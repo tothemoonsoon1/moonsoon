@@ -215,7 +215,8 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
     <div class="section-info"><div class="section-title">Device Setup</div><div class="section-sub">One-time configuration</div></div>
     <div class="section-prog"><div class="sec-badge amber" id="setup-prog">0/3</div><div class="chevron open" id="setup-chev">&#9658;</div></div>
   </div>
-  <div class="section-body open" id="setup-body">
+      <div class="section-body open" id="setup-body">
+    <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:10px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px;border:0.5px solid rgba(255,255,255,0.05);">One-time setup — not counted in daily progress</div>
     <div class="task" id="t-diag" onclick="toggleTask('t-diag')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Enable Usage and Diagnostics</div><div class="task-tip">Settings - Solana Mobile - Enable Usage and Diagnostics</div><div class="task-tag tag-setup">One-time</div></div></div>
     <div class="task" id="t-wallet" onclick="toggleTask('t-wallet')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Update wallet to latest version</div><div class="task-tip">dApp Store - swipe left on banner - update Seed Vault Wallet</div><div class="task-tag tag-setup">One-time</div></div></div>
     <div class="task" id="t-genesis" onclick="toggleTask('t-genesis')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Claim Genesis Token and Seeker ID</div><div class="task-tip">Claim your .skr domain - your digital passport to the ecosystem</div><div class="task-tag tag-setup">One-time</div></div></div>
@@ -239,8 +240,8 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
         <div class="counter-controls">
           <button class="counter-btn" onclick="adjustCounter(-5)">&#8722;</button>
           <div class="counter-val" id="swaps-val">0</div>
-          <button class="counter-btn" onclick="adjustCounter(5)">+5</button>
-          <button class="counter-btn" onclick="adjustCounter(10)">+10</button>
+          <button class="counter-btn" onclick="adjustCounter(5)" style="width:36px;">+5</button>
+          <button class="counter-btn" onclick="adjustCounter(10)" style="width:36px;">+10</button>
         </div>
         <div style="font-size:11px;color:var(--muted)" id="swaps-label">0 / 50</div>
       </div>
@@ -423,7 +424,7 @@ function toggleDapp(id) {
 }
 
 function adjustCounter(delta) {
-  state.swaps = Math.max(0, state.swaps + delta);
+  state.swaps = Math.min(50, Math.max(0, state.swaps + delta));
   render();
 }
 
@@ -483,8 +484,10 @@ function render() {
     var badge = document.getElementById(sec + "-prog");
     if (badge) badge.textContent = done + "/" + cfg.total;
   });
-  var totalTasks = TASKS.length + 1;
-  var doneTasks = TASKS.filter(function(t) { return state.tasks[t]; }).length + (swaps >= 50 ? 1 : 0);
+  var dailyTasks = ["t-stake","t-defi","t-nft","t-dstore","t-seedv","t-variety","t-notif","t-download1","t-download2","t-download3","t-engage","t-review","t-skrstake"];
+  var totalTasks = dailyTasks.length + 1;
+  var swapProgress = Math.min(1, swaps / 50);
+  var doneTasks = dailyTasks.filter(function(t) { return state.tasks[t]; }).length + swapProgress;
   var pct = Math.round((doneTasks / totalTasks) * 100);
   document.getElementById("overall-pct").textContent = pct + "%";
   document.getElementById("main-bar").style.width = pct + "%";

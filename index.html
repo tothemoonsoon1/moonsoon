@@ -9,20 +9,17 @@
 <meta name="author" content="tothemoonsoon">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://tothemoonsoon.xyz">
-
-<!-- Open Graph (social sharing) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tothemoonsoon.xyz">
 <meta property="og:title" content="Seeker Season 2 Checklist | tothemoonsoon.xyz">
-<meta property="og:description" content="Daily strategy checklist for Solana Seeker Season 2. Track on-chain activity, dApp exploration, SKR staking and maximize your airdrop rewards.">
+<meta property="og:description" content="Daily strategy checklist for Solana Seeker Season 2.">
 <meta property="og:image" content="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@m00nsoon">
 <meta name="twitter:title" content="Seeker Season 2 Checklist">
-<meta name="twitter:description" content="Daily strategy checklist for Solana Seeker Season 2. Maximize your SKR airdrop rewards.">
+<meta name="twitter:description" content="Daily strategy checklist for Solana Seeker Season 2.">
 <meta name="twitter:image" content="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Seeker Season 2 Checklist","url":"https://tothemoonsoon.xyz","description":"Daily strategy checklist for Solana Seeker Season 2.","applicationCategory":"UtilityApplication","operatingSystem":"Web","author":{"@type":"Person","name":"tothemoonsoon","url":"https://x.com/m00nsoon"}}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
@@ -45,20 +42,19 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .pos{color:#14F195;}.neg{color:#ef4444;}
 .header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:0.5px solid rgba(255,255,255,0.07);margin-bottom:24px;}
 .logo{display:flex;align-items:center;gap:10px;}
-.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#9945FF,#14F195);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#000;}
 .logo-text{font-size:16px;font-weight:700;background:linear-gradient(90deg,#fff 0%,#9945FF 50%,#14F195 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .season-badge{background:rgba(153,69,255,0.15);border:0.5px solid rgba(153,69,255,0.4);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;color:#c084fc;letter-spacing:0.5px;text-transform:uppercase;display:flex;align-items:center;gap:5px;}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:#9945FF;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .overall-card{background:linear-gradient(135deg,rgba(153,69,255,0.1),rgba(20,241,149,0.05));border:0.5px solid rgba(153,69,255,0.25);border-radius:16px;padding:20px 24px;margin-bottom:20px;}
 .overall-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.overall-label{font-size:13px;color:var(--muted);letter-spacing:0.2px;}
+.overall-label{font-size:13px;color:var(--muted);}
 .overall-pct{font-size:28px;font-weight:700;letter-spacing:-1px;background:linear-gradient(90deg,#9945FF,#14F195);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .progress-bar{height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;}
 .progress-fill{height:100%;border-radius:3px;transition:width 0.4s ease;background:linear-gradient(90deg,#9945FF,#00C2FF,#14F195);}
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
 .stat{text-align:center;}
-.stat-val{font-size:18px;font-weight:700;letter-spacing:-0.5px;color:#fff;}
+.stat-val{font-size:18px;font-weight:700;color:#fff;}
 .stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
 .level-row{display:flex;gap:8px;margin-top:12px;justify-content:center;}
 .level-pip{width:36px;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);transition:background 0.3s;}
@@ -101,7 +97,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .counter-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .counter-name{font-size:13px;color:#fff;}
 .counter-controls{display:flex;align-items:center;gap:10px;}
-.counter-btn{width:26px;height:26px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.15);background:transparent;color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;}
+.counter-btn{width:36px;height:26px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.15);background:transparent;color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;}
 .counter-btn:hover{background:rgba(153,69,255,0.2);}
 .counter-val{font-size:15px;font-weight:700;color:#fff;min-width:32px;text-align:center;}
 .counter-bar{height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;}
@@ -120,7 +116,8 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .section-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin:14px 0 8px;}
 .reset-btn{width:100%;padding:14px;margin-top:24px;background:rgba(153,69,255,0.08);border:0.5px solid rgba(153,69,255,0.35);border-radius:12px;color:#c084fc;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;}
 .reset-btn:hover{background:rgba(153,69,255,0.15);border-color:rgba(153,69,255,0.6);color:#d8b4fe;}
-.news-coming{background:rgba(255,255,255,0.03);border:0.5px dashed rgba(153,69,255,0.3);border-radius:14px;padding:40px 20px;text-align:center;}
+.news-card{background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px 18px;transition:border-color 0.2s;}
+.news-card:hover{border-color:rgba(153,69,255,0.25);}
 .calc-inner{background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
 .calc-label{font-size:10px;color:var(--muted);letter-spacing:0.3px;text-transform:uppercase;margin-bottom:6px;}
 .calc-input{width:100%;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:18px;font-weight:700;padding:6px 10px;outline:none;}
@@ -143,30 +140,6 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .built-by-label{font-size:11px;color:rgba(255,255,255,0.35);}
 .built-by-name{font-size:12px;font-weight:600;background:linear-gradient(90deg,#9945FF,#14F195);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 </style>
-<!-- Schema.org -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Seeker Season 2 Checklist",
-  "url": "https://tothemoonsoon.xyz",
-  "description": "Daily strategy checklist for Solana Seeker Season 2. Track on-chain activity, dApp exploration, SKR staking and maximize your airdrop rewards.",
-  "applicationCategory": "UtilityApplication",
-  "operatingSystem": "Web",
-  "author": {
-    "@type": "Person",
-    "name": "tothemoonsoon",
-    "url": "https://x.com/m00nsoon"
-  },
-  "about": {
-    "@type": "Thing",
-    "name": "Solana Seeker",
-    "description": "Solana Mobile Seeker Season 2 rewards and staking"
-  },
-  "keywords": "Seeker Season 2, SKR token, Solana Mobile, checklist, airdrop, staking calculator"
-}
-</script>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
 </head>
 <body>
 <div class="bg-glow g1"></div>
@@ -174,14 +147,12 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 <div class="bg-glow g3"></div>
 <div class="wrap">
 
-<!-- STATS -->
 <div class="stats-bar">
   <div class="stat-card"><div class="stat-card-label">SOL Price</div><div class="stat-card-val" id="sol-price">$90.26</div><div class="stat-card-sub pos" id="sol-change">+5.02% 24h</div></div>
   <div class="stat-card"><div class="stat-card-label">SKR Price</div><div class="stat-card-val" id="skr-price">$0.0210</div><div class="stat-card-sub pos" id="skr-change">+1.00% 24h</div></div>
   <div class="stat-card"><div class="stat-card-label">SKR Staking</div><div class="stat-card-val">19.5%</div><div class="stat-card-sub">Current APY</div></div>
 </div>
 
-<!-- HEADER -->
 <div class="header">
   <div class="logo">
     <a href="https://x.com/m00nsoon" target="_blank"><img src="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png" onerror="this.style.display='none'" style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1.5px solid rgba(153,69,255,0.4);"></a>
@@ -190,7 +161,6 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
   <div class="season-badge"><div class="badge-dot"></div>Season 2</div>
 </div>
 
-<!-- PROGRESS -->
 <div class="overall-card">
   <div class="overall-top">
     <div><div class="overall-label">Daily Progress</div><div class="overall-pct" id="overall-pct">0%</div></div>
@@ -208,22 +178,20 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
   <div class="level-label">On-chain activity: <span id="level-txt">Level 0 / 5 (estimated)</span></div>
 </div>
 
-<!-- SETUP -->
 <div class="section">
   <div class="section-header" onclick="toggleSection('setup')">
     <div class="section-icon">&#9881;</div>
     <div class="section-info"><div class="section-title">Device Setup</div><div class="section-sub">One-time configuration</div></div>
     <div class="section-prog"><div class="sec-badge amber" id="setup-prog">0/3</div><div class="chevron open" id="setup-chev">&#9658;</div></div>
   </div>
-      <div class="section-body open" id="setup-body">
-    <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:10px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px;border:0.5px solid rgba(255,255,255,0.05);">One-time setup — not counted in daily progress</div>
+  <div class="section-body open" id="setup-body">
+    <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:10px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px;border:0.5px solid rgba(255,255,255,0.05);">One-time setup - not counted in daily progress</div>
     <div class="task" id="t-diag" onclick="toggleTask('t-diag')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Enable Usage and Diagnostics</div><div class="task-tip">Settings - Solana Mobile - Enable Usage and Diagnostics</div><div class="task-tag tag-setup">One-time</div></div></div>
     <div class="task" id="t-wallet" onclick="toggleTask('t-wallet')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Update wallet to latest version</div><div class="task-tip">dApp Store - swipe left on banner - update Seed Vault Wallet</div><div class="task-tag tag-setup">One-time</div></div></div>
     <div class="task" id="t-genesis" onclick="toggleTask('t-genesis')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Claim Genesis Token and Seeker ID</div><div class="task-tip">Claim your .skr domain - your digital passport to the ecosystem</div><div class="task-tag tag-setup">One-time</div></div></div>
   </div>
 </div>
 
-<!-- ON-CHAIN -->
 <div class="section">
   <div class="section-header" onclick="toggleSection('onchain')">
     <div class="section-icon">&#9935;</div>
@@ -240,8 +208,8 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
         <div class="counter-controls">
           <button class="counter-btn" onclick="adjustCounter(-5)">&#8722;</button>
           <div class="counter-val" id="swaps-val">0</div>
-          <button class="counter-btn" onclick="adjustCounter(5)" style="width:36px;">+5</button>
-          <button class="counter-btn" onclick="adjustCounter(10)" style="width:36px;">+10</button>
+          <button class="counter-btn" onclick="adjustCounter(5)">+5</button>
+          <button class="counter-btn" onclick="adjustCounter(10)">+10</button>
         </div>
         <div style="font-size:11px;color:var(--muted)" id="swaps-label">0 / 50</div>
       </div>
@@ -260,7 +228,6 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
   </div>
 </div>
 
-<!-- PHONE -->
 <div class="section">
   <div class="section-header" onclick="toggleSection('phone')">
     <div class="section-icon">&#128242;</div>
@@ -275,7 +242,6 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
   </div>
 </div>
 
-<!-- DAPPS -->
 <div class="section">
   <div class="section-header" onclick="toggleSection('dapps')">
     <div class="section-icon">&#129513;</div>
@@ -292,20 +258,9 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
     <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5;">If you have downloaded all new apps, delete one and reinstall to refresh the Freshness ring.</div>
     <div class="task" id="t-engage" onclick="toggleTask('t-engage')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Use each new app for 5+ minutes</div><div class="task-tip">Fills the dApp Engagement ring - complete early, weekend sync may miss deadline</div><div class="task-tag tag-weekly">Weekly</div></div></div>
     <div class="task" id="t-review" onclick="toggleTask('t-review')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Leave a review for an app</div><div class="task-tip">Supports the ecosystem and influences future featured placements</div><div class="task-tag tag-weekly">Weekly</div></div></div>
-    <div class="section-label">Featured S2 dApps to try</div>
-    <div class="dapp-grid">
-      <div class="dapp-item" id="d-orb" onclick="toggleDapp('d-orb')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://orb.helius.dev/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128301;'"></div><div class="dapp-info"><div class="dapp-name">Orb by Helius</div><div class="dapp-cat">Explorer / DeFi</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-loop" onclick="toggleDapp('d-loop')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://loopscale.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128260;'"></div><div class="dapp-info"><div class="dapp-name">Loopscale</div><div class="dapp-cat">DeFi / Lending</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-dev" onclick="toggleDapp('d-dev')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://dev.fun/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128640;'"></div><div class="dapp-info"><div class="dapp-name">Dev.fun</div><div class="dapp-cat">Launchpad</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-moon" onclick="toggleDapp('d-moon')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://moonlock.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127939;'"></div><div class="dapp-info"><div class="dapp-name">Moonlock Fitness</div><div class="dapp-cat">DePIN / Move2Earn</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-jito" onclick="toggleDapp('d-jito')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://jito.network/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128737;'"></div><div class="dapp-info"><div class="dapp-name">Jito Staking</div><div class="dapp-cat">Staking / Guardian</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-tensor" onclick="toggleDapp('d-tensor')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://tensor.trade/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128444;'"></div><div class="dapp-info"><div class="dapp-name">Tensor</div><div class="dapp-cat">NFT Marketplace</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-dialect" onclick="toggleDapp('d-dialect')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://dialect.to/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128172;'"></div><div class="dapp-info"><div class="dapp-name">Dialect</div><div class="dapp-cat">Social / Messaging</div></div><div class="dapp-check">&#10003;</div></div>
-    </div>
   </div>
 </div>
 
-<!-- STAKING -->
 <div class="section">
   <div class="section-header" onclick="toggleSection('staking')">
     <div class="section-icon">&#128142;</div>
@@ -319,53 +274,63 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 
 <button class="reset-btn" onclick="resetAll()">Reset Today's Progress</button>
 
-<!-- ── NEWS FEED ─────────────────────────────── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-label">Featured S2 dApps</div><div class="divider-line"></div></div>
+<div class="dapp-grid">
+  <div class="dapp-item" id="d-orb" onclick="toggleDapp('d-orb')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://orb.helius.dev/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128301;'"></div><div class="dapp-info"><div class="dapp-name">Orb by Helius</div><div class="dapp-cat">Explorer / DeFi</div></div><div class="dapp-check">&#10003;</div></div>
+  <div class="dapp-item" id="d-loop" onclick="toggleDapp('d-loop')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://loopscale.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128260;'"></div><div class="dapp-info"><div class="dapp-name">Loopscale</div><div class="dapp-cat">DeFi / Lending</div></div><div class="dapp-check">&#10003;</div></div>
+  <div class="dapp-item" id="d-sanctum" onclick="toggleDapp('d-sanctum')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://sanctum.so/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9729;'"></div><div class="dapp-info"><div class="dapp-name">Sanctum</div><div class="dapp-cat">Staking / Yield</div></div><div class="dapp-check">&#10003;</div></div>
+  <div class="dapp-item" id="d-dev" onclick="toggleDapp('d-dev')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://dev.fun/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128640;'"></div><div class="dapp-info"><div class="dapp-name">Dev.fun</div><div class="dapp-cat">Launchpad</div></div><div class="dapp-check">&#10003;</div></div>
+  <div class="dapp-item" id="d-moon" onclick="toggleDapp('d-moon')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://moonlock.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127939;'"></div><div class="dapp-info"><div class="dapp-name">Moonlock Fitness</div><div class="dapp-cat">DePIN / Move2Earn</div></div><div class="dapp-check">&#10003;</div></div>
+  <div class="dapp-item" id="d-jito" onclick="toggleDapp('d-jito')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://jito.network/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128737;'"></div><div class="dapp-info"><div class="dapp-name">Jito Staking</div><div class="dapp-cat">Staking / Guardian</div></div><div class="dapp-check">&#10003;</div></div>
+  <div class="dapp-item" id="d-tensor" onclick="toggleDapp('d-tensor')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://tensor.trade/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128444;'"></div><div class="dapp-info"><div class="dapp-name">Tensor</div><div class="dapp-cat">NFT Marketplace</div></div><div class="dapp-check">&#10003;</div></div>
+  <div class="dapp-item" id="d-dialect" onclick="toggleDapp('d-dialect')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://dialect.to/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128172;'"></div><div class="dapp-info"><div class="dapp-name">Dialect</div><div class="dapp-cat">Social / Messaging</div></div><div class="dapp-check">&#10003;</div></div>
+</div>
+
 <div class="divider"><div class="divider-line"></div><div class="divider-label">Latest News</div><div class="divider-line"></div></div>
-<div class="news-coming">
-  <div style="font-size:28px;margin-bottom:12px;">&#128225;</div>
-  <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:6px;">News Feed - Coming Soon</div>
-  <div style="font-size:12px;color:var(--muted);line-height:1.6;max-width:320px;margin:0 auto;">Hand-curated Seeker ecosystem updates - new dApp releases, season changes, staking news and community highlights.</div>
-  <div style="margin-top:16px;display:inline-flex;align-items:center;gap:6px;background:rgba(153,69,255,0.1);border:0.5px solid rgba(153,69,255,0.3);border-radius:20px;padding:6px 14px;">
-    <div style="width:5px;height:5px;border-radius:50%;background:#9945FF;animation:pulse 2s infinite;"></div>
-    <span style="font-size:11px;color:#c084fc;font-weight:600;">In progress</span>
+<div class="news-card">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <img src="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg" onerror="this.style.display='none'" style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+    <div style="flex:1;">
+      <div style="display:flex;align-items:center;gap:5px;">
+        <span style="font-size:14px;font-weight:700;color:#fff;">tothemoonsoon.eth</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1d9bf0"><path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.9-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91C2.88 9.33 2 10.57 2 12s.88 2.67 2.19 3.34c-.46 1.39-.2 2.9.81 3.91s2.52 1.27 3.91.81c.66 1.31 1.9 2.19 3.34 2.19s2.67-.88 3.33-2.19c1.4.46 2.91.2 3.92-.81s1.26-2.52.8-3.91C21.37 14.67 22.25 13.43 22.25 12z"/><path d="M10.54 16.54l-4.08-4.08 1.41-1.41 2.67 2.67 5.5-5.5 1.41 1.41-6.91 6.91z" fill="#fff"/></svg>
+      </div>
+      <span style="font-size:12px;color:rgba(255,255,255,0.45);">@m00nsoon &middot; Mar 25, 2026</span>
+    </div>
+    <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;background:rgba(153,69,255,0.15);color:#c084fc;white-space:nowrap;">dApp Release</span>
+  </div>
+  <div style="font-size:14px;color:#fff;line-height:1.8;margin-bottom:14px;">
+    If you have a <span style="color:#1d9bf0;">@solanamobile</span> Seeker open your dApp Store right now<br><br>
+    <span style="color:#1d9bf0;">@sanctumso</span> just launched exclusively for Seeker holders &#127769;<br><br>
+    why it matters:<br>
+    - earn yield + XP starting today<br>
+    - Seeker Season dropping soon with exclusive rewards<br>
+    - built different: no leverage, no gambling, just healthy wealth growth<br><br>
+    best part? your XP is already counting even before the Seeker Season UI goes live
+  </div>
+  <img src="https://sanctum.so/_next/image?url=%2Fblog%2FChatGPT_Image_Mar_22_2026_12_07_56_PM.png&w=3840&q=100&dpl=dpl_FSc4khZJWgmpGnRR1aLLV8LHvYb3" onerror="this.style.display='none'" style="width:100%;height:200px;object-fit:cover;border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:12px;">
+  <div style="font-size:13px;color:#1d9bf0;margin-bottom:12px;">#Seeker #SKR #Sanctum</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.05);">
+    <span style="font-size:11px;color:rgba(255,255,255,0.25);">via @tothemoonsoon on X</span>
+    <a href="https://x.com/m00nsoon/status/2036723898578862266" target="_blank" style="font-size:11px;color:#9945FF;text-decoration:none;">View on X &rarr;</a>
   </div>
 </div>
 
-<!-- ── STAKING CALCULATOR ─────────────────────── -->
 <div class="divider"><div class="divider-line"></div><div class="divider-label">SKR Staking Calculator</div><div class="divider-line"></div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
-  <div class="calc-inner">
-    <div class="calc-label">SKR Amount</div>
-    <input class="calc-input" type="number" id="c-amount" value="1000" min="1" oninput="calcUpdate()">
-    <input class="calc-slider" type="range" id="c-slider" min="100" max="1000000" step="100" value="1000" oninput="document.getElementById('c-amount').value=this.value;calcUpdate()">
-  </div>
-  <div class="calc-inner">
-    <div class="calc-label">SKR Price (USD)</div>
-    <input class="calc-input" type="number" id="c-price" value="0.0210" min="0.0001" step="0.001" oninput="calcUpdate()">
-    <input class="calc-slider" type="range" id="c-price-slider" min="0.001" max="1" step="0.001" value="0.021" oninput="document.getElementById('c-price').value=parseFloat(this.value).toFixed(4);calcUpdate()">
-  </div>
-  <div class="calc-inner">
-    <div class="calc-label">APY (%)</div>
-    <input class="calc-input" type="number" id="c-apy" value="19.5" min="1" max="100" step="0.1" oninput="calcUpdate()">
-    <input class="calc-slider" type="range" id="c-apy-slider" min="1" max="100" step="0.1" value="19.5" oninput="document.getElementById('c-apy').value=parseFloat(this.value).toFixed(1);calcUpdate()">
-  </div>
+  <div class="calc-inner"><div class="calc-label">SKR Amount</div><input class="calc-input" type="number" id="c-amount" value="1000" min="1" oninput="calcUpdate()"><input class="calc-slider" type="range" id="c-slider" min="100" max="1000000" step="100" value="1000" oninput="document.getElementById('c-amount').value=this.value;calcUpdate()"></div>
+  <div class="calc-inner"><div class="calc-label">SKR Price (USD)</div><input class="calc-input" type="number" id="c-price" value="0.0210" min="0.0001" step="0.001" oninput="calcUpdate()"><input class="calc-slider" type="range" id="c-price-slider" min="0.001" max="1" step="0.001" value="0.021" oninput="document.getElementById('c-price').value=parseFloat(this.value).toFixed(4);calcUpdate()"></div>
+  <div class="calc-inner"><div class="calc-label">APY (%)</div><input class="calc-input" type="number" id="c-apy" value="19.5" min="1" max="100" step="0.1" oninput="calcUpdate()"><input class="calc-slider" type="range" id="c-apy-slider" min="1" max="100" step="0.1" value="19.5" oninput="document.getElementById('c-apy').value=parseFloat(this.value).toFixed(1);calcUpdate()"></div>
 </div>
 <div class="calc-results">
   <div class="calc-result"><div class="calc-result-label">30 days</div><div class="calc-result-val" id="c-30d">-</div><div class="calc-result-sub" id="c-30d-usd">-</div></div>
   <div class="calc-result"><div class="calc-result-label">6 months</div><div class="calc-result-val" id="c-6m">-</div><div class="calc-result-sub" id="c-6m-usd">-</div></div>
   <div class="calc-result"><div class="calc-result-label">1 year</div><div class="calc-result-val" id="c-1y">-</div><div class="calc-result-sub" id="c-1y-usd">-</div></div>
 </div>
-<div class="calc-inner" style="margin-bottom:10px;">
-  <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">Estimated growth</div>
-  <div style="position:relative;height:180px;"><canvas id="c-chart"></canvas></div>
-</div>
-<div class="calc-inner">
-  <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;">Breakdown</div>
-  <div id="c-breakdown"></div>
-</div>
-<div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:10px;line-height:1.6;">Not financial advice.</div>
+<div class="calc-inner" style="margin-bottom:10px;"><div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">Estimated growth</div><div style="position:relative;height:180px;"><canvas id="c-chart"></canvas></div></div>
+<div class="calc-inner"><div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;">Breakdown</div><div id="c-breakdown"></div></div>
+<div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:10px;">Not financial advice.</div>
 
-<!-- ── SUPPORT ─────────────────────────────── -->
 <div class="divider"><div class="divider-line"></div><div class="divider-label">Support this Project</div><div class="divider-line"></div></div>
 <div class="tip-section">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:18px">&#9749;</span><span style="font-size:14px;font-weight:600;color:#fff">Support this project</span></div>
@@ -392,7 +357,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 <script>
 var WALLET = "C5maywT6FNqLZVi9m94yKc1RCstd18gYs6Cv1bzFPyD3";
 var TASKS = ["t-diag","t-wallet","t-genesis","t-stake","t-defi","t-nft","t-dstore","t-seedv","t-variety","t-notif","t-download1","t-download2","t-download3","t-engage","t-review","t-skrstake"];
-var DAPPS = ["d-jup","d-phantom","d-backpack","d-solflare","d-orb","d-loop","d-dev","d-moon","d-jito","d-tensor","d-dialect"];
+var DAPPS = ["d-jup","d-phantom","d-backpack","d-solflare","d-orb","d-loop","d-sanctum","d-dev","d-moon","d-jito","d-tensor","d-dialect"];
 var state = {tasks:{}, swaps:0, dapps:{}, streak:0};
 var stakingChart = null;
 
@@ -401,258 +366,116 @@ function toggleTask(id) {
   var el = document.getElementById(id);
   if (el) {
     el.classList.toggle("done", !!state.tasks[id]);
-    var cb = el.querySelector(".checkbox");
-    var ci = el.querySelector(".check-icon");
+    var cb = el.querySelector(".checkbox"); var ci = el.querySelector(".check-icon");
     if (cb && ci) {
-      if (state.tasks[id]) {
-        cb.style.background = "linear-gradient(135deg,#9945FF,#14F195)";
-        cb.style.borderColor = "transparent";
-        ci.style.display = "block";
-      } else {
-        cb.style.background = "";
-        cb.style.borderColor = "";
-        ci.style.display = "none";
-      }
+      if (state.tasks[id]) { cb.style.background="linear-gradient(135deg,#9945FF,#14F195)"; cb.style.borderColor="transparent"; ci.style.display="block"; }
+      else { cb.style.background=""; cb.style.borderColor=""; ci.style.display="none"; }
     }
   }
   render();
 }
 
-function toggleDapp(id) {
-  state.dapps[id] = !state.dapps[id];
-  render();
-}
-
-function adjustCounter(delta) {
-  state.swaps = Math.min(50, Math.max(0, state.swaps + delta));
-  render();
-}
-
-function toggleSection(id) {
-  document.getElementById(id + "-body").classList.toggle("open");
-  document.getElementById(id + "-chev").classList.toggle("open");
-}
+function toggleDapp(id) { state.dapps[id] = !state.dapps[id]; render(); }
+function adjustCounter(delta) { state.swaps = Math.min(50, Math.max(0, state.swaps + delta)); render(); }
+function toggleSection(id) { document.getElementById(id+"-body").classList.toggle("open"); document.getElementById(id+"-chev").classList.toggle("open"); }
 
 function resetAll() {
-  state.tasks = {};
-  state.swaps = 0;
-  state.dapps = {};
+  state.tasks={}; state.swaps=0; state.dapps={};
   TASKS.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (!el) return;
+    var el=document.getElementById(id); if(!el) return;
     el.classList.remove("done");
-    var cb = el.querySelector(".checkbox");
-    var ci = el.querySelector(".check-icon");
-    if (cb) { cb.style.background = ""; cb.style.borderColor = ""; }
-    if (ci) { ci.style.display = "none"; }
+    var cb=el.querySelector(".checkbox"); var ci=el.querySelector(".check-icon");
+    if(cb){cb.style.background="";cb.style.borderColor="";}
+    if(ci){ci.style.display="none";}
   });
   render();
 }
 
 function copyWallet() {
   navigator.clipboard.writeText(WALLET).then(function() {
-    var btn = document.getElementById("copy-btn");
-    btn.textContent = "OK";
-    setTimeout(function() { btn.innerHTML = "&#10697;"; }, 2000);
+    var btn=document.getElementById("copy-btn"); btn.textContent="OK";
+    setTimeout(function(){btn.innerHTML="&#10697;";},2000);
   });
 }
 
 function render() {
-  TASKS.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.toggle("done", !!state.tasks[id]);
-  });
-  DAPPS.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.toggle("done", !!state.dapps[id]);
-  });
-  var swaps = state.swaps;
-  document.getElementById("swaps-val").textContent = swaps;
-  document.getElementById("swaps-label").textContent = swaps + " / 50";
-  document.getElementById("swaps-fill").style.width = Math.min(100, (swaps / 50) * 100) + "%";
-  var sections = {
-    setup: {tasks: ["t-diag","t-wallet","t-genesis"], total: 3},
-    onchain: {tasks: ["t-stake","t-defi","t-nft"], total: 4, counter: true},
-    phone: {tasks: ["t-dstore","t-seedv","t-variety","t-notif"], total: 4},
-    dapps: {tasks: ["t-download1","t-download2","t-download3","t-engage","t-review"], total: 5},
-    staking: {tasks: ["t-skrstake"], total: 1}
-  };
-  Object.keys(sections).forEach(function(sec) {
-    var cfg = sections[sec];
-    var done = cfg.tasks.filter(function(t) { return state.tasks[t]; }).length;
-    if (cfg.counter && swaps >= 50) done++;
-    var badge = document.getElementById(sec + "-prog");
-    if (badge) badge.textContent = done + "/" + cfg.total;
-  });
-  var dailyTasks = ["t-stake","t-defi","t-nft","t-dstore","t-seedv","t-variety","t-notif","t-download1","t-download2","t-download3","t-engage","t-review","t-skrstake"];
-  var totalTasks = dailyTasks.length + 1;
-  var swapProgress = Math.min(1, swaps / 50);
-  var doneTasks = dailyTasks.filter(function(t) { return state.tasks[t]; }).length + swapProgress;
-  var pct = Math.round((doneTasks / totalTasks) * 100);
-  document.getElementById("overall-pct").textContent = pct + "%";
-  document.getElementById("main-bar").style.width = pct + "%";
-  document.getElementById("tasks-done").textContent = doneTasks;
-  document.getElementById("tasks-total").textContent = totalTasks;
-  document.getElementById("streak-val").textContent = state.streak || 0;
-  var onchainDone = ["t-stake","t-defi","t-nft"].filter(function(t) { return state.tasks[t]; }).length;
-  var swapLevel = swaps >= 50 ? 2 : swaps >= 20 ? 1 : 0;
-  var level = Math.min(5, swapLevel + onchainDone);
-  document.getElementById("chain-level").textContent = "Lv " + level;
-  document.getElementById("level-txt").textContent = "Level " + level + " / 5 (estimated)";
-  for (var i = 1; i <= 5; i++) {
-    document.getElementById("pip" + i).classList.toggle("active", i <= level);
-  }
+  TASKS.forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle("done",!!state.tasks[id]);});
+  DAPPS.forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle("done",!!state.dapps[id]);});
+  var swaps=state.swaps;
+  document.getElementById("swaps-val").textContent=swaps;
+  document.getElementById("swaps-label").textContent=swaps+" / 50";
+  document.getElementById("swaps-fill").style.width=Math.min(100,(swaps/50)*100)+"%";
+  var sections={setup:{tasks:["t-diag","t-wallet","t-genesis"],total:3},onchain:{tasks:["t-stake","t-defi","t-nft"],total:4,counter:true},phone:{tasks:["t-dstore","t-seedv","t-variety","t-notif"],total:4},dapps:{tasks:["t-download1","t-download2","t-download3","t-engage","t-review"],total:5},staking:{tasks:["t-skrstake"],total:1}};
+  Object.keys(sections).forEach(function(sec){var cfg=sections[sec];var done=cfg.tasks.filter(function(t){return state.tasks[t];}).length;if(cfg.counter&&swaps>=50)done++;var badge=document.getElementById(sec+"-prog");if(badge)badge.textContent=done+"/"+cfg.total;});
+  var dailyTasks=["t-stake","t-defi","t-nft","t-dstore","t-seedv","t-variety","t-notif","t-download1","t-download2","t-download3","t-engage","t-review","t-skrstake"];
+  var totalTasks=dailyTasks.length+1;
+  var swapProgress=Math.min(1,swaps/50);
+  var doneTasks=dailyTasks.filter(function(t){return state.tasks[t];}).length+swapProgress;
+  var pct=Math.round((doneTasks/totalTasks)*100);
+  document.getElementById("overall-pct").textContent=pct+"%";
+  document.getElementById("main-bar").style.width=pct+"%";
+  document.getElementById("tasks-done").textContent=Math.floor(doneTasks);
+  document.getElementById("tasks-total").textContent=totalTasks;
+  document.getElementById("streak-val").textContent=state.streak||0;
+  var onchainDone=["t-stake","t-defi","t-nft"].filter(function(t){return state.tasks[t];}).length;
+  var swapLevel=swaps>=50?2:swaps>=20?1:0;
+  var level=Math.min(5,swapLevel+onchainDone);
+  document.getElementById("chain-level").textContent="Lv "+level;
+  document.getElementById("level-txt").textContent="Level "+level+" / 5 (estimated)";
+  for(var i=1;i<=5;i++){document.getElementById("pip"+i).classList.toggle("active",i<=level);}
 }
 
 function initQR() {
-  var container = document.getElementById("qr-container");
-  if (!container || typeof QRCode === "undefined") return;
-  new QRCode(container, {text: "solana:" + WALLET, width: 120, height: 120, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M});
+  var container=document.getElementById("qr-container");
+  if(!container||typeof QRCode==="undefined") return;
+  new QRCode(container,{text:"solana:"+WALLET,width:120,height:120,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
 }
 
 function fetchPrices() {
   fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana,seeker&vs_currencies=usd&include_24hr_change=true")
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (d.solana) {
-        document.getElementById("sol-price").textContent = "$" + d.solana.usd.toFixed(2);
-        var sc = d.solana.usd_24h_change;
-        var el = document.getElementById("sol-change");
-        el.textContent = (sc >= 0 ? "+" : "") + sc.toFixed(2) + "% 24h";
-        el.className = "stat-card-sub " + (sc >= 0 ? "pos" : "neg");
-      }
-      if (d.seeker) {
-        var sp = d.seeker.usd;
-        document.getElementById("skr-price").textContent = "$" + (sp < 0.01 ? sp.toFixed(5) : sp.toFixed(4));
-        var sk = d.seeker.usd_24h_change;
-        var el2 = document.getElementById("skr-change");
-        el2.textContent = (sk >= 0 ? "+" : "") + sk.toFixed(2) + "% 24h";
-        el2.className = "stat-card-sub " + (sk >= 0 ? "pos" : "neg");
-      }
-    })
-    .catch(function() {});
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.solana){document.getElementById("sol-price").textContent="$"+d.solana.usd.toFixed(2);var sc=d.solana.usd_24h_change;var el=document.getElementById("sol-change");el.textContent=(sc>=0?"+":"")+sc.toFixed(2)+"% 24h";el.className="stat-card-sub "+(sc>=0?"pos":"neg");}
+      if(d.seeker){var sp=d.seeker.usd;document.getElementById("skr-price").textContent="$"+(sp<0.01?sp.toFixed(5):sp.toFixed(4));var sk=d.seeker.usd_24h_change;var el2=document.getElementById("skr-change");el2.textContent=(sk>=0?"+":"")+sk.toFixed(2)+"% 24h";el2.className="stat-card-sub "+(sk>=0?"pos":"neg");}
+    }).catch(function(){});
 }
 
-function fmtS(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(2) + "M";
-  if (n >= 1000) return (n / 1000).toFixed(2) + "K";
-  return n.toFixed(2);
+function fmtS(n){if(n>=1000000)return(n/1000000).toFixed(2)+"M";if(n>=1000)return(n/1000).toFixed(2)+"K";return n.toFixed(2);}
+function fmtU(n){if(n>=1000000)return"$"+(n/1000000).toFixed(2)+"M";if(n>=1000)return"$"+(n/1000).toFixed(2)+"K";return"$"+n.toFixed(2);}
+
+function compoundBal(principal,days){
+  var apy=parseFloat(document.getElementById("c-apy").value)||19.5;
+  var ppy=8760/48;
+  var periods=Math.floor(days*(ppy/365));
+  return principal*Math.pow(1+(apy/100)/ppy,periods);
 }
 
-function fmtU(n) {
-  if (n >= 1000000) return "$" + (n / 1000000).toFixed(2) + "M";
-  if (n >= 1000) return "$" + (n / 1000).toFixed(2) + "K";
-  return "$" + n.toFixed(2);
-}
-
-function compoundBal(principal, days) {
-  var apy = parseFloat(document.getElementById("c-apy").value) || 19.5;
-  var periodsPerYear = 8760 / 48;
-  var periods = Math.floor(days * (periodsPerYear / 365));
-  return principal * Math.pow(1 + (apy / 100) / periodsPerYear, periods);
-}
-
-function calcUpdate() {
-  var amount = parseFloat(document.getElementById("c-amount").value) || 1000;
-  var price = parseFloat(document.getElementById("c-price").value) || 0.021;
-  document.getElementById("c-slider").value = Math.min(amount, 1000000);
-  document.getElementById("c-price-slider").value = Math.min(price, 1);
-
-  var b30 = compoundBal(amount, 30);
-  var b6m = compoundBal(amount, 182);
-  var b1y = compoundBal(amount, 365);
-
-  document.getElementById("c-30d").textContent = "+" + fmtS(b30 - amount) + " SKR";
-  document.getElementById("c-30d-usd").textContent = fmtU((b30 - amount) * price) + " earned";
-  document.getElementById("c-6m").textContent = "+" + fmtS(b6m - amount) + " SKR";
-  document.getElementById("c-6m-usd").textContent = fmtU((b6m - amount) * price) + " earned";
-  document.getElementById("c-1y").textContent = "+" + fmtS(b1y - amount) + " SKR";
-  document.getElementById("c-1y-usd").textContent = fmtU((b1y - amount) * price) + " earned";
-
-  var labels = [];
-  var data = [];
-  for (var d = 0; d <= 365; d += 14) {
-    labels.push(d === 0 ? "Now" : "D" + d);
-    data.push(parseFloat(compoundBal(amount, d).toFixed(2)));
+function calcUpdate(){
+  var amount=parseFloat(document.getElementById("c-amount").value)||1000;
+  var price=parseFloat(document.getElementById("c-price").value)||0.021;
+  document.getElementById("c-slider").value=Math.min(amount,1000000);
+  document.getElementById("c-price-slider").value=Math.min(price,1);
+  var b30=compoundBal(amount,30);var b6m=compoundBal(amount,182);var b1y=compoundBal(amount,365);
+  document.getElementById("c-30d").textContent="+"+fmtS(b30-amount)+" SKR";
+  document.getElementById("c-30d-usd").textContent=fmtU((b30-amount)*price)+" earned";
+  document.getElementById("c-6m").textContent="+"+fmtS(b6m-amount)+" SKR";
+  document.getElementById("c-6m-usd").textContent=fmtU((b6m-amount)*price)+" earned";
+  document.getElementById("c-1y").textContent="+"+fmtS(b1y-amount)+" SKR";
+  document.getElementById("c-1y-usd").textContent=fmtU((b1y-amount)*price)+" earned";
+  var labels=[];var data=[];
+  for(var d=0;d<=365;d+=14){labels.push(d===0?"Now":"D"+d);data.push(parseFloat(compoundBal(amount,d).toFixed(2)));}
+  if(stakingChart){stakingChart.data.labels=labels;stakingChart.data.datasets[0].data=data;stakingChart.update();}
+  else{
+    var ctx=document.getElementById("c-chart").getContext("2d");
+    stakingChart=new Chart(ctx,{type:"line",data:{labels:labels,datasets:[{data:data,borderColor:"#9945FF",backgroundColor:"rgba(153,69,255,0.08)",borderWidth:2,fill:true,tension:0.4,pointRadius:0,pointHoverRadius:4,pointHoverBackgroundColor:"#14F195"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:"rgba(10,10,20,0.9)",borderColor:"rgba(153,69,255,0.3)",borderWidth:1,titleColor:"rgba(255,255,255,0.5)",bodyColor:"#14F195",callbacks:{label:function(ctx){var p=parseFloat(document.getElementById("c-price").value)||0.021;return fmtS(ctx.raw)+" SKR ("+fmtU(ctx.raw*p)+")";}}}},scales:{x:{ticks:{color:"rgba(255,255,255,0.3)",font:{size:9},maxTicksLimit:7},grid:{color:"rgba(255,255,255,0.04)"}},y:{ticks:{color:"rgba(255,255,255,0.3)",font:{size:9},callback:function(v){return fmtS(v);}},grid:{color:"rgba(255,255,255,0.04)"}}}}});
   }
-
-  if (stakingChart) {
-    stakingChart.data.labels = labels;
-    stakingChart.data.datasets[0].data = data;
-    stakingChart.update();
-  } else {
-    var ctx = document.getElementById("c-chart").getContext("2d");
-    stakingChart = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data,
-          borderColor: "#9945FF",
-          backgroundColor: "rgba(153,69,255,0.08)",
-          borderWidth: 2,
-          fill: true,
-          tension: 0.4,
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          pointHoverBackgroundColor: "#14F195"
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {display: false},
-          tooltip: {
-            backgroundColor: "rgba(10,10,20,0.9)",
-            borderColor: "rgba(153,69,255,0.3)",
-            borderWidth: 1,
-            titleColor: "rgba(255,255,255,0.5)",
-            bodyColor: "#14F195",
-            callbacks: {
-              label: function(ctx) {
-                var p = parseFloat(document.getElementById("c-price").value) || 0.021;
-                return fmtS(ctx.raw) + " SKR (" + fmtU(ctx.raw * p) + ")";
-              }
-            }
-          }
-        },
-        scales: {
-          x: {ticks: {color: "rgba(255,255,255,0.3)", font: {size: 9}, maxTicksLimit: 7}, grid: {color: "rgba(255,255,255,0.04)"}},
-          y: {ticks: {color: "rgba(255,255,255,0.3)", font: {size: 9}, callback: function(v) { return fmtS(v); }}, grid: {color: "rgba(255,255,255,0.04)"}}
-        }
-      }
-    });
-  }
-
-  var periods = [
-    {label: "1 week", days: 7},
-    {label: "1 month", days: 30},
-    {label: "3 months", days: 90},
-    {label: "6 months", days: 182},
-    {label: "1 year", days: 365}
-  ];
-  var html = "";
-  periods.forEach(function(p) {
-    var bal = compoundBal(amount, p.days);
-    var earned = bal - amount;
-    html += "<div class=\"breakdown-row\">" +
-      "<span style=\"font-size:12px;color:rgba(255,255,255,0.6);\">After " + p.label + "</span>" +
-      "<div style=\"text-align:right;\">" +
-        "<div style=\"font-size:12px;font-weight:600;color:#14F195;\">+" + fmtS(earned) + " SKR</div>" +
-        "<div style=\"font-size:10px;color:var(--muted);margin-top:1px;\">" + fmtU(earned * price) + " &bull; Total: " + fmtS(bal) + " SKR</div>" +
-      "</div>" +
-    "</div>";
-  });
-  document.getElementById("c-breakdown").innerHTML = html;
+  var periods=[{label:"1 week",days:7},{label:"1 month",days:30},{label:"3 months",days:90},{label:"6 months",days:182},{label:"1 year",days:365}];
+  var html="";
+  periods.forEach(function(p){var bal=compoundBal(amount,p.days);var earned=bal-amount;html+='<div class="breakdown-row"><span style="font-size:12px;color:rgba(255,255,255,0.6);">After '+p.label+'</span><div style="text-align:right;"><div style="font-size:12px;font-weight:600;color:#14F195;">+'+fmtS(earned)+' SKR</div><div style="font-size:10px;color:var(--muted);margin-top:1px;">'+fmtU(earned*price)+' &bull; Total: '+fmtS(bal)+' SKR</div></div></div>';});
+  document.getElementById("c-breakdown").innerHTML=html;
 }
 
-window.addEventListener("load", function() {
-  initQR();
-  render();
-  fetchPrices();
-  calcUpdate();
-});
+window.addEventListener("load",function(){initQR();render();fetchPrices();calcUpdate();});
 </script>
 </body>
 </html>

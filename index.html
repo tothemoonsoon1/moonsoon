@@ -19,9 +19,13 @@
 <meta name="twitter:title" content="Seeker Season 2 Checklist">
 <meta name="twitter:description" content="Daily strategy checklist for Solana Seeker Season 2.">
 <meta name="twitter:image" content="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png">
+<meta name="twitter:image:alt" content="Seeker Season 2 Checklist by tothemoonsoon">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+<meta name="theme-color" content="#9945FF">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Seeker Season 2 Checklist","url":"https://tothemoonsoon.xyz","description":"Daily strategy checklist for Solana Seeker Season 2.","applicationCategory":"UtilityApplication","operatingSystem":"Web","author":{"@type":"Person","name":"tothemoonsoon","url":"https://x.com/m00nsoon"}}</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" defer></script>
 <style>
 :root{--purple:#9945FF;--teal:#14F195;--blue:#00C2FF;--dark:#0a0a14;--muted:rgba(255,255,255,0.4);--text:rgba(255,255,255,0.85);}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -30,7 +34,34 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .g1{width:500px;height:500px;background:#9945FF;top:-150px;left:-100px;}
 .g2{width:400px;height:400px;background:#14F195;bottom:-100px;right:-80px;}
 .g3{width:250px;height:250px;background:#00C2FF;top:40%;left:60%;}
-.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 16px 100px;}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 16px 100px;}
+.two-col{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;}
+.col-left{min-width:0;}
+.col-right{position:sticky;top:20px;display:flex;flex-direction:column;gap:32px;}
+.col-right .divider{margin:0 0 4px;flex-shrink:0;}
+.mobile-news{display:none;}
+.desktop-only{display:block;}
+.news-scroll-wrap{position:relative;border-radius:12px;overflow:hidden;margin-bottom:24px;}
+.news-scroll-wrap::before{content:"";position:absolute;top:0;left:0;right:0;height:32px;background:linear-gradient(to bottom,var(--dark),transparent);pointer-events:none;z-index:2;}
+.news-scroll-fade-bottom{position:absolute;bottom:0;left:0;right:0;height:32px;background:linear-gradient(to top,var(--dark),transparent);pointer-events:none;z-index:2;transition:opacity 0.3s;}
+.news-scroll-fade-bottom.hidden{opacity:0;}
+.news-scroll{display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 320px);overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:rgba(153,69,255,0.35) transparent;}
+.news-scroll::-webkit-scrollbar{width:4px;}
+.news-scroll::-webkit-scrollbar-track{background:transparent;}
+.news-scroll::-webkit-scrollbar-thumb{background:rgba(153,69,255,0.35);border-radius:2px;}
+.news-scroll::-webkit-scrollbar-thumb:hover{background:rgba(153,69,255,0.6);}
+.scroll-arrow{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);pointer-events:none;transition:opacity 0.3s;z-index:3;}
+.scroll-arrow svg{animation:bounce-arrow 1.8s ease-in-out infinite;display:block;will-change:transform;}
+.scroll-arrow.hidden{opacity:0;}
+@keyframes bounce-arrow{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+@media(max-width:860px){
+  .two-col{grid-template-columns:1fr;}
+  .col-left{min-width:0;}
+  .col-right{position:static;}
+  .desktop-only{display:none;}
+  .mobile-news{display:block;}
+  .news-scroll{max-height:480px;overflow-y:auto;}
+}
 .divider{display:flex;align-items:center;gap:12px;margin:32px 0 24px;}
 .divider-line{flex:1;height:0.5px;background:rgba(255,255,255,0.07);}
 .divider-label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.2);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
@@ -44,7 +75,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .logo{display:flex;align-items:center;gap:10px;}
 .logo-text{font-size:16px;font-weight:700;background:linear-gradient(90deg,#fff 0%,#9945FF 50%,#14F195 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .season-badge{background:rgba(153,69,255,0.15);border:0.5px solid rgba(153,69,255,0.4);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;color:#c084fc;letter-spacing:0.5px;text-transform:uppercase;display:flex;align-items:center;gap:5px;}
-.badge-dot{width:5px;height:5px;border-radius:50%;background:#9945FF;animation:pulse 2s infinite;}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:#9945FF;animation:pulse 2s infinite;will-change:opacity;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .overall-card{background:linear-gradient(135deg,rgba(153,69,255,0.1),rgba(20,241,149,0.05));border:0.5px solid rgba(153,69,255,0.25);border-radius:16px;padding:20px 24px;margin-bottom:20px;}
 .overall-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
@@ -109,6 +140,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 .dapp-item.done .dapp-name{text-decoration:line-through;}
 .dapp-item.done .dapp-check{opacity:1;}
 .dapp-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.dapp-ico-dark{background:#1a1a2e;overflow:hidden;}
 .dapp-info{flex:1;min-width:0;}
 .dapp-name{font-size:12px;font-weight:600;color:#fff;}
 .dapp-cat{font-size:10px;color:var(--muted);}
@@ -165,7 +197,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 
 <div class="header">
   <div class="logo">
-    <a href="https://x.com/m00nsoon" target="_blank"><img src="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png" onerror="this.style.display='none'" style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1.5px solid rgba(153,69,255,0.4);"></a>
+    <a href="https://x.com/m00nsoon" target="_blank"><img loading="eager" src="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png" onerror="this.style.display='none'" style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1.5px solid rgba(153,69,255,0.4);"></a>
     <span class="logo-text">Seeker Checklist</span>
   </div>
   <div class="season-badge"><div class="badge-dot"></div>Season 2</div>
@@ -188,8 +220,12 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
   <div class="level-label">On-chain activity: <span id="level-txt">Level 0 / 5 (estimated)</span></div>
 </div>
 
+<div class="two-col">
+<div class="col-left">
+<div class="checklist-block">
+
 <div class="section">
-  <div class="section-header" onclick="toggleSection('setup')">
+  <div class="section-header" onclick="toggleSection('setup')" aria-expanded="true" aria-controls="setup-body">
     <div class="section-icon">&#9881;</div>
     <div class="section-info"><div class="section-title">Device Setup</div><div class="section-sub">One-time configuration</div></div>
     <div class="section-prog"><div class="sec-badge amber" id="setup-prog">0/3</div><div class="chevron open" id="setup-chev">&#9658;</div></div>
@@ -203,7 +239,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 </div>
 
 <div class="section">
-  <div class="section-header" onclick="toggleSection('onchain')">
+  <div class="section-header" onclick="toggleSection('onchain')" aria-expanded="false" aria-controls="onchain-body">
     <div class="section-icon">&#9935;</div>
     <div class="section-info"><div class="section-title">On-Chain Activity</div><div class="section-sub">Do daily - max Level 5 = highest airdrop weight</div></div>
     <div class="section-prog"><div class="sec-badge teal" id="onchain-prog">0/4</div><div class="chevron" id="onchain-chev">&#9658;</div></div>
@@ -227,10 +263,10 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
     </div>
     <div class="section-label">Wallets and swap apps to use</div>
     <div class="dapp-grid">
-      <div class="dapp-item" id="d-jup" onclick="toggleDapp('d-jup')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://jup.ag/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9889;'"></div><div class="dapp-info"><div class="dapp-name">Jupiter</div><div class="dapp-cat">DEX / Swaps</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-phantom" onclick="toggleDapp('d-phantom')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://phantom.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128123;'"></div><div class="dapp-info"><div class="dapp-name">Phantom</div><div class="dapp-cat">Wallet</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-backpack" onclick="toggleDapp('d-backpack')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://backpack.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127890;'"></div><div class="dapp-info"><div class="dapp-name">Backpack</div><div class="dapp-cat">Wallet / xNFT</div></div><div class="dapp-check">&#10003;</div></div>
-      <div class="dapp-item" id="d-solflare" onclick="toggleDapp('d-solflare')"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://solflare.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128293;'"></div><div class="dapp-info"><div class="dapp-name">Solflare</div><div class="dapp-cat">Wallet</div></div><div class="dapp-check">&#10003;</div></div>
+      <div class="dapp-item" id="d-jup" onclick="toggleDapp('d-jup')"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://jup.ag/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9889;'"></div><div class="dapp-info"><div class="dapp-name">Jupiter</div><div class="dapp-cat">DEX / Swaps</div></div><div class="dapp-check">&#10003;</div></div>
+      <div class="dapp-item" id="d-phantom" onclick="toggleDapp('d-phantom')"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://phantom.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128123;'"></div><div class="dapp-info"><div class="dapp-name">Phantom</div><div class="dapp-cat">Wallet</div></div><div class="dapp-check">&#10003;</div></div>
+      <div class="dapp-item" id="d-backpack" onclick="toggleDapp('d-backpack')"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://backpack.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127890;'"></div><div class="dapp-info"><div class="dapp-name">Backpack</div><div class="dapp-cat">Wallet / xNFT</div></div><div class="dapp-check">&#10003;</div></div>
+      <div class="dapp-item" id="d-solflare" onclick="toggleDapp('d-solflare')"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://solflare.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128293;'"></div><div class="dapp-info"><div class="dapp-name">Solflare</div><div class="dapp-cat">Wallet</div></div><div class="dapp-check">&#10003;</div></div>
     </div>
     <div class="task" id="t-stake" onclick="toggleTask('t-stake')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">Stake SKR tokens</div><div class="task-tip">48h unstaking - stake.solanamobile.com - key loyalty signal</div><div class="task-tag tag-staking">Staking</div></div></div>
     <div class="task" id="t-defi" onclick="toggleTask('t-defi')"><div class="checkbox"><span class="check-icon">&#10003;</span></div><div class="task-content"><div class="task-name">DeFi interaction (Loopscale / Jupiter)</div><div class="task-tip">Lend, borrow, or trade - diversify transaction types beyond swaps</div><div class="task-tag tag-daily">Daily</div></div></div>
@@ -239,7 +275,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 </div>
 
 <div class="section">
-  <div class="section-header" onclick="toggleSection('phone')">
+  <div class="section-header" onclick="toggleSection('phone')" aria-expanded="false" aria-controls="phone-body">
     <div class="section-icon">&#128242;</div>
     <div class="section-info"><div class="section-title">Daily Device Usage</div><div class="section-sub">Consistency may unlock bonus multipliers</div></div>
     <div class="section-prog"><div class="sec-badge teal" id="phone-prog">0/4</div><div class="chevron" id="phone-chev">&#9658;</div></div>
@@ -253,7 +289,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 </div>
 
 <div class="section">
-  <div class="section-header" onclick="toggleSection('dapps')">
+  <div class="section-header" onclick="toggleSection('dapps')" aria-expanded="false" aria-controls="dapps-body">
     <div class="section-icon">&#129513;</div>
     <div class="section-info"><div class="section-title">dApp Exploration</div><div class="section-sub">Weekly - download 3 apps early in the week</div></div>
     <div class="section-prog"><div class="sec-badge blue" id="dapps-prog">0/5</div><div class="chevron" id="dapps-chev">&#9658;</div></div>
@@ -272,7 +308,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 </div>
 
 <div class="section">
-  <div class="section-header" onclick="toggleSection('staking')">
+  <div class="section-header" onclick="toggleSection('staking')" aria-expanded="false" aria-controls="staking-body">
     <div class="section-icon">&#128142;</div>
     <div class="section-info"><div class="section-title">SKR Staking</div><div class="section-sub">Key loyalty signal for S2 airdrop</div></div>
     <div class="section-prog"><div class="sec-badge" id="staking-prog">0/1</div><div class="chevron" id="staking-chev">&#9658;</div></div>
@@ -297,56 +333,61 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 
 <div class="cat-panel active" id="panel-wallets">
 <div class="dapp-grid">
-  <div class="dapp-item"><a href="https://phantom.app" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://phantom.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128123;'"></div><div class="dapp-info"><div class="dapp-name">Phantom</div><div class="dapp-cat">Wallet</div></div></a></div>
-  <div class="dapp-item"><a href="https://backpack.app" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://backpack.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127890;'"></div><div class="dapp-info"><div class="dapp-name">Backpack</div><div class="dapp-cat">Wallet / xNFT</div></div></a></div>
-  <div class="dapp-item"><a href="https://solflare.com" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://solflare.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128293;'"></div><div class="dapp-info"><div class="dapp-name">Solflare</div><div class="dapp-cat">Wallet</div></div></a></div>
+  <div class="dapp-item"><a href="https://phantom.app" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://phantom.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128123;'"></div><div class="dapp-info"><div class="dapp-name">Phantom</div><div class="dapp-cat">Wallet</div></div></a></div>
+  <div class="dapp-item"><a href="https://backpack.app" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://backpack.app/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127890;'"></div><div class="dapp-info"><div class="dapp-name">Backpack</div><div class="dapp-cat">Wallet / xNFT</div></div></a></div>
+  <div class="dapp-item"><a href="https://solflare.com" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://solflare.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128293;'"></div><div class="dapp-info"><div class="dapp-name">Solflare</div><div class="dapp-cat">Wallet</div></div></a></div>
 </div>
 </div>
 
 <div class="cat-panel" id="panel-dex">
 <div class="dapp-grid">
-  <div class="dapp-item"><a href="https://jup.ag" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://jup.ag/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9889;'"></div><div class="dapp-info"><div class="dapp-name">Jupiter</div><div class="dapp-cat">DEX / Swaps</div></div></a></div>
-  <div class="dapp-item"><a href="https://drift.trade" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://drift.trade/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128200;'"></div><div class="dapp-info"><div class="dapp-name">Drift</div><div class="dapp-cat">Perps / Spot</div></div></a></div>
-  <div class="dapp-item"><a href="https://raydium.io" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://raydium.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9728;'"></div><div class="dapp-info"><div class="dapp-name">Raydium</div><div class="dapp-cat">DEX / AMM</div></div></a></div>
-  <div class="dapp-item"><a href="https://orca.so" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://orca.so/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128011;'"></div><div class="dapp-info"><div class="dapp-name">Orca</div><div class="dapp-cat">DEX / AMM</div></div></a></div>
+  <div class="dapp-item"><a href="https://jup.ag" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://jup.ag/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9889;'"></div><div class="dapp-info"><div class="dapp-name">Jupiter</div><div class="dapp-cat">DEX / Swaps</div></div></a></div>
+  <div class="dapp-item"><a href="https://drift.trade" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://drift.trade/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128200;'"></div><div class="dapp-info"><div class="dapp-name">Drift</div><div class="dapp-cat">Perps / Spot</div></div></a></div>
+  <div class="dapp-item"><a href="https://raydium.io" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://raydium.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9728;'"></div><div class="dapp-info"><div class="dapp-name">Raydium</div><div class="dapp-cat">DEX / AMM</div></div></a></div>
+  <div class="dapp-item"><a href="https://orca.so" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://orca.so/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128011;'"></div><div class="dapp-info"><div class="dapp-name">Orca</div><div class="dapp-cat">DEX / AMM</div></div></a></div>
 </div>
 </div>
 
 <div class="cat-panel" id="panel-defi">
 <div class="dapp-grid">
-  <div class="dapp-item"><a href="https://loopscale.com" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://loopscale.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128260;'"></div><div class="dapp-info"><div class="dapp-name">Loopscale</div><div class="dapp-cat">Lending</div></div></a></div>
-  <div class="dapp-item"><a href="https://kamino.finance" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://kamino.finance/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127981;'"></div><div class="dapp-info"><div class="dapp-name">Kamino</div><div class="dapp-cat">Lending / Liquidity</div></div></a></div>
-  <div class="dapp-item"><a href="https://marginfi.com" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://marginfi.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127968;'"></div><div class="dapp-info"><div class="dapp-name">MarginFi</div><div class="dapp-cat">Lending</div></div></a></div>
+  <div class="dapp-item"><a href="https://loopscale.com" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://loopscale.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128260;'"></div><div class="dapp-info"><div class="dapp-name">Loopscale</div><div class="dapp-cat">Lending</div></div></a></div>
+  <div class="dapp-item"><a href="https://kamino.finance" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://kamino.finance/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127981;'"></div><div class="dapp-info"><div class="dapp-name">Kamino</div><div class="dapp-cat">Lending / Liquidity</div></div></a></div>
+  <div class="dapp-item"><a href="https://marginfi.com" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://marginfi.com/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127968;'"></div><div class="dapp-info"><div class="dapp-name">MarginFi</div><div class="dapp-cat">Lending</div></div></a></div>
 </div>
 </div>
 
 <div class="cat-panel" id="panel-nft">
 <div class="dapp-grid">
-  <div class="dapp-item"><a href="https://tensor.trade" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://tensor.trade/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128444;'"></div><div class="dapp-info"><div class="dapp-name">Tensor</div><div class="dapp-cat">NFT Marketplace</div></div></a></div>
-  <div class="dapp-item"><a href="https://magiceden.io" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://magiceden.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#129668;'"></div><div class="dapp-info"><div class="dapp-name">Magic Eden</div><div class="dapp-cat">NFT Marketplace</div></div></a></div>
+  <div class="dapp-item"><a href="https://tensor.trade" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://tensor.trade/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128444;'"></div><div class="dapp-info"><div class="dapp-name">Tensor</div><div class="dapp-cat">NFT Marketplace</div></div></a></div>
+  <div class="dapp-item"><a href="https://magiceden.io" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://magiceden.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#129668;'"></div><div class="dapp-info"><div class="dapp-name">Magic Eden</div><div class="dapp-cat">NFT Marketplace</div></div></a></div>
 </div>
 </div>
 
 <div class="cat-panel" id="panel-depin">
 <div class="dapp-grid">
-  <div class="dapp-item"><a href="https://moonwalk.fit" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://moonwalk.fit/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127939;'"></div><div class="dapp-info"><div class="dapp-name">Moonwalk</div><div class="dapp-cat">DePIN / Move2Earn</div></div></a></div>
-  <div class="dapp-item"><a href="https://getgrass.io" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://getgrass.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127807;'"></div><div class="dapp-info"><div class="dapp-name">Grass</div><div class="dapp-cat">DePIN / Bandwidth</div></div></a></div>
-  <div class="dapp-item"><a href="https://www.lootgo.app/" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://lootgo.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127758;'"></div><div class="dapp-info"><div class="dapp-name">Loot Go</div><div class="dapp-cat">GameFi / Geo</div></div></a></div>
+  <div class="dapp-item"><a href="https://moonwalk.fit" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://moonwalk.fit/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127939;'"></div><div class="dapp-info"><div class="dapp-name">Moonwalk</div><div class="dapp-cat">DePIN / Move2Earn</div></div></a></div>
+  <div class="dapp-item"><a href="https://getgrass.io" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://getgrass.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127807;'"></div><div class="dapp-info"><div class="dapp-name">Grass</div><div class="dapp-cat">DePIN / Bandwidth</div></div></a></div>
+  <div class="dapp-item"><a href="https://www.lootgo.app/" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://lootgo.io/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#127758;'"></div><div class="dapp-info"><div class="dapp-name">Loot Go</div><div class="dapp-cat">GameFi / Geo</div></div></a></div>
 </div>
 </div>
 
 <div class="cat-panel" id="panel-staking">
 <div class="dapp-grid">
-  <div class="dapp-item"><a href="https://jito.network" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://jito.network/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128737;'"></div><div class="dapp-info"><div class="dapp-name">Jito</div><div class="dapp-cat">Staking / Guardian</div></div></a></div>
-  <div class="dapp-item"><a href="https://sanctum.so" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://sanctum.so/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9729;'"></div><div class="dapp-info"><div class="dapp-name">Sanctum</div><div class="dapp-cat">Liquid Staking</div></div></a></div>
-  <div class="dapp-item"><a href="https://marinade.finance" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico" style="background:#1a1a2e;overflow:hidden"><img src="https://marinade.finance/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#129748;'"></div><div class="dapp-info"><div class="dapp-name">Marinade</div><div class="dapp-cat">Liquid Staking</div></div></a></div>
+  <div class="dapp-item"><a href="https://jito.network" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://jito.network/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#128737;'"></div><div class="dapp-info"><div class="dapp-name">Jito</div><div class="dapp-cat">Staking / Guardian</div></div></a></div>
+  <div class="dapp-item"><a href="https://sanctum.so" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://sanctum.so/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#9729;'"></div><div class="dapp-info"><div class="dapp-name">Sanctum</div><div class="dapp-cat">Liquid Staking</div></div></a></div>
+  <div class="dapp-item"><a href="https://marinade.finance" target="_blank" style="display:contents;text-decoration:none;color:inherit;"><div class="dapp-ico dapp-ico-dark"><img loading="lazy" src="https://marinade.finance/favicon.ico" style="width:24px;height:24px;object-fit:contain;" onerror="this.parentNode.innerHTML='&#129748;'"></div><div class="dapp-info"><div class="dapp-name">Marinade</div><div class="dapp-cat">Liquid Staking</div></div></a></div>
 </div>
 </div>
 
+</div><!-- /checklist-block -->
+
+<div class="mobile-news">
 <div class="divider"><div class="divider-line"></div><div class="divider-label">Latest News</div><div class="divider-line"></div></div>
+<div class="news-scroll-wrap">
+<div class="news-scroll" id="news-scroll-mobile">
 <div class="news-card">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-    <a href="https://x.com/m00nsoon" target="_blank"><img src="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg" onerror="this.style.display='none'" style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;"></a>
+    <a href="https://x.com/m00nsoon" target="_blank"><img loading="lazy" src="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg" onerror="this.style.display='none'" style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;"></a>
     <div style="flex:1;">
       <div style="display:flex;align-items:center;gap:5px;">
         <a href="https://x.com/m00nsoon" target="_blank" style="text-decoration:none;"><span style="font-size:14px;font-weight:700;background:linear-gradient(90deg,#9945FF,#14F195);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">@tothemoonsoon</span></a>
@@ -359,7 +400,7 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
   <div style="font-size:14px;color:#fff;line-height:1.8;margin-bottom:14px;">
     New game just dropped on <span style="color:#1d9bf0;">@SolanaMobile</span> &#128293;<br><br>
     It's a simple but addictive loop:<br>
-    play -&gt; climb the leaderboard -&gt; earn rewards -&gt; upgrade -&gt; repeat<br><br>
+    play &rarr; climb the leaderboard &rarr; earn rewards &rarr; upgrade &rarr; repeat<br><br>
     You can:<br>
     🎮 compete for top spots<br>
     🏆 unlock badges + achievements<br>
@@ -370,16 +411,16 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
     👉 <span style="color:#14F195;font-weight:600;">BNC-JC7G2V7W</span><br><br>
     Let's see who makes it to the top 👀
   </div>
-  <img src="https://pbs.twimg.com/media/G_Xx2fyWQAAm-x_?format=jpg&name=large" style="width:100%;height:280px;object-fit:cover;object-position:left center;border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:12px;">
+  <img loading="lazy" src="https://pbs.twimg.com/media/G_Xx2fyWQAAm-x_?format=jpg&name=large" style="width:100%;height:160px;object-fit:cover;object-position:left center;border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:12px;">
   <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.05);">
     <span style="font-size:11px;color:rgba(255,255,255,0.25);">via @tothemoonsoon on X</span>
     <a href="https://x.com/m00nsoon/status/2036905929439142403" target="_blank" style="font-size:11px;color:#9945FF;text-decoration:none;">View on X &rarr;</a>
   </div>
 </div>
 
-<div class="news-card" style="margin-top:12px;">
+<div class="news-card">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-    <a href="https://x.com/m00nsoon" target="_blank"><img src="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg" onerror="this.style.display='none'" style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;"></a>
+    <a href="https://x.com/m00nsoon" target="_blank"><img loading="lazy" src="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg" onerror="this.style.display='none'" style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;"></a>
     <div style="flex:1;">
       <div style="display:flex;align-items:center;gap:5px;">
         <a href="https://x.com/m00nsoon" target="_blank" style="text-decoration:none;"><span style="font-size:14px;font-weight:700;background:linear-gradient(90deg,#9945FF,#14F195);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">@tothemoonsoon</span></a>
@@ -398,13 +439,20 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
     - built different: no leverage, no gambling, just healthy wealth growth<br><br>
     best part? your XP is already counting even before the Seeker Season UI goes live
   </div>
-  <img src="https://sanctum.so/_next/image?url=%2Fblog%2FChatGPT_Image_Mar_22_2026_12_07_56_PM.png&w=3840&q=100&dpl=dpl_FSc4khZJWgmpGnRR1aLLV8LHvYb3" onerror="this.style.display='none'" style="width:100%;height:200px;object-fit:cover;border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:12px;">
+  <img loading="lazy" src="https://sanctum.so/_next/image?url=%2Fblog%2FChatGPT_Image_Mar_22_2026_12_07_56_PM.png&w=3840&q=100&dpl=dpl_FSc4khZJWgmpGnRR1aLLV8LHvYb3" onerror="this.style.display='none'" style="width:100%;height:160px;object-fit:cover;border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:12px;">
   <div style="font-size:13px;color:#1d9bf0;margin-bottom:12px;">#Seeker #SKR #Sanctum</div>
   <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.05);">
     <a href="https://x.com/m00nsoon/status/2036723898578862266" target="_blank" style="font-size:11px;color:#9945FF;text-decoration:none;">View on X &rarr;</a>
   </div>
 </div>
+  <div class="scroll-arrow" id="scroll-arrow-mobile">
+    <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M2 2l7 6 7-6" stroke="rgba(153,69,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</div><!-- /news-scroll-mobile -->
+</div><!-- /news-scroll-wrap -->
+</div><!-- /mobile-news -->
 
+<div class="calc-block">
 <div class="divider"><div class="divider-line"></div><div class="divider-label">SKR Staking Calculator</div><div class="divider-line"></div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
   <div class="calc-inner"><div class="calc-label">SKR Amount</div><input class="calc-input" type="number" id="c-amount" value="1000" min="1" oninput="calcUpdate()"><input class="calc-slider" type="range" id="c-slider" min="100" max="1000000" step="100" value="1000" oninput="document.getElementById('c-amount').value=this.value;calcUpdate()"></div>
@@ -419,6 +467,81 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
 <div class="calc-inner" style="margin-bottom:10px;"><div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:12px;">Estimated growth</div><div style="position:relative;height:180px;"><canvas id="c-chart"></canvas></div></div>
 <div class="calc-inner"><div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;">Breakdown</div><div id="c-breakdown"></div></div>
 <div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:10px;">Not financial advice.</div>
+</div><!-- /calc-block -->
+
+</div><!-- /col-left -->
+
+<div class="col-right desktop-only">
+
+<div class="divider"><div class="divider-line"></div><div class="divider-label">Latest News</div><div class="divider-line"></div></div>
+<div class="news-scroll-wrap">
+<div class="news-scroll" id="news-scroll">
+<div class="news-card">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <a href="https://x.com/m00nsoon" target="_blank"><img loading="lazy" src="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg" onerror="this.style.display='none'" style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;"></a>
+    <div style="flex:1;">
+      <div style="display:flex;align-items:center;gap:5px;">
+        <a href="https://x.com/m00nsoon" target="_blank" style="text-decoration:none;"><span style="font-size:14px;font-weight:700;background:linear-gradient(90deg,#9945FF,#14F195);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">@tothemoonsoon</span></a>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1d9bf0"><path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.9-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91C2.88 9.33 2 10.57 2 12s.88 2.67 2.19 3.34c-.46 1.39-.2 2.9.81 3.91s2.52 1.27 3.91.81c.66 1.31 1.9 2.19 3.34 2.19s2.67-.88 3.33-2.19c1.4.46 2.91.2 3.92-.81s1.26-2.52.8-3.91C21.37 14.67 22.25 13.43 22.25 12z"/><path d="M10.54 16.54l-4.08-4.08 1.41-1.41 2.67 2.67 5.5-5.5 1.41 1.41-6.91 6.91z" fill="#fff"/></svg>
+      </div>
+      <span style="font-size:12px;color:rgba(255,255,255,0.45);">@m00nsoon &middot; Mar 25, 2026</span>
+    </div>
+    <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;background:rgba(20,241,149,0.1);color:#14F195;white-space:nowrap;">Gaming</span>
+  </div>
+  <div style="font-size:14px;color:#fff;line-height:1.8;margin-bottom:14px;">
+    New game just dropped on <span style="color:#1d9bf0;">@SolanaMobile</span> &#128293;<br><br>
+    It's a simple but addictive loop:<br>
+    play &rarr; climb the leaderboard &rarr; earn rewards &rarr; upgrade &rarr; repeat<br><br>
+    You can:<br>
+    🎮 compete for top spots<br>
+    🏆 unlock badges + achievements<br>
+    🍌 earn and spend bananas on loot<br>
+    👾 customize your character<br><br>
+    <span style="color:#1d9bf0;">@monkebounce</span> feels like early days of something big for mobile + onchain gaming.<br><br>
+    If you're trying it out, use my referral code:<br>
+    👉 <span style="color:#14F195;font-weight:600;">BNC-JC7G2V7W</span><br><br>
+    Let's see who makes it to the top 👀
+  </div>
+  <img loading="lazy" src="https://pbs.twimg.com/media/G_Xx2fyWQAAm-x_?format=jpg&name=large" style="width:100%;height:160px;object-fit:cover;object-position:left center;border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:12px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.05);">
+    <span style="font-size:11px;color:rgba(255,255,255,0.25);">via @tothemoonsoon on X</span>
+    <a href="https://x.com/m00nsoon/status/2036905929439142403" target="_blank" style="font-size:11px;color:#9945FF;text-decoration:none;">View on X &rarr;</a>
+  </div>
+</div>
+
+<div class="news-card">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <a href="https://x.com/m00nsoon" target="_blank"><img loading="lazy" src="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg" onerror="this.style.display='none'" style="width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;"></a>
+    <div style="flex:1;">
+      <div style="display:flex;align-items:center;gap:5px;">
+        <a href="https://x.com/m00nsoon" target="_blank" style="text-decoration:none;"><span style="font-size:14px;font-weight:700;background:linear-gradient(90deg,#9945FF,#14F195);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">@tothemoonsoon</span></a>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1d9bf0"><path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.9-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91C2.88 9.33 2 10.57 2 12s.88 2.67 2.19 3.34c-.46 1.39-.2 2.9.81 3.91s2.52 1.27 3.91.81c.66 1.31 1.9 2.19 3.34 2.19s2.67-.88 3.33-2.19c1.4.46 2.91.2 3.92-.81s1.26-2.52.8-3.91C21.37 14.67 22.25 13.43 22.25 12z"/><path d="M10.54 16.54l-4.08-4.08 1.41-1.41 2.67 2.67 5.5-5.5 1.41 1.41-6.91 6.91z" fill="#fff"/></svg>
+      </div>
+      <span style="font-size:12px;color:rgba(255,255,255,0.45);">@m00nsoon &middot; Mar 25, 2026</span>
+    </div>
+    <span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;background:rgba(153,69,255,0.15);color:#c084fc;white-space:nowrap;">dApp Release</span>
+  </div>
+  <div style="font-size:14px;color:#fff;line-height:1.8;margin-bottom:14px;">
+    If you have a <span style="color:#1d9bf0;">@solanamobile</span> Seeker open your dApp Store right now<br><br>
+    <span style="color:#1d9bf0;">@sanctumso</span> just launched exclusively for Seeker holders &#127769;<br><br>
+    why it matters:<br>
+    - earn yield + XP starting today<br>
+    - Seeker Season dropping soon with exclusive rewards<br>
+    - built different: no leverage, no gambling, just healthy wealth growth<br><br>
+    best part? your XP is already counting even before the Seeker Season UI goes live
+  </div>
+  <img loading="lazy" src="https://sanctum.so/_next/image?url=%2Fblog%2FChatGPT_Image_Mar_22_2026_12_07_56_PM.png&w=3840&q=100&dpl=dpl_FSc4khZJWgmpGnRR1aLLV8LHvYb3" onerror="this.style.display='none'" style="width:100%;height:160px;object-fit:cover;border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);margin-bottom:12px;">
+  <div style="font-size:13px;color:#1d9bf0;margin-bottom:12px;">#Seeker #SKR #Sanctum</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.05);">
+    <a href="https://x.com/m00nsoon/status/2036723898578862266" target="_blank" style="font-size:11px;color:#9945FF;text-decoration:none;">View on X &rarr;</a>
+  </div>
+</div>
+</div><!-- /news-scroll -->
+  <div class="scroll-arrow" id="scroll-arrow">
+    <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M2 2l7 6 7-6" stroke="rgba(153,69,255,0.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</div><!-- /news-scroll-wrap -->
+
 
 <div class="divider"><div class="divider-line"></div><div class="divider-label">Support this Project</div><div class="divider-line"></div></div>
 <div class="tip-section">
@@ -435,8 +558,30 @@ body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMac
   </div>
 </div>
 
+</div><!-- /col-right -->
+</div><!-- /two-col -->
+
+<div class="mobile-news">
+<div class="divider"><div class="divider-line"></div><div class="divider-label">Support this Project</div><div class="divider-line"></div></div>
+<div class="tip-section">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:18px">&#9749;</span><span style="font-size:14px;font-weight:600;color:#fff">Support this project</span></div>
+  <p style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:16px;">If this checklist helps your Seeker Season 2 journey, consider sending a tip in SOL!</p>
+  <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+    <div style="background:#fff;border-radius:12px;padding:10px;flex-shrink:0;" id="qr-container-mobile"></div>
+    <div style="flex:1;min-width:180px;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase;">Solana address</div>
+      <div class="addr-box"><span class="addr-text">C5maywT6FNqLZVi9m94yKc1RCstd18gYs6Cv1bzFPyD3</span><button class="copy-btn" onclick="copyWallet()">&#10697;</button></div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:8px;">or send to <span style="color:#c084fc;font-weight:600;">moonsoon.skr</span></div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:8px;">Scan QR with any Solana wallet app</div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- /wrap -->
+
 <a class="built-by" href="https://x.com/m00nsoon" target="_blank">
-  <img class="built-by-avatar" src="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png" alt="tothemoonsoon" onerror="this.style.display='none'">
+  <img loading="eager" class="built-by-avatar" src="https://madlads.s3.us-west-2.amazonaws.com/images/9175.png" alt="tothemoonsoon" onerror="this.style.display='none'">
   <span class="built-by-label">built by</span>
   <span class="built-by-name">@tothemoonsoon</span>
 </a>
@@ -515,8 +660,11 @@ function render() {
 
 function initQR() {
   var container=document.getElementById("qr-container");
+  var containerMobile=document.getElementById("qr-container-mobile");
+  var opts={text:"solana:"+WALLET,width:120,height:120,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M};
   if(!container||typeof QRCode==="undefined") return;
-  new QRCode(container,{text:"solana:"+WALLET,width:120,height:120,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
+  new QRCode(container,opts);
+  if(containerMobile) new QRCode(containerMobile,opts);
 }
 
 function fetchPrices() {
@@ -563,7 +711,18 @@ function calcUpdate(){
   document.getElementById("c-breakdown").innerHTML=html;
 }
 
-window.addEventListener("load",function(){initQR();render();fetchPrices();calcUpdate();});
+window.addEventListener("load",function(){
+  initQR();render();fetchPrices();calcUpdate();
+  function initScrollArrow(scrollId, arrowId){
+    var ns=document.getElementById(scrollId);
+    var arrow=document.getElementById(arrowId);
+    if(ns&&arrow){ns.addEventListener("scroll",function(){
+      arrow.classList.toggle("hidden",ns.scrollHeight-ns.scrollTop-ns.clientHeight<8);
+    });}
+  }
+  initScrollArrow("news-scroll","scroll-arrow");
+  initScrollArrow("news-scroll-mobile","scroll-arrow-mobile");
+});
 </script>
 </body>
 </html>

@@ -1,34 +1,55 @@
 # tothemoonsoon — Project Context for Claude
 
-## Who I am
-- Twitter/X: @m00nsoon (https://x.com/m00nsoon)
-- Website: https://tothemoonsoon.xyz
-- Solana address: C5maywT6FNqLZVi9m94yKc1RCstd18gYs6Cv1bzFPyD3
-- SKR domain: moonsoon.skr
+## WAŻNE — jak zacząć każdą sesję
+1. Przeczytaj ten plik
+2. Pobierz aktualny `index.html` z GitHub przed jakimikolwiek zmianami
+3. Wprowadź zmiany
+4. Commituj bezpośrednio do `main` przez GitHub MCP
+5. Zmiany są od razu live — nie trzeba nic robić ręcznie
 
-## Repository
+## Dane właściciela
+- Twitter/X: @m00nsoon (https://x.com/m00nsoon)
+- GitHub user: `tothemoonsoon1`
+- Website: https://tothemoonsoon.xyz
+- Solana address: `C5maywT6FNqLZVi9m94yKc1RCstd18gYs6Cv1bzFPyD3`
+- SKR domain: `moonsoon.skr`
+
+## Repozytorium
 - GitHub: https://github.com/tothemoonsoon1/moonsoon
-- Main branch: `main`
+- Owner: `tothemoonsoon1`
+- Repo: `moonsoon`
+- Branch: `main`
 - Deployed at: https://tothemoonsoon.xyz
 
-## Project overview
-**tothemoonsoon Strategies Hub** — a multi-page web project focused on Solana ecosystem tools and strategies. Currently contains:
+## Struktura plików
+```
+moonsoon/
+├── index.html       ← główna strona (Seeker Season 2 checklist)
+├── CLAUDE.md        ← ten plik
+└── README.md
+```
 
-### Files
-- `index.html` — Seeker Season 2 daily checklist (main page)
-  - Interactive task tracker with on-chain level estimation
-  - SKR staking calculator with Chart.js
-  - Featured dApps with tabbed categories (Wallets, DEX, DeFi, NFT, DePIN, Staking)
-  - Latest news panel (right sidebar on desktop, bottom sheet on mobile)
-  - Responsive: 3-col desktop layout, mobile topbar + drawer
-  - Umami Analytics: `data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"`
+## Aktualny stan projektu
+- Jeden plik `index.html` — wszystko inline (HTML + CSS + JS)
+- **Nie ma osobnych plików CSS/JS** — wszystko jest w `index.html`
+- Poprzednia sesja próbowała rozbić na osobne pliki, ale to nie zostało wdrożone
+
+## Co robi index.html
+- Interaktywna codzienna checklista dla posiadaczy Solana Seeker (Season 2)
+- Tracker postępów z paskiem i poziomami on-chain (Lv 0–5)
+- Licznik dziennych swapów
+- Siatka featured dApps z filtrowaniem po kategorii
+- Kalkulator stakingu SKR z wykresem (Chart.js)
+- Sekcja latest news
+- Sekcja wsparcia projektu z QR kodem (Solana wallet)
+- Pobieranie cen SOL/SKR z CoinGecko API
 
 ## Tech stack
-- Pure HTML/CSS/JS (no framework, no build step)
+- Czysty HTML/CSS/JS (zero frameworków, zero build step)
 - Chart.js 4.4.0 (CDN)
 - QRCodeJS 1.0.0 (CDN)
-- Umami Cloud Analytics
-- Hosted on: (static hosting, likely Cloudflare Pages or similar)
+- Umami Analytics: `data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"`
+- Hosting: statyczny (Cloudflare Pages lub podobny)
 
 ## Design system
 - Background: `#0d0d1a` (dark navy)
@@ -36,31 +57,25 @@
 - Teal: `#14F195` (Solana green)
 - Blue: `#00C2FF`
 - Font: system-ui / -apple-system stack
-- All colors defined as CSS variables in `:root`
+- CSS variables w `:root`
 
-## How to work with Claude
-1. At the start of each session, read this file to understand context
-2. To make changes: read the current file from GitHub, apply changes, commit directly via GitHub MCP
-3. Always fetch the latest file before editing — never work from memory
-4. Commit messages should be descriptive (e.g. "Add Umami analytics", "Update news section")
-5. When adding new pages, maintain the same design system and nav structure
+## Kluczowe wzorce w kodzie
+- Sekcje zwijane: `toggleSection(id)`
+- Taski: `toggleTask(id)` — ID z prefiksem `t-`
+- dAppy: `toggleDapp(id)` — ID z prefiksem `d-`
+- Filtrowanie dApps: `setDappCat(cat, btn)` via `data-cat` attribute
+- Stan in-memory (brak localStorage)
+- Ceny z CoinGecko na load
 
-## Workflow
+## Workflow zmian
 ```
-User describes change
-→ Claude reads latest file from GitHub
-→ Claude makes changes
-→ Claude commits directly to main branch
-→ Changes are live (no manual steps needed)
+User opisuje zmianę
+→ Claude czyta aktualny index.html z GitHub (zawsze!)
+→ Claude wprowadza zmiany
+→ Claude commituje do main przez GitHub MCP
+→ Live bez żadnych kroków ręcznych
 ```
 
-## Key patterns in the codebase
-- All sections are collapsible via `toggleSection(id)`
-- Tasks use `toggleTask(id)` — IDs prefixed with `t-`
-- dApps use `toggleDapp(id)` — IDs prefixed with `d-`
-- Featured dApps filtered by `data-cat` attribute via `setDappCat(cat, btn)`
-- State is in-memory only (no localStorage)
-- Prices fetched from CoinGecko API on load
-
-## Coming soon (planned pages)
-- Airdrop strategy guides: Jupiter, Kamino, Drift, Meteora
+## Zaplanowane (coming soon)
+- Podstrony z strategiami dla innych projektów (Jupiter, Kamino, Drift, Meteora)
+- Osobne URL-e per strategia dla SEO

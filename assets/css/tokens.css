@@ -1,0 +1,27 @@
+/* ============================================================
+   TOKENS — CSS custom properties (design system)
+   Edit here to change colors/fonts across the entire site.
+   tothemoonsoon.xyz
+   ============================================================ */
+
+:root {
+  /* Colors */
+  --bg:     #0d0d1a;
+  --bg2:    #0a0a15;
+  --purple: #9945FF;
+  --teal:   #14F195;
+  --blue:   #00C2FF;
+  --border: rgba(255, 255, 255, 0.07);
+  --muted:  rgba(255, 255, 255, 0.4);
+  --text:   rgba(255, 255, 255, 0.85);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}

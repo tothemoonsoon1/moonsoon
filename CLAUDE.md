@@ -2,10 +2,9 @@
 
 ## WAŻNE — jak zacząć każdą sesję
 1. Przeczytaj ten plik
-2. Pobierz aktualny `index.html` z GitHub przed jakimikolwiek zmianami
+2. Pobierz aktualny plik który chcesz edytować z GitHub przed zmianami
 3. Wprowadź zmiany
-4. Commituj bezpośrednio do `main` przez GitHub MCP
-5. Zmiany są od razu live — nie trzeba nic robić ręcznie
+4. Commituj bezpośrednio do `main` przez GitHub MCP — zmiany są od razu live
 
 ## Dane właściciela
 - Twitter/X: @m00nsoon (https://x.com/m00nsoon)
@@ -20,44 +19,45 @@
 - Repo: `moonsoon`
 - Branch: `main`
 - Deployed at: https://tothemoonsoon.xyz
+- Hosting: statyczny (Cloudflare Pages lub podobny) — commit = live
 
 ## Struktura plików
 ```
 moonsoon/
-├── index.html       ← główna strona (Seeker Season 2 checklist)
-├── CLAUDE.md        ← ten plik
-└── README.md
+├── index.html              ← główna strona (Seeker S2 checklist)
+│                             UWAGA: <style> i <script> są inline — patrz niżej
+├── assets/
+│   ├── css/
+│   │   ├── tokens.css      ← CSS variables (kolory, fonty) — EDYTUJ TU aby zmienić design
+│   │   ├── layout.css      ← 3-col layout, nav, topbar, panel, responsive
+│   │   └── components.css  ← wszystkie komponenty UI (taski, karty, tabs, kalkulator...)
+│   └── js/
+│       ├── checklist.js    ← logika tasków, stan, render, QR
+│       ├── prices.js       ← CoinGecko price fetch
+│       ├── calculator.js   ← SKR staking kalkulator + Chart.js
+│       └── ui.js           ← drawer, bottom sheet, dApp filter, init
+├── sitemap.xml
+├── robots.txt
+└── CLAUDE.md               ← ten plik
 ```
 
-## Aktualny stan projektu
-- Jeden plik `index.html` — wszystko inline (HTML + CSS + JS)
-- **Nie ma osobnych plików CSS/JS** — wszystko jest w `index.html`
-- Poprzednia sesja próbowała rozbić na osobne pliki, ale to nie zostało wdrożone
+## WAŻNE: index.html ma inline style i skrypty
+Plik `index.html` zawiera `<style>` i `<script>` wbudowane inline (dla podglądu w Claude artifacts).
+Osobne pliki w `assets/` to **źródło prawdy** — tam wprowadzaj zmiany, potem zaktualizuj też inline w index.html.
 
-## Co robi index.html
-- Interaktywna codzienna checklista dla posiadaczy Solana Seeker (Season 2)
-- Tracker postępów z paskiem i poziomami on-chain (Lv 0–5)
-- Licznik dziennych swapów
-- Siatka featured dApps z filtrowaniem po kategorii
-- Kalkulator stakingu SKR z wykresem (Chart.js)
-- Sekcja latest news
-- Sekcja wsparcia projektu z QR kodem (Solana wallet)
-- Pobieranie cen SOL/SKR z CoinGecko API
+Gdy edytujesz index.html bezpośrednio (np. HTML, tweety, dAppy) — wystarczy zaktualizować index.html.
+Gdy edytujesz CSS/JS — zaktualizuj plik w assets/ ORAZ odpowiedni blok `<style>`/`<script>` w index.html.
 
 ## Tech stack
 - Czysty HTML/CSS/JS (zero frameworków, zero build step)
 - Chart.js 4.4.0 (CDN)
 - QRCodeJS 1.0.0 (CDN)
 - Umami Analytics: `data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"`
-- Hosting: statyczny (Cloudflare Pages lub podobny)
 
 ## Design system
-- Background: `#0d0d1a` (dark navy)
-- Purple: `#9945FF` (Solana purple)
-- Teal: `#14F195` (Solana green)
-- Blue: `#00C2FF`
+- Tło: `#0d0d1a` | Purple: `#9945FF` | Teal: `#14F195` | Blue: `#00C2FF`
+- Wszystkie kolory jako CSS variables w `tokens.css`
 - Font: system-ui / -apple-system stack
-- CSS variables w `:root`
 
 ## Kluczowe wzorce w kodzie
 - Sekcje zwijane: `toggleSection(id)`
@@ -67,15 +67,12 @@ moonsoon/
 - Stan in-memory (brak localStorage)
 - Ceny z CoinGecko na load
 
-## Workflow zmian
-```
-User opisuje zmianę
-→ Claude czyta aktualny index.html z GitHub (zawsze!)
-→ Claude wprowadza zmiany
-→ Claude commituje do main przez GitHub MCP
-→ Live bez żadnych kroków ręcznych
-```
+## Layout (desktop 3 kolumny)
+- **Lewa kolumna** (180px): nawigacja `.nav` — linki do stron, coming soon
+- **Środek** (max 680px): główna treść `.main` — checklist, kalkulator
+- **Prawa kolumna** (360px): panel `.panel` — newsy, support/QR
+- **Mobile** (<768px): topbar + drawer + bottom sheet dla newsów
 
-## Zaplanowane (coming soon)
+## Zaplanowane
 - Podstrony z strategiami dla innych projektów (Jupiter, Kamino, Drift, Meteora)
 - Osobne URL-e per strategia dla SEO

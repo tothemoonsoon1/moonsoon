@@ -49,7 +49,7 @@ moonsoon/
 │       ├── prices.js       ← CoinGecko price fetch
 │       ├── calculator.js   ← SKR staking kalkulator + Chart.js
 │       └── ui.js           ← drawer, bottom sheet, dApp filter, init
-├── sitemap.xml
+├── sitemap.xml             ← ZAWSZE aktualizuj przy nowej stronie!
 ├── robots.txt
 └── CLAUDE.md               ← ten plik
 ```
@@ -129,7 +129,9 @@ Wszystkie strony strategii są oparte na wspólnym szablonie: `strategies/TEMPLA
 3. Zmień `--accent` na kolor akcentu protokołu
 4. Dostosuj liczbę kart modów (1–4) i tip boxów
 5. Dodaj nowy link w nawigacji na **wszystkich** stronach (index.html + huma.html + nowa strona)
-6. Pushuj na `dev`, testuj, potem `main`
+6. Wypełnij SEO (patrz sekcja niżej) — **obowiązkowo**
+7. Dodaj stronę do `sitemap.xml` — **obowiązkowo**
+8. Pushuj na `dev`, testuj, potem `main`
 
 ### Zasady spójności nawigacji
 Każda strona ma identyczny `<nav>` z pełną listą strategii.
@@ -158,6 +160,117 @@ Kiedy dodajesz nową strategię:
 - JUP (Jupiter): `jupiter-exchange-solana`
 - KMNO (Kamino): `kamino-finance`
 - Format: jeśli cena < $0.01 → `.toFixed(5)`, < $1 → `.toFixed(4)`, >= $1 → `.toFixed(2)`
+
+---
+
+## ⚠️ SEO — obowiązkowe przy każdej nowej stronie
+
+Każda nowa strona strategii MUSI mieć kompletne SEO zanim trafi na `main`.
+Nie jest to opcjonalne — bez tego Google nie zaindeksuje strony poprawnie.
+
+### Wymagane tagi `<head>` dla każdej strony strategii
+
+```html
+<!-- 1. Primary SEO -->
+<title>[PROTOCOL] Strategy Guide | tothemoonsoon</title>
+<meta name="description" content="[1–2 zdania opisujące strategię, max 155 znaków]">
+<meta name="keywords" content="[PROTOCOL], [TOKEN], Solana DeFi, airdrop strategy, tothemoonsoon, [inne słowa kluczowe]">
+<meta name="author" content="tothemoonsoon">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0d0d1a">
+<link rel="canonical" href="https://tothemoonsoon.xyz/strategies/[protocol-slug]">
+
+<!-- 2. Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tothemoonsoon.xyz/strategies/[protocol-slug]">
+<meta property="og:title" content="[PROTOCOL] Strategy Guide | tothemoonsoon">
+<meta property="og:description" content="[ten sam opis co meta description]">
+<meta property="og:image" content="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+<meta property="og:site_name" content="tothemoonsoon Strategies Hub">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="https://x.com/m00nsoon">
+
+<!-- 3. Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@m00nsoon">
+<meta name="twitter:creator" content="@m00nsoon">
+<meta name="twitter:title" content="[PROTOCOL] Strategy Guide | tothemoonsoon">
+<meta name="twitter:description" content="[opis]">
+<meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg">
+
+<!-- 4. JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "[PROTOCOL] Strategy Guide",
+  "description": "[opis]",
+  "url": "https://tothemoonsoon.xyz/strategies/[slug]",
+  "author": {
+    "@type": "Person",
+    "name": "tothemoonsoon",
+    "url": "https://x.com/m00nsoon"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "tothemoonsoon",
+    "url": "https://tothemoonsoon.xyz"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://tothemoonsoon.xyz/strategies/[slug]"
+  },
+  "about": {
+    "@type": "Thing",
+    "name": "[PROTOCOL]",
+    "url": "[APP_URL]"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Strategies Hub", "item": "https://tothemoonsoon.xyz"},
+      {"@type": "ListItem", "position": 2, "name": "[PROTOCOL] Strategy", "item": "https://tothemoonsoon.xyz/strategies/[slug]"}
+    ]
+  }
+}
+</script>
+
+<!-- 5. Performance -->
+<link rel="dns-prefetch" href="https://api.coingecko.com">
+<!-- dodaj dns-prefetch dla każdej zewnętrznej domeny linkowanej ze strony -->
+```
+
+### Obowiązkowa aktualizacja sitemap.xml
+
+Każda nowa strona = nowy wpis w `sitemap.xml`. Rób to **w tym samym commicie** co publikacja strony.
+
+```xml
+<url>
+  <loc>https://tothemoonsoon.xyz/strategies/[protocol-slug]</loc>
+  <lastmod>YYYY-MM-DD</lastmod>  <!-- data dzisiejsza -->
+  <changefreq>monthly</changefreq>
+  <priority>0.9</priority>
+</url>
+```
+
+### Aktualny stan sitemap.xml
+Strony już zaindeksowane:
+- `https://tothemoonsoon.xyz/` — Seeker S2 Checklist
+- `https://tothemoonsoon.xyz/strategies/huma` — Huma Finance Strategy
+
+### Checklist SEO przed każdym publishem nowej strony
+- [ ] `<title>` unikalny, zawiera nazwę protokołu i "tothemoonsoon"
+- [ ] `<meta description>` 120–155 znaków, opisuje co użytkownik znajdzie
+- [ ] `<link rel="canonical">` z pełnym URL
+- [ ] Open Graph — wszystkie 7 tagów
+- [ ] Twitter Card — wszystkie 5 tagów
+- [ ] JSON-LD Article + BreadcrumbList
+- [ ] `sitemap.xml` zaktualizowany z nowym wpisem
+- [ ] Wszystkie `target="_blank"` mają `rel="noopener noreferrer"`
+- [ ] Obrazki mają `alt` i `loading="lazy"` (poza LCP)
+- [ ] Script owinięty w IIFE `(function(){...})()`
 
 ---
 

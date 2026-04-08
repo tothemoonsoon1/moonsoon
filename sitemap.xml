@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Main page — Seeker Season 2 Checklist -->
   <url>
     <loc>https://tothemoonsoon.xyz/</loc>
-    <lastmod>2026-03-31</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Add new strategy pages below when created, e.g.:
   <url>
-    <loc>https://tothemoonsoon.xyz/jupiter/</loc>
-    <lastmod>2026-XX-XX</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://tothemoonsoon.xyz/strategies/huma</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Dodawaj nowe strony strategii tutaj przy każdym publishu:
+  <url>
+    <loc>https://tothemoonsoon.xyz/strategies/jupiter</loc>
+    <lastmod>YYYY-MM-DD</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   -->

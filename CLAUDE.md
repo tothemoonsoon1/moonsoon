@@ -35,6 +35,10 @@ moonsoon/
 ├── index.html              ← główna strona (Seeker S2 checklist)
 │                             UWAGA: <style> i <script> są inline — patrz niżej
 ├── news.json               ← dane newsów ładowane przez fetch w JS
+├── strategies/
+│   ├── TEMPLATE.html       ← szablon dla nowych stron strategii (NIE deployować!)
+│   ├── huma.html           ← Huma Finance strategy page
+│   └── (przyszłe: jupiter.html, kamino.html, meteora.html...)
 ├── assets/
 │   ├── css/
 │   │   ├── tokens.css      ← CSS variables (kolory, fonty) — EDYTUJ TU aby zmienić design
@@ -111,6 +115,51 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - **Środek** (max 680px): główna treść `.main` — checklist, kalkulator
 - **Prawa kolumna** (360px): panel `.panel` — newsy, support/QR
 - **Mobile** (<768px): topbar + drawer + bottom sheet dla newsów
+
+---
+
+## Strategy pages — struktura i template
+
+Każda strategia to osobny plik HTML pod `strategies/[protocol].html`.
+Wszystkie strony strategii są oparte na wspólnym szablonie: `strategies/TEMPLATE.html`.
+
+### Jak stworzyć nową stronę strategii
+1. Skopiuj `strategies/TEMPLATE.html` jako `strategies/[protocol].html`
+2. Znajdź wszystkie `[PLACEHOLDERS]` w nawiasach kwadratowych i zastąp je prawdziwymi danymi
+3. Zmień `--accent` na kolor akcentu protokołu
+4. Dostosuj liczbę kart modów (1–4) i tip boxów
+5. Dodaj nowy link w nawigacji na **wszystkich** stronach (index.html + huma.html + nowa strona)
+6. Pushuj na `dev`, testuj, potem `main`
+
+### Zasady spójności nawigacji
+Każda strona ma identyczny `<nav>` z pełną listą strategii.
+Kiedy dodajesz nową strategię:
+- Dodaj link `.nav-link` do nav na **wszystkich istniejących stronach**
+- Na własnej stronie nowa strategia ma klasę `.active`
+- Na pozostałych stronach — bez `.active`
+- Zaktualizuj "Coming Soon" blok żeby nie wymieniał już dodanej strategii
+
+### Struktura strony strategii (kolejność sekcji)
+1. **Hero** — nazwa protokołu, tag kategorii (np. "PayFi Strategy"), opis jednym zdaniem, 2–4 meta-facts
+2. **Stats bar** — 2–3 karty z kluczowymi metrykami (APY, TVL, itp.)
+3. **CTA banner** — przycisk do apki + opcjonalny referral link
+4. **Mode cards** — 1–4 karty z trybami/strategiami, każda z APY, opisem, risk dots
+5. **Tip boxes** — amber (tipsy), blue (info), green (dobre wieści), red (ryzyko)
+6. **Panel prawy** — live price box (jeśli jest token), official links, opcjonalne dodatkowe sekcje
+
+### CSS — kluczowe klasy strony strategii
+- `.panel::before` — **NIE UŻYWAĆ** — powoduje spurious border line niezależną od layoutu. Zamiast tego border-left na `.panel` wystarczy.
+- Panel width: `360px` — identyczny z `index.html` (prawa kolumna)
+- Breakpoint chowania panelu: `@media(max-width:1100px)`
+- Breakpoint mobilny: `@media(max-width:768px)`
+
+### CoinGecko price fetch — przykłady ID
+- HUMA: `huma-finance`
+- JUP (Jupiter): `jupiter-exchange-solana`
+- KMNO (Kamino): `kamino-finance`
+- Format: jeśli cena < $0.01 → `.toFixed(5)`, < $1 → `.toFixed(4)`, >= $1 → `.toFixed(2)`
+
+---
 
 ## Zaplanowane
 - Podstrony z strategiami dla innych projektów (Jupiter, Kamino, Drift, Meteora)

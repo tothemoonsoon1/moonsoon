@@ -19,13 +19,22 @@
 - Repo: `moonsoon`
 - Branch: `main`
 - Deployed at: https://tothemoonsoon.xyz
-- Hosting: statyczny (Cloudflare Pages lub podobny) — commit = live
+- Hosting: statyczny (Netlify) — commit = live
+
+## Release flow
+1. Claude pushuje zmiany na branch `dev`
+2. Netlify automatycznie deployuje → https://dev--moonsoon.netlify.app/
+3. Właściciel testuje na tym URL
+4. Właściciel mówi "OK"
+5. Claude robi merge `dev` → `main`
+6. Netlify deployuje na produkcję → tothemoonsoon.xyz
 
 ## Struktura plików
 ```
 moonsoon/
 ├── index.html              ← główna strona (Seeker S2 checklist)
 │                             UWAGA: <style> i <script> są inline — patrz niżej
+├── news.json               ← dane newsów ładowane przez fetch w JS
 ├── assets/
 │   ├── css/
 │   │   ├── tokens.css      ← CSS variables (kolory, fonty) — EDYTUJ TU aby zmienić design
@@ -48,6 +57,35 @@ Osobne pliki w `assets/` to **źródło prawdy** — tam wprowadzaj zmiany, pote
 Gdy edytujesz index.html bezpośrednio (np. HTML, tweety, dAppy) — wystarczy zaktualizować index.html.
 Gdy edytujesz CSS/JS — zaktualizuj plik w assets/ ORAZ odpowiedni blok `<style>`/`<script>` w index.html.
 
+## ⚠️ KRYTYCZNE — inline `<script>` i błędy parsowania
+
+**Jeden błąd składniowy w bloku `<script>` = cała strona nie działa.**
+
+Przeglądarka parsuje `<script>` jako jeden blok. Jeśli gdziekolwiek jest błąd składniowy,
+cały skrypt jest odrzucany — żadna funkcja nie istnieje, żaden button nie reaguje,
+żaden fetch nie odpala. Objawia się to tym że strona wygląda dobrze wizualnie,
+ale jest kompletnie martwa (przyciski, newsfeed, kalkulator — nic nie działa).
+
+**Najczęstsze przyczyny:**
+- Wklejanie danych JSON z HTML entities wewnątrz stringa JS (np. `&#128241;`, `&amp;`)
+- Zagnieżdżone cudzysłowy bez prawidłowego escapowania (`"` w środku `"..."`)
+- HTML w stringach JS (tagi `<strong style="...">` wewnątrz apostrofów)
+
+**Zasada:** dane z HTML (entities, tagi, cudzysłowy) nie powinny być hardkodowane
+bezpośrednio w bloku `<script>`. Lepiej trzymać je w osobnym pliku (np. `news.json`)
+i ładować fetchem — wtedy błąd w danych nie niszczy całego skryptu.
+
+## ⚠️ KRYTYCZNE — jak naprawić zepsutą wersję dev
+
+Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów):
+
+**Nie próbuj naprawiać kodu na dev.** Zamiast tego:
+1. Pobierz czysty `index.html` z `main` (prod)
+2. Wprowadź tylko te zmiany które były planowane (np. nowy link w nawigacji)
+3. Wrzuć na `dev`
+
+`main` jest zawsze źródłem prawdy. Dev to tylko środowisko testowe.
+
 ## Tech stack
 - Czysty HTML/CSS/JS (zero frameworków, zero build step)
 - Chart.js 4.4.0 (CDN)
@@ -66,6 +104,7 @@ Gdy edytujesz CSS/JS — zaktualizuj plik w assets/ ORAZ odpowiedni blok `<style
 - Filtrowanie dApps: `setDappCat(cat, btn)` via `data-cat` attribute
 - Stan in-memory (brak localStorage)
 - Ceny z CoinGecko na load
+- Newsfeed: fetch z `/news.json` na load event
 
 ## Layout (desktop 3 kolumny)
 - **Lewa kolumna** (180px): nawigacja `.nav` — linki do stron, coming soon

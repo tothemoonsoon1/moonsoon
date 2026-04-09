@@ -1,16 +1,19 @@
 /* ============================================================
    calculator.js — SKR staking compound calculator + Chart.js
    tothemoonsoon.xyz
+   Chart.js is lazy-loaded only when calculator scrolls into view
    ============================================================ */
 
 var stakingChart = null;
+var chartJsLoaded = false;
+var chartJsLoading = false;
 
 function fmtS(n) { if (n >= 1e6) return (n/1e6).toFixed(2)+'M'; if (n >= 1e3) return (n/1e3).toFixed(2)+'K'; return n.toFixed(2); }
 function fmtU(n) { if (n >= 1e6) return '$'+(n/1e6).toFixed(2)+'M'; if (n >= 1e3) return '$'+(n/1e3).toFixed(2)+'K'; return '$'+n.toFixed(2); }
 
 function compoundBal(principal, days) {
   var apy     = parseFloat(document.getElementById('c-apy').value) || 19.5;
-  var ppy     = 8760 / 48; // periods per year (48h unstaking cycle)
+  var ppy     = 8760 / 48;
   var periods = Math.floor(days * (ppy / 365));
   return principal * Math.pow(1 + (apy / 100) / ppy, periods);
 }
@@ -33,6 +36,18 @@ function calcUpdate() {
   document.getElementById('c-1y').textContent      = '+' + fmtS(b1y - amount) + ' SKR';
   document.getElementById('c-1y-usd').textContent  = fmtU((b1y - amount) * price) + ' earned';
 
+  var periods = [{label:'1 week',days:7},{label:'1 month',days:30},{label:'3 months',days:90},{label:'6 months',days:182},{label:'1 year',days:365}];
+  var html = '';
+  periods.forEach(function(p) {
+    var bal = compoundBal(amount, p.days); var earned = bal - amount;
+    html += '<div class="breakdown-row"><span style="font-size:12px;color:rgba(255,255,255,0.6);">After '+p.label+'</span><div style="text-align:right;"><div style="font-size:12px;font-weight:600;color:#14F195;">+'+fmtS(earned)+' SKR</div><div style="font-size:10px;color:var(--muted);margin-top:1px;">'+fmtU(earned*price)+' &bull; Total: '+fmtS(bal)+' SKR</div></div></div>';
+  });
+  document.getElementById('c-breakdown').innerHTML = html;
+
+  if (chartJsLoaded) renderChart(amount, price);
+}
+
+function renderChart(amount, price) {
   var labels = [], data = [];
   for (var d = 0; d <= 365; d += 14) { labels.push(d === 0 ? 'Now' : 'D'+d); data.push(parseFloat(compoundBal(amount, d).toFixed(2))); }
 
@@ -62,12 +77,45 @@ function calcUpdate() {
       }
     });
   }
+}
 
-  var periods = [{label:'1 week',days:7},{label:'1 month',days:30},{label:'3 months',days:90},{label:'6 months',days:182},{label:'1 year',days:365}];
-  var html = '';
-  periods.forEach(function(p) {
-    var bal = compoundBal(amount, p.days); var earned = bal - amount;
-    html += '<div class="breakdown-row"><span style="font-size:12px;color:rgba(255,255,255,0.6);">After '+p.label+'</span><div style="text-align:right;"><div style="font-size:12px;font-weight:600;color:#14F195;">+'+fmtS(earned)+' SKR</div><div style="font-size:10px;color:var(--muted);margin-top:1px;">'+fmtU(earned*price)+' &bull; Total: '+fmtS(bal)+' SKR</div></div></div>';
-  });
-  document.getElementById('c-breakdown').innerHTML = html;
+function loadChartJs(callback) {
+  if (chartJsLoaded) { callback(); return; }
+  if (chartJsLoading) {
+    var poll = setInterval(function() {
+      if (chartJsLoaded) { clearInterval(poll); callback(); }
+    }, 50);
+    return;
+  }
+  chartJsLoading = true;
+  var script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js';
+  script.onload = function() { chartJsLoaded = true; chartJsLoading = false; callback(); };
+  script.onerror = function() { chartJsLoading = false; };
+  document.head.appendChild(script);
+}
+
+function initCalculatorObserver() {
+  var calcEl = document.getElementById('c-chart');
+  if (!calcEl) return;
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) {
+        observer.disconnect();
+        loadChartJs(function() {
+          var amount = parseFloat(document.getElementById('c-amount').value) || 1000;
+          var price  = parseFloat(document.getElementById('c-price').value)  || 0.021;
+          renderChart(amount, price);
+        });
+      }
+    }, { rootMargin: '200px' });
+    observer.observe(calcEl);
+  } else {
+    loadChartJs(function() {
+      var amount = parseFloat(document.getElementById('c-amount').value) || 1000;
+      var price  = parseFloat(document.getElementById('c-price').value)  || 0.021;
+      renderChart(amount, price);
+    });
+  }
 }

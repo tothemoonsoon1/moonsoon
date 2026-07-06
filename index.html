@@ -47,7 +47,7 @@
   --bg:#0b0d12;--surface:#0e1117;--border:#1a1f29;
   --card-bg:#12161e;--card-border:#1e2430;
   --text:#ffffff;--text-muted:#8b94a3;
-  --accent:#4fd8ff;--accent-border:rgba(79,216,255,0.35);--accent-glow:rgba(79,216,255,0.27);
+  --accent:#4fd8ff;--accent-border:rgba(79,216,255,0.35);--accent-tint:rgba(79,216,255,0.133);--accent-glow:rgba(79,216,255,0.27);
   --btn-bg:#4fd8ff;--btn-text:#0b0d12;
   --nft-gradient:linear-gradient(150deg,rgba(79,216,255,0.25),rgba(79,216,255,0) 60%),#12161e;
   --toggle-track:#232935;
@@ -56,7 +56,7 @@
   --bg:#f5f6f8;--surface:#ffffff;--border:#e6e8ec;
   --card-bg:#ffffff;--card-border:#e2e5ea;
   --text:#0b0d12;--text-muted:#5c6577;
-  --accent:#0a8fb5;--accent-border:rgba(10,143,181,0.35);--accent-glow:rgba(10,143,181,0.2);
+  --accent:#0a8fb5;--accent-border:rgba(10,143,181,0.35);--accent-tint:rgba(10,143,181,0.133);--accent-glow:rgba(10,143,181,0.2);
   --btn-bg:#0b0d12;--btn-text:#f5f6f8;
   --nft-gradient:linear-gradient(150deg,rgba(10,143,181,0.14),rgba(10,143,181,0) 60%),#ffffff;
   --toggle-track:#e2e5ea;
@@ -122,46 +122,52 @@ a{color:inherit;}
 #checklist-view{display:none;}
 .cl-wrap{padding:56px 72px 90px;max-width:920px;margin:0 auto;}
 .cl-header{margin-bottom:28px;}
-.cl-title{font-size:28px;font-weight:700;margin-bottom:8px;}
-.cl-subtitle{font-size:14px;color:var(--text-muted);}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.15em;margin-bottom:14px;}
+.cl-title{font-size:38px;font-weight:700;margin-bottom:14px;}
+.cl-desc{font-size:15.5px;line-height:1.7;color:var(--text-muted);max-width:640px;margin-bottom:24px;}
 .progress-card{display:flex;gap:48px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 32px;}
-.progress-stat-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.08em;}
-.progress-stat-val{font-size:22px;font-weight:700;margin-top:6px;}
+.progress-stat-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;margin-bottom:8px;}
+.progress-stat-val{font-size:32px;font-weight:700;}
+.progress-stat-val .of{color:var(--text-muted);font-size:18px;}
 .progress-track{margin-top:12px;height:8px;border-radius:4px;background:var(--toggle-track);overflow:hidden;max-width:280px;}
 .progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .3s ease;}
 
 .cl-cat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;}
 .cl-cat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;gap:12px;}
 .cl-cat-left{display:flex;align-items:center;gap:12px;}
-.cl-cat-icon{flex:none;width:36px;height:36px;border-radius:10px;background:var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:17px;}
-.cl-cat-title{font-size:14px;font-weight:700;}
-.cl-cat-sub{font-size:11.5px;color:var(--text-muted);margin-top:1px;}
-.cl-cat-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);flex-shrink:0;}
+.cl-cat-icon{flex:none;width:36px;height:36px;border-radius:10px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;font-size:17px;}
+.cl-cat-title{font-size:17px;font-weight:600;}
+.cl-cat-sub{font-size:13px;color:var(--text-muted);margin-top:1px;}
+.cl-cat-count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);flex-shrink:0;}
 .cl-task{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--border);cursor:pointer;}
 .cl-check{flex:none;width:19px;height:19px;border-radius:6px;border:2px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--btn-text);font-weight:700;transition:all .15s;}
 .cl-check.checked{border-color:var(--accent);background:var(--accent);}
-.cl-task-label{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;flex:1;}
+.cl-task-body{flex:1;}
+.cl-task-label{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;}
 .cl-task-label.checked{text-decoration:line-through;opacity:.6;}
+.cl-task-desc{font-size:13px;color:var(--text-muted);margin-top:1px;}
 .cl-tag{flex:none;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);border:1px solid var(--card-border);border-radius:20px;padding:3px 9px;}
 
 .dapps-header{margin-top:48px;margin-bottom:20px;}
+.dapps-title{font-size:24px;font-weight:600;}
 .dapps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
 .dapp-card{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-decoration:none;}
-.dapp-icon{flex:none;width:36px;height:36px;border-radius:9px;background:var(--accent-border);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;}
-.dapp-name{font-size:13px;font-weight:600;}
-.dapp-cat{font-size:11px;color:var(--text-muted);}
+.dapp-icon{flex:none;width:36px;height:36px;border-radius:9px;background:var(--accent-tint);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;}
+.dapp-name{font-size:14.5px;font-weight:600;}
+.dapp-cat{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
 
 .calc-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-top:40px;}
-.calc-title{font-size:16px;font-weight:700;margin-bottom:18px;}
+.calc-title{font-size:24px;font-weight:600;margin-bottom:24px;}
 .calc-inputs-row{display:flex;gap:16px;flex-wrap:wrap;}
 .calc-field{flex:1;min-width:140px;}
 .calc-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:8px;display:block;}
 .calc-input{width:100%;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--text);background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:12px 14px;}
 .calc-results-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;}
 .calc-result{flex:1;min-width:160px;background:var(--bg);border:1px solid var(--card-border);border-radius:12px;padding:18px;}
-.calc-result-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:6px;}
-.calc-result-val{font-size:17px;font-weight:700;}
-.calc-result-usd{font-size:11px;color:var(--text-muted);margin-top:3px;}
+.calc-result-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:8px;}
+.calc-result-val{font-size:20px;font-weight:700;}
+.calc-result-usd{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--accent);margin-top:4px;}
+.calc-disclaimer{font-size:11.5px;color:var(--text-muted);margin-top:18px;}
 
 @media(max-width:768px){
   .nav{padding:20px 20px;}
@@ -235,38 +241,40 @@ a{color:inherit;}
   <main id="checklist-view">
     <div class="cl-wrap">
       <div class="cl-header">
-        <div class="cl-title">Seeker Season 2 Checklist</div>
-        <div class="cl-subtitle">Track daily on-chain activity to maximize your airdrop weight.</div>
+        <div class="kicker">SEEKER SEASON 2</div>
+        <div class="cl-title">Seeker Checklist</div>
+        <div class="cl-desc">Since launch, well over a billion SKR has already gone out to tens of thousands of wallets, and a big chunk of it is already staked. This checklist keeps you on top of the on-chain activity that actually counts toward round 2 of the airdrop.</div>
       </div>
       <div class="progress-card">
-        <div>
-          <div class="progress-stat-label">PROGRESS</div>
+        <div style="flex:1;min-width:220px;">
+          <div class="progress-stat-label">DAILY PROGRESS</div>
           <div class="progress-stat-val"><span id="cl-pct">0</span>%</div>
           <div class="progress-track"><div class="progress-fill" id="cl-fill" style="width:0%"></div></div>
         </div>
-        <div>
+        <div style="min-width:140px;">
           <div class="progress-stat-label">TASKS DONE</div>
-          <div class="progress-stat-val"><span id="cl-done">0</span> / <span id="cl-total">0</span></div>
+          <div class="progress-stat-val"><span id="cl-done">0</span><span class="of">/<span id="cl-total">0</span></span></div>
         </div>
       </div>
 
       <div id="cl-categories" style="margin-top:24px;"></div>
 
       <div class="dapps-header">
-        <div class="cl-title" style="font-size:18px;">Featured dApps</div>
-        <div class="cl-subtitle">Explore early — variety matters more than volume.</div>
+        <div class="kicker">FEATURED</div>
+        <div class="dapps-title">Featured S2 dApps</div>
       </div>
       <div class="dapps-grid" id="cl-dapps"></div>
 
       <div class="calc-card">
+        <div class="kicker" style="margin-bottom:10px;">CALCULATOR</div>
         <div class="calc-title">SKR Staking Calculator</div>
         <div class="calc-inputs-row">
           <div class="calc-field">
-            <label class="calc-label" for="calc-amount">SKR AMOUNT</label>
+            <label class="calc-label" for="calc-amount">SKR Amount</label>
             <input class="calc-input" type="number" id="calc-amount" value="1000" min="0" oninput="calcUpdate()">
           </div>
           <div class="calc-field">
-            <label class="calc-label" for="calc-price">SKR PRICE (USD)</label>
+            <label class="calc-label" for="calc-price">SKR Price (USD)</label>
             <input class="calc-input" type="number" id="calc-price" value="0.021" min="0" step="0.001" oninput="calcUpdate()">
           </div>
           <div class="calc-field">
@@ -275,6 +283,7 @@ a{color:inherit;}
           </div>
         </div>
         <div class="calc-results-row" id="calc-results"></div>
+        <div class="calc-disclaimer">Not financial advice.</div>
       </div>
     </div>
   </main>
@@ -290,29 +299,29 @@ a{color:inherit;}
 
 var CHECKLIST_DATA = [
   { key:'setup', icon:'⚙', title:'Device Setup', subtitle:'One-time configuration', countable:false, tasks:[
-    { id:'setup-1', label:'Enable Usage and Diagnostics', tag:'One-time' },
-    { id:'setup-2', label:'Update wallet to latest version', tag:'One-time' },
-    { id:'setup-3', label:'Claim Genesis Token and Seeker ID', tag:'One-time' },
+    { id:'setup-1', label:'Enable Usage and Diagnostics', desc:'Settings — Solana Mobile — enable diagnostics', tag:'One-time' },
+    { id:'setup-2', label:'Update wallet to latest version', desc:'dApp Store — update Seed Vault Wallet', tag:'One-time' },
+    { id:'setup-3', label:'Claim Genesis Token and Seeker ID', desc:'Claim your .skr domain', tag:'One-time' },
   ]},
   { key:'onchain', icon:'⛏', title:'On-Chain Activity', subtitle:'Do daily — highest airdrop weight', countable:true, tasks:[
-    { id:'onchain-1', label:'Daily swaps', tag:'Daily' },
-    { id:'onchain-2', label:'Stake SKR tokens', tag:'Staking' },
-    { id:'onchain-3', label:'DeFi interaction', tag:'Daily' },
-    { id:'onchain-4', label:'NFT mint or marketplace interaction', tag:'Daily' },
+    { id:'onchain-1', label:'Daily swaps', desc:'Diversify swap pairs for a better on-chain score', tag:'Daily' },
+    { id:'onchain-2', label:'Stake SKR tokens', desc:'48h unstaking — key loyalty signal', tag:'Staking' },
+    { id:'onchain-3', label:'DeFi interaction', desc:'Lend, borrow, or trade — diversify beyond swaps', tag:'Daily' },
+    { id:'onchain-4', label:'NFT mint or marketplace interaction', desc:'Boosts on-chain level faster than swaps alone', tag:'Daily' },
   ]},
   { key:'usage', icon:'📲', title:'Daily Device Usage', subtitle:'Consistency may unlock bonus multipliers', countable:true, tasks:[
-    { id:'usage-1', label:'Open dApp Store', tag:'Daily' },
-    { id:'usage-2', label:'Open Seed Vault Wallet', tag:'Daily' },
-    { id:'usage-3', label:'Open 3+ different dApps', tag:'Daily' },
-    { id:'usage-4', label:'Check dApp Store notifications', tag:'Daily' },
+    { id:'usage-1', label:'Open dApp Store', desc:'Browse featured and recommendations', tag:'Daily' },
+    { id:'usage-2', label:'Open Seed Vault Wallet', desc:'Check balances, review activity', tag:'Daily' },
+    { id:'usage-3', label:'Open 3+ different dApps', desc:'Rewards variety, not just volume', tag:'Daily' },
+    { id:'usage-4', label:'Check dApp Store notifications', desc:'New weekly activations and rewards', tag:'Daily' },
   ]},
   { key:'explore', icon:'🧩', title:'dApp Exploration', subtitle:'Weekly — download early in the week', countable:true, tasks:[
-    { id:'explore-1', label:'Download 3 new apps', tag:'Weekly' },
-    { id:'explore-2', label:'Use each new app for 5+ minutes', tag:'Weekly' },
-    { id:'explore-3', label:'Leave a review for an app', tag:'Weekly' },
+    { id:'explore-1', label:'Download 3 new apps', desc:'Any new app from the dApp Store', tag:'Weekly' },
+    { id:'explore-2', label:'Use each new app for 5+ minutes', desc:'Complete early — weekend sync may miss it', tag:'Weekly' },
+    { id:'explore-3', label:'Leave a review for an app', desc:'Supports future featured placements', tag:'Weekly' },
   ]},
   { key:'staking', icon:'💎', title:'SKR Staking', subtitle:'Key loyalty signal for S2 airdrop', countable:true, tasks:[
-    { id:'staking-1', label:'Stake SKR to a Guardian node', tag:'Staking' },
+    { id:'staking-1', label:'Stake SKR to a Guardian node', desc:'Helius, Jito, Anza, DoubleZero or Triton — rewards every 48h', tag:'Staking' },
   ]},
 ];
 
@@ -360,7 +369,10 @@ function renderChecklist(){
       if(isChecked) doneCount++;
       taskHtml += '<div class="cl-task" onclick="toggleTask(\''+t.id+'\')">'+
         '<div class="cl-check'+(isChecked?' checked':'')+'">'+(isChecked?'&#10003;':'')+'</div>'+
-        '<div class="cl-task-label'+(isChecked?' checked':'')+'">'+escAttr(t.label)+'</div>'+
+        '<div class="cl-task-body">'+
+          '<div class="cl-task-label'+(isChecked?' checked':'')+'">'+escAttr(t.label)+'</div>'+
+          '<div class="cl-task-desc">'+escAttr(t.desc)+'</div>'+
+        '</div>'+
         '<div class="cl-tag">'+escAttr(t.tag)+'</div>'+
       '</div>';
     });

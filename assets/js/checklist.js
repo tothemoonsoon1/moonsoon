@@ -13,16 +13,7 @@ var TASKS = [
   't-engage','t-review','t-skrstake'
 ];
 
-var DAPPS = [
-  'd-phantom','d-backpack','d-solflare',
-  'd-jup','d-drift','d-raydium','d-orca',
-  'd-loop','d-kamino','d-marginfi',
-  'd-tensor','d-me',
-  'd-moon','d-grass','d-lootgo',
-  'd-jito','d-sanctum','d-marinade'
-];
-
-var state = { tasks: {}, swaps: 0, dapps: {}, streak: 0 };
+var state = { tasks: {}, swaps: 0, streak: 0 };
 
 /* ---- Interactions ---- */
 
@@ -31,6 +22,7 @@ function toggleTask(id) {
   var el = document.getElementById(id);
   if (el) {
     el.classList.toggle('done', !!state.tasks[id]);
+    el.setAttribute('aria-checked', state.tasks[id] ? 'true' : 'false');
     var cb = el.querySelector('.checkbox');
     var ci = el.querySelector('.ci');
     if (cb && ci) {
@@ -48,15 +40,22 @@ function toggleTask(id) {
   render();
 }
 
-function toggleDapp(id)       { state.dapps[id] = !state.dapps[id]; render(); }
 function adjustCounter(delta) { state.swaps = Math.min(50, Math.max(0, state.swaps + delta)); render(); }
-function toggleSection(id)    { document.getElementById(id+'-body').classList.toggle('open'); document.getElementById(id+'-chev').classList.toggle('open'); }
+function toggleSection(id) {
+  var body = document.getElementById(id + '-body');
+  var chev = document.getElementById(id + '-chev');
+  var head = body.previousElementSibling;
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+  if (head) head.setAttribute('aria-expanded', body.classList.contains('open') ? 'true' : 'false');
+}
 
 function resetAll() {
-  state.tasks = {}; state.swaps = 0; state.dapps = {};
+  state.tasks = {}; state.swaps = 0;
   TASKS.forEach(function(id) {
     var el = document.getElementById(id); if (!el) return;
     el.classList.remove('done');
+    el.setAttribute('aria-checked', 'false');
     var cb = el.querySelector('.checkbox'); var ci = el.querySelector('.ci');
     if (cb) { cb.style.background = ''; cb.style.borderColor = ''; }
     if (ci) { ci.style.display = 'none'; }
@@ -75,12 +74,12 @@ function copyWallet() {
 
 function render() {
   TASKS.forEach(function(id) { var el = document.getElementById(id); if (el) el.classList.toggle('done', !!state.tasks[id]); });
-  DAPPS.forEach(function(id) { var el = document.getElementById(id); if (el) el.classList.toggle('done', !!state.dapps[id]); });
 
   var swaps = state.swaps;
   document.getElementById('swaps-val').textContent   = swaps;
   document.getElementById('swaps-label').textContent = swaps + ' / 50';
   document.getElementById('swaps-fill').style.width  = Math.min(100, (swaps / 50) * 100) + '%';
+  document.getElementById('swaps-fill').parentElement.setAttribute('aria-valuenow', swaps);
 
   var sections = {
     setup:   { tasks: ['t-diag','t-wallet','t-genesis'], total: 3 },
@@ -104,7 +103,9 @@ function render() {
   var pct          = Math.round((doneTasks / totalTasks) * 100);
 
   document.getElementById('overall-pct').textContent = pct + '%';
-  document.getElementById('main-bar').style.width    = pct + '%';
+  var bar = document.getElementById('main-bar');
+  bar.style.width = pct + '%';
+  bar.parentElement.setAttribute('aria-valuenow', pct);
   document.getElementById('tasks-done').textContent  = Math.floor(doneTasks);
   document.getElementById('tasks-total').textContent = totalTasks;
   document.getElementById('streak-val').textContent  = state.streak || 0;

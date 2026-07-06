@@ -4,7 +4,7 @@
    Uses sessionStorage to cache prices for 5 minutes
    ============================================================ */
 
-var PRICES_CACHE_KEY = 'tothemoonsoon_prices';
+var PRICES_CACHE_KEY = 'tm_prices';
 var PRICES_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 function applyPrices(d) {

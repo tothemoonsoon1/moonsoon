@@ -640,26 +640,30 @@ var BSTYLES={
   blue:'background:rgba(0,194,255,0.1);color:#00C2FF;border-color:rgba(0,194,255,0.3);',
   purple:'background:rgba(153,69,255,0.15);color:#c084fc;border-color:rgba(153,69,255,0.3);'
 };
+function escAttr(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 function buildTweet(n){
   var bs=BSTYLES[n.badgeColor]||BSTYLES.purple;
-  var img=n.image?'<img class="tweet-img" loading="lazy" src="'+n.image+'" alt="'+(n.imageAlt||'')+'" onerror="this.style.display=\'none\'">':'';
-  var tags=n.tags?'<div class="tweet-tags">'+n.tags+'</div>':'';
+  var url=escAttr(n.url);
+  var img=n.image?'<img class="tweet-img" loading="lazy" src="'+escAttr(n.image)+'" alt="'+escAttr(n.imageAlt||'')+'" onerror="this.style.display=\'none\'">':'';
+  var tags=n.tags?'<div class="tweet-tags">'+escAttr(n.tags)+'</div>':'';
   return '<article class="tweet">'+
     '<div class="tweet-head">'+
-      '<a href="'+n.url+'" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:8px;text-decoration:none;flex:1;min-width:0;">'+
+      '<a href="'+url+'" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:8px;text-decoration:none;flex:1;min-width:0;">'+
         '<img class="tweet-av" src="'+AV+'" alt="@tothemoonsoon" width="34" height="34" onerror="this.style.display=\'none\'">'+
         '<div class="tweet-meta">'+
           '<div class="tweet-name">@tothemoonsoon '+VSVG+'</div>'+
-          '<div class="tweet-handle">@m00nsoon &middot; <time>'+n.date+'</time></div>'+
+          '<div class="tweet-handle">@m00nsoon &middot; <time>'+escAttr(n.date)+'</time></div>'+
         '</div>'+
       '</a>'+
-      '<span class="tweet-badge" style="'+bs+'">'+n.badge+'</span>'+
+      '<span class="tweet-badge" style="'+bs+'">'+escAttr(n.badge)+'</span>'+
     '</div>'+
     '<div class="tweet-body">'+n.body+'</div>'+
     img+tags+
     '<div class="tweet-foot">'+
       '<span class="tweet-src">via @tothemoonsoon on X</span>'+
-      '<a href="'+n.url+'" target="_blank" rel="noopener noreferrer" class="tweet-link">View on X &rarr;</a>'+
+      '<a href="'+url+'" target="_blank" rel="noopener noreferrer" class="tweet-link">View on X &rarr;</a>'+
     '</div>'+
   '</article>';
 }

@@ -129,26 +129,46 @@ function parseSolPriceFromDescription(description) {
   return match ? parseFloat(match[1]) : null;
 }
 
+const HELIUS_TX_PAGE_LIMIT = 100;
+const HELIUS_TX_MAX_PAGES = 10; // safety cap: 1000 events per mint is plenty
+
+// Paginates v0/addresses/{mint}/transactions with `before` since a single
+// call only returns up to HELIUS_TX_PAGE_LIMIT results — without paging,
+// older sales get silently dropped whenever a mint has enough intervening
+// activity (bids, cancels, listings) to fill that first page.
 async function heliusNftSales(mint) {
-  const url = `https://api-mainnet.helius-rpc.com/v0/addresses/${mint}/transactions?api-key=${HELIUS_KEY}&type=NFT_SALE`;
-  const res = await fetchWithRetry(url, `Helius NFT_SALE for ${mint}`);
+  const allTxs = [];
+  let before = null;
 
-  // Helius returns 404 (not an empty array) when an address has zero matching
-  // transactions — that's the normal "never sold" case, not a real failure.
-  if (res.status === 404) return { trades: 0, lastSalePrice: null };
-  if (!res.ok) {
-    console.warn(`\nHelius NFT_SALE for ${mint} returned ${res.status}`);
-    return { trades: 0, lastSalePrice: null };
+  for (let page = 0; page < HELIUS_TX_MAX_PAGES; page++) {
+    const url =
+      `https://api-mainnet.helius-rpc.com/v0/addresses/${mint}/transactions` +
+      `?api-key=${HELIUS_KEY}&type=NFT_SALE&limit=${HELIUS_TX_PAGE_LIMIT}` +
+      (before ? `&before=${before}` : '');
+    const res = await fetchWithRetry(url, `Helius NFT_SALE for ${mint} (page ${page})`);
+
+    // Helius returns 404 (not an empty array) when an address has zero
+    // matching transactions — normal "never sold" case, not a real failure.
+    if (res.status === 404) break;
+    if (!res.ok) {
+      console.warn(`\nHelius NFT_SALE for ${mint} returned ${res.status}`);
+      break;
+    }
+
+    const pageTxs = await res.json();
+    if (!Array.isArray(pageTxs) || pageTxs.length === 0) break;
+    allTxs.push(...pageTxs);
+    if (pageTxs.length < HELIUS_TX_PAGE_LIMIT) break; // last page
+    before = pageTxs[pageTxs.length - 1]?.signature;
+    if (!before) break;
   }
-
-  const txs = await res.json();
 
   if (salesDebugLogged < 3) {
     salesDebugLogged++;
-    console.log(`\n[debug-sales] ${mint} raw=${JSON.stringify(txs)}`);
+    console.log(`\n[debug-sales] ${mint} pages fetched, total raw=${allTxs.length} raw=${JSON.stringify(allTxs)}`);
   }
 
-  const sales = (txs || []).filter((t) => t.type === 'NFT_SALE');
+  const sales = allTxs.filter((t) => t.type === 'NFT_SALE');
   const trades = sales.length;
   // timestamp descending isn't guaranteed by the API, so sort explicitly for "last sale".
   const sorted = sales.slice().sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));

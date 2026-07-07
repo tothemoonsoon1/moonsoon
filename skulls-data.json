@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T17:09:38.080Z",
+  "generatedAt": "2026-07-07T17:26:55.657Z",
   "skulls": [
     {
       "num": 542,
@@ -11,6 +11,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/542.png",
       "meUrl": "https://magiceden.io/item-details/9r19whEpS9FkqaEHY2NkV17VEzaLmzvKWPLFBjSZQYpH"
     },
     {
@@ -23,6 +24,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/704.png",
       "meUrl": "https://magiceden.io/item-details/fBvgesYn3bYBgPR3GruBNV6VY926WK7iaMTapXEhS3C"
     },
     {
@@ -35,6 +37,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/710.png",
       "meUrl": "https://magiceden.io/item-details/KqdCKLaENNWXcv9eHA99rt8n7ujETkEY93k5ezemZ7w"
     },
     {
@@ -59,6 +62,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/764.png",
       "meUrl": "https://magiceden.io/item-details/FdsGZfG3dVx2Lbb2cdhNjoU91AsYBMqoHDhj3MkvCU66"
     },
     {
@@ -71,6 +75,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/794.png",
       "meUrl": "https://magiceden.io/item-details/Haw5kGDkb9Hr25y97yXeTAt8KfheoEGC588Q9oDaGzc7"
     },
     {
@@ -83,6 +88,7 @@
       "neverTraded": true,
       "listed": true,
       "listPrice": 74,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/831.png",
       "meUrl": "https://magiceden.io/item-details/G8FJmQzBbuem24DJUYeGruPmv1DHngEGkdd7YzawCwaU"
     },
     {
@@ -95,6 +101,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/956.png",
       "meUrl": "https://magiceden.io/item-details/HWnkRFcFpmX1rDwYhLiAp7KfKCGy3eeu2KissbhYAYZb"
     },
     {
@@ -107,6 +114,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1052.png",
       "meUrl": "https://magiceden.io/item-details/GpJBBjWD6cghyHJZymSqugSS22WN8iUHuaqTaJgX33GA"
     },
     {
@@ -119,6 +127,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1435.png",
       "meUrl": "https://magiceden.io/item-details/HaiZuktgi6ZJULTZQLDXASAJpNHSpcgSWFAiSryfPmmG"
     },
     {
@@ -131,6 +140,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1457.png",
       "meUrl": "https://magiceden.io/item-details/B6HNzu48szTJ8iut78k12eP7XFhuhcejFxj3DcQhZYaC"
     },
     {
@@ -155,6 +165,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1703.png",
       "meUrl": "https://magiceden.io/item-details/5hEdMM5t4wvx8qRENKrCfV2iCk5vKknmDSEUEBc5DAs"
     },
     {
@@ -167,6 +178,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1778.png",
       "meUrl": "https://magiceden.io/item-details/E2wUFPLyXybjsp58oR3LKCGvmx9fT79BobYLokGWJELz"
     },
     {
@@ -179,6 +191,7 @@
       "neverTraded": false,
       "listed": true,
       "listPrice": 83.69,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1792.png",
       "meUrl": "https://magiceden.io/item-details/HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx"
     },
     {
@@ -191,6 +204,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1846.png",
       "meUrl": "https://magiceden.io/item-details/HYWcvT8y8LMfXWgRXb1FRTu6sBP7yCFRZssv4rxAnpde"
     },
     {
@@ -203,6 +217,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1885.png",
       "meUrl": "https://magiceden.io/item-details/9CbgZCn5SKxZWHG21EzhuMYUfc65T4ZXQXamZiiwTbvv"
     },
     {
@@ -227,6 +242,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2249.png",
       "meUrl": "https://magiceden.io/item-details/5sAb3o6Tsx4B4rbfUPzaii33acyhtU7KSJxV6fwJ1P3s"
     },
     {
@@ -239,6 +255,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2382.png",
       "meUrl": "https://magiceden.io/item-details/Fzp15ELGCFYy8k7ns4k2b3Y5MhpmPeK6ppb3HLookBV7"
     },
     {
@@ -263,6 +280,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2540.png",
       "meUrl": "https://magiceden.io/item-details/9PoCvN7rivdRQz7brZk3erfZ2CdeTSCVqjCgryBbF87e"
     },
     {
@@ -275,6 +293,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2542.png",
       "meUrl": "https://magiceden.io/item-details/5knzAaPTuezWXqoffkUGTL46MyTnhaVwJAzBBs3ZXBfn"
     },
     {
@@ -287,6 +306,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2616.png",
       "meUrl": "https://magiceden.io/item-details/8MXageyT6qBrDbSAizorPa3GgmrAjAf5B5SzvygqDYGc"
     },
     {
@@ -299,6 +319,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2704.png",
       "meUrl": "https://magiceden.io/item-details/EfHHab9b4mbP4xd6b5C8jNppWUUr7bptup2yLNNaBjNt"
     },
     {
@@ -311,6 +332,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2732.png",
       "meUrl": "https://magiceden.io/item-details/5ja3EvVuEu5rXgtYE3LXKG84s7Pmy5siFfYbcopMc2Dx"
     },
     {
@@ -323,6 +345,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2924.png",
       "meUrl": "https://magiceden.io/item-details/AdRFcTX6gKP7f1catvHfU8SVZzRqMV9RGotCBzKfTPx4"
     },
     {
@@ -335,6 +358,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2953.png",
       "meUrl": "https://magiceden.io/item-details/HRyLwyjDqHVCBUtiwpbWa4uVoucH8CauR7KzM3kQjHkL"
     },
     {
@@ -347,6 +371,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2968.png",
       "meUrl": "https://magiceden.io/item-details/ESNFuinsGTQcgMKw2BMue1pTwWMKooqmfrGJZevFVji"
     },
     {
@@ -359,6 +384,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2996.png",
       "meUrl": "https://magiceden.io/item-details/F5UBwfT1knPfkETDqbdG1iKXkF9jRQCqzzDuQnKVpTZJ"
     },
     {
@@ -371,6 +397,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2997.png",
       "meUrl": "https://magiceden.io/item-details/AVLGjRAowAgPJ7gk1cRT5UxMWsm6uXg9Rs7pxaYzpVpF"
     },
     {
@@ -383,6 +410,7 @@
       "neverTraded": true,
       "listed": true,
       "listPrice": 100,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3306.png",
       "meUrl": "https://magiceden.io/item-details/FwZqruGzoh4oQXbo1pgtJ8gTEgGRHqm4Ko89WdxxH2Df"
     },
     {
@@ -395,6 +423,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3353.png",
       "meUrl": "https://magiceden.io/item-details/C5y13Yg3Wyrnf19rNTm9BmPN7PSjRJfEHNXHbFPPze7C"
     },
     {
@@ -419,6 +448,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3417.png",
       "meUrl": "https://magiceden.io/item-details/H9Z3EbQGrDo4QuTS3RGrYTtrcQGqiUcQnpkQGV3W4zTV"
     },
     {
@@ -431,6 +461,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3444.png",
       "meUrl": "https://magiceden.io/item-details/9rP5pNSzg37jJfi5ppyWyn8tnsXAYHAUE8Q2MwtQYDXi"
     },
     {
@@ -443,6 +474,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3540.png",
       "meUrl": "https://magiceden.io/item-details/WEo2gmmaBsfYd47VJ9C3h8d7LhxYqiqjJqAATLv419g"
     },
     {
@@ -455,6 +487,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3627.png",
       "meUrl": "https://magiceden.io/item-details/EDNZkEwHcnCgf3aHpwskggnP2XCvBo4AHEmjZLPykZCm"
     },
     {
@@ -467,6 +500,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3645.png",
       "meUrl": "https://magiceden.io/item-details/7dkWojqMZjZ4kRYvLgHNemHRHzLzpEFAsSKitgP6iXEM"
     },
     {
@@ -479,6 +513,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3676.png",
       "meUrl": "https://magiceden.io/item-details/FXYFchuewPiwnzTDU3SGLh4QGZjtXTWcJKmjfocZoRTz"
     },
     {
@@ -491,6 +526,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3712.png",
       "meUrl": "https://magiceden.io/item-details/EADMEm3WjAYukyagfnAHTT7L37kjozLDSNENjvSm7fp7"
     },
     {
@@ -503,6 +539,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3732.png",
       "meUrl": "https://magiceden.io/item-details/4153oJAFhqRZFfFUwwSiF1jASs5BPTmPa56xGXQoQLMV"
     },
     {
@@ -515,6 +552,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3807.png",
       "meUrl": "https://magiceden.io/item-details/HrC7EXPi3AkD38hCkRztfpGJ9o2pRb8ZnAQ2M8KmHih8"
     },
     {
@@ -527,6 +565,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3886.png",
       "meUrl": "https://magiceden.io/item-details/4KnNU61JGKdmpv5MQLko7pg3kVpqgjyA4JbaJByU8x4r"
     },
     {
@@ -551,6 +590,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3927.png",
       "meUrl": "https://magiceden.io/item-details/5UdcebtAd4TULnvAC6vNRbkd2knGh6JhbV88NKsguxrH"
     },
     {
@@ -563,6 +603,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4109.png",
       "meUrl": "https://magiceden.io/item-details/Fw8YYtyLwEKcjQtzPbtZHwuQEgNorB6CCZDGPpVreA6U"
     },
     {
@@ -575,6 +616,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4424.png",
       "meUrl": "https://magiceden.io/item-details/5K9dGYAPao5ySagKcHYKTBq1ko2Hvamd8bDvYH4NqPYQ"
     },
     {
@@ -587,6 +629,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4506.png",
       "meUrl": "https://magiceden.io/item-details/1ZrnvELdCpzda8qK9bE7Hxco6aYkZAn9hmHgbaNj3Jz"
     },
     {
@@ -599,6 +642,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4509.png",
       "meUrl": "https://magiceden.io/item-details/BYQXm87spJDQUQvp9FmYsvYvAm33MrjZWmc2F45YVwRU"
     },
     {
@@ -647,6 +691,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4580.png",
       "meUrl": "https://magiceden.io/item-details/6kfJgJYdtPL1LfRCXh77VbLfSRMKAQMUDy9A8i55VqZv"
     },
     {
@@ -659,6 +704,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4836.png",
       "meUrl": "https://magiceden.io/item-details/EBN6B5iK1poV1pqZSZnfYRRUBfRwQu8PjQ8UdfBdxvmM"
     },
     {
@@ -671,6 +717,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4862.png",
       "meUrl": "https://magiceden.io/item-details/AhpaJGp2sWjQEEz8JTJ21Mro83jcAaBmPpCekDxxdAoT"
     },
     {
@@ -719,6 +766,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5364.png",
       "meUrl": "https://magiceden.io/item-details/5TGVpYrmje5sYyf9nRUHmML2VUEaNTsTC24cz53FbxNA"
     },
     {
@@ -731,6 +779,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5386.png",
       "meUrl": "https://magiceden.io/item-details/mRqT94K6oo3T3795XigTwzBGLLND4sjvzfsdv4PR3Dt"
     },
     {
@@ -743,6 +792,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5519.png",
       "meUrl": "https://magiceden.io/item-details/13fkSUEvM4VEJBuX6No3PdDA4ahYpWeJgGD8a7bwWM8Q"
     },
     {
@@ -755,6 +805,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5566.png",
       "meUrl": "https://magiceden.io/item-details/FkryfWhjF9knHx3rUV357geZJLkwpCP8K3af49zdcoHL"
     },
     {
@@ -767,6 +818,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5784.png",
       "meUrl": "https://magiceden.io/item-details/HfFwS5gLcBJvawgCzNTKKBeMrqND4gCEpJMhJEbSMYtz"
     },
     {
@@ -791,6 +843,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5943.png",
       "meUrl": "https://magiceden.io/item-details/8wsLSdEMc3jMatLkU8Jr3nphpx62Km6m3FFNyGanafnW"
     },
     {
@@ -803,6 +856,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6017.png",
       "meUrl": "https://magiceden.io/item-details/9RTEDULPG81crKHao3LWFuF7PjhFneVXDWtSq7UQXYdw"
     },
     {
@@ -815,6 +869,7 @@
       "neverTraded": true,
       "listed": true,
       "listPrice": 395.5,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6198.png",
       "meUrl": "https://magiceden.io/item-details/GtfaHTSodBZ8je4BZW3ket8B18Zvxwwq2U2GbbuyQWEq"
     },
     {
@@ -839,6 +894,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6616.png",
       "meUrl": "https://magiceden.io/item-details/4ybsDZvURgL2nYMvpFQUQckqPQ7QT1fju5oVRyMKQqZc"
     },
     {
@@ -863,6 +919,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7092.png",
       "meUrl": "https://magiceden.io/item-details/E15vXEstzUrv26wkLvkLy8bpCo9nB8kjYZPb8tUJ5yZW"
     },
     {
@@ -875,6 +932,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7245.png",
       "meUrl": "https://magiceden.io/item-details/7j8Wt6XEHCzsYW5AVTAU6twju3tt9xXSu6yGTy1Vnwvz"
     },
     {
@@ -887,6 +945,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7421.png",
       "meUrl": "https://magiceden.io/item-details/6xQmEMRTHacZ9RZnNd9ZRozdLsgDC2NC9yKVQG17QhGX"
     },
     {
@@ -911,6 +970,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7592.png",
       "meUrl": "https://magiceden.io/item-details/7fCC6TzAV58svkfKxzX1sPAvQAD6gKQpaDjbFSbSGo2f"
     },
     {
@@ -923,6 +983,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7720.png",
       "meUrl": "https://magiceden.io/item-details/4hAvgcmDdYiEyXn5gJifPbp8Hc1jMXy2QSFdfxGzh2TZ"
     },
     {
@@ -935,6 +996,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7744.png",
       "meUrl": "https://magiceden.io/item-details/5Yvam4HipCwxdyMVYsfNgPYhtTA1svCaep2TQdD3B5zE"
     },
     {
@@ -947,6 +1009,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7798.png",
       "meUrl": "https://magiceden.io/item-details/81foUy8EZ3zFaZ2s7dAWjmzKHsdmsHp1ghf4BPt4wv77"
     },
     {
@@ -959,6 +1022,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7972.png",
       "meUrl": "https://magiceden.io/item-details/JDtdTLzb7gpBBsQrKWDYX2NCfUZHkzATH2QX5dFrTL7H"
     },
     {
@@ -971,6 +1035,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8003.png",
       "meUrl": "https://magiceden.io/item-details/3p1dGyvbCMiA8pAncAaMadBFuzkL4X4pxfYsrKdCRjpC"
     },
     {
@@ -995,6 +1060,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8169.png",
       "meUrl": "https://magiceden.io/item-details/J4cHp4y4VGE8R2mf8r6YeJowo4oKjMZK6wvkyCWQZfAV"
     },
     {
@@ -1007,6 +1073,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8177.png",
       "meUrl": "https://magiceden.io/item-details/kqvb9REWTiNtsbqRd2BQ6hP3b2jVG7y8L1dCZtAqTGR"
     },
     {
@@ -1019,6 +1086,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8396.png",
       "meUrl": "https://magiceden.io/item-details/2Caf1k2CSp1yDRb5YpXGWD6vHPRGzvqdA8f3t8fbG4kA"
     },
     {
@@ -1031,6 +1099,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8566.png",
       "meUrl": "https://magiceden.io/item-details/F5Us8HsZoWLwfvDoGGJWvW2G5JdgyLw87ssrbrFYbhNn"
     },
     {
@@ -1055,6 +1124,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8644.png",
       "meUrl": "https://magiceden.io/item-details/BKfGgoRx1u1zw4Gc1NbvcsdvL12Zhxq4KCCWeQKxP6RM"
     },
     {
@@ -1067,6 +1137,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8902.png",
       "meUrl": "https://magiceden.io/item-details/BgnCeuZbyGkptFSzPrP2RVxaK58j2WJWPj1uDf4CxNN7"
     },
     {
@@ -1079,6 +1150,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9031.png",
       "meUrl": "https://magiceden.io/item-details/694En1yPMLibpzF2ZXToJoFEkLAVTFh2787iReryEutF"
     },
     {
@@ -1091,6 +1163,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9175.png",
       "meUrl": "https://magiceden.io/item-details/7yAXKRNaxS1cnZs2hFRYieLTtbAu336bfkGnyZ1Lr8N2"
     },
     {
@@ -1115,6 +1188,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9405.png",
       "meUrl": "https://magiceden.io/item-details/7b3JLBQAFhi2hARW4JabXq6pJakXoQATnfaiPyBGajih"
     },
     {
@@ -1127,6 +1201,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9592.png",
       "meUrl": "https://magiceden.io/item-details/HJ5igKjFSNqDWUwyvLxM96yUeo3ZpkURkzNmFXdUBd2h"
     },
     {
@@ -1139,6 +1214,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9595.png",
       "meUrl": "https://magiceden.io/item-details/J87H6aa37YqXWcBJ184KxM22jdz1Sc4aGyQbNxoq3wtr"
     },
     {
@@ -1151,6 +1227,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9760.png",
       "meUrl": "https://magiceden.io/item-details/FADSDuHnwNJM7ZjFBTfX92h85RwA4fyZ5h7PgsCYT9Wg"
     },
     {
@@ -1175,6 +1252,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9864.png",
       "meUrl": "https://magiceden.io/item-details/HrNukt8VeBCVxinbYP571Vhy36ehGgfwnLtVLZqsE5yV"
     },
     {
@@ -1187,6 +1265,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9937.png",
       "meUrl": "https://magiceden.io/item-details/75GM9UAvB393ZAu9QrWgm2Wu4YySQEVVsWmwwdrpzqfg"
     }
   ]

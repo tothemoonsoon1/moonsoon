@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T18:09:40.408Z",
+  "generatedAt": "2026-07-07T20:20:53.131Z",
   "skulls": [
     {
       "num": 542,
@@ -82,7 +82,7 @@
     {
       "num": 831,
       "mint": "G8FJmQzBbuem24DJUYeGruPmv1DHngEGkdd7YzawCwaU",
-      "owner": "1BWutmTvYPwDtmw9abTkS4Ssr8no61spGAvW1X6NDix",
+      "owner": "Ff5VCErymV1aZXRtvNrs1RUmKqUHJ4wscvxFPG8LCi4z",
       "isDomain": false,
       "trades": 0,
       "lastSalePrice": null,
@@ -186,7 +186,7 @@
     {
       "num": 1792,
       "mint": "HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx",
-      "owner": "EhC3HyM2bo5esya8GDvz1v4Lid6TppyGbSsEBcTcpesr",
+      "owner": "CdPwE6opPDnzoMc3NTfQSn9Sqkj3Sz2qQQjwfinnrjKn",
       "isDomain": false,
       "trades": 1,
       "lastSalePrice": 37.6,
@@ -407,7 +407,7 @@
     {
       "num": 3306,
       "mint": "FwZqruGzoh4oQXbo1pgtJ8gTEgGRHqm4Ko89WdxxH2Df",
-      "owner": "1BWutmTvYPwDtmw9abTkS4Ssr8no61spGAvW1X6NDix",
+      "owner": "8zjuzuqY7AfqwJDxJYZzrcmDF1dPDwZmYUinRjzBMLmM",
       "isDomain": false,
       "trades": 0,
       "lastSalePrice": null,
@@ -773,9 +773,9 @@
       "mint": "5TGVpYrmje5sYyf9nRUHmML2VUEaNTsTC24cz53FbxNA",
       "owner": "AuyPr87ub8C2RVjJprHqXRGtsm7Q8ZzMqnz9xpBopixf",
       "isDomain": false,
-      "trades": 1,
-      "lastSalePrice": 830,
-      "neverTraded": false,
+      "trades": 0,
+      "lastSalePrice": null,
+      "neverTraded": true,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5364.png",
@@ -875,7 +875,7 @@
     {
       "num": 6198,
       "mint": "GtfaHTSodBZ8je4BZW3ket8B18Zvxwwq2U2GbbuyQWEq",
-      "owner": "1BWutmTvYPwDtmw9abTkS4Ssr8no61spGAvW1X6NDix",
+      "owner": "3TeuX3jUSsB9bpaNvLLC2GLMEHM1knv18w8f8fzMegNZ",
       "isDomain": false,
       "trades": 0,
       "lastSalePrice": null,

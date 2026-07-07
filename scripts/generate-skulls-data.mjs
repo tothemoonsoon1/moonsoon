@@ -91,7 +91,10 @@ let debugLogged = 0;
 
 async function meTokenData(mint) {
   const listingRes = await fetchWithRetry(`${ME_BASE}/tokens/${mint}`, `ME listing for ${mint}`);
-  const activityRes = await fetchWithRetry(`${ME_BASE}/tokens/${mint}/activities`, `ME activities for ${mint}`);
+  const activityRes = await fetchWithRetry(
+    `${ME_BASE}/tokens/${mint}/activities?offset=0&limit=100`,
+    `ME activities for ${mint}`
+  );
 
   if (!listingRes.ok) console.warn(`\nME listing for ${mint} returned ${listingRes.status}`);
   if (!activityRes.ok) console.warn(`\nME activities for ${mint} returned ${activityRes.status}`);
@@ -99,24 +102,26 @@ async function meTokenData(mint) {
   const listing = listingRes.ok ? await listingRes.json() : null;
   const activities = activityRes.ok ? await activityRes.json() : [];
 
-  if (debugLogged < 3) {
+  if (debugLogged < 5) {
     debugLogged++;
-    console.log(`\n[debug] ${mint} listing=${JSON.stringify(listing)}`);
-    console.log(`[debug] ${mint} activities sample=${JSON.stringify((activities || []).slice(0, 3))}`);
+    const types = [...new Set((activities || []).map((a) => a.type))];
+    console.log(
+      `\n[debug] ${mint} listStatus=${listing?.listStatus} price=${listing?.price} activities.length=${(activities || []).length} types=${JSON.stringify(types)}`
+    );
   }
 
   const sales = (activities || []).filter((a) => a.type === 'buyNow' || a.type === 'sale' || a.type === 'acceptBid');
   const trades = sales.length;
   const lastSale = sales.length ? sales[0] : null;
   return {
-    listed: !!listing?.price,
+    listed: listing?.listStatus === 'listed',
     listPrice: listing?.price ?? null,
     trades,
     lastSalePrice: lastSale ? lastSale.price : null,
   };
 }
 
-const CONCURRENCY = 3;
+const CONCURRENCY = 2;
 
 // Runs `worker` over `items` with at most CONCURRENCY in flight at once.
 async function mapWithConcurrency(items, worker) {
@@ -165,7 +170,7 @@ async function main() {
       console.warn(`\nSNS lookup failed for ${owner}: ${e.message}`);
     }
 
-    await sleep(120); // stagger requests to stay under ME rate limits
+    await sleep(250); // stagger requests to stay under ME rate limits
 
     return {
       num,

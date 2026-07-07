@@ -118,6 +118,7 @@ async function meTokenData(mint) {
     listPrice: listing?.price ?? null,
     trades,
     lastSalePrice: lastSale ? lastSale.price : null,
+    image: listing?.image ?? null,
   };
 }
 
@@ -182,6 +183,7 @@ async function main() {
       neverTraded: market.trades === 0,
       listed: market.listed,
       listPrice: market.listPrice,
+      image: market.image,
       meUrl: `https://magiceden.io/item-details/${mint}`,
     };
   });

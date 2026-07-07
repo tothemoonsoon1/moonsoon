@@ -61,23 +61,42 @@ function extractNumber(asset) {
   return match ? parseInt(match[1], 10) : null;
 }
 
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+// Fetches with retry+backoff on 429/5xx. Logs (and eventually throws) real
+// failures instead of letting callers silently treat them as "no data".
+async function fetchWithRetry(url, label, attempts = 4) {
+  let lastStatus = null;
+  for (let i = 0; i < attempts; i++) {
+    const res = await fetch(url);
+    if (res.ok) return res;
+    lastStatus = res.status;
+    if (res.status !== 429 && res.status < 500) return res; // real 4xx, don't retry
+    await sleep(400 * Math.pow(2, i)); // 400ms, 800ms, 1600ms, 3200ms
+  }
+  throw new Error(`${label} failed after ${attempts} attempts, last status ${lastStatus}`);
+}
+
 async function reverseSolDomain(owner) {
-  try {
-    const res = await fetch(`https://sns-api.bonfida.com/owners/${owner}/domains`);
-    if (!res.ok) return null;
-    const json = await res.json();
-    const domains = json?.result || [];
-    return domains.length ? `${domains[0]}.sol` : null;
-  } catch {
+  const res = await fetchWithRetry(`https://sns-api.bonfida.com/owners/${owner}/domains`, `SNS lookup for ${owner}`);
+  if (!res.ok) {
+    console.warn(`\nSNS lookup for ${owner} returned ${res.status}`);
     return null;
   }
+  const json = await res.json();
+  const domains = json?.result || [];
+  return domains.length ? `${domains[0]}.sol` : null;
 }
 
 async function meTokenData(mint) {
-  const [listingRes, activityRes] = await Promise.all([
-    fetch(`${ME_BASE}/tokens/${mint}`),
-    fetch(`${ME_BASE}/tokens/${mint}/activities`),
-  ]);
+  const listingRes = await fetchWithRetry(`${ME_BASE}/tokens/${mint}`, `ME listing for ${mint}`);
+  const activityRes = await fetchWithRetry(`${ME_BASE}/tokens/${mint}/activities`, `ME activities for ${mint}`);
+
+  if (!listingRes.ok) console.warn(`\nME listing for ${mint} returned ${listingRes.status}`);
+  if (!activityRes.ok) console.warn(`\nME activities for ${mint} returned ${activityRes.status}`);
+
   const listing = listingRes.ok ? await listingRes.json() : null;
   const activities = activityRes.ok ? await activityRes.json() : [];
   const sales = (activities || []).filter((a) => a.type === 'buyNow' || a.type === 'sale' || a.type === 'acceptBid');
@@ -91,7 +110,7 @@ async function meTokenData(mint) {
   };
 }
 
-const CONCURRENCY = 8;
+const CONCURRENCY = 3;
 
 // Runs `worker` over `items` with at most CONCURRENCY in flight at once.
 async function mapWithConcurrency(items, worker) {
@@ -133,7 +152,14 @@ async function main() {
       console.warn(`\nMagic Eden fetch failed for ${mint}: ${e.message}`);
     }
 
-    const domain = owner ? await reverseSolDomain(owner) : null;
+    let domain = null;
+    try {
+      domain = owner ? await reverseSolDomain(owner) : null;
+    } catch (e) {
+      console.warn(`\nSNS lookup failed for ${owner}: ${e.message}`);
+    }
+
+    await sleep(120); // stagger requests to stay under ME rate limits
 
     return {
       num,

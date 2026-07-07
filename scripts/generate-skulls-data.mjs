@@ -79,16 +79,15 @@ async function fetchWithRetry(url, label, attempts = 4) {
   throw new Error(`${label} failed after ${attempts} attempts, last status ${lastStatus}`);
 }
 
-async function reverseSolDomain(owner) {
-  const res = await fetchWithRetry(`https://sns-api.bonfida.com/owners/${owner}/domains`, `SNS lookup for ${owner}`);
-  if (!res.ok) {
-    console.warn(`\nSNS lookup for ${owner} returned ${res.status}`);
-    return null;
-  }
-  const json = await res.json();
-  const domains = json?.result || [];
-  return domains.length ? `${domains[0]}.sol` : null;
+// sns-api.bonfida.com/owners/{owner}/domains currently 500s on every request
+// (confirmed across 99/99 lookups in a real run) — looks dead/moved. Disabled
+// until we find a working reverse-lookup source; owners fall back to the raw
+// wallet address (shortened) in skulls.html.
+async function reverseSolDomain() {
+  return null;
 }
+
+let debugLogged = 0;
 
 async function meTokenData(mint) {
   const listingRes = await fetchWithRetry(`${ME_BASE}/tokens/${mint}`, `ME listing for ${mint}`);
@@ -99,6 +98,13 @@ async function meTokenData(mint) {
 
   const listing = listingRes.ok ? await listingRes.json() : null;
   const activities = activityRes.ok ? await activityRes.json() : [];
+
+  if (debugLogged < 3) {
+    debugLogged++;
+    console.log(`\n[debug] ${mint} listing=${JSON.stringify(listing)}`);
+    console.log(`[debug] ${mint} activities sample=${JSON.stringify((activities || []).slice(0, 3))}`);
+  }
+
   const sales = (activities || []).filter((a) => a.type === 'buyNow' || a.type === 'sale' || a.type === 'acceptBid');
   const trades = sales.length;
   const lastSale = sales.length ? sales[0] : null;

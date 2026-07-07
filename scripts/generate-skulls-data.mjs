@@ -87,39 +87,59 @@ async function reverseSolDomain() {
   return null;
 }
 
-let debugLogged = 0;
+let meDebugLogged = 0;
+let salesDebugLogged = 0;
 
-async function meTokenData(mint) {
+// Only used for listing status/price/image now — trade history comes from
+// Helius (see heliusNftSales) since ME's own activities endpoint only
+// returns marketplace-local events (bid/cancelBid), missing actual sales.
+async function meListingData(mint) {
   const listingRes = await fetchWithRetry(`${ME_BASE}/tokens/${mint}`, `ME listing for ${mint}`);
-  const activityRes = await fetchWithRetry(
-    `${ME_BASE}/tokens/${mint}/activities?offset=0&limit=100`,
-    `ME activities for ${mint}`
-  );
-
   if (!listingRes.ok) console.warn(`\nME listing for ${mint} returned ${listingRes.status}`);
-  if (!activityRes.ok) console.warn(`\nME activities for ${mint} returned ${activityRes.status}`);
-
   const listing = listingRes.ok ? await listingRes.json() : null;
-  const activities = activityRes.ok ? await activityRes.json() : [];
 
-  if (debugLogged < 5) {
-    debugLogged++;
-    const types = [...new Set((activities || []).map((a) => a.type))];
-    console.log(
-      `\n[debug] ${mint} listStatus=${listing?.listStatus} price=${listing?.price} activities.length=${(activities || []).length} types=${JSON.stringify(types)}`
-    );
+  if (meDebugLogged < 3) {
+    meDebugLogged++;
+    console.log(`\n[debug-me] ${mint} listStatus=${listing?.listStatus} price=${listing?.price}`);
   }
 
-  const sales = (activities || []).filter((a) => a.type === 'buyNow' || a.type === 'sale' || a.type === 'acceptBid');
-  const trades = sales.length;
-  const lastSale = sales.length ? sales[0] : null;
   return {
     listed: listing?.listStatus === 'listed',
     listPrice: listing?.price ?? null,
-    trades,
-    lastSalePrice: lastSale ? lastSale.price : null,
     image: listing?.image ?? null,
   };
+}
+
+const LAMPORTS_PER_SOL = 1_000_000_000;
+
+// Helius Enhanced Transactions (v0, deprecated but still live on free tier;
+// the newer getTransactionsForAddress RPC method needs a paid plan).
+// Returns on-chain NFT_SALE events for this mint across ALL marketplaces
+// (Magic Eden, Tensor, OTC, etc.) — not just Magic Eden's own activity feed.
+async function heliusNftSales(mint) {
+  const url = `https://api-mainnet.helius-rpc.com/v0/addresses/${mint}/transactions?api-key=${HELIUS_KEY}&type=NFT_SALE`;
+  const res = await fetchWithRetry(url, `Helius NFT_SALE for ${mint}`);
+  if (!res.ok) {
+    console.warn(`\nHelius NFT_SALE for ${mint} returned ${res.status}`);
+    return { trades: 0, lastSalePrice: null };
+  }
+  const txs = await res.json();
+
+  if (salesDebugLogged < 3) {
+    salesDebugLogged++;
+    console.log(`\n[debug-sales] ${mint} raw=${JSON.stringify(txs).slice(0, 1500)}`);
+  }
+
+  const sales = (txs || []).filter((t) => t.type === 'NFT_SALE');
+  const trades = sales.length;
+  // events.nft.amount is lamports per Helius's enhanced tx schema; timestamp
+  // descending isn't guaranteed by the API, so sort explicitly for "last sale".
+  const sorted = sales.slice().sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
+  const last = sorted[0];
+  const lastLamports = last?.events?.nft?.amount;
+  const lastSalePrice = typeof lastLamports === 'number' ? +(lastLamports / LAMPORTS_PER_SOL).toFixed(3) : null;
+
+  return { trades, lastSalePrice };
 }
 
 const CONCURRENCY = 2;
@@ -157,11 +177,18 @@ async function main() {
     const owner = asset.ownership?.owner || null;
     const num = extractNumber(asset);
 
-    let market = { listed: false, listPrice: null, trades: 0, lastSalePrice: null };
+    let listing = { listed: false, listPrice: null, image: null };
     try {
-      market = await meTokenData(mint);
+      listing = await meListingData(mint);
     } catch (e) {
       console.warn(`\nMagic Eden fetch failed for ${mint}: ${e.message}`);
+    }
+
+    let sales = { trades: 0, lastSalePrice: null };
+    try {
+      sales = await heliusNftSales(mint);
+    } catch (e) {
+      console.warn(`\nHelius sales fetch failed for ${mint}: ${e.message}`);
     }
 
     let domain = null;
@@ -171,19 +198,19 @@ async function main() {
       console.warn(`\nSNS lookup failed for ${owner}: ${e.message}`);
     }
 
-    await sleep(250); // stagger requests to stay under ME rate limits
+    await sleep(250); // stagger requests to stay under rate limits
 
     return {
       num,
       mint,
       owner: domain || owner,
       isDomain: !!domain,
-      trades: market.trades,
-      lastSalePrice: market.lastSalePrice,
-      neverTraded: market.trades === 0,
-      listed: market.listed,
-      listPrice: market.listPrice,
-      image: market.image,
+      trades: sales.trades,
+      lastSalePrice: sales.lastSalePrice,
+      neverTraded: sales.trades === 0,
+      listed: listing.listed,
+      listPrice: listing.listPrice,
+      image: listing.image,
       meUrl: `https://magiceden.io/item-details/${mint}`,
     };
   });

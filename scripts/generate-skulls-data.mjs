@@ -116,28 +116,43 @@ const LAMPORTS_PER_SOL = 1_000_000_000;
 // the newer getTransactionsForAddress RPC method needs a paid plan).
 // Returns on-chain NFT_SALE events for this mint across ALL marketplaces
 // (Magic Eden, Tensor, OTC, etc.) — not just Magic Eden's own activity feed.
+// Parses "...for 37.6 SOL on MAGIC_EDEN." out of Helius's human-readable
+// description — more robust than relying on an exact events.nft.amount shape
+// we haven't fully confirmed, and works even if that field is ever renamed.
+function parseSolPriceFromDescription(description) {
+  const match = String(description || '').match(/for ([\d.]+) SOL/);
+  return match ? parseFloat(match[1]) : null;
+}
+
 async function heliusNftSales(mint) {
   const url = `https://api-mainnet.helius-rpc.com/v0/addresses/${mint}/transactions?api-key=${HELIUS_KEY}&type=NFT_SALE`;
   const res = await fetchWithRetry(url, `Helius NFT_SALE for ${mint}`);
+
+  // Helius returns 404 (not an empty array) when an address has zero matching
+  // transactions — that's the normal "never sold" case, not a real failure.
+  if (res.status === 404) return { trades: 0, lastSalePrice: null };
   if (!res.ok) {
     console.warn(`\nHelius NFT_SALE for ${mint} returned ${res.status}`);
     return { trades: 0, lastSalePrice: null };
   }
+
   const txs = await res.json();
 
   if (salesDebugLogged < 3) {
     salesDebugLogged++;
-    console.log(`\n[debug-sales] ${mint} raw=${JSON.stringify(txs).slice(0, 1500)}`);
+    console.log(`\n[debug-sales] ${mint} raw=${JSON.stringify(txs)}`);
   }
 
   const sales = (txs || []).filter((t) => t.type === 'NFT_SALE');
   const trades = sales.length;
-  // events.nft.amount is lamports per Helius's enhanced tx schema; timestamp
-  // descending isn't guaranteed by the API, so sort explicitly for "last sale".
+  // timestamp descending isn't guaranteed by the API, so sort explicitly for "last sale".
   const sorted = sales.slice().sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
   const last = sorted[0];
   const lastLamports = last?.events?.nft?.amount;
-  const lastSalePrice = typeof lastLamports === 'number' ? +(lastLamports / LAMPORTS_PER_SOL).toFixed(3) : null;
+  const lastSalePrice =
+    typeof lastLamports === 'number'
+      ? +(lastLamports / LAMPORTS_PER_SOL).toFixed(3)
+      : parseSolPriceFromDescription(last?.description);
 
   return { trades, lastSalePrice };
 }

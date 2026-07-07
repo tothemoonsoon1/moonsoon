@@ -80,6 +80,8 @@ a{color:inherit;}
 [data-theme="light"] .theme-toggle .knob{left:3px;}
 .btn{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--btn-text);background:var(--btn-bg);padding:11px 22px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;display:inline-block;}
 .btn-lg{font-size:15px;padding:17px 32px;}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent-border);color:var(--accent);}
 
 /* ---- Hero ---- */
 .hero{padding:70px 72px 110px;background:radial-gradient(ellipse 1100px 600px at 72% -15%,var(--accent-glow),transparent),var(--bg);}
@@ -98,7 +100,7 @@ a{color:inherit;}
 .nft-card img{width:100%;display:block;border-radius:12px;}
 .nft-foot{display:flex;justify-content:space-between;align-items:center;padding:16px 8px 4px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
 .nft-foot a{text-decoration:none;}
-.mythic-badge{display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.04em;color:#fff;background:#d98a15;border:2px solid #8a5a0a;border-radius:5px;padding:3px 10px;text-shadow:0 1px 1px rgba(0,0,0,0.3);}
+.mythic-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#f0b84d;background:rgba(240,184,77,0.12);border:1px solid rgba(240,184,77,0.4);border-radius:20px;padding:4px 12px;}
 @keyframes skullGlow{0%,100%{opacity:0.55}50%{opacity:1}}
 @keyframes skullFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-16px) rotate(1deg)}}
 
@@ -135,7 +137,8 @@ a{color:inherit;}
 .cl-cat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;}
 .cl-cat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;gap:12px;}
 .cl-cat-left{display:flex;align-items:center;gap:12px;}
-.cl-cat-icon{flex:none;width:36px;height:36px;border-radius:10px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;font-size:17px;}
+.cl-cat-icon{flex:none;width:36px;height:36px;border-radius:10px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;color:var(--accent);}
+.cl-cat-icon svg{width:18px;height:18px;}
 .cl-cat-title{font-size:17px;font-weight:600;}
 .cl-cat-sub{font-size:13px;color:var(--text-muted);margin-top:1px;}
 .cl-cat-count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);flex-shrink:0;}
@@ -191,7 +194,7 @@ a{color:inherit;}
     </div>
     <div class="nav-right">
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" onclick="toggleTheme()"><span class="knob"></span></button>
-      <a class="btn" href="https://x.com/m00nsoon" target="_blank" rel="noopener noreferrer">Follow on X</a>
+      <a class="btn btn-ghost" href="https://x.com/m00nsoon" target="_blank" rel="noopener noreferrer">Follow on X</a>
     </div>
   </nav>
 
@@ -297,30 +300,38 @@ a{color:inherit;}
 <script>
 (function(){
 
+var CL_ICONS = {
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19.5a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4.5a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.02a1.65 1.65 0 0 0 1-1.51V4.5a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.02a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.02a1.65 1.65 0 0 0 1.51 1H19.5a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
+  chain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V10"/><path d="m3 8 4-4 4 4"/><path d="M7 4v10"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',
+  compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m14.5 9.5-2 5-5 2 2-5 5-2Z"/></svg>',
+  gem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20M12 21 8 9l2-6m4 0 2 6-4 12"/></svg>',
+};
+
 var CHECKLIST_DATA = [
-  { key:'setup', icon:'⚙', title:'Device Setup', subtitle:'One-time configuration', countable:false, tasks:[
+  { key:'setup', icon:CL_ICONS.gear, title:'Device Setup', subtitle:'One-time configuration', countable:false, tasks:[
     { id:'setup-1', label:'Enable Usage and Diagnostics', desc:'Settings — Solana Mobile — enable diagnostics', tag:'One-time' },
     { id:'setup-2', label:'Update wallet to latest version', desc:'dApp Store — update Seed Vault Wallet', tag:'One-time' },
     { id:'setup-3', label:'Claim Genesis Token and Seeker ID', desc:'Claim your .skr domain', tag:'One-time' },
   ]},
-  { key:'onchain', icon:'⛏', title:'On-Chain Activity', subtitle:'Do daily — highest airdrop weight', countable:true, tasks:[
+  { key:'onchain', icon:CL_ICONS.chain, title:'On-Chain Activity', subtitle:'Do daily — highest airdrop weight', countable:true, tasks:[
     { id:'onchain-1', label:'Daily swaps', desc:'Diversify swap pairs for a better on-chain score', tag:'Daily' },
     { id:'onchain-2', label:'Stake SKR tokens', desc:'48h unstaking — key loyalty signal', tag:'Staking' },
     { id:'onchain-3', label:'DeFi interaction', desc:'Lend, borrow, or trade — diversify beyond swaps', tag:'Daily' },
     { id:'onchain-4', label:'NFT mint or marketplace interaction', desc:'Boosts on-chain level faster than swaps alone', tag:'Daily' },
   ]},
-  { key:'usage', icon:'📲', title:'Daily Device Usage', subtitle:'Consistency may unlock bonus multipliers', countable:true, tasks:[
+  { key:'usage', icon:CL_ICONS.phone, title:'Daily Device Usage', subtitle:'Consistency may unlock bonus multipliers', countable:true, tasks:[
     { id:'usage-1', label:'Open dApp Store', desc:'Browse featured and recommendations', tag:'Daily' },
     { id:'usage-2', label:'Open Seed Vault Wallet', desc:'Check balances, review activity', tag:'Daily' },
     { id:'usage-3', label:'Open 3+ different dApps', desc:'Rewards variety, not just volume', tag:'Daily' },
     { id:'usage-4', label:'Check dApp Store notifications', desc:'New weekly activations and rewards', tag:'Daily' },
   ]},
-  { key:'explore', icon:'🧩', title:'dApp Exploration', subtitle:'Weekly — download early in the week', countable:true, tasks:[
+  { key:'explore', icon:CL_ICONS.compass, title:'dApp Exploration', subtitle:'Weekly — download early in the week', countable:true, tasks:[
     { id:'explore-1', label:'Download 3 new apps', desc:'Any new app from the dApp Store', tag:'Weekly' },
     { id:'explore-2', label:'Use each new app for 5+ minutes', desc:'Complete early — weekend sync may miss it', tag:'Weekly' },
     { id:'explore-3', label:'Leave a review for an app', desc:'Supports future featured placements', tag:'Weekly' },
   ]},
-  { key:'staking', icon:'💎', title:'SKR Staking', subtitle:'Key loyalty signal for S2 airdrop', countable:true, tasks:[
+  { key:'staking', icon:CL_ICONS.gem, title:'SKR Staking', subtitle:'Key loyalty signal for S2 airdrop', countable:true, tasks:[
     { id:'staking-1', label:'Stake SKR to a Guardian node', desc:'Helius, Jito, Anza, DoubleZero or Triton — rewards every 48h', tag:'Staking' },
   ]},
 ];

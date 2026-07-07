@@ -40,26 +40,16 @@ moonsoon/
 │   ├── huma.html           ← Huma Finance strategy page
 │   └── (przyszłe: jupiter.html, kamino.html, meteora.html...)
 ├── assets/
-│   ├── css/
-│   │   ├── tokens.css      ← CSS variables (kolory, fonty) — EDYTUJ TU aby zmienić design
-│   │   ├── layout.css      ← 3-col layout, nav, topbar, panel, responsive
-│   │   └── components.css  ← wszystkie komponenty UI (taski, karty, tabs, kalkulator...)
-│   └── js/
-│       ├── checklist.js    ← logika tasków, stan, render, QR
-│       ├── prices.js       ← CoinGecko price fetch
-│       ├── calculator.js   ← SKR staking kalkulator + Chart.js
-│       └── ui.js           ← drawer, bottom sheet, dApp filter, init
+│   └── img/                ← obrazki (np. mad-lads-skull)
 ├── sitemap.xml             ← ZAWSZE aktualizuj przy nowej stronie!
 ├── robots.txt
 └── CLAUDE.md               ← ten plik
 ```
 
 ## WAŻNE: index.html ma inline style i skrypty
-Plik `index.html` zawiera `<style>` i `<script>` wbudowane inline (dla podglądu w Claude artifacts).
-Osobne pliki w `assets/` to **źródło prawdy** — tam wprowadzaj zmiany, potem zaktualizuj też inline w index.html.
-
-Gdy edytujesz index.html bezpośrednio (np. HTML, tweety, dAppy) — wystarczy zaktualizować index.html.
-Gdy edytujesz CSS/JS — zaktualizuj plik w assets/ ORAZ odpowiedni blok `<style>`/`<script>` w index.html.
+Plik `index.html` zawiera `<style>` i `<script>` wbudowane inline — to jedyne i jedyne źródło prawdy
+dla layoutu, designu i logiki strony głównej. Nie ma osobnych plików CSS/JS do utrzymywania w sync —
+wszystko edytujesz bezpośrednio w `index.html`.
 
 ## ⚠️ KRYTYCZNE — inline `<script>` i błędy parsowania
 

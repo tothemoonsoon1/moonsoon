@@ -107,6 +107,11 @@ async function meListingData(mint) {
     listed: listing?.listStatus === 'listed',
     listPrice: listing?.price ?? null,
     image: listing?.image ?? null,
+    // ME resolves listed items back to the actual seller. Helius's DAS
+    // ownership.owner instead reports the on-chain token account holder,
+    // which for a listed item is the marketplace's escrow/vault PDA — not
+    // the human owner. Prefer ME's when we have it.
+    owner: listing?.owner ?? null,
   };
 }
 
@@ -189,15 +194,19 @@ async function main() {
 
   const results = await mapWithConcurrency(skullAssets, async (asset) => {
     const mint = asset.id;
-    const owner = asset.ownership?.owner || null;
+    const heliusOwner = asset.ownership?.owner || null;
     const num = extractNumber(asset);
 
-    let listing = { listed: false, listPrice: null, image: null };
+    let listing = { listed: false, listPrice: null, image: null, owner: null };
     try {
       listing = await meListingData(mint);
     } catch (e) {
       console.warn(`\nMagic Eden fetch failed for ${mint}: ${e.message}`);
     }
+
+    // Helius's token-account owner is the marketplace escrow PDA for listed
+    // items — use ME's resolved seller when we have it.
+    const owner = listing.owner || heliusOwner;
 
     let sales = { trades: 0, lastSalePrice: null };
     try {

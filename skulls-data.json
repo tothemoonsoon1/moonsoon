@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T17:58:38.168Z",
+  "generatedAt": "2026-07-07T18:09:40.408Z",
   "skulls": [
     {
       "num": 542,
@@ -773,9 +773,9 @@
       "mint": "5TGVpYrmje5sYyf9nRUHmML2VUEaNTsTC24cz53FbxNA",
       "owner": "AuyPr87ub8C2RVjJprHqXRGtsm7Q8ZzMqnz9xpBopixf",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 830,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5364.png",

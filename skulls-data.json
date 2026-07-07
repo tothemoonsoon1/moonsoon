@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-07-07T17:26:55.657Z",
+  "generatedAt": "2026-07-07T17:58:38.168Z",
   "skulls": [
     {
       "num": 542,
       "mint": "9r19whEpS9FkqaEHY2NkV17VEzaLmzvKWPLFBjSZQYpH",
       "owner": "7bkeDJjUSSkxFFrwoPdfKZe7ktajsWPyr3nLtoNTbuNX",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 2,
+      "lastSalePrice": 156.66,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/542.png",
@@ -50,6 +50,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/749.png",
       "meUrl": "https://magiceden.io/item-details/2MfKQM4Sewgz5s9dEZv7LETXijuCV7TLDbTM6jW3yQmR"
     },
     {
@@ -57,9 +58,9 @@
       "mint": "FdsGZfG3dVx2Lbb2cdhNjoU91AsYBMqoHDhj3MkvCU66",
       "owner": "XvH7UbLiyqCGDMJLjNh5omU9am1k2ctiqKJS8JMtA8P",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 1326,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/764.png",
@@ -153,6 +154,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1495.png",
       "meUrl": "https://magiceden.io/item-details/CKPH2TxzciARSCkPcg6BVDNNA4cCHsm698tqjQEZQGNb"
     },
     {
@@ -186,7 +188,7 @@
       "mint": "HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx",
       "owner": "EhC3HyM2bo5esya8GDvz1v4Lid6TppyGbSsEBcTcpesr",
       "isDomain": false,
-      "trades": 2,
+      "trades": 1,
       "lastSalePrice": 37.6,
       "neverTraded": false,
       "listed": true,
@@ -230,6 +232,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2196.png",
       "meUrl": "https://magiceden.io/item-details/D5VorFFtbAgmGafXdjzrod2HfFiocHjFmEzhQSH2Rh6t"
     },
     {
@@ -268,6 +271,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2441.png",
       "meUrl": "https://magiceden.io/item-details/2ytEqsh9XECRtqcMm5qg2xL1RMJdFV1ry7xKVP66n1sL"
     },
     {
@@ -436,6 +440,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3367.png",
       "meUrl": "https://magiceden.io/item-details/DUp9W2Ad5yPTHeRpwE2L6juuTuLMsjUzeSKVamT9CDXv"
     },
     {
@@ -534,9 +539,9 @@
       "mint": "4153oJAFhqRZFfFUwwSiF1jASs5BPTmPa56xGXQoQLMV",
       "owner": "rvHtBGZSNVjnzbZ31B65tvak5yFhQDnzGNoyL1QhF7Y",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 1299,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3732.png",
@@ -573,11 +578,12 @@
       "mint": "DC22H6bAshuJjmXXpyS8MUKGE7dPzW4FfqJT4dFBNZJp",
       "owner": "EiFmFjfbpgkpEdm3W74ZfjBPkwFEK6oGa5ecHXpHD7rE",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 853,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3919.png",
       "meUrl": "https://magiceden.io/item-details/DC22H6bAshuJjmXXpyS8MUKGE7dPzW4FfqJT4dFBNZJp"
     },
     {
@@ -611,9 +617,9 @@
       "mint": "5K9dGYAPao5ySagKcHYKTBq1ko2Hvamd8bDvYH4NqPYQ",
       "owner": "7bkeDJjUSSkxFFrwoPdfKZe7ktajsWPyr3nLtoNTbuNX",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 946.5,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4424.png",
@@ -624,9 +630,9 @@
       "mint": "1ZrnvELdCpzda8qK9bE7Hxco6aYkZAn9hmHgbaNj3Jz",
       "owner": "DD9eeertZsaHXzxiBwaBV9BSgMhPHb2yuvBH5ivuxAFV",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 398,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4506.png",
@@ -655,6 +661,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4544.png",
       "meUrl": "https://magiceden.io/item-details/3aT4QZd8BQR8n8YZgcXAxCc5Gktye7eZxayU85wHcTF5"
     },
     {
@@ -662,11 +669,12 @@
       "mint": "2wArabgGHrXtaQqS5ZQFrddWyEWtAL6A11DHe4VZvSz5",
       "owner": "DtrA8ZbUuZVdRc1fH4ouVEmLS9rPgs52ob3eew9gwNHq",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 2,
+      "lastSalePrice": 123,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4575.png",
       "meUrl": "https://magiceden.io/item-details/2wArabgGHrXtaQqS5ZQFrddWyEWtAL6A11DHe4VZvSz5"
     },
     {
@@ -674,11 +682,12 @@
       "mint": "3bn4LpnUL4W5snNMtt94FLEGzdfmts4qn3Jz5HkBLEJ7",
       "owner": "33L3ELrsPLoy3WtT1uF7qV9DFinAegt3LccDsDEq9Eju",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 377.5,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4576.png",
       "meUrl": "https://magiceden.io/item-details/3bn4LpnUL4W5snNMtt94FLEGzdfmts4qn3Jz5HkBLEJ7"
     },
     {
@@ -730,6 +739,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4909.png",
       "meUrl": "https://magiceden.io/item-details/2Ytx3Qp5Qev3S93T718fmpAK8ZVPBThyocwEpfziSsrp"
     },
     {
@@ -737,11 +747,12 @@
       "mint": "CMHNwcDZuTyKu5qZtgNqVsGuTvx7Ey5XNUHz6NjLmDwf",
       "owner": "BbsBzA6p5EiW14nMJmqL3HpPSBc1dpg97PNqaNPudCge",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 800,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5091.png",
       "meUrl": "https://magiceden.io/item-details/CMHNwcDZuTyKu5qZtgNqVsGuTvx7Ey5XNUHz6NjLmDwf"
     },
     {
@@ -754,6 +765,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5340.png",
       "meUrl": "https://magiceden.io/item-details/DXQjWMVzbhGunEJGeHK1DbPKEdbNz2yLvs69nYfxfPSJ"
     },
     {
@@ -831,6 +843,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5845.png",
       "meUrl": "https://magiceden.io/item-details/Dwc7Mm9r13Czb2kdoYnC6NDCsZ8XKrpow2dq8mnHeyU1"
     },
     {
@@ -838,9 +851,9 @@
       "mint": "8wsLSdEMc3jMatLkU8Jr3nphpx62Km6m3FFNyGanafnW",
       "owner": "7Vswiik2U6b7MNGFtzUsi7SSVSDrFZfjjbxCejPRNVgb",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 2,
+      "lastSalePrice": 133.33,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5943.png",
@@ -882,6 +895,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6408.png",
       "meUrl": "https://magiceden.io/item-details/3M9UdJnCsrYvBuCLLB5LFcGL44wbdghSHSUbHFbJ1zFm"
     },
     {
@@ -907,6 +921,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6882.png",
       "meUrl": "https://magiceden.io/item-details/CXNLZncJJ7btw6LP84sWgzduamtebejWwSZmWPhW6vVc"
     },
     {
@@ -914,9 +929,9 @@
       "mint": "E15vXEstzUrv26wkLvkLy8bpCo9nB8kjYZPb8tUJ5yZW",
       "owner": "HzdS2G7gMinzZnxx93QJrW8avEz9j7QA25Z2njdHj7uZ",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 48,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7092.png",
@@ -958,6 +973,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7577.png",
       "meUrl": "https://magiceden.io/item-details/3AmHkCWTmwHCcYsuagfPf2VRk8QLCgbcbh9fqQHVUnTe"
     },
     {
@@ -991,9 +1007,9 @@
       "mint": "5Yvam4HipCwxdyMVYsfNgPYhtTA1svCaep2TQdD3B5zE",
       "owner": "A5Kawb8aZx1iqMWnLxKhPZha7Ro11e6FqWc8KWdNoakJ",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 222,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7744.png",
@@ -1048,6 +1064,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8086.png",
       "meUrl": "https://magiceden.io/item-details/2UH62SurvrRHTtEAr2aKC42nw4BN87uTTf8289c3zAvz"
     },
     {
@@ -1112,6 +1129,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8634.png",
       "meUrl": "https://magiceden.io/item-details/CypccztsyD8gHGYLB2BBDQNCH5MsHkRoTjERWad71rwW"
     },
     {
@@ -1145,9 +1163,9 @@
       "mint": "694En1yPMLibpzF2ZXToJoFEkLAVTFh2787iReryEutF",
       "owner": "4FJjAvYdwmwJit4J5wvTQt8LzuE2E8ez6UcozkWCQRQx",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 900,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9031.png",
@@ -1176,6 +1194,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9184.png",
       "meUrl": "https://magiceden.io/item-details/2XumnV79nikK1WVGQCQuRH8iCVX6eWfPAijhZVWVCCq5"
     },
     {
@@ -1183,9 +1202,9 @@
       "mint": "7b3JLBQAFhi2hARW4JabXq6pJakXoQATnfaiPyBGajih",
       "owner": "FH5nSHvSU8XfcvJTZuLyBiu9xhHGYcdkz2GfoxnjR8TK",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 200,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9405.png",
@@ -1222,9 +1241,9 @@
       "mint": "FADSDuHnwNJM7ZjFBTfX92h85RwA4fyZ5h7PgsCYT9Wg",
       "owner": "7NcowvAUJLcZ6KHSm82v6dMFz7pTNRvHvBh8CSjheaU5",
       "isDomain": false,
-      "trades": 0,
-      "lastSalePrice": null,
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 147,
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9760.png",
@@ -1240,6 +1259,7 @@
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
+      "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9857.png",
       "meUrl": "https://magiceden.io/item-details/DQR6FhoBdRSzM9rLNtAaZ3yrttzvWy5w9twGJEPvUjbQ"
     },
     {

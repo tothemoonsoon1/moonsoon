@@ -231,6 +231,12 @@ function txProgramIds(tx) {
   return ids;
 }
 
+// Temporary: while pinning down the right price-extraction heuristic for
+// self-classified Tensor sales, always dump raw data for this one mint
+// (Mad Lads #1792) regardless of the first-3 debug cap — remove once
+// lastSalePrice is verified correct for it.
+const DEBUG_MINT = 'HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx';
+
 async function tensorProgramSales(mint) {
   const allTxs = await heliusAddressTransactions(mint, { label: 'Helius all-txs (Tensor scan)' });
 
@@ -240,7 +246,7 @@ async function tensorProgramSales(mint) {
     return false;
   });
 
-  if (tensorDebugLogged < 3) {
+  if (tensorDebugLogged < 3 || mint === DEBUG_MINT) {
     tensorDebugLogged++;
     console.log(`\n[debug-tensor] ${mint} tensor-program txs=${tensorTxs.length} raw=${JSON.stringify(tensorTxs)}`);
   }
@@ -253,6 +259,10 @@ async function tensorProgramSales(mint) {
     const solMoved = (t.nativeTransfers || []).some((nt) => nt.amount > 0);
     return nftMoved && solMoved;
   });
+
+  if (mint === DEBUG_MINT) {
+    console.log(`\n[debug-tensor-sales] ${mint} classified sales=${JSON.stringify(sales)}`);
+  }
 
   return sales.map(saleFromTx);
 }
@@ -291,15 +301,26 @@ async function mapWithConcurrency(items, worker) {
   return results;
 }
 
+// Temporary fast-path for debugging the Tensor price heuristic on a single
+// mint without running the full 99-skull pipeline (and, crucially, without
+// ever writing a truncated skulls-data.json over the real one). Remove once
+// lastSalePrice is verified correct for DEBUG_MINT.
+const DEBUG_ONLY_TARGET = process.env.DEBUG_ONLY_TARGET === '1';
+
 async function main() {
   console.log('Fetching Mad Lads collection assets from Helius...');
   const assets = await fetchAllCollectionAssets();
   console.log(`Fetched ${assets.length} assets. Filtering for "Skull" trait...`);
 
-  const skullAssets = assets.filter(skullTraitInfo);
+  let skullAssets = assets.filter(skullTraitInfo);
   console.log(`Found ${skullAssets.length} Skulls.`);
   if (skullAssets.length !== 99) {
     console.warn(`Warning: expected 99 Skulls, found ${skullAssets.length}. Check trait filter logic.`);
+  }
+
+  if (DEBUG_ONLY_TARGET) {
+    skullAssets = skullAssets.filter((a) => a.id === DEBUG_MINT);
+    console.log(`DEBUG_ONLY_TARGET set — restricting run to ${DEBUG_MINT} only, will NOT write skulls-data.json.`);
   }
 
   const results = await mapWithConcurrency(skullAssets, async (asset) => {
@@ -357,6 +378,12 @@ async function main() {
       meUrl: `https://magiceden.io/item-details/${mint}`,
     };
   });
+
+  if (DEBUG_ONLY_TARGET) {
+    console.log(`\nDEBUG_ONLY_TARGET result: ${JSON.stringify(results, null, 2)}`);
+    console.log('Not writing skulls-data.json (debug run).');
+    return;
+  }
 
   console.log('\nDone. Writing skulls-data.json...');
   results.sort((a, b) => (a.num ?? 0) - (b.num ?? 0));

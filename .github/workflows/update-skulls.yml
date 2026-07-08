@@ -3,7 +3,12 @@ name: Update Skulls Data
 on:
   schedule:
     - cron: '17 4 * * *'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      debug_only_target:
+        description: 'Debug: restrict to DEBUG_MINT and skip writing/committing skulls-data.json'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -23,6 +28,7 @@ jobs:
       - name: Generate skulls-data.json
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          DEBUG_ONLY_TARGET: ${{ inputs.debug_only_target && '1' || '' }}
         run: node scripts/generate-skulls-data.mjs
 
       - name: Commit and push if changed

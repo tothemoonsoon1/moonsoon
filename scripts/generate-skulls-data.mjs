@@ -134,7 +134,7 @@ const HELIUS_TX_MAX_PAGES = 10; // safety cap: 1000 events per mint is plenty
 
 // Fetches every page of v0/addresses/{mint}/transactions, optionally
 // filtered by `type`. Shared paging logic for both heliusNftSales (type
-// restricted to NFT_SALE) and tensorProgramSales (unfiltered, since Tensor
+// restricted to NFT_SALE) and tensorMintActivity (unfiltered, since Tensor
 // AMM/Marketplace pool trades aren't always tagged NFT_SALE by Helius).
 async function heliusAddressTransactions(mint, { type, label } = {}) {
   const allTxs = [];
@@ -246,7 +246,32 @@ const MIN_SALE_LAMPORTS = 20_000_000; // 0.02 SOL — comfortably above escrow-s
 // (see main()) to re-verify against this mint without a full 99-skull run.
 const DEBUG_MINT = 'HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx';
 
-async function tensorProgramSales(mint) {
+// Finds whatever Tensor listing/cancellation/transfer happened most
+// recently and reports it if it was a still-active listing. Helius's own
+// human-readable `description` already spells out the listing price
+// ("...listed Mad Lads #1792 for 1000.69 SOL on TENSOR.") — reuses the same
+// unfiltered tx fetch as the sales scan, no extra API calls. Any actual
+// ownership transfer after a listing (sale on Tensor or elsewhere,
+// cancellation, shared-escrow move) makes that listing stale, so we track
+// whichever event is newest rather than just "is there ever a listing tx".
+function currentTensorListing(allTxs, mint) {
+  const events = [];
+  for (const t of allTxs) {
+    const ts = t.timestamp ?? 0;
+    if (t.source === 'TENSOR' && t.type === 'NFT_LISTING') {
+      events.push({ ts, active: true, price: parseSolPriceFromDescription(t.description) });
+    } else if ((t.tokenTransfers || []).some((tt) => tt.mint === mint)) {
+      events.push({ ts, active: false });
+    } else if (t.source === 'TENSOR' && t.type === 'NFT_CANCEL_LISTING') {
+      events.push({ ts, active: false });
+    }
+  }
+  events.sort((a, b) => b.ts - a.ts);
+  const latest = events[0];
+  return latest?.active ? { tensorListed: true, tensorListPrice: latest.price } : { tensorListed: false, tensorListPrice: null };
+}
+
+async function tensorMintActivity(mint) {
   const allTxs = await heliusAddressTransactions(mint, { label: 'Helius all-txs (Tensor scan)' });
 
   const tensorTxs = allTxs.filter((t) => {
@@ -269,7 +294,7 @@ async function tensorProgramSales(mint) {
     return nftMoved && solMoved;
   });
 
-  return sales.map(saleFromTx);
+  return { sales: sales.map(saleFromTx), ...currentTensorListing(allTxs, mint) };
 }
 
 // Combines sales from both sources, de-duplicating by transaction signature
@@ -351,14 +376,24 @@ async function main() {
       console.warn(`\nHelius sales fetch failed for ${mint}: ${e.message}`);
     }
 
-    let tensorSales = [];
+    let tensorActivity = { sales: [], tensorListed: false, tensorListPrice: null };
     try {
-      tensorSales = await tensorProgramSales(mint);
+      tensorActivity = await tensorMintActivity(mint);
     } catch (e) {
       console.warn(`\nTensor program scan failed for ${mint}: ${e.message}`);
     }
 
-    const sales = mergeSales([heliusSales, tensorSales]);
+    const sales = mergeSales([heliusSales, tensorActivity.sales]);
+
+    // Magic Eden's own listing price can lag or miss cross-listed Tensor
+    // pool/marketplace listings entirely (this is the same underlying gap
+    // as the sales one — ME only reliably knows about its own listings).
+    // Show whichever is listed, and the cheaper of the two if both are.
+    const listed = listing.listed || tensorActivity.tensorListed;
+    const listPrice =
+      listing.listed && tensorActivity.tensorListed
+        ? Math.min(listing.listPrice, tensorActivity.tensorListPrice)
+        : listing.listPrice ?? tensorActivity.tensorListPrice;
 
     let domain = null;
     try {
@@ -377,8 +412,8 @@ async function main() {
       trades: sales.trades,
       lastSalePrice: sales.lastSalePrice,
       neverTraded: sales.trades === 0,
-      listed: listing.listed,
-      listPrice: listing.listPrice,
+      listed,
+      listPrice,
       image: listing.image,
       meUrl: `https://magiceden.io/item-details/${mint}`,
     };

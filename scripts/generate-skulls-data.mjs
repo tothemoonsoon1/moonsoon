@@ -67,14 +67,14 @@ function sleep(ms) {
 
 // Fetches with retry+backoff on 429/5xx. Logs (and eventually throws) real
 // failures instead of letting callers silently treat them as "no data".
-async function fetchWithRetry(url, label, attempts = 4) {
+async function fetchWithRetry(url, label, attempts = 6) {
   let lastStatus = null;
   for (let i = 0; i < attempts; i++) {
     const res = await fetch(url);
     if (res.ok) return res;
     lastStatus = res.status;
     if (res.status !== 429 && res.status < 500) return res; // real 4xx, don't retry
-    await sleep(400 * Math.pow(2, i)); // 400ms, 800ms, 1600ms, 3200ms
+    await sleep(500 * Math.pow(2, i)); // 500ms, 1s, 2s, 4s, 8s, 16s
   }
   throw new Error(`${label} failed after ${attempts} attempts, last status ${lastStatus}`);
 }
@@ -162,17 +162,30 @@ async function heliusAddressTransactions(mint, { type, label } = {}) {
     if (pageTxs.length < HELIUS_TX_PAGE_LIMIT) break; // last page
     before = pageTxs[pageTxs.length - 1]?.signature;
     if (!before) break;
+    await sleep(300); // avoid bursting straight into the next page and tripping 429s
   }
 
   return allTxs;
 }
 
+// Tensor-program sales (self-classified, not Helius's own NFT_SALE type)
+// usually have a generic/UNKNOWN `description` with no "for X SOL" text to
+// parse, and no `events.nft.amount` either (that field only gets populated
+// for types Helius recognizes). Fall back to the largest native SOL
+// transfer in the tx — the actual sale price — so we don't silently lose
+// the price just because Helius didn't classify the transaction type.
+function largestNativeTransferSol(tx) {
+  const amounts = (tx?.nativeTransfers || []).map((nt) => nt.amount).filter((a) => typeof a === 'number' && a > 0);
+  if (amounts.length === 0) return null;
+  return +(Math.max(...amounts) / LAMPORTS_PER_SOL).toFixed(3);
+}
+
 function saleFromTx(tx) {
   const lamports = tx?.events?.nft?.amount;
   const priceSol =
-    typeof lamports === 'number'
-      ? +(lamports / LAMPORTS_PER_SOL).toFixed(3)
-      : parseSolPriceFromDescription(tx?.description);
+    (typeof lamports === 'number' ? +(lamports / LAMPORTS_PER_SOL).toFixed(3) : null) ??
+    parseSolPriceFromDescription(tx?.description) ??
+    largestNativeTransferSol(tx);
   return { signature: tx.signature, timestamp: tx.timestamp ?? 0, priceSol };
 }
 
@@ -252,10 +265,14 @@ function mergeSales(saleArrays) {
     if (sale.signature) bySignature.set(sale.signature, sale);
   }
   const sales = [...bySignature.values()].sort((a, b) => b.timestamp - a.timestamp);
-  return { trades: sales.length, lastSalePrice: sales[0]?.priceSol ?? null };
+  // Most recent sale might still lack a price in some edge case (e.g. a
+  // marketplace fee-only tx we misclassified) — fall back to the newest
+  // sale that actually has one rather than showing null when older data exists.
+  const lastPriced = sales.find((s) => s.priceSol != null);
+  return { trades: sales.length, lastSalePrice: lastPriced?.priceSol ?? null };
 }
 
-const CONCURRENCY = 2;
+const CONCURRENCY = 1;
 
 // Runs `worker` over `items` with at most CONCURRENCY in flight at once.
 async function mapWithConcurrency(items, worker) {

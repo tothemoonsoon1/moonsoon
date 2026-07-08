@@ -231,10 +231,19 @@ function txProgramIds(tx) {
   return ids;
 }
 
-// Temporary: while pinning down the right price-extraction heuristic for
-// self-classified Tensor sales, always dump raw data for this one mint
-// (Mad Lads #1792) regardless of the first-3 debug cap — remove once
-// lastSalePrice is verified correct for it.
+// Mad Lads #1792's raw txs revealed that Tensor's "shared escrow" feature
+// (depositing/withdrawing an NFT from the shared vault to relist elsewhere
+// or lower fees) also moves both the NFT and a small SOL amount — just
+// token-account rent (~0.002 SOL) plus a flat fee (~0.0014 SOL), consistently
+// ~0.003 SOL total regardless of the NFT's actual value. That's not a sale.
+// A real sale's SOL transfer is the purchase price, easily one or more
+// orders of magnitude above rent+fee dust even for a cheap NFT. Require the
+// largest native transfer to clear this threshold before calling it a sale.
+const MIN_SALE_LAMPORTS = 20_000_000; // 0.02 SOL — comfortably above escrow-shuffle dust, below any real NFT sale
+
+// Mint used to sanity-check this heuristic (Mad Lads #1792): 4 sales on
+// tensor.trade, only 1 tagged NFT_SALE by Helius. Set DEBUG_ONLY_TARGET=1
+// (see main()) to re-verify against this mint without a full 99-skull run.
 const DEBUG_MINT = 'HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx';
 
 async function tensorProgramSales(mint) {
@@ -246,23 +255,19 @@ async function tensorProgramSales(mint) {
     return false;
   });
 
-  if (tensorDebugLogged < 3 || mint === DEBUG_MINT) {
+  if (tensorDebugLogged < 3) {
     tensorDebugLogged++;
     console.log(`\n[debug-tensor] ${mint} tensor-program txs=${tensorTxs.length} raw=${JSON.stringify(tensorTxs)}`);
   }
 
-  // A sale actually moves the NFT (tokenTransfers) and SOL (nativeTransfers)
-  // in the same transaction — excludes listings, delistings, and bid
-  // placement/cancellation, which touch a Tensor program but move neither.
+  // A sale actually moves the NFT (tokenTransfers) and a real SOL price (not
+  // escrow-shuffle dust) in the same transaction — excludes listings,
+  // delistings, bid placement/cancellation, and shared-escrow deposit/withdrawal.
   const sales = tensorTxs.filter((t) => {
     const nftMoved = (t.tokenTransfers || []).some((tt) => tt.mint === mint);
-    const solMoved = (t.nativeTransfers || []).some((nt) => nt.amount > 0);
+    const solMoved = (t.nativeTransfers || []).some((nt) => nt.amount > MIN_SALE_LAMPORTS);
     return nftMoved && solMoved;
   });
-
-  if (mint === DEBUG_MINT) {
-    console.log(`\n[debug-tensor-sales] ${mint} classified sales=${JSON.stringify(sales)}`);
-  }
 
   return sales.map(saleFromTx);
 }

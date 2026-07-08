@@ -132,26 +132,27 @@ function parseSolPriceFromDescription(description) {
 const HELIUS_TX_PAGE_LIMIT = 100;
 const HELIUS_TX_MAX_PAGES = 10; // safety cap: 1000 events per mint is plenty
 
-// Paginates v0/addresses/{mint}/transactions with `before` since a single
-// call only returns up to HELIUS_TX_PAGE_LIMIT results — without paging,
-// older sales get silently dropped whenever a mint has enough intervening
-// activity (bids, cancels, listings) to fill that first page.
-async function heliusNftSales(mint) {
+// Fetches every page of v0/addresses/{mint}/transactions, optionally
+// filtered by `type`. Shared paging logic for both heliusNftSales (type
+// restricted to NFT_SALE) and tensorProgramSales (unfiltered, since Tensor
+// AMM/Marketplace pool trades aren't always tagged NFT_SALE by Helius).
+async function heliusAddressTransactions(mint, { type, label } = {}) {
   const allTxs = [];
   let before = null;
 
   for (let page = 0; page < HELIUS_TX_MAX_PAGES; page++) {
     const url =
       `https://api-mainnet.helius-rpc.com/v0/addresses/${mint}/transactions` +
-      `?api-key=${HELIUS_KEY}&type=NFT_SALE&limit=${HELIUS_TX_PAGE_LIMIT}` +
+      `?api-key=${HELIUS_KEY}&limit=${HELIUS_TX_PAGE_LIMIT}` +
+      (type ? `&type=${type}` : '') +
       (before ? `&before=${before}` : '');
-    const res = await fetchWithRetry(url, `Helius NFT_SALE for ${mint} (page ${page})`);
+    const res = await fetchWithRetry(url, `${label} for ${mint} (page ${page})`);
 
     // Helius returns 404 (not an empty array) when an address has zero
     // matching transactions — normal "never sold" case, not a real failure.
     if (res.status === 404) break;
     if (!res.ok) {
-      console.warn(`\nHelius NFT_SALE for ${mint} returned ${res.status}`);
+      console.warn(`\n${label} for ${mint} returned ${res.status}`);
       break;
     }
 
@@ -163,23 +164,95 @@ async function heliusNftSales(mint) {
     if (!before) break;
   }
 
+  return allTxs;
+}
+
+function saleFromTx(tx) {
+  const lamports = tx?.events?.nft?.amount;
+  const priceSol =
+    typeof lamports === 'number'
+      ? +(lamports / LAMPORTS_PER_SOL).toFixed(3)
+      : parseSolPriceFromDescription(tx?.description);
+  return { signature: tx.signature, timestamp: tx.timestamp ?? 0, priceSol };
+}
+
+// Trade history straight from Helius's own NFT_SALE classification — catches
+// Magic Eden and any marketplace Helius tags correctly.
+async function heliusNftSales(mint) {
+  const allTxs = await heliusAddressTransactions(mint, { type: 'NFT_SALE', label: 'Helius NFT_SALE' });
+
   if (salesDebugLogged < 3) {
     salesDebugLogged++;
     console.log(`\n[debug-sales] ${mint} pages fetched, total raw=${allTxs.length} raw=${JSON.stringify(allTxs)}`);
   }
 
-  const sales = allTxs.filter((t) => t.type === 'NFT_SALE');
-  const trades = sales.length;
-  // timestamp descending isn't guaranteed by the API, so sort explicitly for "last sale".
-  const sorted = sales.slice().sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
-  const last = sorted[0];
-  const lastLamports = last?.events?.nft?.amount;
-  const lastSalePrice =
-    typeof lastLamports === 'number'
-      ? +(lastLamports / LAMPORTS_PER_SOL).toFixed(3)
-      : parseSolPriceFromDescription(last?.description);
+  return allTxs.filter((t) => t.type === 'NFT_SALE').map(saleFromTx);
+}
 
-  return { trades, lastSalePrice };
+// Tensor migrated its on-chain program over time (see
+// https://dev.tensor.trade/docs/program-changes): the legacy TSWAP program
+// only handles shared-escrow now, while pool trades and marketplace
+// listings/bids moved to two newer programs. Helius's NFT_SALE classifier
+// doesn't reliably tag trades routed through these — e.g. Mad Lads #1792
+// shows 4 sales on tensor.trade but only 1 came back as NFT_SALE from
+// Helius. So instead of trusting Helius's `type` field, we pull ALL
+// transactions touching the mint and self-classify: any tx that (a) touches
+// a known Tensor program and (b) actually moves both the NFT and SOL is a
+// sale, regardless of what Helius labeled it.
+const TENSOR_PROGRAM_IDS = new Set([
+  'TSWAPaqyCSx2KABk68Shruf4rp7CxcNi8hAsbdwmHbN', // legacy TSWAP (shared escrow only, going forward)
+  'TAMM6ub33ij1mbetoMyVBLeKY5iP41i4UPUJQGkhfsg', // AMM (liquidity pools)
+  'TCMPhJdwDryooaGtiocG1u3xcYbRpiJzb283XfCZsDp', // Marketplace (listings/bids) + Escrow
+]);
+
+let tensorDebugLogged = 0;
+
+function txProgramIds(tx) {
+  const ids = new Set();
+  for (const ix of tx.instructions || []) {
+    if (ix.programId) ids.add(ix.programId);
+    for (const inner of ix.innerInstructions || []) {
+      if (inner.programId) ids.add(inner.programId);
+    }
+  }
+  return ids;
+}
+
+async function tensorProgramSales(mint) {
+  const allTxs = await heliusAddressTransactions(mint, { label: 'Helius all-txs (Tensor scan)' });
+
+  const tensorTxs = allTxs.filter((t) => {
+    const ids = txProgramIds(t);
+    for (const id of ids) if (TENSOR_PROGRAM_IDS.has(id)) return true;
+    return false;
+  });
+
+  if (tensorDebugLogged < 3) {
+    tensorDebugLogged++;
+    console.log(`\n[debug-tensor] ${mint} tensor-program txs=${tensorTxs.length} raw=${JSON.stringify(tensorTxs)}`);
+  }
+
+  // A sale actually moves the NFT (tokenTransfers) and SOL (nativeTransfers)
+  // in the same transaction — excludes listings, delistings, and bid
+  // placement/cancellation, which touch a Tensor program but move neither.
+  const sales = tensorTxs.filter((t) => {
+    const nftMoved = (t.tokenTransfers || []).some((tt) => tt.mint === mint);
+    const solMoved = (t.nativeTransfers || []).some((nt) => nt.amount > 0);
+    return nftMoved && solMoved;
+  });
+
+  return sales.map(saleFromTx);
+}
+
+// Combines sales from both sources, de-duplicating by transaction signature
+// so a trade Helius *and* our Tensor scan both catch doesn't get double-counted.
+function mergeSales(saleArrays) {
+  const bySignature = new Map();
+  for (const sale of saleArrays.flat()) {
+    if (sale.signature) bySignature.set(sale.signature, sale);
+  }
+  const sales = [...bySignature.values()].sort((a, b) => b.timestamp - a.timestamp);
+  return { trades: sales.length, lastSalePrice: sales[0]?.priceSol ?? null };
 }
 
 const CONCURRENCY = 2;
@@ -228,12 +301,21 @@ async function main() {
     // items — use ME's resolved seller when we have it.
     const owner = listing.owner || heliusOwner;
 
-    let sales = { trades: 0, lastSalePrice: null };
+    let heliusSales = [];
     try {
-      sales = await heliusNftSales(mint);
+      heliusSales = await heliusNftSales(mint);
     } catch (e) {
       console.warn(`\nHelius sales fetch failed for ${mint}: ${e.message}`);
     }
+
+    let tensorSales = [];
+    try {
+      tensorSales = await tensorProgramSales(mint);
+    } catch (e) {
+      console.warn(`\nTensor program scan failed for ${mint}: ${e.message}`);
+    }
+
+    const sales = mergeSales([heliusSales, tensorSales]);
 
     let domain = null;
     try {
@@ -242,7 +324,7 @@ async function main() {
       console.warn(`\nSNS lookup failed for ${owner}: ${e.message}`);
     }
 
-    await sleep(250); // stagger requests to stay under rate limits
+    await sleep(400); // stagger requests to stay under rate limits (now 3 fetches/mint)
 
     return {
       num,

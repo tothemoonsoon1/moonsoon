@@ -1,65 +1,37 @@
 #!/usr/bin/env node
 /**
  * Generates skulls-data.json from real on-chain + marketplace data.
- * Run with a Helius key in HELIUS_API_KEY, either locally:
+ * Run locally:
  *
- *   HELIUS_API_KEY=xxxxxxxx node scripts/generate-skulls-data.mjs
+ *   node scripts/generate-skulls-data.mjs
  *
- * or via the scheduled GitHub Actions workflow (.github/workflows/update-skulls.yml),
- * which reads the key from a repo secret and never prints or commits it.
+ * or via the scheduled GitHub Actions workflow
+ * (.github/workflows/update-skulls.yml).
  *
- * Output: skulls-data.json in the repo root — safe to commit, contains
- * no API key, only public NFT data (owner, trades, prices, listings).
+ * Everything — the 99-mint collection listing, per-mint trade history,
+ * listing price, owner, and image — comes from graphql.tensor.trade, the
+ * same undocumented GraphQL endpoint tensor.trade's own frontend calls (no
+ * API key required, discovered via its validation-error messages since
+ * introspection is disabled in production). No Helius key needed at all.
+ * Tensor's indexer aggregates sales across ALL marketplaces (Magic Eden,
+ * Tensor) with proper classification (buy-now vs bid-accept), which is both
+ * more accurate and free compared to parsing raw Solana transactions
+ * ourselves through a paid RPC provider.
+ *
+ * Known risk: this is not an officially published API, so it could change
+ * or start blocking scripted traffic without notice — if this stops
+ * working, the previous Helius-RPC-based approach is in git history (see
+ * the commit that introduced this file). It has also been observed
+ * silently returning partial/incomplete results on rare occasions (retried
+ * against in tensorMintData below), and occasional transient
+ * search_phase_execution_exception errors (retried in tensorGraphql).
+ *
+ * Output: skulls-data.json in the repo root — safe to commit, contains no
+ * API key, only public NFT data (owner, trades, prices, listings).
  */
 
-const HELIUS_KEY = process.env.HELIUS_API_KEY;
-if (!HELIUS_KEY) {
-  console.error('Missing HELIUS_API_KEY env var. Usage: HELIUS_API_KEY=xxx node scripts/generate-skulls-data.mjs');
-  process.exit(1);
-}
-
-const MAD_LADS_COLLECTION = 'J1S9H3QjnRtBbbuD4HjPV6RpRhwuk4zKbxsnCHuTgh9w';
-const HELIUS_RPC = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_KEY}`;
-const ME_BASE = 'https://api-mainnet.magiceden.dev/v2';
-
-async function heliusRpc(method, params) {
-  const res = await fetch(HELIUS_RPC, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ jsonrpc: '2.0', id: 'skulls', method, params }),
-  });
-  const json = await res.json();
-  if (json.error) throw new Error(`Helius ${method} error: ${JSON.stringify(json.error)}`);
-  return json.result;
-}
-
-async function fetchAllCollectionAssets() {
-  let page = 1;
-  const all = [];
-  while (true) {
-    const result = await heliusRpc('getAssetsByGroup', {
-      groupKey: 'collection',
-      groupValue: MAD_LADS_COLLECTION,
-      page,
-      limit: 1000,
-    });
-    all.push(...result.items);
-    if (result.items.length < 1000) break;
-    page++;
-  }
-  return all;
-}
-
-function skullTraitInfo(asset) {
-  const attrs = asset.content?.metadata?.attributes || [];
-  return attrs.find((a) => String(a.value).toLowerCase() === 'skull') || null;
-}
-
-function extractNumber(asset) {
-  const name = asset.content?.metadata?.name || '';
-  const match = name.match(/#(\d+)/);
-  return match ? parseInt(match[1], 10) : null;
-}
+const MAD_LADS_COLLECTION_SLUG = 'bd366797-5599-417a-be03-1e43a7e3fb90';
+const TENSOR_GRAPHQL = 'https://graphql.tensor.trade/graphql';
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -67,16 +39,28 @@ function sleep(ms) {
 
 // Fetches with retry+backoff on 429/5xx. Logs (and eventually throws) real
 // failures instead of letting callers silently treat them as "no data".
-async function fetchWithRetry(url, label, attempts = 6) {
+// Transport-level failures (DNS, connection reset, timeout) make fetch()
+// itself reject rather than resolve with a non-ok response — a full 99-skull
+// run hit 7 of these ("fetch failed") and, uncaught, they skipped retry
+// entirely and produced empty (owner: null, trades: 0) entries. Catch and
+// retry those the same as a 5xx.
+async function fetchWithRetry(url, label, attempts = 6, init = undefined) {
   let lastStatus = null;
+  let lastErr = null;
   for (let i = 0; i < attempts; i++) {
-    const res = await fetch(url);
-    if (res.ok) return res;
-    lastStatus = res.status;
-    if (res.status !== 429 && res.status < 500) return res; // real 4xx, don't retry
+    try {
+      const res = await fetch(url, init);
+      if (res.ok) return res;
+      lastStatus = res.status;
+      if (res.status !== 429 && res.status < 500) return res; // real 4xx, don't retry
+    } catch (e) {
+      lastErr = e;
+    }
     await sleep(500 * Math.pow(2, i)); // 500ms, 1s, 2s, 4s, 8s, 16s
   }
-  throw new Error(`${label} failed after ${attempts} attempts, last status ${lastStatus}`);
+  throw new Error(
+    `${label} failed after ${attempts} attempts, last status ${lastStatus}${lastErr ? `, last error: ${lastErr.message}` : ''}`
+  );
 }
 
 // sns-api.bonfida.com/owners/{owner}/domains currently 500s on every request
@@ -87,229 +71,176 @@ async function reverseSolDomain() {
   return null;
 }
 
-let meDebugLogged = 0;
-let salesDebugLogged = 0;
+const LAMPORTS_PER_SOL = 1_000_000_000;
 
-// Only used for listing status/price/image now — trade history comes from
-// Helius (see heliusNftSales) since ME's own activities endpoint only
-// returns marketplace-local events (bid/cancelBid), missing actual sales.
-async function meListingData(mint) {
-  const listingRes = await fetchWithRetry(`${ME_BASE}/tokens/${mint}`, `ME listing for ${mint}`);
-  if (!listingRes.ok) console.warn(`\nME listing for ${mint} returned ${listingRes.status}`);
-  const listing = listingRes.ok ? await listingRes.json() : null;
+// Headers matter here — without an Origin/Referer matching tensor.trade the
+// endpoint 403s (confirmed while probing it).
+const TENSOR_HEADERS = {
+  'User-Agent': 'Mozilla/5.0',
+  Origin: 'https://www.tensor.trade',
+  Referer: 'https://www.tensor.trade/',
+  'Content-Type': 'application/json',
+};
 
-  if (meDebugLogged < 3) {
-    meDebugLogged++;
-    console.log(`\n[debug-me] ${mint} listStatus=${listing?.listStatus} price=${listing?.price}`);
+// GraphQL errors (e.g. their search cluster's transient
+// "search_phase_execution_exception") come back as HTTP 200 with an
+// `errors` array — fetchWithRetry only looks at HTTP status, so those never
+// get retried there. Retry them here too, separately from transport-level
+// failures.
+async function tensorGraphql(query, variables, label, attempts = 4) {
+  let lastErr = null;
+  for (let i = 0; i < attempts; i++) {
+    if (i > 0) await sleep(500 * Math.pow(2, i));
+    const res = await fetchWithRetry(TENSOR_GRAPHQL, label, 6, {
+      method: 'POST',
+      headers: TENSOR_HEADERS,
+      body: JSON.stringify({ query, variables }),
+    });
+    const json = await res.json();
+    if (!json.errors) return json.data;
+    lastErr = json.errors;
+  }
+  throw new Error(`Tensor GraphQL ${label} error after ${attempts} attempts: ${JSON.stringify(lastErr)}`);
+}
+
+// One request gets mint metadata (name/image/owner/current listing) plus the
+// first page (up to 88) of the mint's full transaction history, newest
+// first. Field names below were reverse-engineered from GraphQL validation
+// error messages (introspection is disabled in prod) — see the header
+// comment for the risk tradeoff.
+const MINT_AND_TXS_QUERY = `
+  query MintAndTxs($mint: String!) {
+    mint(mint: $mint) {
+      name
+      imageUri
+      owner
+      activeListings { tx { txType grossAmount txAt } }
+    }
+    mintTransactions(mint: $mint) {
+      page { hasMore endCursor { txAt txKey } }
+      txs { tx { txType grossAmount txAt source } }
+    }
+  }
+`;
+
+const MORE_TXS_QUERY = `
+  query MoreTxs($mint: String!, $cursor: TransactionsCursorInput!) {
+    mintTransactions(mint: $mint, cursor: $cursor) {
+      page { hasMore endCursor { txAt txKey } }
+      txs { tx { txType grossAmount txAt source } }
+    }
+  }
+`;
+
+// Enumerates the whole ~9970-mint collection (250/page) to find the 99 with
+// a "Skull" trait value — same client-side filter the old Helius DAS-based
+// version used, just against a different source of the same public
+// metadata. Runs once per script invocation, not once per mint.
+const COLLECTION_MINTS_QUERY = `
+  query CollectionMints($slug: String!, $cursor: String) {
+    collectionMintsV2(slug: $slug, sortBy: LastSaleDesc, cursor: $cursor) {
+      page { hasMore endCursor }
+      mints { mint { onchainId name attributes { trait_type value } } }
+    }
+  }
+`;
+
+async function fetchAllCollectionMints() {
+  const all = [];
+  let cursor = null;
+  while (true) {
+    const data = await tensorGraphql(COLLECTION_MINTS_QUERY, { slug: MAD_LADS_COLLECTION_SLUG, cursor }, 'collection mints page');
+    all.push(...data.collectionMintsV2.mints.map((m) => m.mint));
+    if (!data.collectionMintsV2.page.hasMore) break;
+    cursor = data.collectionMintsV2.page.endCursor;
+    await sleep(150);
+  }
+  return all;
+}
+
+function skullTraitInfo(mint) {
+  const attrs = mint.attributes || [];
+  return attrs.find((a) => String(a.value).toLowerCase() === 'skull') || null;
+}
+
+function extractNumber(mint) {
+  const match = (mint.name || '').match(/#(\d+)/);
+  return match ? parseInt(match[1], 10) : null;
+}
+
+const TX_PAGE_MAX = 20; // 20 * 88 ~= 1760 tx safety cap per mint
+
+// Sale-representing txType values seen so far: SALE_BUY_NOW (instant buy),
+// SALE_ACCEPT_BID (seller accepts a standing bid). Matched by prefix so any
+// other SALE_* variant Tensor adds later is still caught.
+function isSaleTx(tx) {
+  return typeof tx.txType === 'string' && tx.txType.startsWith('SALE_');
+}
+
+// Single, un-retried fetch of a mint's full tx history + listing state.
+async function tensorMintDataOnce(mint) {
+  let data = await tensorGraphql(MINT_AND_TXS_QUERY, { mint }, `mint+txs for ${mint}`);
+  const allTxs = data.mintTransactions.txs.map((t) => t.tx);
+  let page = data.mintTransactions.page;
+
+  for (let i = 0; i < TX_PAGE_MAX && page.hasMore; i++) {
+    await sleep(200);
+    const more = await tensorGraphql(
+      MORE_TXS_QUERY,
+      { mint, cursor: { txAt: page.endCursor.txAt, txKey: page.endCursor.txKey } },
+      `more txs for ${mint} (page ${i + 2})`
+    );
+    allTxs.push(...more.mintTransactions.txs.map((t) => t.tx));
+    page = more.mintTransactions.page;
   }
 
+  const sales = allTxs
+    .filter(isSaleTx)
+    .map((tx) => ({ timestamp: tx.txAt, priceSol: +(Number(tx.grossAmount) / LAMPORTS_PER_SOL).toFixed(3) }))
+    .sort((a, b) => b.timestamp - a.timestamp);
+
+  // A mint can carry more than one active LIST entry (relisted, or listed via
+  // more than one front-end pointing at the same underlying listing) — take
+  // the cheapest raw ask.
+  const listings = (data.mint.activeListings || [])
+    .map((l) => l.tx)
+    .filter((tx) => tx.txType === 'LIST')
+    .map((tx) => Number(tx.grossAmount) / LAMPORTS_PER_SOL);
+  const rawAskPrice = listings.length ? Math.min(...listings) : null;
+
   return {
-    listed: listing?.listStatus === 'listed',
-    listPrice: listing?.price ?? null,
-    image: listing?.image ?? null,
-    // ME resolves listed items back to the actual seller. Helius's DAS
-    // ownership.owner instead reports the on-chain token account holder,
-    // which for a listed item is the marketplace's escrow/vault PDA — not
-    // the human owner. Prefer ME's when we have it.
-    owner: listing?.owner ?? null,
+    name: data.mint.name,
+    image: data.mint.imageUri,
+    owner: data.mint.owner,
+    trades: sales.length,
+    lastSalePrice: sales[0]?.priceSol ?? null,
+    listed: rawAskPrice != null,
+    rawAskPrice,
+    totalTxs: allTxs.length,
   };
 }
 
-const LAMPORTS_PER_SOL = 1_000_000_000;
+const STABILITY_MAX_ATTEMPTS = 4;
 
-// Helius Enhanced Transactions (v0, deprecated but still live on free tier;
-// the newer getTransactionsForAddress RPC method needs a paid plan).
-// Returns on-chain NFT_SALE events for this mint across ALL marketplaces
-// (Magic Eden, Tensor, OTC, etc.) — not just Magic Eden's own activity feed.
-// Parses "...for 37.6 SOL on MAGIC_EDEN." out of Helius's human-readable
-// description — more robust than relying on an exact events.nft.amount shape
-// we haven't fully confirmed, and works even if that field is ever renamed.
-function parseSolPriceFromDescription(description) {
-  const match = String(description || '').match(/for ([\d.]+) SOL/);
-  return match ? parseFloat(match[1]) : null;
-}
-
-const HELIUS_TX_PAGE_LIMIT = 100;
-const HELIUS_TX_MAX_PAGES = 10; // safety cap: 1000 events per mint is plenty
-
-// Fetches every page of v0/addresses/{mint}/transactions, optionally
-// filtered by `type`. Shared paging logic for both heliusNftSales (type
-// restricted to NFT_SALE) and tensorMintActivity (unfiltered, since Tensor
-// AMM/Marketplace pool trades aren't always tagged NFT_SALE by Helius).
-async function heliusAddressTransactions(mint, { type, label } = {}) {
-  const allTxs = [];
-  let before = null;
-
-  for (let page = 0; page < HELIUS_TX_MAX_PAGES; page++) {
-    const url =
-      `https://api-mainnet.helius-rpc.com/v0/addresses/${mint}/transactions` +
-      `?api-key=${HELIUS_KEY}&limit=${HELIUS_TX_PAGE_LIMIT}` +
-      (type ? `&type=${type}` : '') +
-      (before ? `&before=${before}` : '');
-    const res = await fetchWithRetry(url, `${label} for ${mint} (page ${page})`);
-
-    // Helius returns 404 (not an empty array) when an address has zero
-    // matching transactions — normal "never sold" case, not a real failure.
-    if (res.status === 404) break;
-    if (!res.ok) {
-      console.warn(`\n${label} for ${mint} returned ${res.status}`);
-      break;
-    }
-
-    const pageTxs = await res.json();
-    if (!Array.isArray(pageTxs) || pageTxs.length === 0) break;
-    allTxs.push(...pageTxs);
-    if (pageTxs.length < HELIUS_TX_PAGE_LIMIT) break; // last page
-    before = pageTxs[pageTxs.length - 1]?.signature;
-    if (!before) break;
-    await sleep(300); // avoid bursting straight into the next page and tripping 429s
+// This undocumented endpoint has been observed silently returning a partial
+// transaction list (no error, no hasMore flag, just fewer rows than a repeat
+// query for the identical mint) — verified on Mad Lads #1792: one fetch
+// reported trades=1/57 total txs, the very next one 4/92. Re-fetch until two
+// consecutive attempts agree on trade count, and keep the one with the most
+// total txs seen if we run out of attempts, rather than silently shipping a
+// possibly-truncated result the way the raw endpoint would.
+async function tensorMintData(mint) {
+  let best = null;
+  let prevTrades = null;
+  for (let attempt = 0; attempt < STABILITY_MAX_ATTEMPTS; attempt++) {
+    if (attempt > 0) await sleep(400);
+    const result = await tensorMintDataOnce(mint);
+    if (!best || result.totalTxs > best.totalTxs) best = result;
+    if (prevTrades !== null && result.trades === prevTrades) return best;
+    prevTrades = result.trades;
   }
-
-  return allTxs;
-}
-
-// Tensor-program sales (self-classified, not Helius's own NFT_SALE type)
-// usually have a generic/UNKNOWN `description` with no "for X SOL" text to
-// parse, and no `events.nft.amount` either (that field only gets populated
-// for types Helius recognizes). Fall back to the largest native SOL
-// transfer in the tx — the actual sale price — so we don't silently lose
-// the price just because Helius didn't classify the transaction type.
-function largestNativeTransferSol(tx) {
-  const amounts = (tx?.nativeTransfers || []).map((nt) => nt.amount).filter((a) => typeof a === 'number' && a > 0);
-  if (amounts.length === 0) return null;
-  return +(Math.max(...amounts) / LAMPORTS_PER_SOL).toFixed(3);
-}
-
-function saleFromTx(tx) {
-  const lamports = tx?.events?.nft?.amount;
-  const priceSol =
-    (typeof lamports === 'number' ? +(lamports / LAMPORTS_PER_SOL).toFixed(3) : null) ??
-    parseSolPriceFromDescription(tx?.description) ??
-    largestNativeTransferSol(tx);
-  return { signature: tx.signature, timestamp: tx.timestamp ?? 0, priceSol };
-}
-
-// Trade history straight from Helius's own NFT_SALE classification — catches
-// Magic Eden and any marketplace Helius tags correctly.
-async function heliusNftSales(mint) {
-  const allTxs = await heliusAddressTransactions(mint, { type: 'NFT_SALE', label: 'Helius NFT_SALE' });
-
-  if (salesDebugLogged < 3) {
-    salesDebugLogged++;
-    console.log(`\n[debug-sales] ${mint} pages fetched, total raw=${allTxs.length} raw=${JSON.stringify(allTxs)}`);
-  }
-
-  return allTxs.filter((t) => t.type === 'NFT_SALE').map(saleFromTx);
-}
-
-// Tensor migrated its on-chain program over time (see
-// https://dev.tensor.trade/docs/program-changes): the legacy TSWAP program
-// only handles shared-escrow now, while pool trades and marketplace
-// listings/bids moved to two newer programs. Helius's NFT_SALE classifier
-// doesn't reliably tag trades routed through these — e.g. Mad Lads #1792
-// shows 4 sales on tensor.trade but only 1 came back as NFT_SALE from
-// Helius. So instead of trusting Helius's `type` field, we pull ALL
-// transactions touching the mint and self-classify: any tx that (a) touches
-// a known Tensor program and (b) actually moves both the NFT and SOL is a
-// sale, regardless of what Helius labeled it.
-const TENSOR_PROGRAM_IDS = new Set([
-  'TSWAPaqyCSx2KABk68Shruf4rp7CxcNi8hAsbdwmHbN', // legacy TSWAP (shared escrow only, going forward)
-  'TAMM6ub33ij1mbetoMyVBLeKY5iP41i4UPUJQGkhfsg', // AMM (liquidity pools)
-  'TCMPhJdwDryooaGtiocG1u3xcYbRpiJzb283XfCZsDp', // Marketplace (listings/bids) + Escrow
-]);
-
-let tensorDebugLogged = 0;
-
-function txProgramIds(tx) {
-  const ids = new Set();
-  for (const ix of tx.instructions || []) {
-    if (ix.programId) ids.add(ix.programId);
-    for (const inner of ix.innerInstructions || []) {
-      if (inner.programId) ids.add(inner.programId);
-    }
-  }
-  return ids;
-}
-
-// Mad Lads #1792's raw txs revealed that Tensor's "shared escrow" feature
-// (depositing/withdrawing an NFT from the shared vault to relist elsewhere
-// or lower fees) also moves both the NFT and a small SOL amount — just
-// token-account rent (~0.002 SOL) plus a flat fee (~0.0014 SOL), consistently
-// ~0.003 SOL total regardless of the NFT's actual value. That's not a sale.
-// A real sale's SOL transfer is the purchase price, easily one or more
-// orders of magnitude above rent+fee dust even for a cheap NFT. Require the
-// largest native transfer to clear this threshold before calling it a sale.
-const MIN_SALE_LAMPORTS = 20_000_000; // 0.02 SOL — comfortably above escrow-shuffle dust, below any real NFT sale
-
-// Mint used to sanity-check this heuristic (Mad Lads #1792): 4 sales on
-// tensor.trade, only 1 tagged NFT_SALE by Helius. Set DEBUG_ONLY_TARGET=1
-// (see main()) to re-verify against this mint without a full 99-skull run.
-const DEBUG_MINT = 'HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx';
-
-// Finds whatever Tensor listing/cancellation/transfer happened most
-// recently and reports it if it was a still-active listing. Helius's own
-// human-readable `description` already spells out the listing price
-// ("...listed Mad Lads #1792 for 1000.69 SOL on TENSOR.") — reuses the same
-// unfiltered tx fetch as the sales scan, no extra API calls. Any actual
-// ownership transfer after a listing (sale on Tensor or elsewhere,
-// cancellation, shared-escrow move) makes that listing stale, so we track
-// whichever event is newest rather than just "is there ever a listing tx".
-function currentTensorListing(allTxs, mint) {
-  const events = [];
-  for (const t of allTxs) {
-    const ts = t.timestamp ?? 0;
-    if (t.source === 'TENSOR' && t.type === 'NFT_LISTING') {
-      events.push({ ts, active: true, price: parseSolPriceFromDescription(t.description) });
-    } else if ((t.tokenTransfers || []).some((tt) => tt.mint === mint)) {
-      events.push({ ts, active: false });
-    } else if (t.source === 'TENSOR' && t.type === 'NFT_CANCEL_LISTING') {
-      events.push({ ts, active: false });
-    }
-  }
-  events.sort((a, b) => b.ts - a.ts);
-  const latest = events[0];
-  return latest?.active ? { tensorListed: true, tensorListPrice: latest.price } : { tensorListed: false, tensorListPrice: null };
-}
-
-async function tensorMintActivity(mint) {
-  const allTxs = await heliusAddressTransactions(mint, { label: 'Helius all-txs (Tensor scan)' });
-
-  const tensorTxs = allTxs.filter((t) => {
-    const ids = txProgramIds(t);
-    for (const id of ids) if (TENSOR_PROGRAM_IDS.has(id)) return true;
-    return false;
-  });
-
-  if (tensorDebugLogged < 3) {
-    tensorDebugLogged++;
-    console.log(`\n[debug-tensor] ${mint} tensor-program txs=${tensorTxs.length} raw=${JSON.stringify(tensorTxs)}`);
-  }
-
-  // A sale actually moves the NFT (tokenTransfers) and a real SOL price (not
-  // escrow-shuffle dust) in the same transaction — excludes listings,
-  // delistings, bid placement/cancellation, and shared-escrow deposit/withdrawal.
-  const sales = tensorTxs.filter((t) => {
-    const nftMoved = (t.tokenTransfers || []).some((tt) => tt.mint === mint);
-    const solMoved = (t.nativeTransfers || []).some((nt) => nt.amount > MIN_SALE_LAMPORTS);
-    return nftMoved && solMoved;
-  });
-
-  return { sales: sales.map(saleFromTx), ...currentTensorListing(allTxs, mint) };
-}
-
-// Combines sales from both sources, de-duplicating by transaction signature
-// so a trade Helius *and* our Tensor scan both catch doesn't get double-counted.
-function mergeSales(saleArrays) {
-  const bySignature = new Map();
-  for (const sale of saleArrays.flat()) {
-    if (sale.signature) bySignature.set(sale.signature, sale);
-  }
-  const sales = [...bySignature.values()].sort((a, b) => b.timestamp - a.timestamp);
-  // Most recent sale might still lack a price in some edge case (e.g. a
-  // marketplace fee-only tx we misclassified) — fall back to the newest
-  // sale that actually has one rather than showing null when older data exists.
-  const lastPriced = sales.find((s) => s.priceSol != null);
-  return { trades: sales.length, lastSalePrice: lastPriced?.priceSol ?? null };
+  console.warn(`\nTensor data for ${mint} never stabilized after ${STABILITY_MAX_ATTEMPTS} attempts — using the most complete fetch (${best.totalTxs} txs).`);
+  return best;
 }
 
 const CONCURRENCY = 1;
@@ -331,69 +262,61 @@ async function mapWithConcurrency(items, worker) {
   return results;
 }
 
-// Temporary fast-path for debugging the Tensor price heuristic on a single
-// mint without running the full 99-skull pipeline (and, crucially, without
-// ever writing a truncated skulls-data.json over the real one). Remove once
-// lastSalePrice is verified correct for DEBUG_MINT.
+// Mint used to sanity-check this pipeline (Mad Lads #1792): 4 real sales —
+// 2023 Magic Eden buy-now 324.69 SOL, 2026 Magic Eden bid-accept 49 SOL,
+// 2026 Tensor buy-now 47.07 SOL, 2026 Magic Eden buy-now 37.6 SOL — verified
+// against tensor.trade's own Sale History chart and Activity tab. Set
+// DEBUG_ONLY_TARGET=1 to re-verify without a full 99-skull run.
+const DEBUG_MINT = 'HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx';
 const DEBUG_ONLY_TARGET = process.env.DEBUG_ONLY_TARGET === '1';
 
 async function main() {
-  console.log('Fetching Mad Lads collection assets from Helius...');
-  const assets = await fetchAllCollectionAssets();
-  console.log(`Fetched ${assets.length} assets. Filtering for "Skull" trait...`);
+  console.log('Fetching Mad Lads collection mints from Tensor...');
+  const mints = await fetchAllCollectionMints();
+  console.log(`Fetched ${mints.length} mints. Filtering for "Skull" trait...`);
 
-  let skullAssets = assets.filter(skullTraitInfo);
+  let skullAssets = mints.filter(skullTraitInfo);
   console.log(`Found ${skullAssets.length} Skulls.`);
   if (skullAssets.length !== 99) {
     console.warn(`Warning: expected 99 Skulls, found ${skullAssets.length}. Check trait filter logic.`);
   }
 
   if (DEBUG_ONLY_TARGET) {
-    skullAssets = skullAssets.filter((a) => a.id === DEBUG_MINT);
+    skullAssets = skullAssets.filter((a) => a.onchainId === DEBUG_MINT);
     console.log(`DEBUG_ONLY_TARGET set — restricting run to ${DEBUG_MINT} only, will NOT write skulls-data.json.`);
   }
 
   const results = await mapWithConcurrency(skullAssets, async (asset) => {
-    const mint = asset.id;
-    const heliusOwner = asset.ownership?.owner || null;
+    const mint = asset.onchainId;
     const num = extractNumber(asset);
 
-    let listing = { listed: false, listPrice: null, image: null, owner: null };
+    let t = {
+      name: null,
+      image: null,
+      owner: null,
+      trades: 0,
+      lastSalePrice: null,
+      listed: false,
+      rawAskPrice: null,
+    };
     try {
-      listing = await meListingData(mint);
+      t = await tensorMintData(mint);
     } catch (e) {
-      console.warn(`\nMagic Eden fetch failed for ${mint}: ${e.message}`);
+      console.warn(`\nTensor fetch failed for ${mint}: ${e.message}`);
     }
 
-    // Helius's token-account owner is the marketplace escrow PDA for listed
-    // items — use ME's resolved seller when we have it.
-    const owner = listing.owner || heliusOwner;
+    const owner = t.owner;
 
-    let heliusSales = [];
-    try {
-      heliusSales = await heliusNftSales(mint);
-    } catch (e) {
-      console.warn(`\nHelius sales fetch failed for ${mint}: ${e.message}`);
-    }
-
-    let tensorActivity = { sales: [], tensorListed: false, tensorListPrice: null };
-    try {
-      tensorActivity = await tensorMintActivity(mint);
-    } catch (e) {
-      console.warn(`\nTensor program scan failed for ${mint}: ${e.message}`);
-    }
-
-    const sales = mergeSales([heliusSales, tensorActivity.sales]);
-
-    // Magic Eden's own listing price can lag or miss cross-listed Tensor
-    // pool/marketplace listings entirely (this is the same underlying gap
-    // as the sales one — ME only reliably knows about its own listings).
-    // Show whichever is listed, and the cheaper of the two if both are.
-    const listed = listing.listed || tensorActivity.tensorListed;
+    // Both Magic Eden and Tensor list the seller's raw ask and add their 2%
+    // taker fee + Mad Lads' enforced 4.2% royalty on top at checkout
+    // (confirmed against both marketplaces' fee docs, and cross-checked
+    // live: a raw ask of 83.69 SOL for #1792 became Tensor's displayed
+    // "88.8788 SOL" buy-now total — 83.69 * 1.062 = 88.8787..., an exact
+    // match). Show the real total a buyer pays, not the raw ask.
+    const MARKETPLACE_FEE_RATE = 0.02;
+    const MAD_LADS_ROYALTY_RATE = 0.042;
     const listPrice =
-      listing.listed && tensorActivity.tensorListed
-        ? Math.min(listing.listPrice, tensorActivity.tensorListPrice)
-        : listing.listPrice ?? tensorActivity.tensorListPrice;
+      t.rawAskPrice == null ? null : +(t.rawAskPrice * (1 + MARKETPLACE_FEE_RATE + MAD_LADS_ROYALTY_RATE)).toFixed(4);
 
     let domain = null;
     try {
@@ -402,19 +325,19 @@ async function main() {
       console.warn(`\nSNS lookup failed for ${owner}: ${e.message}`);
     }
 
-    await sleep(400); // stagger requests to stay under rate limits (now 3 fetches/mint)
+    await sleep(300); // stagger requests to stay well under Tensor's unofficial rate limits
 
     return {
       num,
       mint,
       owner: domain || owner,
       isDomain: !!domain,
-      trades: sales.trades,
-      lastSalePrice: sales.lastSalePrice,
-      neverTraded: sales.trades === 0,
-      listed,
+      trades: t.trades,
+      lastSalePrice: t.lastSalePrice,
+      neverTraded: t.trades === 0,
+      listed: t.listed,
       listPrice,
-      image: listing.image,
+      image: t.image,
       meUrl: `https://magiceden.io/item-details/${mint}`,
     };
   });

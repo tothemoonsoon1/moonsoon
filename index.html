@@ -72,7 +72,7 @@ a{color:inherit;}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;letter-spacing:0.02em;}
 .nav-logo span{color:var(--accent);}
 .nav-tabs{display:flex;gap:36px;font-size:14px;}
-.nav-tab{cursor:pointer;color:var(--text-muted);font-weight:400;background:none;border:none;font-family:'Space Grotesk',sans-serif;font-size:14px;padding:0;}
+.nav-tab{cursor:pointer;color:var(--text-muted);font-weight:400;background:none;border:none;font-family:'Space Grotesk',sans-serif;font-size:14px;padding:0;text-decoration:none;}
 .nav-tab.active{color:var(--text);font-weight:600;}
 .nav-right{display:flex;align-items:center;gap:14px;}
 .theme-toggle{width:44px;height:24px;border-radius:12px;background:var(--toggle-track);position:relative;cursor:pointer;transition:background .2s ease;border:none;padding:0;}
@@ -191,6 +191,7 @@ a{color:inherit;}
     <div class="nav-tabs" role="tablist">
       <button class="nav-tab active" id="tab-home" role="tab" aria-selected="true" onclick="goHome()">Home</button>
       <button class="nav-tab" id="tab-checklist" role="tab" aria-selected="false" onclick="goChecklist()">Seeker Checklist</button>
+      <a class="nav-tab" href="/skulls">Skulls</a>
     </div>
     <div class="nav-right">
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" onclick="toggleTheme()"><span class="knob"></span></button>

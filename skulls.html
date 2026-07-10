@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mad Lads Skulls Gallery — All 99 Skulls | tothemoonsoon</title>
+<meta name="description" content="Browse all 99 Mad Lads Skulls: owners, trade counts, last sale prices and live listings. Floor price, never-traded skulls and more.">
+<meta name="keywords" content="Mad Lads, Mad Lads Skulls, Solana NFT, tothemoonsoon, Magic Eden, NFT gallery, floor price">
+<meta name="author" content="tothemoonsoon">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0b0d12">
+<meta name="color-scheme" content="dark light">
+<link rel="canonical" href="https://tothemoonsoon.xyz/skulls">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tothemoonsoon.xyz/skulls">
+<meta property="og:title" content="Mad Lads Skulls Gallery — All 99 Skulls">
+<meta property="og:description" content="Browse all 99 Mad Lads Skulls: owners, trade counts, last sale prices and live listings.">
+<meta property="og:image" content="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+<meta property="og:site_name" content="tothemoonsoon">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@m00nsoon">
+<meta name="twitter:creator" content="@m00nsoon">
+<meta name="twitter:title" content="Mad Lads Skulls Gallery — All 99 Skulls">
+<meta name="twitter:description" content="Browse all 99 Mad Lads Skulls: owners, trade counts, last sale prices and live listings.">
+<meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1716881356209467393/Q07vWOFt_400x400.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Mad Lads Skulls Gallery",
+  "description": "Browse all 99 Mad Lads Skulls: owners, trade counts, last sale prices and live listings.",
+  "url": "https://tothemoonsoon.xyz/skulls",
+  "author": { "@type": "Person", "name": "tothemoonsoon", "url": "https://x.com/m00nsoon" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://magiceden.io">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
+<style>
+:root{
+  --bg:#0b0d12;--surface:#0e1117;--border:#1a1f29;
+  --card-bg:#12161e;--card-border:#1e2430;
+  --text:#ffffff;--text-muted:#8b94a3;
+  --accent:#4fd8ff;--accent-border:rgba(79,216,255,0.35);--accent-tint:rgba(79,216,255,0.133);--accent-glow:rgba(79,216,255,0.27);
+  --btn-bg:#4fd8ff;--btn-text:#0b0d12;
+  --nft-gradient:linear-gradient(150deg,rgba(79,216,255,0.25),rgba(79,216,255,0) 60%),#12161e;
+  --toggle-track:#232935;
+  --gold:#f0b84d;
+}
+[data-theme="light"]{
+  --bg:#f5f6f8;--surface:#ffffff;--border:#e6e8ec;
+  --card-bg:#ffffff;--card-border:#e2e5ea;
+  --text:#0b0d12;--text-muted:#5c6577;
+  --accent:#0a8fb5;--accent-border:rgba(10,143,181,0.35);--accent-tint:rgba(10,143,181,0.133);--accent-glow:rgba(10,143,181,0.2);
+  --btn-bg:#0b0d12;--btn-text:#f5f6f8;
+  --nft-gradient:linear-gradient(150deg,rgba(10,143,181,0.14),rgba(10,143,181,0) 60%),#ffffff;
+  --toggle-track:#e2e5ea;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',-apple-system,sans-serif;transition:background .3s ease,color .3s ease;}
+body{min-height:100vh;overflow-x:hidden;}
+a{color:inherit;}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+/* ---- Nav (shared) ---- */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:32px 72px;background:var(--bg);flex-wrap:wrap;gap:16px;}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;letter-spacing:0.02em;}
+.nav-logo span{color:var(--accent);}
+.nav-tabs{display:flex;gap:36px;font-size:14px;}
+.nav-tab{cursor:pointer;color:var(--text-muted);font-weight:400;background:none;border:none;font-family:'Space Grotesk',sans-serif;font-size:14px;padding:0;text-decoration:none;}
+.nav-tab.active{color:var(--text);font-weight:600;}
+.nav-right{display:flex;align-items:center;gap:14px;}
+.theme-toggle{width:44px;height:24px;border-radius:12px;background:var(--toggle-track);position:relative;cursor:pointer;transition:background .2s ease;border:none;padding:0;}
+.theme-toggle .knob{width:18px;height:18px;border-radius:50%;background:var(--accent);position:absolute;top:3px;left:23px;transition:left .2s ease;}
+[data-theme="light"] .theme-toggle .knob{left:3px;}
+.btn{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--btn-text);background:var(--btn-bg);padding:11px 22px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;display:inline-block;}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent-border);color:var(--accent);}
+
+.site-footer{padding:36px 72px;background:var(--bg);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.site-footer .copy{font-size:13px;color:var(--text-muted);}
+.site-footer .links{display:flex;gap:28px;font-size:13px;font-weight:600;}
+.site-footer .links a{text-decoration:none;}
+
+/* ---- Skulls gallery ---- */
+.sk-wrap{padding:56px 72px 90px;max-width:1280px;margin:0 auto;}
+.sk-header{margin-bottom:28px;}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.15em;margin-bottom:14px;}
+.sk-title{font-size:38px;font-weight:700;margin-bottom:14px;}
+.sk-desc{font-size:15.5px;line-height:1.7;color:var(--text-muted);max-width:640px;}
+
+.stats-bar{display:flex;gap:16px;flex-wrap:wrap;margin:28px 0 32px;}
+.stat-card{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;margin-bottom:8px;}
+.stat-val{font-size:26px;font-weight:700;}
+.stat-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.ctl-search{flex:1;min-width:180px;}
+.ctl-input,.ctl-select{width:100%;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--text);background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:10px 14px;}
+.ctl-select{width:auto;cursor:pointer;}
+.ctl-toggle{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text-muted);cursor:pointer;user-select:none;white-space:nowrap;}
+.ctl-toggle input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
+
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;}
+.sk-card{position:relative;display:block;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--text);transition:transform .15s ease,border-color .15s ease;}
+.sk-card:hover{transform:translateY(-3px);border-color:var(--accent-border);}
+.sk-card.never-traded{border:1.5px solid var(--gold);}
+.sk-img{aspect-ratio:1/1;background:var(--nft-gradient);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);font-family:'JetBrains Mono',monospace;position:relative;}
+.sk-img .placeholder-label{font-size:11px;letter-spacing:0.1em;opacity:.6;}
+.sk-img .placeholder-num{font-size:22px;font-weight:700;color:var(--text);margin-top:4px;}
+.sk-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.sk-listed-badge{position:absolute;top:10px;right:10px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.04em;color:var(--btn-text);background:var(--accent);border-radius:20px;padding:4px 10px;}
+.sk-never-badge{position:absolute;top:10px;left:10px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.04em;color:#0b0d12;background:var(--gold);border-radius:20px;padding:4px 10px;}
+.sk-body{padding:14px 16px 16px;}
+.sk-num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;margin-bottom:6px;}
+.sk-owner{font-size:12.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px;}
+.sk-meta-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);}
+.sk-meta-row .val{color:var(--text);font-weight:600;}
+.sk-links{display:flex;gap:8px;margin-top:12px;}
+.sk-links a{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.03em;color:var(--text);background:none;border:1px solid var(--card-border);border-radius:8px;padding:7px 0;text-decoration:none;transition:border-color .15s ease,color .15s ease;}
+.sk-links a:hover{border-color:var(--accent-border);color:var(--accent);}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;}
+
+@media(max-width:768px){
+  .nav{padding:20px 20px;}
+  .sk-wrap{padding:40px 20px 60px;}
+  .site-footer{padding:36px 20px;}
+  .sk-title{font-size:30px;}
+  .controls{flex-direction:column;align-items:stretch;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav" aria-label="Main navigation">
+    <a class="nav-logo" href="/"><span>$</span>MOONSOON</a>
+    <div class="nav-tabs" role="tablist">
+      <a class="nav-tab" href="/">Home</a>
+      <a class="nav-tab" href="/#checklist">Seeker Checklist</a>
+      <a class="nav-tab active" href="/skulls" aria-current="page">Skulls</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" onclick="toggleTheme()"><span class="knob"></span></button>
+      <a class="btn btn-ghost" href="https://x.com/m00nsoon" target="_blank" rel="noopener noreferrer">Follow on X</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="sk-wrap">
+      <div class="sk-header">
+        <div class="kicker">MAD LADS</div>
+        <div class="sk-title">Skulls Gallery</div>
+        <div class="sk-desc">All 99 Mad Lads Skulls in one place — owners, trade history, last sale price and current listings.</div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">TOTAL SKULLS</div>
+          <div class="stat-val" id="stat-total">99</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FLOOR PRICE</div>
+          <div class="stat-val" id="stat-floor">&mdash;</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">CURRENTLY LISTED</div>
+          <div class="stat-val" id="stat-listed">0</div>
+          <div class="stat-sub" id="stat-listed-pct">0% of supply</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">NEVER SOLD</div>
+          <div class="stat-val" id="stat-never">0</div>
+          <div class="stat-sub">no on-chain sale recorded</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="ctl-search">
+          <input class="ctl-input" type="text" id="sk-search" placeholder="Search by number (e.g. 9175)" oninput="applyFilters()">
+        </div>
+        <select class="ctl-select" id="sk-sort" onchange="applyFilters()">
+          <option value="num-asc">Number: Low to High</option>
+          <option value="num-desc">Number: High to Low</option>
+          <option value="trades-desc">Most Traded</option>
+          <option value="trades-asc">Least Traded</option>
+          <option value="sale-desc">Last Sale: High to Low</option>
+          <option value="sale-asc">Last Sale: Low to High</option>
+        </select>
+        <label class="ctl-toggle">
+          <input type="checkbox" id="sk-never-only" onchange="applyFilters()">
+          Never sold only
+        </label>
+      </div>
+
+      <div class="sk-grid" id="sk-grid"></div>
+      <div class="empty-state" id="sk-empty" style="display:none;">No skulls match your filters.</div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="copy">&copy; tothemoonsoon</div>
+    <div class="links"><a href="https://x.com/m00nsoon" target="_blank" rel="noopener noreferrer">X</a></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+
+function escAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* Deterministic PRNG (mulberry32), seeded so data is stable across loads */
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+var rng = mulberry32(9175);
+
+var SKULL_NUMS = [
+  9175, 22, 87, 134, 251, 318, 402, 455, 519, 588,
+  641, 703, 777, 812, 856, 901, 963, 1024, 1088, 1142,
+  1199, 1256, 1310, 1367, 1420, 1481, 1533, 1590, 1648, 1702,
+  1755, 1811, 1868, 1922, 1979, 2035, 2091, 2148, 2204, 2260,
+  2317, 2373, 2430, 2486, 2543, 2599, 2656, 2712, 2769, 2825,
+  2882, 2938, 2995, 3051, 3108, 3164, 3221, 3277, 3334, 3390,
+  3447, 3503, 3560, 3616, 3673, 3729, 3786, 3842, 3899, 3955,
+  4012, 4068, 4125, 4181, 4238, 4294, 4351, 4407, 4464, 4520,
+  4577, 4633, 4690, 4746, 4803, 4859, 4916, 4972, 5029, 5085,
+  5142, 5198, 5255, 5311, 5368, 5424, 5481, 5537, 5594
+];
+
+var DOMAIN_WORDS = ['moon','lad','skull','sol','chain','degen','based','void','ghost','node','orbit','nova','frost','ember','vault'];
+
+function randInt(min, max){ return Math.floor(rng() * (max - min + 1)) + min; }
+function randChoice(arr){ return arr[Math.floor(rng() * arr.length)]; }
+function randAddress(){
+  var chars = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789';
+  var s = '';
+  for(var i=0;i<44;i++){ s += chars[Math.floor(rng()*chars.length)]; }
+  return s;
+}
+function shortAddr(a){ return a.slice(0,4)+'...'+a.slice(-4); }
+
+function buildPlaceholderSkulls(){
+  return SKULL_NUMS.map(function(num){
+    var isDomain = rng() < 0.45;
+    var owner = isDomain ? (randChoice(DOMAIN_WORDS) + randInt(1,999) + '.sol') : randAddress();
+    var neverTraded = rng() < 0.15;
+    var trades = neverTraded ? 0 : randInt(1, 14);
+    var lastSalePrice = neverTraded ? null : +(randInt(600, 1600) / 10).toFixed(1);
+    var listed = !neverTraded && rng() < 0.041;
+    var listPrice = listed ? +(78.588 + randInt(0, 400)/10).toFixed(3) : null;
+    return {
+      num: num,
+      owner: owner,
+      isDomain: isDomain,
+      trades: trades,
+      lastSalePrice: lastSalePrice,
+      neverTraded: neverTraded,
+      listed: listed,
+      listPrice: listPrice,
+      // Placeholder rows have no real mint address, so link to the collection
+      // page instead of a fake (non-resolving) item-details URL. Real rows
+      // from skulls-data.json carry a proper per-item meUrl built from the mint.
+      meUrl: 'https://magiceden.io/marketplace/mad_lads'
+    };
+  });
+}
+
+var SKULLS = buildPlaceholderSkulls();
+
+function renderStats(){
+  var neverCount = SKULLS.filter(function(s){ return s.neverTraded; }).length;
+  var listedSkulls = SKULLS.filter(function(s){ return s.listed; });
+  var floorPrice = listedSkulls.reduce(function(min, s){
+    return (s.listPrice != null && (min == null || s.listPrice < min)) ? s.listPrice : min;
+  }, null);
+
+  document.getElementById('stat-total').textContent = SKULLS.length;
+  document.getElementById('stat-floor').textContent = floorPrice != null ? floorPrice + ' SOL' : '—';
+  document.getElementById('stat-listed').textContent = listedSkulls.length;
+  document.getElementById('stat-listed-pct').textContent =
+    (SKULLS.length ? (listedSkulls.length / SKULLS.length * 100).toFixed(2) : 0) + '% of supply';
+  document.getElementById('stat-never').textContent = neverCount;
+}
+
+function cardHtml(s){
+  var classes = 'sk-card' + (s.neverTraded ? ' never-traded' : '');
+  var badges = '';
+  if(s.listed){ badges += '<div class="sk-listed-badge">LISTED &middot; '+s.listPrice+' SOL</div>'; }
+  if(s.neverTraded){ badges += '<div class="sk-never-badge">NEVER SOLD</div>'; }
+  var ownerDisplay = s.isDomain ? s.owner : shortAddr(s.owner);
+  var saleRow = s.neverTraded
+    ? '<div class="sk-meta-row"><span>Last Sale</span><span class="val">&mdash;</span></div>'
+    : '<div class="sk-meta-row"><span>Last Sale</span><span class="val">'+s.lastSalePrice+' SOL</span></div>';
+  var imgHtml = s.image
+    ? '<img src="'+escAttr(s.image)+'" alt="Mad Lads Skull #'+s.num+'" loading="lazy">'
+    : '<div class="placeholder-label">NFT IMAGE</div><div class="placeholder-num">#'+s.num+'</div>';
+  // Placeholder rows have no mint address, so fall back to the collection page.
+  var tensorUrl = s.mint
+    ? 'https://www.tensor.trade/item/'+s.mint
+    : 'https://www.tensor.trade/trade/madlads';
+  return '<div class="'+classes+'">'+
+    '<div class="sk-img">'+badges+imgHtml+
+    '</div>'+
+    '<div class="sk-body">'+
+      '<div class="sk-num">#'+s.num+'</div>'+
+      '<div class="sk-owner mono" title="'+escAttr(s.owner)+'">'+escAttr(ownerDisplay)+'</div>'+
+      '<div class="sk-meta-row"><span>Trades</span><span class="val">'+s.trades+'</span></div>'+
+      saleRow+
+      '<div class="sk-links">'+
+        '<a href="'+escAttr(s.meUrl)+'" target="_blank" rel="noopener noreferrer">Magic Eden</a>'+
+        '<a href="'+escAttr(tensorUrl)+'" target="_blank" rel="noopener noreferrer">Tensor</a>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function applyFilters(){
+  var query = document.getElementById('sk-search').value.trim();
+  var sort = document.getElementById('sk-sort').value;
+  var neverOnly = document.getElementById('sk-never-only').checked;
+
+  var list = SKULLS.slice();
+  if(query){ list = list.filter(function(s){ return String(s.num).indexOf(query) !== -1; }); }
+  if(neverOnly){ list = list.filter(function(s){ return s.neverTraded; }); }
+
+  list.sort(function(a,b){
+    switch(sort){
+      case 'num-desc': return b.num - a.num;
+      case 'trades-desc': return b.trades - a.trades;
+      case 'trades-asc': return a.trades - b.trades;
+      case 'sale-desc': return (b.lastSalePrice||0) - (a.lastSalePrice||0);
+      case 'sale-asc':
+        var av = a.lastSalePrice==null ? Infinity : a.lastSalePrice;
+        var bv = b.lastSalePrice==null ? Infinity : b.lastSalePrice;
+        return av - bv;
+      case 'num-asc':
+      default: return a.num - b.num;
+    }
+  });
+
+  var grid = document.getElementById('sk-grid');
+  var empty = document.getElementById('sk-empty');
+  if(list.length === 0){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    grid.innerHTML = list.map(cardHtml).join('');
+    empty.style.display = 'none';
+  }
+}
+window.applyFilters = applyFilters;
+
+function toggleTheme(){
+  var isLight = document.documentElement.getAttribute('data-theme')==='light';
+  document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
+  try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
+}
+window.toggleTheme = toggleTheme;
+
+var savedTheme = null;
+try{ savedTheme = localStorage.getItem('moonsoon_theme'); }catch(e){}
+if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
+
+function renderAll(){
+  renderStats();
+  applyFilters();
+}
+
+renderAll();
+
+fetch('/skulls-data.json', { cache: 'no-store' })
+  .then(function(res){ return res.ok ? res.json() : null; })
+  .then(function(data){
+    if(data && Array.isArray(data.skulls) && data.skulls.length){
+      SKULLS = data.skulls;
+      renderAll();
+    }
+  })
+  .catch(function(){ /* stay on placeholder data */ });
+
+})();
+</script>
+</body>
+</html>

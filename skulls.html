@@ -212,6 +212,7 @@ a{color:inherit;}
           <option value="trades-asc">Least Traded</option>
           <option value="sale-desc">Last Sale: High to Low</option>
           <option value="sale-asc">Last Sale: Low to High</option>
+          <option value="price-asc">Price: Low to High</option>
           <option value="owner">Group by Owner</option>
         </select>
         <label class="ctl-toggle">
@@ -407,6 +408,10 @@ function applyFilters(){
         var av = a.lastSalePrice==null ? Infinity : a.lastSalePrice;
         var bv = b.lastSalePrice==null ? Infinity : b.lastSalePrice;
         return av - bv;
+      case 'price-asc':
+        var ap = a.listPrice==null ? Infinity : a.listPrice;
+        var bp = b.listPrice==null ? Infinity : b.listPrice;
+        return ap - bp;
       case 'owner':
         var ac = byOwner[a.owner] ? byOwner[a.owner].length : 1;
         var bc = byOwner[b.owner] ? byOwner[b.owner].length : 1;

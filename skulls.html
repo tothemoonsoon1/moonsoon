@@ -392,12 +392,18 @@ function applyFilters(){
     empty.style.display = 'block';
   } else {
     var lastOwner = null;
+    var enteredSingles = false;
     grid.innerHTML = list.map(function(s){
       var holderCount = s.owner && byOwner[s.owner] ? byOwner[s.owner].length : 1;
       var header = '';
-      if(sort === 'owner' && holderCount > 1 && s.owner !== lastOwner){
-        var display = s.isDomain ? s.owner : shortAddr(s.owner);
-        header = '<div class="owner-group-header">'+holderEmoji(holderCount)+' '+escAttr(display)+' <span class="val">&times;'+holderCount+'</span></div>';
+      if(sort === 'owner' && s.owner !== lastOwner){
+        if(holderCount > 1){
+          var display = s.isDomain ? s.owner : shortAddr(s.owner);
+          header = '<div class="owner-group-header">'+holderEmoji(holderCount)+' '+escAttr(display)+' <span class="val">&times;'+holderCount+'</span></div>';
+        } else if(!enteredSingles){
+          header = '<div class="owner-group-header">1 SKULL PER WALLET</div>';
+          enteredSingles = true;
+        }
       }
       lastOwner = s.owner;
       return header + cardHtml(s, holderCount);

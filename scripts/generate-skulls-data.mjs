@@ -33,6 +33,20 @@
 const MAD_LADS_COLLECTION_SLUG = 'bd366797-5599-417a-be03-1e43a7e3fb90';
 const TENSOR_GRAPHQL = 'https://graphql.tensor.trade/graphql';
 
+// Wallet -> X handle tags (owner-tags.json, hand-maintained). Looked up by the
+// CURRENT owner on every run, so a tag automatically follows a Skull to its
+// new owner (or disappears) when it's sold — no manual re-tagging needed.
+async function loadOwnerTags() {
+  const fs = await import('node:fs');
+  try {
+    const raw = fs.readFileSync(new URL('../owner-tags.json', import.meta.url), 'utf8');
+    return JSON.parse(raw).wallets || {};
+  } catch (e) {
+    console.warn(`Could not read owner-tags.json, continuing without tags: ${e.message}`);
+    return {};
+  }
+}
+
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -229,18 +243,39 @@ const STABILITY_MAX_ATTEMPTS = 4;
 // consecutive attempts agree on trade count, and keep the one with the most
 // total txs seen if we run out of attempts, rather than silently shipping a
 // possibly-truncated result the way the raw endpoint would.
+//
+// The same endpoint has also been observed returning a stale/wrong `owner`
+// for a mint on an isolated fetch (Mad Lads #3306: one fetch returned a
+// wallet that never appears anywhere in the mint's own — empty — trade
+// history, while every other fetch and tensor.trade's own live page agreed
+// on a different owner). Trade-count stability alone doesn't catch this
+// since owner and trades come from the same response but can independently
+// glitch. Track owner across attempts too and go with whichever owner value
+// a majority of attempts agree on, rather than trusting a single response.
 async function tensorMintData(mint) {
   let best = null;
   let prevTrades = null;
+  let stableTrades = null;
+  const ownerVotes = new Map();
   for (let attempt = 0; attempt < STABILITY_MAX_ATTEMPTS; attempt++) {
     if (attempt > 0) await sleep(400);
     const result = await tensorMintDataOnce(mint);
     if (!best || result.totalTxs > best.totalTxs) best = result;
-    if (prevTrades !== null && result.trades === prevTrades) return best;
+    if (result.owner) ownerVotes.set(result.owner, (ownerVotes.get(result.owner) || 0) + 1);
+    if (stableTrades === null && prevTrades !== null && result.trades === prevTrades) stableTrades = result.trades;
     prevTrades = result.trades;
+    if (stableTrades !== null && ownerVotes.size === 1) break;
   }
-  console.warn(`\nTensor data for ${mint} never stabilized after ${STABILITY_MAX_ATTEMPTS} attempts — using the most complete fetch (${best.totalTxs} txs).`);
-  return best;
+  if (stableTrades === null) {
+    console.warn(`\nTensor trade count for ${mint} never stabilized after ${STABILITY_MAX_ATTEMPTS} attempts — using the most complete fetch (${best.totalTxs} txs).`);
+  }
+  let ownerConsensus = best.owner;
+  if (ownerVotes.size > 1) {
+    const sorted = [...ownerVotes.entries()].sort((a, b) => b[1] - a[1]);
+    ownerConsensus = sorted[0][0];
+    console.warn(`\nTensor owner for ${mint} disagreed across attempts (${JSON.stringify(Object.fromEntries(ownerVotes))}) — using majority-agreed owner ${ownerConsensus}.`);
+  }
+  return { ...best, owner: ownerConsensus };
 }
 
 const CONCURRENCY = 1;
@@ -271,6 +306,7 @@ const DEBUG_MINT = 'HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx';
 const DEBUG_ONLY_TARGET = process.env.DEBUG_ONLY_TARGET === '1';
 
 async function main() {
+  const ownerTags = await loadOwnerTags();
   console.log('Fetching Mad Lads collection mints from Tensor...');
   const mints = await fetchAllCollectionMints();
   console.log(`Fetched ${mints.length} mints. Filtering for "Skull" trait...`);
@@ -332,6 +368,7 @@ async function main() {
       mint,
       owner: domain || owner,
       isDomain: !!domain,
+      twitter: (owner && ownerTags[owner]?.twitter) || null,
       trades: t.trades,
       lastSalePrice: t.lastSalePrice,
       neverTraded: t.trades === 0,

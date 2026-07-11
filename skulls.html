@@ -101,6 +101,9 @@ a{color:inherit;}
 .stat-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
 
 .sk-holder-tag{font-size:11px;font-weight:700;color:var(--text);}
+.sk-twitter-link{display:inline-flex;align-items:center;gap:4px;color:#00C2FF;font-weight:600;text-decoration:none;}
+.sk-twitter-link:hover{text-decoration:underline;}
+.sk-twitter-link svg{flex-shrink:0;}
 .owner-group-header{grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);letter-spacing:0.05em;padding:18px 2px 4px;border-top:1px solid var(--border);margin-top:4px;}
 .owner-group-header:first-child{border-top:none;margin-top:0;padding-top:0;}
 .owner-group-header .val{color:var(--text);font-weight:700;}
@@ -271,6 +274,7 @@ function buildPlaceholderSkulls(){
       num: num,
       owner: owner,
       isDomain: isDomain,
+      twitter: null,
       trades: trades,
       lastSalePrice: lastSalePrice,
       neverTraded: neverTraded,
@@ -301,6 +305,8 @@ function renderStats(){
   document.getElementById('stat-never').textContent = neverCount;
 }
 
+var X_ICON_SVG = '<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+
 // 3+ Skulls = whale, exactly 2 = shark. Single-Skull holders get no icon.
 function holderEmoji(count){
   if(count >= 3) return '🐋';
@@ -327,6 +333,9 @@ function cardHtml(s, holderCount){
   if(s.neverTraded){ badges += '<div class="sk-never-badge">NEVER SOLD</div>'; }
   var ownerDisplay = s.isDomain ? s.owner : shortAddr(s.owner);
   var ownerBadge = holderCount > 1 ? ' <span class="sk-holder-tag">'+holderEmoji(holderCount)+' &times;'+holderCount+'</span>' : '';
+  var twitterRow = s.twitter
+    ? '<div class="sk-meta-row"><span>Owner Profile</span><a class="sk-twitter-link" href="https://x.com/'+encodeURIComponent(s.twitter)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">@'+escAttr(s.twitter)+'</a></div>'
+    : '';
   var saleRow = s.neverTraded
     ? '<div class="sk-meta-row"><span>Last Sale</span><span class="val">&mdash;</span></div>'
     : '<div class="sk-meta-row"><span>Last Sale</span><span class="val">'+s.lastSalePrice+' SOL</span></div>';
@@ -343,6 +352,7 @@ function cardHtml(s, holderCount){
     '<div class="sk-body">'+
       '<div class="sk-num">#'+s.num+'</div>'+
       '<div class="sk-owner mono" title="'+escAttr(s.owner)+'">'+escAttr(ownerDisplay)+ownerBadge+'</div>'+
+      twitterRow+
       '<div class="sk-meta-row"><span>Trades</span><span class="val">'+s.trades+'</span></div>'+
       saleRow+
       '<div class="sk-links">'+

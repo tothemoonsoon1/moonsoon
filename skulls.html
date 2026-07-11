@@ -100,6 +100,11 @@ a{color:inherit;}
 .stat-val{font-size:26px;font-weight:700;}
 .stat-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
 
+.sk-holder-tag{font-size:11px;font-weight:700;color:var(--text);}
+.owner-group-header{grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);letter-spacing:0.05em;padding:18px 2px 4px;border-top:1px solid var(--border);margin-top:4px;}
+.owner-group-header:first-child{border-top:none;margin-top:0;padding-top:0;}
+.owner-group-header .val{color:var(--text);font-weight:700;}
+
 .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
 .ctl-search{flex:1;min-width:180px;}
 .ctl-input,.ctl-select{width:100%;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--text);background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:10px 14px;}
@@ -193,6 +198,7 @@ a{color:inherit;}
           <option value="trades-asc">Least Traded</option>
           <option value="sale-desc">Last Sale: High to Low</option>
           <option value="sale-asc">Last Sale: Low to High</option>
+          <option value="owner">Group by Owner</option>
         </select>
         <label class="ctl-toggle">
           <input type="checkbox" id="sk-never-only" onchange="applyFilters()">
@@ -295,12 +301,32 @@ function renderStats(){
   document.getElementById('stat-never').textContent = neverCount;
 }
 
-function cardHtml(s){
+// 3+ Skulls = whale, exactly 2 = shark. Single-Skull holders get no icon.
+function holderEmoji(count){
+  if(count >= 3) return '🐋';
+  if(count === 2) return '🦈';
+  return '';
+}
+
+// Groups skulls by owner wallet — used by the "Group by Owner" sort mode and
+// the per-card whale badge, so a wallet holding >1 Skull is easy to spot
+// whichever way you're browsing the gallery.
+function ownerGroups(){
+  var byOwner = {};
+  SKULLS.forEach(function(s){
+    if(!s.owner) return;
+    (byOwner[s.owner] = byOwner[s.owner] || []).push(s);
+  });
+  return byOwner;
+}
+
+function cardHtml(s, holderCount){
   var classes = 'sk-card' + (s.neverTraded ? ' never-traded' : '');
   var badges = '';
   if(s.listed){ badges += '<div class="sk-listed-badge">LISTED &middot; '+s.listPrice+' SOL</div>'; }
   if(s.neverTraded){ badges += '<div class="sk-never-badge">NEVER SOLD</div>'; }
   var ownerDisplay = s.isDomain ? s.owner : shortAddr(s.owner);
+  var ownerBadge = holderCount > 1 ? ' <span class="sk-holder-tag">'+holderEmoji(holderCount)+' &times;'+holderCount+'</span>' : '';
   var saleRow = s.neverTraded
     ? '<div class="sk-meta-row"><span>Last Sale</span><span class="val">&mdash;</span></div>'
     : '<div class="sk-meta-row"><span>Last Sale</span><span class="val">'+s.lastSalePrice+' SOL</span></div>';
@@ -316,7 +342,7 @@ function cardHtml(s){
     '</div>'+
     '<div class="sk-body">'+
       '<div class="sk-num">#'+s.num+'</div>'+
-      '<div class="sk-owner mono" title="'+escAttr(s.owner)+'">'+escAttr(ownerDisplay)+'</div>'+
+      '<div class="sk-owner mono" title="'+escAttr(s.owner)+'">'+escAttr(ownerDisplay)+ownerBadge+'</div>'+
       '<div class="sk-meta-row"><span>Trades</span><span class="val">'+s.trades+'</span></div>'+
       saleRow+
       '<div class="sk-links">'+
@@ -336,6 +362,8 @@ function applyFilters(){
   if(query){ list = list.filter(function(s){ return String(s.num).indexOf(query) !== -1; }); }
   if(neverOnly){ list = list.filter(function(s){ return s.neverTraded; }); }
 
+  var byOwner = ownerGroups();
+
   list.sort(function(a,b){
     switch(sort){
       case 'num-desc': return b.num - a.num;
@@ -346,6 +374,12 @@ function applyFilters(){
         var av = a.lastSalePrice==null ? Infinity : a.lastSalePrice;
         var bv = b.lastSalePrice==null ? Infinity : b.lastSalePrice;
         return av - bv;
+      case 'owner':
+        var ac = byOwner[a.owner] ? byOwner[a.owner].length : 1;
+        var bc = byOwner[b.owner] ? byOwner[b.owner].length : 1;
+        if(bc !== ac) return bc - ac;
+        if(a.owner !== b.owner) return (a.owner||'').localeCompare(b.owner||'');
+        return a.num - b.num;
       case 'num-asc':
       default: return a.num - b.num;
     }
@@ -357,7 +391,17 @@ function applyFilters(){
     grid.innerHTML = '';
     empty.style.display = 'block';
   } else {
-    grid.innerHTML = list.map(cardHtml).join('');
+    var lastOwner = null;
+    grid.innerHTML = list.map(function(s){
+      var holderCount = s.owner && byOwner[s.owner] ? byOwner[s.owner].length : 1;
+      var header = '';
+      if(sort === 'owner' && holderCount > 1 && s.owner !== lastOwner){
+        var display = s.isDomain ? s.owner : shortAddr(s.owner);
+        header = '<div class="owner-group-header">'+holderEmoji(holderCount)+' '+escAttr(display)+' <span class="val">&times;'+holderCount+'</span></div>';
+      }
+      lastOwner = s.owner;
+      return header + cardHtml(s, holderCount);
+    }).join('');
     empty.style.display = 'none';
   }
 }

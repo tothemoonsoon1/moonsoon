@@ -107,6 +107,10 @@ a{color:inherit;}
 .owner-group-header{grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);letter-spacing:0.05em;padding:18px 2px 4px;border-top:1px solid var(--border);margin-top:4px;}
 .owner-group-header:first-child{border-top:none;margin-top:0;padding-top:0;}
 .owner-group-header .val{color:var(--text);font-weight:700;}
+.owner-group-header .ogh-handle{color:var(--accent);font-weight:700;text-decoration:none;}
+.owner-group-header a.ogh-handle:hover{text-decoration:underline;}
+.ogh-tag-pill{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.05em;border-radius:14px;padding:3px 9px;}
+.owner-group-header a.ogh-handle-tagonly:hover{text-decoration:none;filter:brightness(1.1);}
 
 .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
 .ctl-search{flex:1;min-width:180px;}
@@ -129,6 +133,9 @@ a{color:inherit;}
 .sk-owner-badge:hover{background:rgba(11,13,18,0.95);}
 .sk-owner-badge-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.05em;color:#0b0d12;background:#fff;border-radius:14px;padding:3px 8px;}
 .sk-owner-badge svg{flex-shrink:0;}
+.sk-owner-badge-tagonly{background:none;backdrop-filter:none;padding:0;border-radius:14px;}
+.sk-owner-badge-tagonly:hover{background:none;filter:brightness(1.1);}
+.sk-owner-badge-tagonly .sk-owner-badge-label{font-size:10.5px;padding:5px 12px;}
 .sk-body{padding:14px 16px 16px;}
 .sk-num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;margin-bottom:6px;}
 .sk-owner{font-size:12.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px;}
@@ -335,7 +342,22 @@ function cardHtml(s, holderCount){
   var badges = '';
   if(s.listed){ badges += '<div class="sk-listed-badge">LISTED &middot; '+s.listPrice+' SOL</div>'; }
   if(s.neverTraded){ badges += '<div class="sk-never-badge">NEVER SOLD</div>'; }
-  if(s.twitter){ badges += '<a class="sk-owner-badge" href="https://x.com/'+encodeURIComponent(s.twitter)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><span class="sk-owner-badge-label">OWNER</span>'+X_ICON_SVG+' @'+escAttr(s.twitter)+'</a>'; }
+  if(s.label){
+    var tagUrl = s.twitterUrl || (s.twitter ? 'https://x.com/'+encodeURIComponent(s.twitter) : null);
+    var tagPill = '<span class="sk-owner-badge-label" style="background:'+escAttr(s.tagColor||'#fff')+';color:'+(s.tagColor?'#fff':'#0b0d12')+'">'+escAttr(s.tagText||'TAG')+'</span>';
+    if(s.tagOnly){
+      badges += tagUrl
+        ? '<a class="sk-owner-badge sk-owner-badge-tagonly" href="'+escAttr(tagUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">'+tagPill+'</a>'
+        : '<div class="sk-owner-badge sk-owner-badge-tagonly">'+tagPill+'</div>';
+    } else {
+      var tagInner = tagPill+' '+escAttr(s.label)+(tagUrl ? ' '+X_ICON_SVG : '');
+      badges += tagUrl
+        ? '<a class="sk-owner-badge" href="'+escAttr(tagUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">'+tagInner+'</a>'
+        : '<div class="sk-owner-badge">'+tagInner+'</div>';
+    }
+  } else if(s.twitter){
+    badges += '<a class="sk-owner-badge" href="https://x.com/'+encodeURIComponent(s.twitter)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><span class="sk-owner-badge-label">OWNER</span>'+X_ICON_SVG+' @'+escAttr(s.twitter)+'</a>';
+  }
   var ownerDisplay = s.isDomain ? s.owner : shortAddr(s.owner);
   var ownerBadge = holderCount > 1 ? ' <span class="sk-holder-tag">'+holderEmoji(holderCount)+' &times;'+holderCount+'</span>' : '';
   var saleRow = s.neverTraded
@@ -410,7 +432,17 @@ function applyFilters(){
       if(sort === 'owner' && s.owner !== lastOwner){
         if(holderCount > 1){
           var display = s.isDomain ? s.owner : shortAddr(s.owner);
-          header = '<div class="owner-group-header">'+holderEmoji(holderCount)+' '+escAttr(display)+' <span class="val">&times;'+holderCount+'</span></div>';
+          var handleUrl = s.twitterUrl || (s.twitter ? 'https://x.com/'+encodeURIComponent(s.twitter) : null);
+          var handleText = s.tagOnly
+            ? '<span class="ogh-tag-pill" style="background:'+escAttr(s.tagColor||'#fff')+';color:'+(s.tagColor?'#fff':'#0b0d12')+'">'+escAttr(s.tagText||'TAG')+'</span>'
+            : (s.label ? escAttr(s.label) : (s.twitter ? '@'+escAttr(s.twitter) : ''));
+          var handleColorStyle = (!s.tagOnly && s.tagColor) ? ' style="color:'+escAttr(s.tagColor)+'"' : '';
+          var handleSuffix = handleText
+            ? (handleUrl
+                ? ' &middot; <a class="ogh-handle'+(s.tagOnly?' ogh-handle-tagonly':'')+'"'+handleColorStyle+' href="'+escAttr(handleUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">'+handleText+'</a>'
+                : ' &middot; <span class="ogh-handle"'+handleColorStyle+'>'+handleText+'</span>')
+            : '';
+          header = '<div class="owner-group-header">'+holderEmoji(holderCount)+' '+escAttr(display)+handleSuffix+' <span class="val">&times;'+holderCount+'</span></div>';
         } else if(!enteredSingles){
           header = '<div class="owner-group-header">1 SKULL PER WALLET</div>';
           enteredSingles = true;

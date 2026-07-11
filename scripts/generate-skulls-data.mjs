@@ -363,12 +363,18 @@ async function main() {
 
     await sleep(300); // stagger requests to stay well under Tensor's unofficial rate limits
 
+    const tag = owner ? ownerTags[owner] : null;
     return {
       num,
       mint,
       owner: domain || owner,
       isDomain: !!domain,
-      twitter: (owner && ownerTags[owner]?.twitter) || null,
+      twitter: tag?.twitter || null,
+      label: tag?.label || null,
+      tagText: tag?.tag || null,
+      tagColor: tag?.tagColor || null,
+      tagOnly: !!tag?.tagOnly,
+      twitterUrl: tag?.twitterUrl || (tag?.twitter ? `https://x.com/${tag.twitter}` : null),
       trades: t.trades,
       lastSalePrice: t.lastSalePrice,
       neverTraded: t.trades === 0,

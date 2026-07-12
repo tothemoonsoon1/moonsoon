@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-12T06:50:09.385Z",
+  "generatedAt": "2026-07-11T21:37:13.612Z",
   "skulls": [
     {
       "num": 542,
@@ -14,6 +14,23 @@
       "twitterUrl": null,
       "trades": 3,
       "lastSalePrice": 156.66,
+      "sales": [
+        {
+          "timestamp": 1742424660000,
+          "priceSol": 156.66,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1735224997000,
+          "priceSol": 82.22,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682307032000,
+          "priceSol": 775,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -33,6 +50,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -52,6 +70,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 400,
+      "sales": [
+        {
+          "timestamp": 1682140035000,
+          "priceSol": 400,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -71,6 +96,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -90,6 +116,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 1326,
+      "sales": [
+        {
+          "timestamp": 1702215482000,
+          "priceSol": 1326,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -109,6 +142,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1500,
+      "sales": [
+        {
+          "timestamp": 1682484046000,
+          "priceSol": 1500,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682180753000,
+          "priceSol": 380,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -128,6 +173,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 185,
+      "sales": [
+        {
+          "timestamp": 1730231648000,
+          "priceSol": 185,
+          "source": "TENSORBID"
+        }
+      ],
       "neverTraded": false,
       "listed": true,
       "listPrice": 77.6322,
@@ -147,6 +199,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -166,6 +219,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 360,
+      "sales": [
+        {
+          "timestamp": 1682127955000,
+          "priceSol": 360,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -185,6 +245,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -204,6 +265,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 750.69,
+      "sales": [
+        {
+          "timestamp": 1682297414000,
+          "priceSol": 750.69,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682130273000,
+          "priceSol": 230,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -223,6 +296,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -242,6 +316,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 800,
+      "sales": [
+        {
+          "timestamp": 1682403494000,
+          "priceSol": 800,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682181918000,
+          "priceSol": 400,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -261,6 +347,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 1469,
+      "sales": [
+        {
+          "timestamp": 1682572549000,
+          "priceSol": 1469,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -280,6 +373,28 @@
       "twitterUrl": null,
       "trades": 4,
       "lastSalePrice": 37.6,
+      "sales": [
+        {
+          "timestamp": 1780403919000,
+          "priceSol": 37.6,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1778240504000,
+          "priceSol": 49,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1778062879000,
+          "priceSol": 47.07,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1682172582000,
+          "priceSol": 324.69,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": true,
       "listPrice": 88.8788,
@@ -299,6 +414,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1420,
+      "sales": [
+        {
+          "timestamp": 1691521862000,
+          "priceSol": 1420,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682148804000,
+          "priceSol": 420.69,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -318,6 +445,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 1320,
+      "sales": [
+        {
+          "timestamp": 1682518844000,
+          "priceSol": 1320,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -337,6 +471,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 799.99,
+      "sales": [
+        {
+          "timestamp": 1682357304000,
+          "priceSol": 799.99,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682181931000,
+          "priceSol": 410,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -356,6 +502,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 799.99,
+      "sales": [
+        {
+          "timestamp": 1682359071000,
+          "priceSol": 799.99,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682181937000,
+          "priceSol": 420,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -375,6 +533,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -394,6 +553,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 369,
+      "sales": [
+        {
+          "timestamp": 1682127114000,
+          "priceSol": 369,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -413,6 +579,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -432,6 +599,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -451,6 +619,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 400,
+      "sales": [
+        {
+          "timestamp": 1682174784000,
+          "priceSol": 400,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -470,6 +645,7 @@
       "twitterUrl": "https://x.com/MadLads",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -489,6 +665,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -508,6 +685,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 87,
+      "sales": [
+        {
+          "timestamp": 1737947353000,
+          "priceSol": 87,
+          "source": "TENSORBID"
+        },
+        {
+          "timestamp": 1682140543000,
+          "priceSol": 400,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -527,6 +716,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -546,6 +736,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 3420.69,
+      "sales": [
+        {
+          "timestamp": 1682476232000,
+          "priceSol": 3420.69,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682139844000,
+          "priceSol": 425,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -565,6 +767,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 333,
+      "sales": [
+        {
+          "timestamp": 1682132423000,
+          "priceSol": 333,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -584,6 +793,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 369,
+      "sales": [
+        {
+          "timestamp": 1682127533000,
+          "priceSol": 369,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -603,6 +819,7 @@
       "twitterUrl": "https://x.com/SolanaCoach",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -622,6 +839,7 @@
       "twitterUrl": "https://x.com/MadLads",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -641,6 +859,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 300,
+      "sales": [
+        {
+          "timestamp": 1682131230000,
+          "priceSol": 300,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -660,6 +885,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -679,6 +905,7 @@
       "twitterUrl": "https://x.com/MadLads",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -698,6 +925,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 500,
+      "sales": [
+        {
+          "timestamp": 1714507054000,
+          "priceSol": 500,
+          "source": "TENSORBID"
+        },
+        {
+          "timestamp": 1682140031000,
+          "priceSol": 399,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -717,6 +956,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 400,
+      "sales": [
+        {
+          "timestamp": 1682140133000,
+          "priceSol": 400,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -736,6 +982,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 999,
+      "sales": [
+        {
+          "timestamp": 1682401426000,
+          "priceSol": 999,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -755,6 +1008,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -774,6 +1028,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 666,
+      "sales": [
+        {
+          "timestamp": 1682180964000,
+          "priceSol": 666,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -793,6 +1054,28 @@
       "twitterUrl": null,
       "trades": 4,
       "lastSalePrice": 1299,
+      "sales": [
+        {
+          "timestamp": 1701975228000,
+          "priceSol": 1299,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682230699000,
+          "priceSol": 600,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682130701000,
+          "priceSol": 269,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682129165000,
+          "priceSol": 199.9,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -812,6 +1095,7 @@
       "twitterUrl": "https://x.com/MadLads",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -831,6 +1115,7 @@
       "twitterUrl": "https://x.com/MadLads",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -850,6 +1135,33 @@
       "twitterUrl": null,
       "trades": 5,
       "lastSalePrice": 75,
+      "sales": [
+        {
+          "timestamp": 1762419078000,
+          "priceSol": 75,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1715492633000,
+          "priceSol": 460,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1701316179000,
+          "priceSol": 853,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682274015000,
+          "priceSol": 730,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682181801000,
+          "priceSol": 396.9,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -869,6 +1181,7 @@
       "twitterUrl": "https://x.com/MadLads",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -888,6 +1201,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 333.33,
+      "sales": [
+        {
+          "timestamp": 1682127150000,
+          "priceSol": 333.33,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -907,6 +1227,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 946.5,
+      "sales": [
+        {
+          "timestamp": 1700438638000,
+          "priceSol": 946.5,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682188638000,
+          "priceSol": 525,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -926,6 +1258,28 @@
       "twitterUrl": null,
       "trades": 4,
       "lastSalePrice": 398,
+      "sales": [
+        {
+          "timestamp": 1713429163000,
+          "priceSol": 398,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1684287036000,
+          "priceSol": 995,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682127904000,
+          "priceSol": 225,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682127813000,
+          "priceSol": 100,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -945,6 +1299,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 270,
+      "sales": [
+        {
+          "timestamp": 1682136309000,
+          "priceSol": 270,
+          "source": "TENSORBID"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -964,6 +1325,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 325,
+      "sales": [
+        {
+          "timestamp": 1718465161000,
+          "priceSol": 325,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682310704000,
+          "priceSol": 769,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -983,6 +1356,28 @@
       "twitterUrl": null,
       "trades": 4,
       "lastSalePrice": 123,
+      "sales": [
+        {
+          "timestamp": 1750023948000,
+          "priceSol": 123,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1749976755000,
+          "priceSol": 65.354,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1718595182000,
+          "priceSol": 377,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682153882000,
+          "priceSol": 450,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1002,6 +1397,23 @@
       "twitterUrl": null,
       "trades": 3,
       "lastSalePrice": 65.11,
+      "sales": [
+        {
+          "timestamp": 1749578077000,
+          "priceSol": 65.11,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1718595208000,
+          "priceSol": 377.5,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682402259000,
+          "priceSol": 950.66,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1021,6 +1433,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -1040,6 +1453,23 @@
       "twitterUrl": null,
       "trades": 3,
       "lastSalePrice": 70,
+      "sales": [
+        {
+          "timestamp": 1781672054000,
+          "priceSol": 70,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1683303104000,
+          "priceSol": 995,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682254812000,
+          "priceSol": 590,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1059,6 +1489,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 333,
+      "sales": [
+        {
+          "timestamp": 1682133882000,
+          "priceSol": 333,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1078,6 +1515,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 2300,
+      "sales": [
+        {
+          "timestamp": 1687267130000,
+          "priceSol": 2300,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682131355000,
+          "priceSol": 300,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1097,6 +1546,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 800,
+      "sales": [
+        {
+          "timestamp": 1710381474000,
+          "priceSol": 800,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682130664000,
+          "priceSol": 280,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1116,6 +1577,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 145,
+      "sales": [
+        {
+          "timestamp": 1745936366000,
+          "priceSol": 145,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1682127997000,
+          "priceSol": 295,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1135,6 +1608,33 @@
       "twitterUrl": null,
       "trades": 5,
       "lastSalePrice": 167.1,
+      "sales": [
+        {
+          "timestamp": 1734419943000,
+          "priceSol": 167.1,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1698778827000,
+          "priceSol": 830,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1686532133000,
+          "priceSol": 1000,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682407333000,
+          "priceSol": 949,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682182824000,
+          "priceSol": 420.69,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1154,6 +1654,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1109,
+      "sales": [
+        {
+          "timestamp": 1685900295000,
+          "priceSol": 1109,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682180518000,
+          "priceSol": 500,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1173,6 +1685,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -1192,6 +1705,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 888.88,
+      "sales": [
+        {
+          "timestamp": 1682405926000,
+          "priceSol": 888.88,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682127274000,
+          "priceSol": 260,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1211,6 +1736,23 @@
       "twitterUrl": null,
       "trades": 3,
       "lastSalePrice": 1214,
+      "sales": [
+        {
+          "timestamp": 1685217563000,
+          "priceSol": 1214,
+          "source": "TENSORBID"
+        },
+        {
+          "timestamp": 1682455326000,
+          "priceSol": 988,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682139956000,
+          "priceSol": 363,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1230,6 +1772,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 1000,
+      "sales": [
+        {
+          "timestamp": 1682479127000,
+          "priceSol": 1000,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1249,6 +1798,38 @@
       "twitterUrl": null,
       "trades": 6,
       "lastSalePrice": 88.88,
+      "sales": [
+        {
+          "timestamp": 1753423402000,
+          "priceSol": 88.88,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1751908220000,
+          "priceSol": 133.33,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1751844050000,
+          "priceSol": 100,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1751795392000,
+          "priceSol": 75.5,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1718594314000,
+          "priceSol": 335.86,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682268412000,
+          "priceSol": 688,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1268,6 +1849,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -1287,6 +1869,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": true,
       "listPrice": 420.021,
@@ -1306,6 +1889,7 @@
       "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -1325,6 +1909,23 @@
       "twitterUrl": null,
       "trades": 3,
       "lastSalePrice": 45,
+      "sales": [
+        {
+          "timestamp": 1778074447000,
+          "priceSol": 45,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1776887793000,
+          "priceSol": 37.666,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1682129835000,
+          "priceSol": 225,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1344,6 +1945,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1488,
+      "sales": [
+        {
+          "timestamp": 1685072495000,
+          "priceSol": 1488,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682126707000,
+          "priceSol": 410,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1363,6 +1976,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 48,
+      "sales": [
+        {
+          "timestamp": 1777871117000,
+          "priceSol": 48,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682127788000,
+          "priceSol": 277,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1382,6 +2007,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1000,
+      "sales": [
+        {
+          "timestamp": 1682285524000,
+          "priceSol": 1000,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682129403000,
+          "priceSol": 250,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1401,6 +2038,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 240,
+      "sales": [
+        {
+          "timestamp": 1682128178000,
+          "priceSol": 240,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1420,6 +2064,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 558.88,
+      "sales": [
+        {
+          "timestamp": 1715266296000,
+          "priceSol": 558.88,
+          "source": "TENSORBID"
+        },
+        {
+          "timestamp": 1682179902000,
+          "priceSol": 419,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1439,6 +2095,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 35,
+      "sales": [
+        {
+          "timestamp": 1779597925000,
+          "priceSol": 35,
+          "source": "TCOMP"
+        },
+        {
+          "timestamp": 1682130704000,
+          "priceSol": 269,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1458,6 +2126,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1360,
+      "sales": [
+        {
+          "timestamp": 1682524150000,
+          "priceSol": 1360,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682180851000,
+          "priceSol": 380,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1477,6 +2157,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 222,
+      "sales": [
+        {
+          "timestamp": 1728818967000,
+          "priceSol": 222,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682127067000,
+          "priceSol": 200,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1496,6 +2188,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 490,
+      "sales": [
+        {
+          "timestamp": 1682211493000,
+          "priceSol": 490,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1515,6 +2214,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 340,
+      "sales": [
+        {
+          "timestamp": 1682139063000,
+          "priceSol": 340,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682128891000,
+          "priceSol": 200,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1534,6 +2245,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 325,
+      "sales": [
+        {
+          "timestamp": 1682127420000,
+          "priceSol": 325,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1553,6 +2271,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 400,
+      "sales": [
+        {
+          "timestamp": 1682138915000,
+          "priceSol": 400,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1572,6 +2297,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 715,
+      "sales": [
+        {
+          "timestamp": 1682293795000,
+          "priceSol": 715,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682183215000,
+          "priceSol": 480,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1591,6 +2328,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 888,
+      "sales": [
+        {
+          "timestamp": 1682406623000,
+          "priceSol": 888,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682126633000,
+          "priceSol": 288,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1610,6 +2359,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 899,
+      "sales": [
+        {
+          "timestamp": 1682957820000,
+          "priceSol": 899,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682150499000,
+          "priceSol": 500,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1629,6 +2390,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1299,
+      "sales": [
+        {
+          "timestamp": 1682357260000,
+          "priceSol": 1299,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682129710000,
+          "priceSol": 499,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1648,6 +2421,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1069.42,
+      "sales": [
+        {
+          "timestamp": 1682476650000,
+          "priceSol": 1069.42,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682181002000,
+          "priceSol": 390,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1667,6 +2452,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 350,
+      "sales": [
+        {
+          "timestamp": 1682135212000,
+          "priceSol": 350,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1686,6 +2478,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 369,
+      "sales": [
+        {
+          "timestamp": 1682133084000,
+          "priceSol": 369,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1705,6 +2504,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 900,
+      "sales": [
+        {
+          "timestamp": 1701317915000,
+          "priceSol": 900,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682140679000,
+          "priceSol": 420.69,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1716,14 +2527,15 @@
       "mint": "7yAXKRNaxS1cnZs2hFRYieLTtbAu336bfkGnyZ1Lr8N2",
       "owner": "BZp7wtB6sEUr3kqEUHsquKQJrLe4Fri7ZQaWVBSny22x",
       "isDomain": false,
-      "twitter": null,
+      "twitter": "m00nsoon",
       "label": null,
       "tagText": null,
       "tagColor": null,
       "tagOnly": false,
-      "twitterUrl": null,
+      "twitterUrl": "https://x.com/m00nsoon",
       "trades": 0,
       "lastSalePrice": null,
+      "sales": [],
       "neverTraded": true,
       "listed": false,
       "listPrice": null,
@@ -1743,6 +2555,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 250,
+      "sales": [
+        {
+          "timestamp": 1682130193000,
+          "priceSol": 250,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1762,6 +2581,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 200,
+      "sales": [
+        {
+          "timestamp": 1740504687000,
+          "priceSol": 200,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682399385000,
+          "priceSol": 900,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1781,6 +2612,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 444,
+      "sales": [
+        {
+          "timestamp": 1682177091000,
+          "priceSol": 444,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1800,6 +2638,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 1379.69,
+      "sales": [
+        {
+          "timestamp": 1682527035000,
+          "priceSol": 1379.69,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682132820000,
+          "priceSol": 345,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1819,6 +2669,18 @@
       "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 147,
+      "sales": [
+        {
+          "timestamp": 1753087490000,
+          "priceSol": 147,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682170707000,
+          "priceSol": 398.98,
+          "source": "TENSORSWAP"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1838,6 +2700,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 245,
+      "sales": [
+        {
+          "timestamp": 1682130246000,
+          "priceSol": 245,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1857,6 +2726,23 @@
       "twitterUrl": null,
       "trades": 3,
       "lastSalePrice": 1450,
+      "sales": [
+        {
+          "timestamp": 1682548449000,
+          "priceSol": 1450,
+          "source": "TENSORSWAP"
+        },
+        {
+          "timestamp": 1682357616000,
+          "priceSol": 795,
+          "source": "MAGICEDEN_V2"
+        },
+        {
+          "timestamp": 1682202258000,
+          "priceSol": 500,
+          "source": "MAGICEDEN_V2"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,
@@ -1876,6 +2762,13 @@
       "twitterUrl": null,
       "trades": 1,
       "lastSalePrice": 1299,
+      "sales": [
+        {
+          "timestamp": 1683224935000,
+          "priceSol": 1299,
+          "source": "TENSORBID"
+        }
+      ],
       "neverTraded": false,
       "listed": false,
       "listPrice": null,

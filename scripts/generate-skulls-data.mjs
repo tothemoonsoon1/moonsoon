@@ -210,7 +210,7 @@ async function tensorMintDataOnce(mint) {
 
   const sales = allTxs
     .filter(isSaleTx)
-    .map((tx) => ({ timestamp: tx.txAt, priceSol: +(Number(tx.grossAmount) / LAMPORTS_PER_SOL).toFixed(3) }))
+    .map((tx) => ({ timestamp: tx.txAt, priceSol: +(Number(tx.grossAmount) / LAMPORTS_PER_SOL).toFixed(3), source: tx.source || null }))
     .sort((a, b) => b.timestamp - a.timestamp);
 
   // A mint can carry more than one active LIST entry (relisted, or listed via
@@ -228,6 +228,7 @@ async function tensorMintDataOnce(mint) {
     owner: data.mint.owner,
     trades: sales.length,
     lastSalePrice: sales[0]?.priceSol ?? null,
+    sales,
     listed: rawAskPrice != null,
     rawAskPrice,
     totalTxs: allTxs.length,
@@ -332,6 +333,7 @@ async function main() {
       owner: null,
       trades: 0,
       lastSalePrice: null,
+      sales: [],
       listed: false,
       rawAskPrice: null,
     };
@@ -377,6 +379,7 @@ async function main() {
       twitterUrl: tag?.twitterUrl || (tag?.twitter ? `https://x.com/${tag.twitter}` : null),
       trades: t.trades,
       lastSalePrice: t.lastSalePrice,
+      sales: t.sales || [],
       neverTraded: t.trades === 0,
       listed: t.listed,
       listPrice,

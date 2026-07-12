@@ -2,6 +2,7 @@
   "_comment": "Maps a Solana wallet address to its known X (Twitter) handle. Keyed by wallet so tags automatically follow whichever Skulls that wallet currently owns on each daily regeneration — add/remove entries here, no code changes needed.",
   "wallets": {
     "DNBsTnpUVTvWnwGQ9jMXUtNa7uVtv41fq9CoRDp9h13r": { "twitter": "SolanaCoach" },
+    "BZp7wtB6sEUr3kqEUHsquKQJrLe4Fri7ZQaWVBSny22x": { "twitter": "m00nsoon" },
     "8Ew6iQXcTRHAUNNu3X9VBn1g1bJkXEZJ9gFD2AGKtdPB": {
       "label": "MadLads Team Wallet",
       "tag": "MYSTERY",

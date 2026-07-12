@@ -51,6 +51,8 @@
   --nft-gradient:linear-gradient(150deg,rgba(79,216,255,0.25),rgba(79,216,255,0) 60%),#12161e;
   --toggle-track:#232935;
   --gold:#f0b84d;
+  --me:#b988ff;--me-tint:rgba(185,136,255,0.15);
+  --accent-tint2:rgba(79,216,255,0.15);
 }
 [data-theme="light"]{
   --bg:#f5f6f8;--surface:#ffffff;--border:#e6e8ec;
@@ -147,6 +149,47 @@ a{color:inherit;}
 
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:14px;}
 
+/* ---- View toggle (Gallery / Sale History) ---- */
+.view-toggle{display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:4px;margin-bottom:24px;}
+.view-toggle-btn{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;color:var(--text-muted);background:none;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;}
+.view-toggle-btn.active{font-weight:700;color:var(--btn-text);background:var(--accent);}
+
+/* ---- Sale History tab ---- */
+.sh-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 22px 12px;margin-bottom:22px;}
+.sh-chart-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;}
+.sh-year-pills{display:flex;gap:6px;margin-top:10px;}
+.sh-year-pill{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:var(--text-muted);background:none;border:1px solid var(--card-border);border-radius:7px;padding:5px 11px;cursor:pointer;}
+.sh-year-pill.active{color:var(--btn-text);background:var(--accent);border-color:var(--accent);}
+.sh-chart-detail{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
+.sh-chart-detail .hl{color:var(--accent);font-weight:700;}
+.sh-chart-bars{display:flex;align-items:flex-end;gap:2px;height:64px;margin-top:12px;}
+.sh-bar{flex:1;min-height:2px;background:#3d4b5c;border-radius:2px 2px 0 0;cursor:default;transition:background .1s ease;}
+.sh-chart-labels{display:flex;gap:2px;margin-top:5px;}
+.sh-chart-label{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-muted);opacity:.6;transition:opacity .1s ease,color .1s ease;}
+.sh-chart-label.hover{opacity:1;color:var(--accent);}
+.sh-bar.hover{background:var(--accent);}
+.sh-list{display:flex;flex-direction:column;}
+.sh-row{display:flex;align-items:center;gap:14px;padding:11px 6px;text-decoration:none;color:var(--text);border-bottom:1px solid var(--border);}
+.sh-row:hover{background:var(--card-bg);}
+.sh-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--nft-gradient);flex-shrink:0;}
+.sh-num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--text);width:70px;flex-shrink:0;}
+.sh-spacer{flex:1;}
+.sh-pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:0.03em;border-radius:14px;padding:4px 10px;width:88px;text-align:center;flex-shrink:0;}
+.sh-pill.me{color:var(--me);background:var(--me-tint);}
+.sh-pill.tensor{color:var(--accent);background:var(--accent-tint2);}
+.sh-price{font-size:15px;font-weight:700;color:var(--text);width:100px;text-align:right;flex-shrink:0;}
+.sh-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);width:100px;text-align:right;flex-shrink:0;}
+.sh-pagination{display:flex;justify-content:center;align-items:center;gap:14px;padding:22px 0 4px;}
+.sh-page-btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);background:none;border:1px solid var(--border);border-radius:8px;padding:8px 16px;cursor:pointer;}
+.sh-page-btn:disabled{opacity:.4;cursor:default;}
+.sh-page-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
+.sh-me-pct{color:var(--me);}
+.sh-tensor-pct{color:var(--accent);}
+
+@media(max-width:640px){
+  .sh-pill,.sh-date{display:none;}
+}
+
 @media(max-width:768px){
   .nav{padding:20px 20px;}
   .sk-wrap{padding:40px 20px 60px;}
@@ -174,55 +217,127 @@ a{color:inherit;}
 
   <main>
     <div class="sk-wrap">
-      <div class="sk-header">
-        <div class="kicker">MAD LADS</div>
-        <div class="sk-title">Skulls Gallery</div>
-        <div class="sk-desc">All 99 Mad Lads Skulls in one place — owners, trade history, last sale price and current listings. Each Skull owner is a Solana OG chad.</div>
+
+      <div class="view-toggle" role="tablist">
+        <button class="view-toggle-btn active" id="view-toggle-gallery" onclick="switchView('gallery')">Gallery</button>
+        <button class="view-toggle-btn" id="view-toggle-history" onclick="switchView('history')">Sale History</button>
       </div>
 
-      <div class="stats-bar">
-        <div class="stat-card">
-          <div class="stat-label">TOTAL SKULLS</div>
-          <div class="stat-val" id="stat-total">99</div>
+      <div id="view-gallery">
+        <div class="sk-header">
+          <div class="kicker">MAD LADS</div>
+          <div class="sk-title">Skulls Gallery</div>
+          <div class="sk-desc">All 99 Mad Lads Skulls in one place — owners, trade history, last sale price and current listings. Each Skull owner is a Solana OG chad.</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">FLOOR PRICE</div>
-          <div class="stat-val" id="stat-floor">&mdash;</div>
+
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-label">TOTAL SKULLS</div>
+            <div class="stat-val" id="stat-total">99</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">FLOOR PRICE</div>
+            <div class="stat-val" id="stat-floor">&mdash;</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">CURRENTLY LISTED</div>
+            <div class="stat-val" id="stat-listed">0</div>
+            <div class="stat-sub" id="stat-listed-pct">0% of supply</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">NEVER SOLD</div>
+            <div class="stat-val" id="stat-never">0</div>
+            <div class="stat-sub">no on-chain sale recorded</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">CURRENTLY LISTED</div>
-          <div class="stat-val" id="stat-listed">0</div>
-          <div class="stat-sub" id="stat-listed-pct">0% of supply</div>
+
+        <div class="controls">
+          <div class="ctl-search">
+            <input class="ctl-input" type="text" id="sk-search" placeholder="Search by number (e.g. 9175)" oninput="applyFilters()">
+          </div>
+          <select class="ctl-select" id="sk-sort" onchange="applyFilters()">
+            <option value="num-asc">Number: Low to High</option>
+            <option value="num-desc">Number: High to Low</option>
+            <option value="trades-desc">Most Traded</option>
+            <option value="trades-asc">Least Traded</option>
+            <option value="sale-desc">Last Sale: High to Low</option>
+            <option value="sale-asc">Last Sale: Low to High</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="owner">Group by Owner</option>
+          </select>
+          <label class="ctl-toggle">
+            <input type="checkbox" id="sk-never-only" onchange="applyFilters()">
+            Never sold only
+          </label>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">NEVER SOLD</div>
-          <div class="stat-val" id="stat-never">0</div>
-          <div class="stat-sub">no on-chain sale recorded</div>
+
+        <div class="sk-grid" id="sk-grid"></div>
+        <div class="empty-state" id="sk-empty" style="display:none;">No skulls match your filters.</div>
+      </div>
+
+      <div id="view-history" style="display:none;">
+        <div class="sk-header">
+          <div class="kicker">MAD LADS</div>
+          <div class="sk-title">Sale History</div>
+          <div class="sk-desc">Every recorded on-chain sale across all 99 Skulls — price, marketplace and date.</div>
+        </div>
+
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-label">TOTAL SALES</div>
+            <div class="stat-val" id="sh-stat-total">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">TOTAL VOLUME</div>
+            <div class="stat-val" id="sh-stat-volume">0 SOL</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">AVG PRICE</div>
+            <div class="stat-val" id="sh-stat-avg">0 SOL</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">MARKETPLACE SPLIT</div>
+            <div class="stat-val"><span class="sh-me-pct" id="sh-stat-me-pct">0%</span> <span class="stat-sub" style="display:inline">ME</span> &nbsp;<span class="sh-tensor-pct" id="sh-stat-tensor-pct">0%</span> <span class="stat-sub" style="display:inline">TSR</span></div>
+          </div>
+        </div>
+
+        <div class="sh-chart-card">
+          <div class="sh-chart-head">
+            <div class="stat-label">MONTHLY VOLUME (SOL)</div>
+            <div class="sh-chart-detail" id="sh-chart-detail">hover a bar for details</div>
+          </div>
+          <div class="sh-year-pills" id="sh-year-pills"></div>
+          <div class="sh-chart-bars" id="sh-chart"></div>
+          <div class="sh-chart-labels" id="sh-chart-labels"></div>
+        </div>
+
+        <div class="controls">
+          <div class="ctl-search">
+            <input class="ctl-input" type="text" id="sh-search" placeholder="Search # (e.g. 1792)" oninput="renderHistory()">
+          </div>
+          <select class="ctl-select" id="sh-market" onchange="renderHistory()">
+            <option value="all">All marketplaces</option>
+            <option value="Magic Eden">Magic Eden</option>
+            <option value="Tensor">Tensor</option>
+          </select>
+          <select class="ctl-select" id="sh-sort" onchange="renderHistory()">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="price-asc">Price: Low to High</option>
+          </select>
+        </div>
+
+        <div class="sh-list" id="sh-list"></div>
+        <div class="empty-state" id="sh-empty" style="display:none;">No sales match your filters.</div>
+
+        <div class="sh-pagination" id="sh-pagination" style="display:none;">
+          <button class="sh-page-btn" id="sh-prev" onclick="shChangePage(-1)">Prev</button>
+          <div class="sh-page-label" id="sh-page-label">Page 1 / 1</div>
+          <button class="sh-page-btn" id="sh-next" onclick="shChangePage(1)">Next</button>
         </div>
       </div>
 
-      <div class="controls">
-        <div class="ctl-search">
-          <input class="ctl-input" type="text" id="sk-search" placeholder="Search by number (e.g. 9175)" oninput="applyFilters()">
-        </div>
-        <select class="ctl-select" id="sk-sort" onchange="applyFilters()">
-          <option value="num-asc">Number: Low to High</option>
-          <option value="num-desc">Number: High to Low</option>
-          <option value="trades-desc">Most Traded</option>
-          <option value="trades-asc">Least Traded</option>
-          <option value="sale-desc">Last Sale: High to Low</option>
-          <option value="sale-asc">Last Sale: Low to High</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="owner">Group by Owner</option>
-        </select>
-        <label class="ctl-toggle">
-          <input type="checkbox" id="sk-never-only" onchange="applyFilters()">
-          Never sold only
-        </label>
-      </div>
-
-      <div class="sk-grid" id="sk-grid"></div>
-      <div class="empty-state" id="sk-empty" style="display:none;">No skulls match your filters.</div>
     </div>
   </main>
 
@@ -282,6 +397,16 @@ function buildPlaceholderSkulls(){
     var lastSalePrice = neverTraded ? null : +(randInt(600, 1600) / 10).toFixed(1);
     var listed = !neverTraded && rng() < 0.041;
     var listPrice = listed ? +(78.588 + randInt(0, 400)/10).toFixed(3) : null;
+    var sales = [];
+    var daysAgo = 20;
+    for(var i=0;i<trades;i++){
+      daysAgo += randInt(4, 58);
+      sales.push({
+        timestamp: Date.now() - daysAgo * 86400000,
+        priceSol: +(randInt(300, 16000) / 10).toFixed(2),
+        source: rng() < 0.55 ? 'MAGICEDEN_V2' : 'TCOMP'
+      });
+    }
     return {
       num: num,
       owner: owner,
@@ -289,6 +414,7 @@ function buildPlaceholderSkulls(){
       twitter: null,
       trades: trades,
       lastSalePrice: lastSalePrice,
+      sales: sales,
       neverTraded: neverTraded,
       listed: listed,
       listPrice: listPrice,
@@ -387,6 +513,233 @@ function cardHtml(s, holderCount){
   '</div>';
 }
 
+// Everything on this collection trades through either Magic Eden or Tensor.
+// Tensor has several source enum variants (TCOMP, TENSORSWAP, TENSORBID, and
+// possibly future ones) — anything not explicitly Magic Eden is Tensor,
+// rather than an allowlist that silently mislabels a variant we haven't seen.
+function fmtMarketplace(source){
+  if(source && source.indexOf('MAGICEDEN') === 0) return 'Magic Eden';
+  return 'Tensor';
+}
+
+function fmtDate(ts){
+  if(!ts) return '';
+  var d = new Date(ts);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
+function flattenSales(){
+  var out = [];
+  SKULLS.forEach(function(s){
+    (s.sales || []).forEach(function(sale){
+      var marketplace = fmtMarketplace(sale.source);
+      out.push({
+        num: s.num,
+        mint: s.mint,
+        image: s.image,
+        priceSol: sale.priceSol,
+        timestamp: sale.timestamp,
+        marketplace: marketplace,
+        link: (marketplace === 'Magic Eden' && s.meUrl) ? s.meUrl
+          : (s.mint ? 'https://www.tensor.trade/item/'+s.mint : 'https://www.tensor.trade/trade/madlads')
+      });
+    });
+  });
+  return out;
+}
+
+var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var shChartBuckets = [];
+var shChartDefaultLabel = '';
+var shChartSalesByYear = null;
+var shSelectedYear = null;
+
+// A single all-time chart made April 2023's mint-week frenzy (~54k SOL)
+// dwarf everything since, even on a log scale — 250 SOL bars next to it read
+// as flat. Splitting by year keeps each chart's scale proportionate to its
+// own year instead of the lifetime max.
+function renderMonthlyChart(filtered){
+  var byYear = {};
+  filtered.forEach(function(s){
+    var y = new Date(s.timestamp).getFullYear();
+    (byYear[y] = byYear[y] || []).push(s);
+  });
+  shChartSalesByYear = byYear;
+
+  var years = Object.keys(byYear).map(Number).sort(function(a,b){ return a-b; });
+  var pillsEl = document.getElementById('sh-year-pills');
+
+  if(!years.length){
+    pillsEl.innerHTML = '';
+    document.getElementById('sh-chart').innerHTML = '';
+    document.getElementById('sh-chart-detail').textContent = 'no sales in range';
+    return;
+  }
+
+  if(shSelectedYear === null || years.indexOf(shSelectedYear) === -1){
+    shSelectedYear = years[years.length - 1];
+  }
+
+  pillsEl.innerHTML = years.map(function(y){
+    return '<button class="sh-year-pill'+(y===shSelectedYear?' active':'')+'" onclick="shSelectYear('+y+')">'+y+'</button>';
+  }).join('');
+
+  renderYearBars(shSelectedYear);
+}
+
+function shSelectYear(year){
+  shSelectedYear = year;
+  document.querySelectorAll('.sh-year-pill').forEach(function(el){
+    el.classList.toggle('active', el.textContent === String(year));
+  });
+  renderYearBars(year);
+}
+window.shSelectYear = shSelectYear;
+
+function renderYearBars(year){
+  var chart = document.getElementById('sh-chart');
+  var detail = document.getElementById('sh-chart-detail');
+  var yearSales = (shChartSalesByYear && shChartSalesByYear[year]) || [];
+
+  var buckets = [];
+  for(var m = 0; m < 12; m++){ buckets.push({ year: year, month: m, volume: 0, count: 0 }); }
+  yearSales.forEach(function(s){
+    var b = buckets[new Date(s.timestamp).getMonth()];
+    b.volume += s.priceSol;
+    b.count++;
+  });
+
+  var maxVolume = buckets.reduce(function(m, b){ return Math.max(m, b.volume); }, 1);
+  shChartBuckets = buckets;
+
+  chart.innerHTML = buckets.map(function(b, i){
+    var pct = b.volume > 0 ? Math.max(4, Math.round(Math.log(1 + b.volume) / Math.log(1 + maxVolume) * 100)) : 2;
+    return '<div class="sh-bar" style="height:'+pct+'%" onmouseenter="shHoverBar('+i+')" onmouseleave="shHoverBarOut()"></div>';
+  }).join('');
+
+  document.getElementById('sh-chart-labels').innerHTML = buckets.map(function(b, i){
+    return '<div class="sh-chart-label" onmouseenter="shHoverBar('+i+')" onmouseleave="shHoverBarOut()">'+MONTH_NAMES[b.month]+'</div>';
+  }).join('');
+
+  var totalVol = buckets.reduce(function(sum, b){ return sum + b.volume; }, 0);
+  var totalCount = buckets.reduce(function(sum, b){ return sum + b.count; }, 0);
+  shChartDefaultLabel = year + ': ' + Math.round(totalVol) + ' SOL &middot; ' + totalCount + ' sales &middot; hover a bar for a monthly breakdown';
+  detail.innerHTML = shChartDefaultLabel;
+}
+
+function shHoverBar(i){
+  var b = shChartBuckets[i];
+  if(!b) return;
+  var bars = document.querySelectorAll('#sh-chart .sh-bar');
+  bars.forEach(function(el, idx){ el.classList.toggle('hover', idx === i); });
+  var labels = document.querySelectorAll('#sh-chart-labels .sh-chart-label');
+  labels.forEach(function(el, idx){ el.classList.toggle('hover', idx === i); });
+  document.getElementById('sh-chart-detail').innerHTML =
+    '<span class="hl">'+MONTH_NAMES[b.month]+" '"+String(b.year).slice(2)+'</span> &middot; '+Math.round(b.volume*10)/10+' SOL &middot; '+b.count+' sale'+(b.count===1?'':'s');
+}
+window.shHoverBar = shHoverBar;
+
+function shHoverBarOut(){
+  document.querySelectorAll('#sh-chart .sh-bar').forEach(function(el){ el.classList.remove('hover'); });
+  document.querySelectorAll('#sh-chart-labels .sh-chart-label').forEach(function(el){ el.classList.remove('hover'); });
+  document.getElementById('sh-chart-detail').innerHTML = shChartDefaultLabel;
+}
+window.shHoverBarOut = shHoverBarOut;
+
+var SH_PAGE_SIZE = 15;
+var shPage = 1;
+
+function shChangePage(delta){
+  shPage += delta;
+  renderHistory();
+}
+window.shChangePage = shChangePage;
+
+function renderHistory(){
+  var all = flattenSales();
+  var search = document.getElementById('sh-search').value.trim();
+  var market = document.getElementById('sh-market').value;
+  var sort = document.getElementById('sh-sort').value;
+
+  var filtered = all.filter(function(s){
+    if(market !== 'all' && s.marketplace !== market) return false;
+    if(search && String(s.num).indexOf(search) === -1) return false;
+    return true;
+  });
+
+  // Stats + chart always reflect the filtered set, not just the current page.
+  var total = filtered.length;
+  var volume = filtered.reduce(function(sum, s){ return sum + s.priceSol; }, 0);
+  var meCount = filtered.filter(function(s){ return s.marketplace === 'Magic Eden'; }).length;
+  document.getElementById('sh-stat-total').textContent = total;
+  document.getElementById('sh-stat-volume').textContent = Math.round(volume) + ' SOL';
+  document.getElementById('sh-stat-avg').textContent = (total ? Math.round((volume/total)*10)/10 : 0) + ' SOL';
+  document.getElementById('sh-stat-me-pct').textContent = (total ? Math.round(meCount/total*100) : 0) + '%';
+  document.getElementById('sh-stat-tensor-pct').textContent = (total ? Math.round((total-meCount)/total*100) : 0) + '%';
+
+  renderMonthlyChart(filtered);
+
+  filtered.sort(function(a,b){
+    switch(sort){
+      case 'oldest': return (a.timestamp||0) - (b.timestamp||0);
+      case 'price-desc': return (b.priceSol||0) - (a.priceSol||0);
+      case 'price-asc': return (a.priceSol||0) - (b.priceSol||0);
+      case 'newest':
+      default: return (b.timestamp||0) - (a.timestamp||0);
+    }
+  });
+
+  var list = document.getElementById('sh-list');
+  var empty = document.getElementById('sh-empty');
+  var pagination = document.getElementById('sh-pagination');
+
+  if(!filtered.length){
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    pagination.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+
+  var pageCount = Math.max(1, Math.ceil(filtered.length / SH_PAGE_SIZE));
+  if(shPage < 1) shPage = 1;
+  if(shPage > pageCount) shPage = pageCount;
+  var pageRows = filtered.slice((shPage-1)*SH_PAGE_SIZE, shPage*SH_PAGE_SIZE);
+
+  list.innerHTML = pageRows.map(function(s){
+    var thumb = s.image
+      ? '<img class="sh-thumb" src="'+escAttr(s.image)+'" alt="Skull #'+s.num+'" loading="lazy">'
+      : '<div class="sh-thumb"></div>';
+    var pillClass = s.marketplace === 'Magic Eden' ? 'me' : 'tensor';
+    return '<a class="sh-row" href="'+escAttr(s.link)+'" target="_blank" rel="noopener noreferrer">'+
+      thumb+
+      '<span class="sh-num">#'+s.num+'</span>'+
+      '<span class="sh-spacer"></span>'+
+      '<span class="sh-pill '+pillClass+'">'+escAttr(s.marketplace)+'</span>'+
+      '<span class="sh-price">'+s.priceSol+' SOL</span>'+
+      '<span class="sh-date">'+fmtDate(s.timestamp)+'</span>'+
+    '</a>';
+  }).join('');
+
+  pagination.style.display = 'flex';
+  document.getElementById('sh-page-label').textContent = 'Page '+shPage+' / '+pageCount;
+  document.getElementById('sh-prev').disabled = shPage <= 1;
+  document.getElementById('sh-next').disabled = shPage >= pageCount;
+}
+window.renderHistory = renderHistory;
+
+function switchView(view){
+  var isHistory = view === 'history';
+  document.getElementById('view-gallery').style.display = isHistory ? 'none' : 'block';
+  document.getElementById('view-history').style.display = isHistory ? 'block' : 'none';
+  document.getElementById('view-toggle-gallery').classList.toggle('active', !isHistory);
+  document.getElementById('view-toggle-history').classList.toggle('active', isHistory);
+  if(location.hash !== '#'+view){ location.hash = view; }
+  if(isHistory){ shPage = 1; renderHistory(); }
+}
+window.switchView = switchView;
+
 function applyFilters(){
   var query = document.getElementById('sk-search').value.trim();
   var sort = document.getElementById('sk-sort').value;
@@ -475,7 +828,15 @@ if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','li
 function renderAll(){
   renderStats();
   applyFilters();
+  if(document.getElementById('view-history').style.display !== 'none'){ renderHistory(); }
 }
+
+if(location.hash === '#history'){ switchView('history'); }
+window.addEventListener('hashchange', function(){
+  var view = location.hash === '#history' ? 'history' : 'gallery';
+  var current = document.getElementById('view-history').style.display !== 'none' ? 'history' : 'gallery';
+  if(view !== current){ switchView(view); }
+});
 
 renderAll();
 

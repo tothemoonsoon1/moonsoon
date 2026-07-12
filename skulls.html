@@ -615,11 +615,11 @@ function renderYearBars(year){
 
   chart.innerHTML = buckets.map(function(b, i){
     var pct = b.volume > 0 ? Math.max(4, Math.round(Math.log(1 + b.volume) / Math.log(1 + maxVolume) * 100)) : 2;
-    return '<div class="sh-bar" style="height:'+pct+'%" onmouseenter="shHoverBar('+i+')" onmouseleave="shHoverBarOut()"></div>';
+    return '<div class="sh-bar" style="height:'+pct+'%" onmouseenter="shHoverBar('+i+')" onmouseleave="shHoverBarOut()" onclick="event.stopPropagation();shHoverBar('+i+')"></div>';
   }).join('');
 
   document.getElementById('sh-chart-labels').innerHTML = buckets.map(function(b, i){
-    return '<div class="sh-chart-label" onmouseenter="shHoverBar('+i+')" onmouseleave="shHoverBarOut()">'+MONTH_NAMES[b.month]+'</div>';
+    return '<div class="sh-chart-label" onmouseenter="shHoverBar('+i+')" onmouseleave="shHoverBarOut()" onclick="event.stopPropagation();shHoverBar('+i+')">'+MONTH_NAMES[b.month]+'</div>';
   }).join('');
 
   var totalVol = buckets.reduce(function(sum, b){ return sum + b.volume; }, 0);
@@ -646,6 +646,11 @@ function shHoverBarOut(){
   document.getElementById('sh-chart-detail').innerHTML = shChartDefaultLabel;
 }
 window.shHoverBarOut = shHoverBarOut;
+
+// Bars only get onclick/onmouseenter — there's no mouseleave on touch, so a
+// tap anywhere outside the chart (document-level, capture phase so it still
+// fires even though the bar handlers above call stopPropagation) clears it.
+document.addEventListener('click', function(){ shHoverBarOut(); }, true);
 
 var SH_PAGE_SIZE = 15;
 var shPage = 1;

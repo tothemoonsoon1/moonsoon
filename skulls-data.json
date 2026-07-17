@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T21:37:13.612Z",
+  "generatedAt": "2026-07-17T16:21:16.823Z",
   "skulls": [
     {
       "num": 542,
@@ -1443,7 +1443,7 @@
     {
       "num": 4836,
       "mint": "EBN6B5iK1poV1pqZSZnfYRRUBfRwQu8PjQ8UdfBdxvmM",
-      "owner": "5LeRpyEJ3Agup4MGCzZCT8nLSyrKp9m5TttGZZXHDrk7",
+      "owner": "EXL18BzanMxQaRZcFkAGLvhdhfnzn6CDPHqhnAcbY1E3",
       "isDomain": false,
       "twitter": null,
       "label": null,
@@ -1451,9 +1451,14 @@
       "tagColor": null,
       "tagOnly": false,
       "twitterUrl": null,
-      "trades": 3,
-      "lastSalePrice": 70,
+      "trades": 4,
+      "lastSalePrice": 60,
       "sales": [
+        {
+          "timestamp": 1784238757000,
+          "priceSol": 60,
+          "source": "TCOMP"
+        },
         {
           "timestamp": 1781672054000,
           "priceSol": 70,
@@ -1968,12 +1973,12 @@
       "mint": "E15vXEstzUrv26wkLvkLy8bpCo9nB8kjYZPb8tUJ5yZW",
       "owner": "HzdS2G7gMinzZnxx93QJrW8avEz9j7QA25Z2njdHj7uZ",
       "isDomain": false,
-      "twitter": null,
+      "twitter": "Solbull007",
       "label": null,
       "tagText": null,
       "tagColor": null,
       "tagOnly": false,
-      "twitterUrl": null,
+      "twitterUrl": "https://x.com/Solbull007",
       "trades": 2,
       "lastSalePrice": 48,
       "sales": [

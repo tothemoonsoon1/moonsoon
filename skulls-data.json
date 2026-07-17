@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-16T06:35:47.690Z",
+  "generatedAt": "2026-07-17T06:32:28.467Z",
   "skulls": [
     {
       "num": 542,
@@ -1443,7 +1443,7 @@
     {
       "num": 4836,
       "mint": "EBN6B5iK1poV1pqZSZnfYRRUBfRwQu8PjQ8UdfBdxvmM",
-      "owner": "5LeRpyEJ3Agup4MGCzZCT8nLSyrKp9m5TttGZZXHDrk7",
+      "owner": "EXL18BzanMxQaRZcFkAGLvhdhfnzn6CDPHqhnAcbY1E3",
       "isDomain": false,
       "twitter": null,
       "label": null,
@@ -1451,9 +1451,14 @@
       "tagColor": null,
       "tagOnly": false,
       "twitterUrl": null,
-      "trades": 3,
-      "lastSalePrice": 70,
+      "trades": 4,
+      "lastSalePrice": 60,
       "sales": [
+        {
+          "timestamp": 1784238757000,
+          "priceSol": 60,
+          "source": "TCOMP"
+        },
         {
           "timestamp": 1781672054000,
           "priceSol": 70,

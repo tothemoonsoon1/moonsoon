@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-21T06:45:11.127Z",
+  "generatedAt": "2026-07-22T06:45:44.754Z",
   "skulls": [
     {
       "num": 542,
@@ -569,7 +569,7 @@
     {
       "num": 2540,
       "mint": "9PoCvN7rivdRQz7brZk3erfZ2CdeTSCVqjCgryBbF87e",
-      "owner": "ZiWLuiz9eA76f9pUNkM2FqihDzNx8DShuYWDk3iCAvK",
+      "owner": "8tNc2fiPwpQ834CpwDk31wamN9hzDDMr7LA7kc3jXSCt",
       "isDomain": false,
       "twitter": null,
       "label": null,
@@ -577,10 +577,16 @@
       "tagColor": null,
       "tagOnly": false,
       "twitterUrl": null,
-      "trades": 0,
-      "lastSalePrice": null,
-      "sales": [],
-      "neverTraded": true,
+      "trades": 1,
+      "lastSalePrice": 29,
+      "sales": [
+        {
+          "timestamp": 1784689296000,
+          "priceSol": 29,
+          "source": "TCOMP"
+        }
+      ],
+      "neverTraded": false,
       "listed": false,
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2540.png",

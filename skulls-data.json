@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-16T04:54:33.569Z",
+  "generatedAt": "2026-08-17T05:02:32.172Z",
   "skulls": [
     {
       "num": 542,
@@ -1429,7 +1429,7 @@
     {
       "num": 4580,
       "mint": "6kfJgJYdtPL1LfRCXh77VbLfSRMKAQMUDy9A8i55VqZv",
-      "owner": "BupQeHJkFcT4Q7Wh1A3y6BhprNp6LZa3j4g4TLVHrU3F",
+      "owner": "CV23PNEuqZkqzMaBM81wT5mZQtMB2aa4u7dxXGS4cPcZ",
       "isDomain": false,
       "twitter": null,
       "label": null,
@@ -1647,8 +1647,8 @@
         }
       ],
       "neverTraded": false,
-      "listed": true,
-      "listPrice": 90.27,
+      "listed": false,
+      "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5364.png",
       "meUrl": "https://magiceden.io/item-details/5TGVpYrmje5sYyf9nRUHmML2VUEaNTsTC24cz53FbxNA"
     },

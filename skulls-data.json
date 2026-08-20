@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-19T04:56:24.150Z",
+  "generatedAt": "2026-08-20T05:06:57.686Z",
   "skulls": [
     {
       "num": 542,
@@ -815,14 +815,14 @@
     {
       "num": 3306,
       "mint": "FwZqruGzoh4oQXbo1pgtJ8gTEgGRHqm4Ko89WdxxH2Df",
-      "owner": "DNBsTnpUVTvWnwGQ9jMXUtNa7uVtv41fq9CoRDp9h13r",
+      "owner": "91R3EbJWvBiNi9SB3dcLt6GM9dKiEj8CqsKBqN8ZhXZr",
       "isDomain": false,
-      "twitter": "SolanaCoach",
+      "twitter": null,
       "label": null,
       "tagText": null,
       "tagColor": null,
       "tagOnly": false,
-      "twitterUrl": "https://x.com/SolanaCoach",
+      "twitterUrl": null,
       "trades": 0,
       "lastSalePrice": null,
       "sales": [],
@@ -1609,7 +1609,7 @@
     {
       "num": 5364,
       "mint": "5TGVpYrmje5sYyf9nRUHmML2VUEaNTsTC24cz53FbxNA",
-      "owner": "1BWutmTvYPwDtmw9abTkS4Ssr8no61spGAvW1X6NDix",
+      "owner": "AuyPr87ub8C2RVjJprHqXRGtsm7Q8ZzMqnz9xpBopixf",
       "isDomain": false,
       "twitter": null,
       "label": null,

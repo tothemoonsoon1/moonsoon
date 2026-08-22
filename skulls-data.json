@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T05:00:53.453Z",
+  "generatedAt": "2026-08-22T04:55:42.689Z",
   "skulls": [
     {
       "num": 542,
@@ -182,7 +182,7 @@
       ],
       "neverTraded": false,
       "listed": true,
-      "listPrice": 74.0002,
+      "listPrice": 100.0404,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/831.png",
       "meUrl": "https://magiceden.io/item-details/G8FJmQzBbuem24DJUYeGruPmv1DHngEGkdd7YzawCwaU"
     },
@@ -363,7 +363,7 @@
     {
       "num": 1792,
       "mint": "HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx",
-      "owner": "CdPwE6opPDnzoMc3NTfQSn9Sqkj3Sz2qQQjwfinnrjKn",
+      "owner": "JCCHjYkL1hM546GHxqqPM1bc7ych8ErLrLDiCivfAexy",
       "isDomain": false,
       "twitter": null,
       "label": null,
@@ -371,9 +371,14 @@
       "tagColor": null,
       "tagOnly": false,
       "twitterUrl": null,
-      "trades": 4,
-      "lastSalePrice": 37.6,
+      "trades": 5,
+      "lastSalePrice": 83.69,
       "sales": [
+        {
+          "timestamp": 1787311024000,
+          "priceSol": 83.69,
+          "source": "TCOMP"
+        },
         {
           "timestamp": 1780403919000,
           "priceSol": 37.6,
@@ -396,8 +401,8 @@
         }
       ],
       "neverTraded": false,
-      "listed": true,
-      "listPrice": 88.8788,
+      "listed": false,
+      "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1792.png",
       "meUrl": "https://magiceden.io/item-details/HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx"
     },
@@ -1609,7 +1614,7 @@
     {
       "num": 5364,
       "mint": "5TGVpYrmje5sYyf9nRUHmML2VUEaNTsTC24cz53FbxNA",
-      "owner": "ABhLBKZZmYKs4simKsdGV9F5nQZ9fDvzZj7UseF4vXkt",
+      "owner": "AuyPr87ub8C2RVjJprHqXRGtsm7Q8ZzMqnz9xpBopixf",
       "isDomain": false,
       "twitter": null,
       "label": null,

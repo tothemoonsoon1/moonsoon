@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T09:00:42.123Z",
+  "generatedAt": "2026-09-04T08:55:22.664Z",
   "skulls": [
     {
       "num": 542,
@@ -717,20 +717,20 @@
     {
       "num": 2953,
       "mint": "HRyLwyjDqHVCBUtiwpbWa4uVoucH8CauR7KzM3kQjHkL",
-      "owner": "MUzVtNZoabjPUPoK9arwhYSKDahnahtuJAhbmMMcnP2",
+      "owner": "DNBsTnpUVTvWnwGQ9jMXUtNa7uVtv41fq9CoRDp9h13r",
       "isDomain": false,
-      "twitter": null,
+      "twitter": "SolanaCoach",
       "label": null,
       "tagText": null,
       "tagColor": null,
       "tagOnly": false,
-      "twitterUrl": null,
+      "twitterUrl": "https://x.com/SolanaCoach",
       "trades": 0,
       "lastSalePrice": null,
       "sales": [],
       "neverTraded": true,
-      "listed": true,
-      "listPrice": 87.084,
+      "listed": false,
+      "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2953.png",
       "meUrl": "https://magiceden.io/item-details/HRyLwyjDqHVCBUtiwpbWa4uVoucH8CauR7KzM3kQjHkL"
     },

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T09:04:26.608Z",
+  "generatedAt": "2026-09-19T08:51:56.886Z",
   "skulls": [
     {
       "num": 542,
@@ -2124,8 +2124,8 @@
         }
       ],
       "neverTraded": false,
-      "listed": true,
-      "listPrice": 69.03,
+      "listed": false,
+      "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7592.png",
       "meUrl": "https://magiceden.io/item-details/7fCC6TzAV58svkfKxzX1sPAvQAD6gKQpaDjbFSbSGo2f"
     },

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-19T08:51:56.886Z",
+  "generatedAt": "2026-09-20T09:20:53.119Z",
   "skulls": [
     {
       "num": 542,
@@ -906,14 +906,14 @@
     {
       "num": 3444,
       "mint": "9rP5pNSzg37jJfi5ppyWyn8tnsXAYHAUE8Q2MwtQYDXi",
-      "owner": "8Ew6iQXcTRHAUNNu3X9VBn1g1bJkXEZJ9gFD2AGKtdPB",
+      "owner": "DNBsTnpUVTvWnwGQ9jMXUtNa7uVtv41fq9CoRDp9h13r",
       "isDomain": false,
-      "twitter": null,
-      "label": "MadLads Team Wallet",
-      "tagText": "MYSTERY",
-      "tagColor": "#e0607a",
+      "twitter": "SolanaCoach",
+      "label": null,
+      "tagText": null,
+      "tagColor": null,
       "tagOnly": false,
-      "twitterUrl": "https://x.com/MadLads",
+      "twitterUrl": "https://x.com/SolanaCoach",
       "trades": 0,
       "lastSalePrice": null,
       "sales": [],

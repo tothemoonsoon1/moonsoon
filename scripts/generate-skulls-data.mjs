@@ -160,8 +160,16 @@ function solFromDescription(description) {
 }
 
 function isSale(tx, mint) {
-  if (!nftMoved(tx, mint) || largestNativeTransfer(tx) <= MIN_SALE_LAMPORTS) return false;
-  return tx.type === 'NFT_SALE' || touchesTensor(tx);
+  if (!nftMoved(tx, mint)) return false;
+  // Helius's own NFT_SALE carries the price itself. A Magic Eden bid-accept
+  // pays out of the bid escrow, so it can have no large native transfer at
+  // all (#1792's 49 SOL sale in May 2026 was missed by requiring one).
+  if (tx.type === 'NFT_SALE') {
+    const lamports = tx.events?.nft?.amount;
+    const sol = typeof lamports === 'number' ? lamports / LAMPORTS_PER_SOL : solFromDescription(tx.description);
+    return sol != null && sol * LAMPORTS_PER_SOL > MIN_SALE_LAMPORTS;
+  }
+  return touchesTensor(tx) && largestNativeTransfer(tx) > MIN_SALE_LAMPORTS;
 }
 
 // Same shape the gallery already reads: { timestamp (ms), priceSol, source }.
@@ -303,6 +311,16 @@ async function main() {
     console.log(`DEBUG ${DEBUG_MINT}: ${fresh.newTxs} txs in full history`);
     console.log('Sales found now:', JSON.stringify(fresh.sales, null, 1));
     console.log('Sales on file:  ', JSON.stringify(prev.sales, null, 1));
+    // Anything on-chain around each sale on file, to see how Helius described it.
+    const all = await heliusTransactionsSince(DEBUG_MINT, 0);
+    for (const s of prev.sales) {
+      for (const tx of all.filter((t) => Math.abs(t.timestamp * 1000 - s.timestamp) < 120_000)) {
+        console.log(
+          `  near ${s.priceSol} SOL sale: type=${tx.type} source=${tx.source} nftMoved=${nftMoved(tx, DEBUG_MINT)} ` +
+            `maxNative=${largestNativeTransfer(tx) / LAMPORTS_PER_SOL} eventAmount=${tx.events?.nft?.amount} desc=${JSON.stringify(tx.description)}`
+        );
+      }
+    }
     console.log(`Owner now ${fresh.owner}, on file ${prev.owner}; listed now ${fresh.listed} (${fresh.listPrice}), on file ${prev.listed} (${prev.listPrice})`);
     const incremental = await updateSkull(prev, defaultSyncedAt, startedAt);
     console.log(`Incremental run since ${data.generatedAt}: ${incremental.newTxs} new txs, trades ${prev.trades} -> ${incremental.trades}`);

@@ -319,6 +319,11 @@ async function main() {
           `  near ${s.priceSol} SOL sale: type=${tx.type} source=${tx.source} nftMoved=${nftMoved(tx, DEBUG_MINT)} ` +
             `maxNative=${largestNativeTransfer(tx) / LAMPORTS_PER_SOL} eventAmount=${tx.events?.nft?.amount} desc=${JSON.stringify(tx.description)}`
         );
+        if (tx.type === 'UNKNOWN' && tx.source === 'MAGIC_EDEN') {
+          console.log(`    tokenTransfers=${JSON.stringify(tx.tokenTransfers)}`);
+          console.log(`    nativeTransfers=${JSON.stringify(tx.nativeTransfers)}`);
+          console.log(`    balanceChanges=${JSON.stringify((tx.accountData || []).filter((a) => a.nativeBalanceChange).map((a) => [a.account, a.nativeBalanceChange]))}`);
+        }
       }
     }
     console.log(`Owner now ${fresh.owner}, on file ${prev.owner}; listed now ${fresh.listed} (${fresh.listPrice}), on file ${prev.listed} (${prev.listPrice})`);

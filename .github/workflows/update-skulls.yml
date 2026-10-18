@@ -17,9 +17,11 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      # Scheduled runs always use main. A manual run uses the branch it was
+      # started from, so a fix can be tried on a branch before it is merged.
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref_name || 'main' }}
 
       - uses: actions/setup-node@v4
         with:
@@ -31,6 +33,7 @@ jobs:
         run: node scripts/generate-skulls-data.mjs
 
       - name: Commit and push if changed
+        if: ${{ !inputs.debug_only_target }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

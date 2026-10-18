@@ -110,7 +110,20 @@ async function tensorGraphql(query, variables, label, attempts = 4) {
       headers: TENSOR_HEADERS,
       body: JSON.stringify({ query, variables }),
     });
-    const json = await res.json();
+    // fetchWithRetry hands real 4xx responses straight back. Those carry no
+    // `data`, and passing them on surfaced as a bare "Cannot read properties
+    // of undefined (reading 'collectionMintsV2')" with no hint of what Tensor
+    // actually said — fail with the status and body instead.
+    const text = await res.text();
+    let json = null;
+    try {
+      json = JSON.parse(text);
+    } catch {
+      // not JSON (e.g. a Cloudflare challenge page) — reported below
+    }
+    if (!res.ok || !json || (!json.data && !json.errors)) {
+      throw new Error(`Tensor GraphQL ${label}: HTTP ${res.status}, body: ${text.slice(0, 500)}`);
+    }
     if (!json.errors) return json.data;
     lastErr = json.errors;
   }

@@ -159,8 +159,25 @@ function solFromDescription(description) {
   return match ? parseFloat(match[1]) : null;
 }
 
+// Mad Lads' 4.2% royalty is enforced on every sale and paid from the same
+// account that pays the seller, so the sale price is the transfer that comes
+// with a sibling transfer of 4.2% of it. Needed for Magic Eden bid-accepts,
+// which Helius leaves as UNKNOWN with no price: #1792's 49 SOL sale paid
+// exactly 49 to the seller, 2.058 royalty and 0.98 Magic Eden fee.
+const ROYALTY_RATE = 0.042;
+function priceFromRoyalty(tx) {
+  const transfers = (tx.nativeTransfers || []).filter((t) => t.amount > MIN_SALE_LAMPORTS);
+  const candidates = transfers.filter((t) =>
+    (tx.nativeTransfers || []).some(
+      (u) => u !== t && u.fromUserAccount === t.fromUserAccount && Math.abs(u.amount - ROYALTY_RATE * t.amount) <= 0.001 * t.amount
+    )
+  );
+  return candidates.length ? Math.max(...candidates.map((t) => t.amount)) : null;
+}
+
 function isSale(tx, mint) {
   if (!nftMoved(tx, mint)) return false;
+  if (tx.source === 'MAGIC_EDEN' && tx.type !== 'NFT_SALE') return priceFromRoyalty(tx) != null;
   // Helius's own NFT_SALE carries the price itself. A Magic Eden bid-accept
   // pays out of the bid escrow, so it can have no large native transfer at
   // all (#1792's 49 SOL sale in May 2026 was missed by requiring one).
@@ -179,7 +196,7 @@ function saleFromTx(tx) {
   const priceSol =
     (typeof lamports === 'number' && lamports > 0 ? lamports / LAMPORTS_PER_SOL : null) ??
     solFromDescription(tx.description) ??
-    largestNativeTransfer(tx) / LAMPORTS_PER_SOL;
+    (priceFromRoyalty(tx) ?? largestNativeTransfer(tx)) / LAMPORTS_PER_SOL;
   return {
     timestamp: (tx.timestamp ?? 0) * 1000,
     priceSol: +priceSol.toFixed(3),
@@ -319,11 +336,6 @@ async function main() {
           `  near ${s.priceSol} SOL sale: type=${tx.type} source=${tx.source} nftMoved=${nftMoved(tx, DEBUG_MINT)} ` +
             `maxNative=${largestNativeTransfer(tx) / LAMPORTS_PER_SOL} eventAmount=${tx.events?.nft?.amount} desc=${JSON.stringify(tx.description)}`
         );
-        if (tx.type === 'UNKNOWN' && tx.source === 'MAGIC_EDEN') {
-          console.log(`    tokenTransfers=${JSON.stringify(tx.tokenTransfers)}`);
-          console.log(`    nativeTransfers=${JSON.stringify(tx.nativeTransfers)}`);
-          console.log(`    balanceChanges=${JSON.stringify((tx.accountData || []).filter((a) => a.nativeBalanceChange).map((a) => [a.account, a.nativeBalanceChange]))}`);
-        }
       }
     }
     console.log(`Owner now ${fresh.owner}, on file ${prev.owner}; listed now ${fresh.listed} (${fresh.listPrice}), on file ${prev.listed} (${prev.listPrice})`);

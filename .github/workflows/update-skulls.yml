@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       debug_only_target:
-        description: 'Debug: restrict to DEBUG_MINT and skip writing/committing skulls-data.json'
+        description: 'Debug: re-read DEBUG_MINT (#1792) history and compare with the file, without writing or committing'
         type: boolean
         default: false
 
@@ -29,6 +29,7 @@ jobs:
 
       - name: Generate skulls-data.json
         env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
           DEBUG_ONLY_TARGET: ${{ inputs.debug_only_target && '1' || '' }}
         run: node scripts/generate-skulls-data.mjs
 

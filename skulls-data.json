@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T10:16:37.562Z",
+  "generatedAt": "2026-10-23T09:23:00.803Z",
   "skulls": [
     {
       "num": 542,
@@ -36,7 +36,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/542.png",
       "meUrl": "https://magiceden.io/item-details/9r19whEpS9FkqaEHY2NkV17VEzaLmzvKWPLFBjSZQYpH",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 704,
@@ -57,7 +57,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/704.png",
       "meUrl": "https://magiceden.io/item-details/fBvgesYn3bYBgPR3GruBNV6VY926WK7iaMTapXEhS3C",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 710,
@@ -84,7 +84,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/710.png",
       "meUrl": "https://magiceden.io/item-details/KqdCKLaENNWXcv9eHA99rt8n7ujETkEY93k5ezemZ7w",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 749,
@@ -105,7 +105,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/749.png",
       "meUrl": "https://magiceden.io/item-details/2MfKQM4Sewgz5s9dEZv7LETXijuCV7TLDbTM6jW3yQmR",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 764,
@@ -132,7 +132,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/764.png",
       "meUrl": "https://magiceden.io/item-details/FdsGZfG3dVx2Lbb2cdhNjoU91AsYBMqoHDhj3MkvCU66",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 794,
@@ -164,7 +164,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/794.png",
       "meUrl": "https://magiceden.io/item-details/Haw5kGDkb9Hr25y97yXeTAt8KfheoEGC588Q9oDaGzc7",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 831,
@@ -196,7 +196,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/831.png",
       "meUrl": "https://magiceden.io/item-details/G8FJmQzBbuem24DJUYeGruPmv1DHngEGkdd7YzawCwaU",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 956,
@@ -217,7 +217,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/956.png",
       "meUrl": "https://magiceden.io/item-details/HWnkRFcFpmX1rDwYhLiAp7KfKCGy3eeu2KissbhYAYZb",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1052,
@@ -244,7 +244,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1052.png",
       "meUrl": "https://magiceden.io/item-details/GpJBBjWD6cghyHJZymSqugSS22WN8iUHuaqTaJgX33GA",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1435,
@@ -265,7 +265,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1435.png",
       "meUrl": "https://magiceden.io/item-details/HaiZuktgi6ZJULTZQLDXASAJpNHSpcgSWFAiSryfPmmG",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1457,
@@ -297,7 +297,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1457.png",
       "meUrl": "https://magiceden.io/item-details/B6HNzu48szTJ8iut78k12eP7XFhuhcejFxj3DcQhZYaC",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1495,
@@ -318,7 +318,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1495.png",
       "meUrl": "https://magiceden.io/item-details/CKPH2TxzciARSCkPcg6BVDNNA4cCHsm698tqjQEZQGNb",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1703,
@@ -350,7 +350,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1703.png",
       "meUrl": "https://magiceden.io/item-details/5hEdMM5t4wvx8qRENKrCfV2iCk5vKknmDSEUEBc5DAs",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1778,
@@ -377,7 +377,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1778.png",
       "meUrl": "https://magiceden.io/item-details/E2wUFPLyXybjsp58oR3LKCGvmx9fT79BobYLokGWJELz",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1792,
@@ -420,11 +420,11 @@
         }
       ],
       "neverTraded": false,
-      "listed": false,
-      "listPrice": null,
+      "listed": true,
+      "listPrice": 318.6,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1792.png",
       "meUrl": "https://magiceden.io/item-details/HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1846,
@@ -456,7 +456,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1846.png",
       "meUrl": "https://magiceden.io/item-details/HYWcvT8y8LMfXWgRXb1FRTu6sBP7yCFRZssv4rxAnpde",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 1885,
@@ -483,7 +483,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1885.png",
       "meUrl": "https://magiceden.io/item-details/9CbgZCn5SKxZWHG21EzhuMYUfc65T4ZXQXamZiiwTbvv",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2196,
@@ -515,7 +515,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2196.png",
       "meUrl": "https://magiceden.io/item-details/D5VorFFtbAgmGafXdjzrod2HfFiocHjFmEzhQSH2Rh6t",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2249,
@@ -547,7 +547,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2249.png",
       "meUrl": "https://magiceden.io/item-details/5sAb3o6Tsx4B4rbfUPzaii33acyhtU7KSJxV6fwJ1P3s",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2382,
@@ -568,7 +568,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2382.png",
       "meUrl": "https://magiceden.io/item-details/Fzp15ELGCFYy8k7ns4k2b3Y5MhpmPeK6ppb3HLookBV7",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2441,
@@ -595,7 +595,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2441.png",
       "meUrl": "https://magiceden.io/item-details/2ytEqsh9XECRtqcMm5qg2xL1RMJdFV1ry7xKVP66n1sL",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2540,
@@ -622,7 +622,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2540.png",
       "meUrl": "https://magiceden.io/item-details/9PoCvN7rivdRQz7brZk3erfZ2CdeTSCVqjCgryBbF87e",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2542,
@@ -643,7 +643,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2542.png",
       "meUrl": "https://magiceden.io/item-details/5knzAaPTuezWXqoffkUGTL46MyTnhaVwJAzBBs3ZXBfn",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2616,
@@ -670,7 +670,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2616.png",
       "meUrl": "https://magiceden.io/item-details/8MXageyT6qBrDbSAizorPa3GgmrAjAf5B5SzvygqDYGc",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2704,
@@ -691,7 +691,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2704.png",
       "meUrl": "https://magiceden.io/item-details/EfHHab9b4mbP4xd6b5C8jNppWUUr7bptup2yLNNaBjNt",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2732,
@@ -712,7 +712,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2732.png",
       "meUrl": "https://magiceden.io/item-details/5ja3EvVuEu5rXgtYE3LXKG84s7Pmy5siFfYbcopMc2Dx",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2924,
@@ -744,7 +744,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2924.png",
       "meUrl": "https://magiceden.io/item-details/AdRFcTX6gKP7f1catvHfU8SVZzRqMV9RGotCBzKfTPx4",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2953,
@@ -765,7 +765,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2953.png",
       "meUrl": "https://magiceden.io/item-details/HRyLwyjDqHVCBUtiwpbWa4uVoucH8CauR7KzM3kQjHkL",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2968,
@@ -797,7 +797,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2968.png",
       "meUrl": "https://magiceden.io/item-details/ESNFuinsGTQcgMKw2BMue1pTwWMKooqmfrGJZevFVji",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2996,
@@ -824,7 +824,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2996.png",
       "meUrl": "https://magiceden.io/item-details/F5UBwfT1knPfkETDqbdG1iKXkF9jRQCqzzDuQnKVpTZJ",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 2997,
@@ -851,7 +851,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/2997.png",
       "meUrl": "https://magiceden.io/item-details/AVLGjRAowAgPJ7gk1cRT5UxMWsm6uXg9Rs7pxaYzpVpF",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3306,
@@ -872,7 +872,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3306.png",
       "meUrl": "https://magiceden.io/item-details/FwZqruGzoh4oQXbo1pgtJ8gTEgGRHqm4Ko89WdxxH2Df",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3353,
@@ -893,7 +893,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3353.png",
       "meUrl": "https://magiceden.io/item-details/C5y13Yg3Wyrnf19rNTm9BmPN7PSjRJfEHNXHbFPPze7C",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3367,
@@ -920,7 +920,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3367.png",
       "meUrl": "https://magiceden.io/item-details/DUp9W2Ad5yPTHeRpwE2L6juuTuLMsjUzeSKVamT9CDXv",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3417,
@@ -941,7 +941,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3417.png",
       "meUrl": "https://magiceden.io/item-details/H9Z3EbQGrDo4QuTS3RGrYTtrcQGqiUcQnpkQGV3W4zTV",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3444,
@@ -962,7 +962,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3444.png",
       "meUrl": "https://magiceden.io/item-details/9rP5pNSzg37jJfi5ppyWyn8tnsXAYHAUE8Q2MwtQYDXi",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3540,
@@ -994,7 +994,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3540.png",
       "meUrl": "https://magiceden.io/item-details/WEo2gmmaBsfYd47VJ9C3h8d7LhxYqiqjJqAATLv419g",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3627,
@@ -1021,7 +1021,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3627.png",
       "meUrl": "https://magiceden.io/item-details/EDNZkEwHcnCgf3aHpwskggnP2XCvBo4AHEmjZLPykZCm",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3645,
@@ -1048,7 +1048,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3645.png",
       "meUrl": "https://magiceden.io/item-details/7dkWojqMZjZ4kRYvLgHNemHRHzLzpEFAsSKitgP6iXEM",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3676,
@@ -1069,7 +1069,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3676.png",
       "meUrl": "https://magiceden.io/item-details/FXYFchuewPiwnzTDU3SGLh4QGZjtXTWcJKmjfocZoRTz",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3712,
@@ -1096,7 +1096,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3712.png",
       "meUrl": "https://magiceden.io/item-details/EADMEm3WjAYukyagfnAHTT7L37kjozLDSNENjvSm7fp7",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3732,
@@ -1138,7 +1138,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3732.png",
       "meUrl": "https://magiceden.io/item-details/4153oJAFhqRZFfFUwwSiF1jASs5BPTmPa56xGXQoQLMV",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3807,
@@ -1159,7 +1159,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3807.png",
       "meUrl": "https://magiceden.io/item-details/HrC7EXPi3AkD38hCkRztfpGJ9o2pRb8ZnAQ2M8KmHih8",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3886,
@@ -1180,7 +1180,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3886.png",
       "meUrl": "https://magiceden.io/item-details/4KnNU61JGKdmpv5MQLko7pg3kVpqgjyA4JbaJByU8x4r",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3919,
@@ -1227,7 +1227,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3919.png",
       "meUrl": "https://magiceden.io/item-details/DC22H6bAshuJjmXXpyS8MUKGE7dPzW4FfqJT4dFBNZJp",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 3927,
@@ -1248,7 +1248,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/3927.png",
       "meUrl": "https://magiceden.io/item-details/5UdcebtAd4TULnvAC6vNRbkd2knGh6JhbV88NKsguxrH",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4109,
@@ -1275,7 +1275,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4109.png",
       "meUrl": "https://magiceden.io/item-details/Fw8YYtyLwEKcjQtzPbtZHwuQEgNorB6CCZDGPpVreA6U",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4424,
@@ -1307,7 +1307,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4424.png",
       "meUrl": "https://magiceden.io/item-details/5K9dGYAPao5ySagKcHYKTBq1ko2Hvamd8bDvYH4NqPYQ",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4506,
@@ -1349,7 +1349,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4506.png",
       "meUrl": "https://magiceden.io/item-details/1ZrnvELdCpzda8qK9bE7Hxco6aYkZAn9hmHgbaNj3Jz",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4509,
@@ -1376,7 +1376,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4509.png",
       "meUrl": "https://magiceden.io/item-details/BYQXm87spJDQUQvp9FmYsvYvAm33MrjZWmc2F45YVwRU",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4544,
@@ -1408,7 +1408,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4544.png",
       "meUrl": "https://magiceden.io/item-details/3aT4QZd8BQR8n8YZgcXAxCc5Gktye7eZxayU85wHcTF5",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4575,
@@ -1450,7 +1450,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4575.png",
       "meUrl": "https://magiceden.io/item-details/2wArabgGHrXtaQqS5ZQFrddWyEWtAL6A11DHe4VZvSz5",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4576,
@@ -1487,7 +1487,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4576.png",
       "meUrl": "https://magiceden.io/item-details/3bn4LpnUL4W5snNMtt94FLEGzdfmts4qn3Jz5HkBLEJ7",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4580,
@@ -1508,7 +1508,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4580.png",
       "meUrl": "https://magiceden.io/item-details/6kfJgJYdtPL1LfRCXh77VbLfSRMKAQMUDy9A8i55VqZv",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4836,
@@ -1550,7 +1550,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4836.png",
       "meUrl": "https://magiceden.io/item-details/EBN6B5iK1poV1pqZSZnfYRRUBfRwQu8PjQ8UdfBdxvmM",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4862,
@@ -1577,7 +1577,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4862.png",
       "meUrl": "https://magiceden.io/item-details/AhpaJGp2sWjQEEz8JTJ21Mro83jcAaBmPpCekDxxdAoT",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 4909,
@@ -1609,7 +1609,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/4909.png",
       "meUrl": "https://magiceden.io/item-details/2Ytx3Qp5Qev3S93T718fmpAK8ZVPBThyocwEpfziSsrp",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5091,
@@ -1641,7 +1641,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5091.png",
       "meUrl": "https://magiceden.io/item-details/CMHNwcDZuTyKu5qZtgNqVsGuTvx7Ey5XNUHz6NjLmDwf",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5340,
@@ -1673,7 +1673,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5340.png",
       "meUrl": "https://magiceden.io/item-details/DXQjWMVzbhGunEJGeHK1DbPKEdbNz2yLvs69nYfxfPSJ",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5364,
@@ -1720,7 +1720,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5364.png",
       "meUrl": "https://magiceden.io/item-details/5TGVpYrmje5sYyf9nRUHmML2VUEaNTsTC24cz53FbxNA",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5386,
@@ -1752,7 +1752,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5386.png",
       "meUrl": "https://magiceden.io/item-details/mRqT94K6oo3T3795XigTwzBGLLND4sjvzfsdv4PR3Dt",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5519,
@@ -1773,7 +1773,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5519.png",
       "meUrl": "https://magiceden.io/item-details/13fkSUEvM4VEJBuX6No3PdDA4ahYpWeJgGD8a7bwWM8Q",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5566,
@@ -1805,7 +1805,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5566.png",
       "meUrl": "https://magiceden.io/item-details/FkryfWhjF9knHx3rUV357geZJLkwpCP8K3af49zdcoHL",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5784,
@@ -1842,7 +1842,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5784.png",
       "meUrl": "https://magiceden.io/item-details/HfFwS5gLcBJvawgCzNTKKBeMrqND4gCEpJMhJEbSMYtz",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5845,
@@ -1869,7 +1869,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5845.png",
       "meUrl": "https://magiceden.io/item-details/Dwc7Mm9r13Czb2kdoYnC6NDCsZ8XKrpow2dq8mnHeyU1",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 5943,
@@ -1921,7 +1921,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/5943.png",
       "meUrl": "https://magiceden.io/item-details/8wsLSdEMc3jMatLkU8Jr3nphpx62Km6m3FFNyGanafnW",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 6017,
@@ -1942,7 +1942,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6017.png",
       "meUrl": "https://magiceden.io/item-details/9RTEDULPG81crKHao3LWFuF7PjhFneVXDWtSq7UQXYdw",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 6198,
@@ -1963,7 +1963,7 @@
       "listPrice": 420.021,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6198.png",
       "meUrl": "https://magiceden.io/item-details/GtfaHTSodBZ8je4BZW3ket8B18Zvxwwq2U2GbbuyQWEq",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 6408,
@@ -1984,7 +1984,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6408.png",
       "meUrl": "https://magiceden.io/item-details/3M9UdJnCsrYvBuCLLB5LFcGL44wbdghSHSUbHFbJ1zFm",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 6616,
@@ -2021,7 +2021,7 @@
       "listPrice": 138.06,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6616.png",
       "meUrl": "https://magiceden.io/item-details/4ybsDZvURgL2nYMvpFQUQckqPQ7QT1fju5oVRyMKQqZc",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 6882,
@@ -2053,7 +2053,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6882.png",
       "meUrl": "https://magiceden.io/item-details/CXNLZncJJ7btw6LP84sWgzduamtebejWwSZmWPhW6vVc",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7092,
@@ -2085,7 +2085,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7092.png",
       "meUrl": "https://magiceden.io/item-details/E15vXEstzUrv26wkLvkLy8bpCo9nB8kjYZPb8tUJ5yZW",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7245,
@@ -2117,7 +2117,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7245.png",
       "meUrl": "https://magiceden.io/item-details/7j8Wt6XEHCzsYW5AVTAU6twju3tt9xXSu6yGTy1Vnwvz",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7421,
@@ -2144,7 +2144,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7421.png",
       "meUrl": "https://magiceden.io/item-details/6xQmEMRTHacZ9RZnNd9ZRozdLsgDC2NC9yKVQG17QhGX",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7577,
@@ -2176,7 +2176,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7577.png",
       "meUrl": "https://magiceden.io/item-details/3AmHkCWTmwHCcYsuagfPf2VRk8QLCgbcbh9fqQHVUnTe",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7592,
@@ -2208,7 +2208,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7592.png",
       "meUrl": "https://magiceden.io/item-details/7fCC6TzAV58svkfKxzX1sPAvQAD6gKQpaDjbFSbSGo2f",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7720,
@@ -2240,7 +2240,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7720.png",
       "meUrl": "https://magiceden.io/item-details/4hAvgcmDdYiEyXn5gJifPbp8Hc1jMXy2QSFdfxGzh2TZ",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7744,
@@ -2272,7 +2272,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7744.png",
       "meUrl": "https://magiceden.io/item-details/5Yvam4HipCwxdyMVYsfNgPYhtTA1svCaep2TQdD3B5zE",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7798,
@@ -2299,7 +2299,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7798.png",
       "meUrl": "https://magiceden.io/item-details/81foUy8EZ3zFaZ2s7dAWjmzKHsdmsHp1ghf4BPt4wv77",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 7972,
@@ -2331,7 +2331,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7972.png",
       "meUrl": "https://magiceden.io/item-details/JDtdTLzb7gpBBsQrKWDYX2NCfUZHkzATH2QX5dFrTL7H",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8003,
@@ -2358,7 +2358,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8003.png",
       "meUrl": "https://magiceden.io/item-details/3p1dGyvbCMiA8pAncAaMadBFuzkL4X4pxfYsrKdCRjpC",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8086,
@@ -2385,7 +2385,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8086.png",
       "meUrl": "https://magiceden.io/item-details/2UH62SurvrRHTtEAr2aKC42nw4BN87uTTf8289c3zAvz",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8169,
@@ -2417,7 +2417,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8169.png",
       "meUrl": "https://magiceden.io/item-details/J4cHp4y4VGE8R2mf8r6YeJowo4oKjMZK6wvkyCWQZfAV",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8177,
@@ -2449,7 +2449,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8177.png",
       "meUrl": "https://magiceden.io/item-details/kqvb9REWTiNtsbqRd2BQ6hP3b2jVG7y8L1dCZtAqTGR",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8396,
@@ -2481,7 +2481,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8396.png",
       "meUrl": "https://magiceden.io/item-details/2Caf1k2CSp1yDRb5YpXGWD6vHPRGzvqdA8f3t8fbG4kA",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8566,
@@ -2513,7 +2513,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8566.png",
       "meUrl": "https://magiceden.io/item-details/F5Us8HsZoWLwfvDoGGJWvW2G5JdgyLw87ssrbrFYbhNn",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8634,
@@ -2545,7 +2545,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8634.png",
       "meUrl": "https://magiceden.io/item-details/CypccztsyD8gHGYLB2BBDQNCH5MsHkRoTjERWad71rwW",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8644,
@@ -2572,7 +2572,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8644.png",
       "meUrl": "https://magiceden.io/item-details/BKfGgoRx1u1zw4Gc1NbvcsdvL12Zhxq4KCCWeQKxP6RM",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 8902,
@@ -2599,7 +2599,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/8902.png",
       "meUrl": "https://magiceden.io/item-details/BgnCeuZbyGkptFSzPrP2RVxaK58j2WJWPj1uDf4CxNN7",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9031,
@@ -2631,7 +2631,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9031.png",
       "meUrl": "https://magiceden.io/item-details/694En1yPMLibpzF2ZXToJoFEkLAVTFh2787iReryEutF",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9175,
@@ -2652,7 +2652,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9175.png",
       "meUrl": "https://magiceden.io/item-details/7yAXKRNaxS1cnZs2hFRYieLTtbAu336bfkGnyZ1Lr8N2",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9184,
@@ -2679,7 +2679,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9184.png",
       "meUrl": "https://magiceden.io/item-details/2XumnV79nikK1WVGQCQuRH8iCVX6eWfPAijhZVWVCCq5",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9405,
@@ -2711,7 +2711,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9405.png",
       "meUrl": "https://magiceden.io/item-details/7b3JLBQAFhi2hARW4JabXq6pJakXoQATnfaiPyBGajih",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9592,
@@ -2738,7 +2738,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9592.png",
       "meUrl": "https://magiceden.io/item-details/HJ5igKjFSNqDWUwyvLxM96yUeo3ZpkURkzNmFXdUBd2h",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9595,
@@ -2770,7 +2770,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9595.png",
       "meUrl": "https://magiceden.io/item-details/J87H6aa37YqXWcBJ184KxM22jdz1Sc4aGyQbNxoq3wtr",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9760,
@@ -2802,7 +2802,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9760.png",
       "meUrl": "https://magiceden.io/item-details/FADSDuHnwNJM7ZjFBTfX92h85RwA4fyZ5h7PgsCYT9Wg",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9857,
@@ -2829,7 +2829,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9857.png",
       "meUrl": "https://magiceden.io/item-details/DQR6FhoBdRSzM9rLNtAaZ3yrttzvWy5w9twGJEPvUjbQ",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9864,
@@ -2866,7 +2866,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9864.png",
       "meUrl": "https://magiceden.io/item-details/HrNukt8VeBCVxinbYP571Vhy36ehGgfwnLtVLZqsE5yV",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     },
     {
       "num": 9937,
@@ -2893,7 +2893,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/9937.png",
       "meUrl": "https://magiceden.io/item-details/75GM9UAvB393ZAu9QrWgm2Wu4YySQEVVsWmwwdrpzqfg",
-      "syncedAt": 1792318597562
+      "syncedAt": 1792747380803
     }
   ]
 }

@@ -30,7 +30,7 @@ const log = (s = '') => { console.log(s); out.push(s); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function rpc(method, params, bucket) {
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 9; i++) {
     const res = await fetch(RPC, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jsonrpc: '2.0', id: 'spike', method, params }),
@@ -42,7 +42,7 @@ async function rpc(method, params, bucket) {
       return j.result;
     }
     if (res.status !== 429 && res.status < 500) throw new Error(`${method} HTTP ${res.status}`);
-    await sleep(500 * 2 ** i);
+    await sleep(Math.min(30000, 1000 * 2 ** i));
   }
   throw new Error(`${method} retries exhausted`);
 }
@@ -144,7 +144,7 @@ async function backfillSample(assets) {
 
   // 2a. Signature counts only (1 credit per 1000 sigs) -> cost model.
   const t0 = Date.now();
-  const sigLists = await pmap(randomSample, 8, (m) => allSignatures(m));
+  const sigLists = await pmap(randomSample, 2, (m) => allSignatures(m).catch(() => []));
   const counts = sigLists.map((l) => l.length).sort((a, b) => a - b);
   const total = counts.reduce((a, b) => a + b, 0);
   const avg = total / counts.length;
@@ -157,7 +157,7 @@ async function backfillSample(assets) {
   const kinds = {}; const marketCount = {}; let parsed = 0, sales = 0;
   for (const list of sigLists.slice(0, 10)) {
     if (Date.now() > DEADLINE) break;
-    const txs = await pmap(list.slice(0, MAX_TX_PER_MINT), 8, (s) => getTx(s.signature).catch(() => null));
+    const txs = await pmap(list.slice(0, MAX_TX_PER_MINT), 3, (s) => getTx(s.signature).catch(() => null));
     for (const tx of txs) {
       if (!tx) continue; parsed++;
       const progs = [...new Set(tx.transaction.message.instructions.map((ix) => ix.programId))].map((p) => MARKETS[p] || p.slice(0, 6)).join('+');
@@ -179,7 +179,7 @@ async function backfillSample(assets) {
     const sigs = await allSignatures(sk.mint);
     if (sigs.length > 300) continue;
     checked++;
-    const txs = await pmap(sigs, 8, (s) => getTx(s.signature).catch(() => null));
+    const txs = await pmap(sigs, 3, (s) => getTx(s.signature).catch(() => null));
     const found = [];
     for (const tx of txs) { const p = parseSale(tx, sk.mint); if (p?.kind === 'sale') found.push({ ...p, ts: tx.blockTime * 1000 }); }
     for (const k of sk.sales) {

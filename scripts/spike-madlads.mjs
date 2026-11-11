@@ -127,56 +127,73 @@ function parseSale(tx, mint) {
   return { kind: 'sale', price: +paid.toFixed(2), market: [...programs].join('+') || '?', from, to };
 }
 
+async function pmap(items, n, fn) {
+  const res = new Array(items.length); let i = 0;
+  await Promise.all(Array.from({ length: n }, async () => { while (i < items.length) { const k = i++; res[k] = await fn(items[k], k); } }));
+  return res;
+}
+const getTx = (sig) => rpc('getTransaction', [sig, { maxSupportedTransactionVersion: 0, encoding: 'jsonParsed' }], 'tx');
+const DEADLINE = Date.now() + 40 * 60000;
+const MAX_TX_PER_MINT = 150;
+
 async function backfillSample(assets) {
   const known = JSON.parse(fs.readFileSync(new URL('../skulls-data.json', import.meta.url), 'utf8')).skulls;
   const skullSample = known.filter((s) => s.sales?.length).slice(0, SAMPLE_SKULLS);
   const pool = assets.filter((a) => !a.burnt);
-  const randomSample = [];
-  for (let i = 0; i < SAMPLE_RANDOM; i++) randomSample.push(pool[Math.floor(Math.random() * pool.length)].id);
+  const randomSample = Array.from({ length: SAMPLE_RANDOM }, () => pool[Math.floor(Math.random() * pool.length)].id);
 
+  // 2a. Signature counts only (1 credit per 1000 sigs) -> cost model.
   const t0 = Date.now();
-  let totalSigs = 0, sales = 0, unsure = 0;
-  const marketCount = {};
-  // Random mints: count signatures only (cost model) + parse all their txs.
-  for (const mint of randomSample) {
-    const sigs = await allSignatures(mint);
-    totalSigs += sigs.length;
-    for (const s of sigs) {
-      const tx = await rpc('getTransaction', [s.signature, { maxSupportedTransactionVersion: 0, encoding: 'jsonParsed' }], 'tx');
-      const p = parseSale(tx, mint);
-      if (p?.kind === 'sale') { sales++; marketCount[p.market] = (marketCount[p.market] || 0) + 1; }
-      if (p?.kind === 'sale?') unsure++;
-    }
-  }
-  const avgSigs = totalSigs / randomSample.length;
+  const sigLists = await pmap(randomSample, 8, (m) => allSignatures(m));
+  const counts = sigLists.map((l) => l.length).sort((a, b) => a - b);
+  const total = counts.reduce((a, b) => a + b, 0);
+  const avg = total / counts.length;
   log('');
   log('## 2. Backfill cost (plain RPC)');
-  log(`- random sample: ${randomSample.length} mints, ${totalSigs} txs (avg ${avgSigs.toFixed(1)}/mint), ${sales} sales, ${unsure} unclear, time ${((Date.now() - t0) / 1000).toFixed(0)}s`);
-  log(`- sales by market: ${JSON.stringify(marketCount)}`);
-  const est = Math.round(10000 * (avgSigs + 1));
-  log(`- **estimated full backfill: ~${est.toLocaleString('en')} credits** (1 sig page + 1 getTransaction per tx, × 10k mints)`);
+  log(`- ${counts.length} random mints: ${total} txs, avg ${avg.toFixed(0)}/mint, median ${counts[counts.length >> 1]}, max ${counts[counts.length - 1]} (${((Date.now() - t0) / 1000).toFixed(0)}s)`);
+  log(`- **getTransaction for every tx × 10k mints ≈ ${Math.round(10000 * avg).toLocaleString('en')} credits**`);
 
-  // Skull mints: compare parser with known sales from skulls-data.json.
-  let match = 0, missed = 0, extra = 0, priceOff = 0;
+  // What are these txs? Parse up to MAX_TX_PER_MINT per mint for the first 10 mints.
+  const kinds = {}; const marketCount = {}; let parsed = 0, sales = 0;
+  for (const list of sigLists.slice(0, 10)) {
+    if (Date.now() > DEADLINE) break;
+    const txs = await pmap(list.slice(0, MAX_TX_PER_MINT), 8, (s) => getTx(s.signature).catch(() => null));
+    for (const tx of txs) {
+      if (!tx) continue; parsed++;
+      const progs = [...new Set(tx.transaction.message.instructions.map((ix) => ix.programId))].map((p) => MARKETS[p] || p.slice(0, 6)).join('+');
+      kinds[progs] = (kinds[progs] || 0) + 1;
+    }
+    const mint = randomSample[sigLists.indexOf(list)];
+    for (const tx of txs) { const p = parseSale(tx, mint); if (p?.kind === 'sale') { sales++; marketCount[p.market] = (marketCount[p.market] || 0) + 1; } }
+    console.log(`  progress: parsed ${parsed}`);
+  }
+  const topKinds = Object.entries(kinds).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  log(`- parsed ${parsed} txs of 10 mints: ${sales} sales, by market ${JSON.stringify(marketCount)}`);
+  log(`- most common top-level programs: ${topKinds.map(([k, v]) => `${k}=${v}`).join(', ')}`);
+
+  // 2b. Parser vs known Skull sales (only mints with <= 300 txs, to stay in budget).
+  let match = 0, missed = 0, extra = 0, priceOff = 0, checked = 0;
   const notes = [];
   for (const sk of skullSample) {
+    if (Date.now() > DEADLINE) break;
     const sigs = await allSignatures(sk.mint);
+    if (sigs.length > 300) continue;
+    checked++;
+    const txs = await pmap(sigs, 8, (s) => getTx(s.signature).catch(() => null));
     const found = [];
-    for (const s of sigs) {
-      const tx = await rpc('getTransaction', [s.signature, { maxSupportedTransactionVersion: 0, encoding: 'jsonParsed' }], 'tx');
-      const p = parseSale(tx, sk.mint);
-      if (p?.kind === 'sale') found.push({ ...p, ts: tx.blockTime * 1000 });
-    }
+    for (const tx of txs) { const p = parseSale(tx, sk.mint); if (p?.kind === 'sale') found.push({ ...p, ts: tx.blockTime * 1000 }); }
     for (const k of sk.sales) {
       const f = found.find((x) => Math.abs(x.ts - k.timestamp) < 120000);
-      if (!f) { missed++; if (notes.length < 8) notes.push(`missed #${sk.num} ${new Date(k.timestamp).toISOString().slice(0, 10)} ${k.priceSol} ${k.source}`); continue; }
+      if (!f) { missed++; if (notes.length < 10) notes.push(`missed #${sk.num} ${new Date(k.timestamp).toISOString().slice(0, 10)} ${k.priceSol} ${k.source}`); continue; }
       match++;
-      if (Math.abs(f.price - k.priceSol) / k.priceSol > 0.03) { priceOff++; if (notes.length < 8) notes.push(`price #${sk.num}: parser ${f.price} vs known ${k.priceSol} (${f.market}${f.approx ? ', ' + f.approx : ''})`); }
+      const ratio = f.price / k.priceSol;
+      if (Math.abs(ratio - 1) > 0.03) { priceOff++; if (notes.length < 10) notes.push(`price #${sk.num}: parser ${f.price} vs known ${k.priceSol}, ratio ${ratio.toFixed(3)} (${f.market}${f.approx ? ', ' + f.approx : ''})`); }
     }
     extra += found.filter((f) => !sk.sales.some((k) => Math.abs(f.ts - k.timestamp) < 120000)).length;
+    console.log(`  skulls checked: ${checked}`);
   }
   log('');
-  log(`## 2b. Parser vs known Skull sales (${skullSample.length} Skulls)`);
+  log(`## 2b. Parser vs known Skull sales (${checked} Skulls with <=300 txs)`);
   log(`- matched ${match}, missed ${missed}, extra (parser-only) ${extra}, price off >3%: ${priceOff}`);
   for (const n of notes) log(`  - ${n}`);
 }

@@ -2,24 +2,35 @@ name: Update Skulls Data
 
 on:
   schedule:
+    # Daily full sync: reads every Skull's history (~9,900 Helius credits).
     - cron: '17 4 * * *'
+    # Hourly quick sync: 1-credit check per Skull, full read only for Skulls
+    # with new on-chain activity (~100 credits on a quiet hour).
+    - cron: '47 * * * *'
   workflow_dispatch:
     inputs:
       debug_only_target:
-        description: 'Debug: restrict to DEBUG_MINT and skip writing/committing skulls-data.json'
+        description: 'Debug: re-read DEBUG_MINT (#1792) history and compare with the file, without writing or committing'
         type: boolean
         default: false
 
 permissions:
   contents: write
 
+# Never let two runs race to push skulls-data.json.
+concurrency:
+  group: update-skulls
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      # Scheduled runs always use main. A manual run uses the branch it was
+      # started from, so a fix can be tried on a branch before it is merged.
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref_name || 'main' }}
 
       - uses: actions/setup-node@v4
         with:
@@ -27,10 +38,13 @@ jobs:
 
       - name: Generate skulls-data.json
         env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
           DEBUG_ONLY_TARGET: ${{ inputs.debug_only_target && '1' || '' }}
+          FULL_SYNC: ${{ github.event.schedule == '17 4 * * *' && '1' || '' }}
         run: node scripts/generate-skulls-data.mjs
 
       - name: Commit and push if changed
+        if: ${{ !inputs.debug_only_target }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

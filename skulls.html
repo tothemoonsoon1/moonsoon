@@ -320,11 +320,38 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
   .sh-num{width:auto;}
 }
 
+/* ---- Compact page header: keep the Skulls above the fold ---- */
+.nav{padding:18px 72px;}
+.sk-wrap{position:relative;padding:18px 72px 90px;}
+.view-toggle{position:absolute;top:18px;right:72px;margin-bottom:0;}
+.sk-header{margin-bottom:14px;padding-right:260px;}
+.kicker{margin-bottom:6px;font-size:11px;}
+.sk-title{font-size:28px;margin-bottom:6px;}
+.sk-desc{font-size:14px;line-height:1.5;max-width:760px;}
+.stats-bar{gap:0;margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.stat-card{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;min-width:140px;padding:10px 18px;background:none;border:none;border-radius:0;border-right:1px solid var(--border);}
+.stat-card:last-child{border-right:none;}
+.stat-label{margin-bottom:0;font-size:10.5px;}
+.stat-val{font-size:18px;}
+.stat-sub{margin-top:0;font-size:11.5px;}
+.controls{margin-bottom:16px;padding:10px 14px;}
+.sh-chart-card{padding:12px 18px 8px;margin-bottom:14px;}
+.sh-price-note{margin-top:8px;padding:0;border:none;max-width:760px;font-size:12.5px;}
+.sh-price-note summary{cursor:pointer;color:var(--text-muted);font-weight:600;width:fit-content;}
+.sh-price-note summary:hover{color:var(--text);}
+.sh-price-note[open] summary{margin-bottom:4px;}
+.tp-tab{font-size:10.5px;letter-spacing:.02em;padding:9px 2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tp-tab .dot{top:4px;right:4px;width:5px;height:5px;}
+
 @media(max-width:768px){
-  .nav{padding:20px 20px;}
-  .sk-wrap{padding:40px 20px 60px;}
+  .nav{padding:14px 20px;}
+  .sk-wrap{padding:14px 20px 60px;}
+  .view-toggle{position:static;margin-bottom:12px;}
+  .sk-header{padding-right:0;}
+  .stat-card{flex:1 1 50%;border-bottom:1px solid var(--border);}
+  .stat-card:nth-child(2n){border-right:none;}
   .site-footer{padding:36px 20px;}
-  .sk-title{font-size:30px;}
+  .sk-title{font-size:24px;}
   .controls{flex-direction:column;align-items:stretch;}
 }
 </style>
@@ -419,7 +446,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Sale History</h2>
           <div class="sk-desc">Every recorded on-chain sale across all 99 Skulls — price, marketplace and date.</div>
-          <div class="sh-price-note"><strong>How prices are shown:</strong> the listing or offer price, before fees. Marketplaces add a 2% fee and the 4.2% Mad Lads royalty (6.2% total), so Tensor and Magic Eden show about 6.2% more when a buyer took a listing, and about 6.2% less when a seller accepted an offer.</div>
+          <details class="sh-price-note"><summary>&#9432; How prices are shown</summary>The listing or offer price, before fees. Marketplaces add a 2% fee and the 4.2% Mad Lads royalty (6.2% total), so Tensor and Magic Eden show about 6.2% more when a buyer took a listing, and about 6.2% less when a seller accepted an offer.</details>
         </div>
 
         <div class="stats-bar">
@@ -996,7 +1023,7 @@ function renderHistory(){
 
   list.innerHTML = pageRows.map(function(s){
     var thumb = s.image
-      ? '<img class="sh-thumb" src="'+escAttr(s.image)+'" alt="Skull #'+s.num+'" loading="lazy">'
+      ? '<img class="sh-thumb" src="'+thumbUrl(s)+'" data-full="'+escAttr(s.image)+'" onerror="thumbFallback(this)" alt="Skull #'+s.num+'" width="44" height="44" loading="lazy" decoding="async">'
       : '<div class="sh-thumb"></div>';
     var pillClass = s.marketplace === 'Magic Eden' ? 'me' : 'tensor';
     return '<a class="sh-row" href="'+escAttr(s.link)+'" target="_blank" rel="noopener noreferrer">'+

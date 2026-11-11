@@ -66,6 +66,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .theme-toggle{width:44px;height:24px;border-radius:12px;background:var(--toggle-track);position:relative;cursor:pointer;transition:background .2s ease;border:none;padding:0;}
 .theme-toggle .knob{width:18px;height:18px;border-radius:50%;background:var(--accent);position:absolute;top:3px;left:23px;transition:left .2s ease;}
 [data-theme="light"] .theme-toggle .knob{left:3px;}
+.theme-toggle .knob{display:flex;align-items:center;justify-content:center;color:var(--bg);}
+.theme-toggle svg{width:12px;height:12px;fill:currentColor;}
+.theme-toggle .ic-sun,[data-theme="light"] .theme-toggle .ic-moon{display:none;}
+[data-theme="light"] .theme-toggle .ic-sun{display:block;}
 .btn{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--btn-text);background:var(--btn-bg);padding:11px 22px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;display:inline-block;}
 .btn-lg{font-size:15px;padding:17px 32px;}
 .btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border);}
@@ -73,7 +77,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 
 /* ---- Hero ---- */
 .hero{padding:70px 72px 110px;background:radial-gradient(ellipse 1100px 600px at 72% -15%,var(--accent-glow),transparent),var(--bg);}
-.hero-inner{display:flex;gap:80px;align-items:center;justify-content:center;flex-wrap:wrap;max-width:1280px;margin:0 auto;}
+.hero-inner{display:flex;gap:80px;align-items:center;justify-content:space-between;flex-wrap:wrap;max-width:1296px;margin:0 auto;}
 .hero-copy{flex:1 1 0;min-width:380px;max-width:520px;}
 .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);border:1px solid var(--accent-border);padding:7px 14px;border-radius:20px;margin-bottom:28px;letter-spacing:0.05em;}
 .hero-kicker{font-size:20px;font-weight:600;color:var(--text-muted);margin-bottom:14px;}
@@ -95,7 +99,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 
 /* ---- About / Connect / Footer ---- */
 .explore{padding:56px 72px;background:var(--bg);border-top:1px solid var(--border);}
-.explore-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1280px;margin:0 auto;}
+.explore-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1296px;margin:0 auto;}
 .explore-card{display:flex;flex-direction:column;gap:8px;padding:22px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;text-decoration:none;color:var(--text);transition:border-color .15s ease,transform .15s ease;}
 .explore-card:hover{border-color:var(--accent-border);transform:translateY(-2px);}
 .explore-k{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.15em;color:var(--accent);}
@@ -104,8 +108,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .explore-d{font-size:14px;line-height:1.55;color:var(--text-muted);flex:1;}
 .explore-m{margin-top:10px;padding-top:14px;border-top:1px solid var(--card-border);font-size:13px;color:var(--text-muted);}
 .explore-m b{font-size:18px;font-weight:700;color:var(--text);margin-right:4px;font-variant-numeric:tabular-nums;}
-.about{padding:100px 72px;background:var(--surface);border-top:1px solid var(--border);}
-.about-inner{display:flex;gap:80px;flex-wrap:wrap;max-width:1280px;margin:0 auto;}
+.about{padding:72px 72px;background:var(--surface);border-top:1px solid var(--border);}
+.about-inner{display:flex;gap:80px;flex-wrap:wrap;max-width:1296px;margin:0 auto;}
 .about-label{flex:0 0 auto;width:200px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.15em;}
 .about-body{flex:1 1 0;min-width:320px;max-width:680px;font-size:17px;line-height:1.85;color:var(--text-muted);}
 .about-body p+p{margin-top:20px;}
@@ -210,7 +214,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
       <a class="nav-tab" href="/mica.html">EU Licenses</a>
     </div>
     <div class="nav-right">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" onclick="toggleTheme()"><span class="knob"></span></button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" onclick="toggleTheme()"><span class="knob"><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button>
       <a class="btn btn-ghost" href="https://x.com/m00nsoon" target="_blank" rel="noopener noreferrer">Follow on X</a>
     </div>
   </nav>
@@ -285,7 +289,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
     <div class="cl-wrap">
       <div class="cl-header">
         <div class="kicker">SEEKER SEASON 2</div>
-        <div class="cl-title">Seeker Checklist</div>
+        <h1 class="cl-title">Seeker Checklist</h1>
         <div class="cl-desc">Since launch, well over a billion SKR has already gone out to tens of thousands of wallets, and a big chunk of it is already staked. This checklist keeps you on top of the on-chain activity that actually counts toward round 2 of the airdrop.</div>
       </div>
       <div class="progress-card">
@@ -491,8 +495,11 @@ function loadExploreFloor(){
     }
   }).catch(function(){});
 }
+var HOME_TITLE=document.title;
+var CHECKLIST_TITLE='Seeker Checklist: Season 2 airdrop tasks | tothemoonsoon';
 function goHome(){
   syncExplore();
+  document.title=HOME_TITLE;
   document.getElementById('home-view').style.display='block';
   document.getElementById('checklist-view').style.display='none';
   document.getElementById('tab-home').classList.add('active');
@@ -504,6 +511,7 @@ function goHome(){
 window.goHome = goHome;
 
 function goChecklist(){
+  document.title=CHECKLIST_TITLE;
   document.getElementById('home-view').style.display='none';
   document.getElementById('checklist-view').style.display='block';
   document.getElementById('tab-checklist').classList.add('active');

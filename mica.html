@@ -82,6 +82,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .theme-toggle{width:44px;height:24px;border-radius:12px;background:var(--toggle-track);position:relative;cursor:pointer;transition:background .2s ease;border:none;padding:0;}
 .theme-toggle .knob{width:18px;height:18px;border-radius:50%;background:var(--accent);position:absolute;top:3px;left:23px;transition:left .2s ease;}
 [data-theme="light"] .theme-toggle .knob{left:3px;}
+.theme-toggle .knob{display:flex;align-items:center;justify-content:center;color:var(--bg);}
+.theme-toggle svg{width:12px;height:12px;fill:currentColor;}
+.theme-toggle .ic-sun,[data-theme="light"] .theme-toggle .ic-moon{display:none;}
+[data-theme="light"] .theme-toggle .ic-sun{display:block;}
 .btn{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--btn-text);background:var(--btn-bg);padding:11px 22px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;display:inline-block;}
 .btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border);}
 .btn-ghost:hover{border-color:var(--accent-border);color:var(--accent);}
@@ -195,7 +199,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
       <a class="nav-tab active" href="/mica.html" aria-current="page">EU Licenses</a>
     </div>
     <div class="nav-right">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" onclick="toggleTheme()"><span class="knob"></span></button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" onclick="toggleTheme()"><span class="knob"><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button>
       <a class="btn btn-ghost" href="https://x.com/m00nsoon" target="_blank" rel="noopener noreferrer">Follow on X</a>
     </div>
   </nav>

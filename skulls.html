@@ -319,6 +319,23 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .ctl-traits::after{content:"";width:7px;height:7px;border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);transform:rotate(45deg) translateY(-2px);}
 .ctl-traits[aria-expanded="true"]{border-color:var(--accent);background:var(--accent-tint);}
 .ctl-traits[aria-expanded="true"]::after{transform:rotate(-135deg) translateY(-2px);}
+/* ---- Desktop cards: equal height, only notable traits, larger chips ---- */
+@media(min-width:641px){
+  .sk-card{display:flex;flex-direction:column;}
+  .sk-body{display:flex;flex-direction:column;flex:1;}
+  .sk-links{margin-top:auto;padding-top:12px;}
+  .sk-traits .sk-trait:not(.t-rare):not(.t-uncommon){display:none;}
+  .sk-traits:not(:has(.t-rare,.t-uncommon)){display:none;}
+  .sk-trait{display:inline-flex;align-items:center;gap:4px;min-height:28px;font-size:12px;padding:4px 9px;}
+}
+/* ---- Phone and small tablet: view switch sits under the page header ---- */
+@media(max-width:768px){
+  .sk-wrap{display:flex;flex-direction:column;}
+  #view-gallery,#view-history{display:contents;}
+  .sk-wrap>*,#view-gallery>*,#view-history>*{min-width:0;}
+  .sk-header{order:-2;}
+  .view-toggle{order:-1;margin-bottom:14px;}
+}
 /* ---- Phone: compact 2-column gallery, traits behind a toggle, sales below the grid ---- */
 @media(max-width:640px){
   .view-toggle{display:flex;}
@@ -1047,8 +1064,8 @@ window.renderHistory = renderHistory;
 
 function switchView(view){
   var isHistory = view === 'history';
-  document.getElementById('view-gallery').style.display = isHistory ? 'none' : 'block';
-  document.getElementById('view-history').style.display = isHistory ? 'block' : 'none';
+  document.getElementById('view-gallery').style.display = isHistory ? 'none' : '';
+  document.getElementById('view-history').style.display = isHistory ? '' : 'none';
   document.getElementById('view-toggle-gallery').classList.toggle('active', !isHistory);
   document.getElementById('view-toggle-history').classList.toggle('active', isHistory);
   if(location.hash !== '#'+view){ location.hash = view; }

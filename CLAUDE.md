@@ -93,6 +93,7 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 ## Design system
 - Strony w menu: Home (`index.html`), Skulls (`skulls.html`), Seeker Checklist (`checklist.html`), EU Licenses (`mica.html`). Nawigacja jest identyczna na wszystkich czterech — zmieniaj ją wszędzie naraz.
 - Home czyta postęp checklisty z `localStorage` (`moonsoon_checklist_summary`, zapisywany przez `checklist.html`); stary adres `/#checklist` przekierowuje na `/checklist.html`
+- Wspólne style (reset, nawigacja, przyciski, przełącznik motywu, fokus, stopka) są w `/assets/css/base.css` — zmieniaj je tam, nie w stronach. Style specyficzne dla strony zostają inline w jej `<style>`. Po zmianie `base.css` podbij `?v=` tak jak przy `tokens.css`.
 - Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla czterech stron. Nie kopiuj `:root` do stron.
 - UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich czterech stronach.
 - Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#0a8fb5`); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`

@@ -366,6 +366,45 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
   .sk-title{font-size:24px;}
   .controls{flex-direction:column;align-items:stretch;}
 }
+.ctl-traits{display:none;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--text);background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:10px 14px;cursor:pointer;align-items:center;justify-content:center;gap:8px;}
+.ctl-traits::after{content:"";width:7px;height:7px;border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);transform:rotate(45deg) translateY(-2px);}
+.ctl-traits[aria-expanded="true"]{border-color:var(--accent);background:var(--accent-tint);}
+.ctl-traits[aria-expanded="true"]::after{transform:rotate(-135deg) translateY(-2px);}
+/* ---- Phone: compact 2-column gallery, traits behind a toggle, sales below the grid ---- */
+@media(max-width:640px){
+  .view-toggle{display:flex;}
+  .view-toggle-btn{flex:1;min-height:44px;}
+  .stat-card{min-width:0;}
+  .stat-card:nth-last-child(-n+2){border-bottom:none;}
+  .stat-label{font-size:11px;}
+  .stat-sub{font-size:12px;}
+  .controls{flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:12px;}
+  .ctl-search{flex:1 1 100%;}
+  .ctl-input,.ctl-select,.ctl-traits{min-height:44px;font-size:16px;}
+  .ctl-select{flex:1 1 0;min-width:0;}
+  .ctl-traits{display:inline-flex;flex:1 1 0;font-size:14px;white-space:nowrap;}
+  .ctl-toggle{flex:1 1 100%;min-height:44px;font-size:14px;}
+  .ctl-toggle input{width:22px;height:22px;}
+  .sk-layout>.tp{display:none;}
+  body.tp-open .sk-layout>.tp:not([hidden]){display:flex;}
+  .sk-layout{gap:0;}
+  .sk-layout>.tp{grid-row:1;margin-bottom:14px;}
+  .sk-layout>div{grid-row:2;}
+  .sk-layout>.sf{grid-row:3;margin-top:20px;}
+  .tp-tab{min-height:44px;font-size:12px;}
+  .tp-row{min-height:52px;}
+  .tp-sub,.sf-sub,.sf-mkt,.pc{font-size:12px;}
+  .tp-clear,.sf-all{font-size:13px;padding:10px 0;}
+  .sf-note{font-size:12px;}
+  .tp-pill{min-height:36px;font-size:13px;}
+  .sk-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .sk-body{padding:10px 10px 12px;}
+  .sk-num{margin-bottom:4px;}
+  .sk-owner,.sk-traits,.sk-links,.sk-owner-badge{display:none;}
+  .sk-never-badge,.sk-listed-badge{top:6px;font-size:10px;}
+  .sk-never-badge{left:6px;}
+  .sk-listed-badge{right:6px;}
+}
 </style>
 </head>
 <body>
@@ -436,6 +475,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
             <option value="rarity">Rarest Traits First</option>
             <option value="owner">Group by Owner</option>
           </select>
+          <button class="ctl-traits" id="tp-toggle" type="button" aria-expanded="false" aria-controls="sk-trait-panel" onclick="this.setAttribute('aria-expanded',document.body.classList.toggle('tp-open'))">Filter by trait</button>
           <label class="ctl-toggle">
             <input type="checkbox" id="sk-never-only" onchange="applyFilters()">
             Never sold only

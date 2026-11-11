@@ -96,7 +96,8 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - Wspólne style (reset, nawigacja, przyciski, przełącznik motywu, fokus, stopka) są w `/assets/css/base.css` — zmieniaj je tam, nie w stronach. Style specyficzne dla strony zostają inline w jej `<style>`. Po zmianie `base.css` podbij `?v=` tak jak przy `tokens.css`.
 - Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla czterech stron. Nie kopiuj `:root` do stron.
 - UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich czterech stronach.
-- Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#0a8fb5`); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
+- Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#066682`, dobrany tak, by tekst miał kontrast co najmniej 4.5:1); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
+- Motyw jasny: każdy nowy kolor tekstu sprawdź też na jasnym tle (min. 4.5:1). Złoty tekst używa `--gold-text`, nie `--gold`. Motyw jest ustawiany skryptem w `<head>` przed arkuszami, żeby nie było mignięcia ciemnego tła.
 - Fonty: Space Grotesk (treść, nagłówki), JetBrains Mono (logo, kickery, etykiety)
 - Skala tekstu: 12, 13, 14, 15, 16, 18, 20, 24, 28px (+ hero 34/48). Minimum 12px, bez wartości połówkowych.
 - Promienie: 6 (znaczniki), 8 (przyciski, pola), 12 (wiersze), 14 (karty), 20 (pigułki)

@@ -98,7 +98,7 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich czterech stronach.
 - Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#0a8fb5`); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
 - Fonty: Space Grotesk (treść, nagłówki), JetBrains Mono (logo, kickery, etykiety)
-- Skala tekstu: 11, 12, 13, 14, 15, 16, 18, 20, 24, 28px (+ hero 34/48). Minimum 11px, bez wartości połówkowych.
+- Skala tekstu: 12, 13, 14, 15, 16, 18, 20, 24, 28px (+ hero 34/48). Minimum 12px, bez wartości połówkowych.
 - Promienie: 6 (znaczniki), 8 (przyciski, pola), 12 (wiersze), 14 (karty), 20 (pigułki)
 - Nagłówek strony: kicker tekstowy (mono, akcent) + tytuł 28px (24px na telefonie) + opis, do lewej
 - Telefon: nawigacja sticky w dwóch rzędach, cele dotykowe min. 44px

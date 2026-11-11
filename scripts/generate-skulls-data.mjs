@@ -413,11 +413,20 @@ async function main() {
   // Only rewrite the file when something visible changed; leaving syncedAt
   // behind on quiet nights is free, since the next run's Helius call still
   // stops at the first already-known transaction.
+  //
+  // Exception: a quick sync that paid for full reads must save the new
+  // syncedAt even when nothing visible changed. Bids placed on individual
+  // Skulls are on-chain transactions that touch the mint without changing
+  // anything we show; if syncedAt stayed behind, every later hourly run would
+  // see the same bids as "new" and pay 100 credits per Skull again.
   const visible = (list) => JSON.stringify(list.map(({ syncedAt, ...rest }) => rest));
-  if (visible(results) === visible([...skulls].sort((a, b) => (a.num ?? 0) - (b.num ?? 0)))) {
+  const nothingVisible = visible(results) === visible([...skulls].sort((a, b) => (a.num ?? 0) - (b.num ?? 0)));
+  const fullReads = skulls.length - skipped - failed;
+  if (nothingVisible && (FULL_SYNC || fullReads === 0)) {
     console.log('Nothing changed — leaving skulls-data.json as it is.');
     return;
   }
+  if (nothingVisible) console.log(`Nothing visible changed, but ${fullReads} Skulls were re-read — saving their sync time so the next quick sync skips them.`);
 
   fs.writeFileSync(DATA_FILE, JSON.stringify({ generatedAt: new Date(startedAt).toISOString(), skulls: results }, null, 2));
   console.log('Wrote skulls-data.json — safe to commit (no API key inside).');

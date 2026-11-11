@@ -164,14 +164,18 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sd-title{font-size:34px;font-weight:700;line-height:1.1;padding-right:44px;}
 .sd-sub{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;display:flex;flex-wrap:wrap;gap:6px 16px;}
 .sd-sub b{color:var(--text);}
+.sd-tip{cursor:help;}
 .sd-traits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .sd-trait{text-align:left;font-family:inherit;color:var(--text);background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:12px;padding:11px 12px;cursor:pointer;min-width:0;}
-.sd-trait:hover{border-color:var(--text-muted);}
+.sd-trait{transition:background .15s ease,border-color .15s ease,box-shadow .15s ease;}
 .sd-trait.t-rare{border-color:#ff4d8d;}
 .sd-trait.t-uncommon{border-color:#ff8a4c;}
+.sd-trait:hover,.sd-trait:focus-visible{background:rgba(127,127,127,.14);border-color:var(--text-muted);}
+.sd-trait.t-rare:hover,.sd-trait.t-rare:focus-visible{border-color:#ff4d8d;box-shadow:0 0 0 2px rgba(255,77,141,.35);}
+.sd-trait.t-uncommon:hover,.sd-trait.t-uncommon:focus-visible{border-color:#ff8a4c;box-shadow:0 0 0 2px rgba(255,138,76,.35);}
 .sd-trait-k{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);}
 .sd-trait-v{font-size:15px;font-weight:700;margin:3px 0 7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sd-trait-r{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-variant-numeric:tabular-nums;}
+.sd-trait-r{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
 .sd-tier{font-size:9.5px;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:5px;color:#fff;background:#6b7280;}
 .sd-tier.t-rare{background:#e63a78;}
 .sd-tier.t-uncommon{background:#e0702f;}
@@ -204,8 +208,9 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sk-traits{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px;}
 .sk-trait{font-size:10px;line-height:1.3;padding:3px 6px;border-radius:6px;border:1px solid var(--card-border);color:var(--text-muted);cursor:pointer;background:transparent;font-family:inherit;text-align:left;}
 .sk-trait b{color:var(--text);font-weight:600;}
-.sk-trait.rare{border-color:#9945FF;}
-.sk-trait:hover{border-color:var(--text-muted);}
+.sk-trait:hover{border-color:var(--text-muted);background:rgba(127,127,127,.14);}
+.sk-trait.rare,.sk-trait.rare:hover{border-color:#9945FF;}
+.sk-trait.rare:hover{box-shadow:0 0 0 1.5px rgba(153,69,255,.4);}
 .sk-layout{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:20px;align-items:start;}
 .sf{position:sticky;top:16px;border:1px solid var(--card-border);border-radius:14px;padding:14px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;gap:10px;}
 .sf-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;letter-spacing:.08em;}
@@ -247,6 +252,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .tp-clear{font-size:11px;color:var(--text-muted);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:inherit;}
 .tp-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
 .tp-tab{font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:9px 4px;border-radius:10px;border:1px solid var(--card-border);background:transparent;color:var(--text-muted);cursor:pointer;position:relative;}
+.tp-tab:hover{color:var(--text);border-color:var(--text-muted);}
 .tp-tab.active{color:var(--text);border-color:var(--text-muted);background:rgba(127,127,127,.12);}
 .tp-tab .dot{position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:#9945FF;}
 .tp-list{display:flex;flex-direction:column;gap:6px;overflow-y:auto;min-height:0;}
@@ -1147,8 +1153,8 @@ function renderSkullDetail(num){
   var sales = (s.sales || []).slice().sort(function(a,b){ return b.timestamp - a.timestamp; });
 
   var sub = [];
-  if(t){ sub.push('Rank <b>#'+rarityRanks()[s.num]+'</b> of '+total); }
-  if(sales.length){ sub.push('Held <b>'+fmtHeld(Date.now() - sales[0].timestamp)+'</b>'); }
+  if(t){ sub.push('<span class="sd-tip" title="Rarity rank among the 99 Skulls. Each of the 6 traits scores 1 / (number of Skulls sharing that value); the highest total is #1.">Rank <b>#'+rarityRanks()[s.num]+'</b> of '+total+' &#9432;</span>'); }
+  if(sales.length){ sub.push('<span class="sd-tip" title="Time since the last recorded sale ('+fmtDate(sales[0].timestamp)+'). Wallet-to-wallet transfers are not counted.">Since last sale <b>'+fmtHeld(Date.now() - sales[0].timestamp)+'</b> &#9432;</span>'); }
   else { sub.push('<b>Never sold</b>'); }
 
   var traitsHtmlStr = '';
@@ -1157,7 +1163,7 @@ function renderSkullDetail(num){
       var v = t[k] || 'None', n = (counts[k] && counts[k][v]) || 0, pct = n / total * 100, tier = traitTier(pct);
       return '<button class="sd-trait '+tier.cls+'" data-k="'+escAttr(k)+'" data-v="'+escAttr(v)+'" onclick="sdFilterTrait(this)" title="Show all '+n+' Skulls with '+escAttr(k)+': '+escAttr(v)+'">'+
         '<div class="sd-trait-k">'+escAttr(k)+'</div><div class="sd-trait-v">'+escAttr(v)+'</div>'+
-        '<div class="sd-trait-r"><span class="sd-tier '+tier.cls+'">'+tier.label+'</span>'+pct.toFixed(1)+'% &middot; '+n+' of '+total+'</div></button>';
+        '<div class="sd-trait-r"><span class="sd-tier '+tier.cls+'">'+tier.label+'</span>'+pct.toFixed(1)+'% &middot; '+n+'/'+total+'</div></button>';
     }).join('')+'</div></div>'+
     '<div class="sd-shared">All 99 share Type: Skull &middot; Expression: Inferno &middot; Gender: Male. Rarity is counted among Skulls only.</div>';
   }

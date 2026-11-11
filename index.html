@@ -111,6 +111,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 @keyframes skullFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-16px) rotate(1deg)}}
 
 /* ---- About / Connect / Footer ---- */
+.explore{padding:56px 72px;background:var(--bg);border-top:1px solid var(--border);}
+.explore-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1280px;margin:0 auto;}
+.explore-card{display:flex;flex-direction:column;gap:8px;padding:22px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;text-decoration:none;color:var(--text);transition:border-color .15s ease,transform .15s ease;}
+.explore-card:hover{border-color:var(--accent-border);transform:translateY(-2px);}
+.explore-k{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.15em;color:var(--accent);}
+.explore-t{font-size:20px;font-weight:700;}
+.explore-t span{color:var(--text-muted);font-weight:400;}
+.explore-d{font-size:14px;line-height:1.55;color:var(--text-muted);flex:1;}
+.explore-m{margin-top:10px;padding-top:14px;border-top:1px solid var(--card-border);font-size:13px;color:var(--text-muted);}
+.explore-m b{font-size:18px;font-weight:700;color:var(--text);margin-right:4px;font-variant-numeric:tabular-nums;}
 .about{padding:100px 72px;background:var(--surface);border-top:1px solid var(--border);}
 .about-inner{display:flex;gap:80px;flex-wrap:wrap;max-width:1280px;margin:0 auto;}
 .about-label{flex:0 0 auto;width:200px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.15em;}
@@ -187,6 +197,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
   .nav-tab.active{box-shadow:inset 0 -2px 0 var(--accent);}
   .hero{padding:50px 20px 70px;overflow:hidden;}
   .about,.connect{padding:60px 20px;}
+  .explore{padding:32px 20px;}
+  .explore-inner{grid-template-columns:minmax(0,1fr);gap:12px;}
   .site-footer{padding:36px 20px;}
   .cl-wrap{padding:40px 20px 60px;}
   .hero-title{font-size:34px;}
@@ -236,6 +248,29 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="explore" aria-label="Explore the site">
+      <div class="explore-inner">
+        <a class="explore-card" href="/skulls.html">
+          <span class="explore-k">MAD LADS</span>
+          <span class="explore-t">Skulls Gallery <span aria-hidden="true">&rarr;</span></span>
+          <span class="explore-d">All 99 Skulls in one place: owners, sale history and current listings.</span>
+          <span class="explore-m"><b id="ex-floor">99</b> <span id="ex-floor-label">Skulls</span></span>
+        </a>
+        <a class="explore-card" href="/#checklist" onclick="goChecklist();window.scrollTo(0,0);return false;">
+          <span class="explore-k">SEEKER SEASON 2</span>
+          <span class="explore-t">Seeker Checklist <span aria-hidden="true">&rarr;</span></span>
+          <span class="explore-d">The on-chain activity that counts toward round 2 of the SKR airdrop.</span>
+          <span class="explore-m"><b id="ex-done">0/0</b> <span>tasks done</span></span>
+        </a>
+        <a class="explore-card" href="/mica.html">
+          <span class="explore-k">EU REGULATION</span>
+          <span class="explore-t">EU Licenses <span aria-hidden="true">&rarr;</span></span>
+          <span class="explore-d">Which crypto exchanges are actually licensed in the EU, checked against regulator registers.</span>
+          <span class="explore-m"><b>MiCA</b> <span>and MiFID II status</span></span>
+        </a>
       </div>
     </section>
 
@@ -452,7 +487,22 @@ function calcUpdate(){
 }
 window.calcUpdate = calcUpdate;
 
+function syncExplore(){
+  var d=document.getElementById('cl-done'),t=document.getElementById('cl-total'),o=document.getElementById('ex-done');
+  if(d&&t&&o){ o.textContent=d.textContent+'/'+t.textContent; }
+}
+function loadExploreFloor(){
+  fetch('/skulls-data.json').then(function(r){ return r.json(); }).then(function(data){
+    var floor=null;
+    (data.skulls||[]).forEach(function(s){ if(s.listed && s.listPrice!=null && (floor==null || s.listPrice<floor)){ floor=s.listPrice; } });
+    if(floor!=null){
+      document.getElementById('ex-floor').textContent=floor+' SOL';
+      document.getElementById('ex-floor-label').textContent='floor price';
+    }
+  }).catch(function(){});
+}
 function goHome(){
+  syncExplore();
   document.getElementById('home-view').style.display='block';
   document.getElementById('checklist-view').style.display='none';
   document.getElementById('tab-home').classList.add('active');
@@ -488,6 +538,8 @@ if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','li
 renderChecklist();
 renderDapps();
 calcUpdate();
+syncExplore();
+loadExploreFloor();
 if(location.hash==='#checklist'){ goChecklist(); }
 
 })();

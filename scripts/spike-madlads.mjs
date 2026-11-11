@@ -215,10 +215,92 @@ async function webhookShape() {
   if (sale) log('- NFT_SALE event: `' + JSON.stringify(sale.events?.nft ? { ...sale.events.nft, nfts: sale.events.nft.nfts?.length } : sale.description) + '`');
 }
 
+// ---------- 4. Owner-chain walk (cheap backfill) ----------
+// Follow the token account that holds the NFT now, back through every
+// account that held it before. Bids/offers never touch the holder's token
+// account, so only real moves (sales, transfers, escrow listings) are read.
+const keysOf = (tx) => tx.transaction.message.accountKeys.map((k) => (typeof k === 'string' ? k : k.pubkey));
+function incoming(tx, mint, acct) {
+  const m = tx?.meta; if (!m) return null;
+  const keys = keysOf(tx);
+  const bal = (list, addr) => { const b = (list || []).find((x) => x.mint === mint && keys[x.accountIndex] === addr); return b ? Number(b.uiTokenAmount.amount) : 0; };
+  if (!(bal(m.preTokenBalances, acct) === 0 && bal(m.postTokenBalances, acct) > 0)) return null;
+  const src = (m.preTokenBalances || []).find((x) => x.mint === mint && Number(x.uiTokenAmount.amount) > 0 && keys[x.accountIndex] !== acct);
+  const dst = (m.postTokenBalances || []).find((x) => x.mint === mint && keys[x.accountIndex] === acct);
+  return { srcAcct: src ? keys[src.accountIndex] : null, from: src?.owner || null, to: dst?.owner };
+}
+async function walkMint(mint, budget = 3000) {
+  const start = credits.sigs + credits.tx;
+  const largest = await rpc('getTokenLargestAccounts', [mint], 'sigs');
+  let acct = largest.value.find((a) => a.uiAmount > 0)?.address;
+  let before;
+  const moves = [];
+  let hops = 0;
+  while (acct && hops < 100 && credits.sigs + credits.tx - start < budget) {
+    hops++;
+    let found = null, cursor = before;
+    outer: for (;;) {
+      const sigs = await rpc('getSignaturesForAddress', [acct, { limit: 100, ...(cursor ? { before: cursor } : {}) }], 'sigs');
+      for (const s of sigs) {
+        if (s.err) continue;
+        const tx = await getTx(s.signature);
+        const inc = incoming(tx, mint, acct);
+        if (inc) { found = { ...inc, sig: s.signature, ts: tx.blockTime * 1000, sale: parseSale(tx, mint) }; break outer; }
+        if (credits.sigs + credits.tx - start > budget) break outer;
+      }
+      if (sigs.length < 100) break;
+      cursor = sigs[sigs.length - 1].signature;
+    }
+    if (!found) break;
+    moves.push(found);
+    if (!found.srcAcct) break; // mint
+    acct = found.srcAcct; before = found.sig;
+  }
+  return { moves, cost: credits.sigs + credits.tx - start, hops, complete: !!moves.length && !moves[moves.length - 1].srcAcct };
+}
+async function chainSpike(assets) {
+  const known = JSON.parse(fs.readFileSync(new URL('../skulls-data.json', import.meta.url), 'utf8')).skulls;
+  const skulls = known.filter((s) => s.sales?.length).sort((a, b) => b.sales.length - a.sales.length).slice(0, 20);
+  const pool = assets.filter((a) => !a.burnt);
+  const randoms = Array.from({ length: 10 }, () => pool[Math.floor(Math.random() * pool.length)].id);
+  log('');
+  log('## 4. Owner-chain walk');
+  let match = 0, missed = 0, extra = 0, priceOff = 0; const ratios = []; const notes = []; const costs = [];
+  for (const sk of skulls) {
+    if (Date.now() > DEADLINE) break;
+    const r = await walkMint(sk.mint).catch((e) => ({ err: e.message }));
+    if (r.err) { notes.push(`#${sk.num} error ${r.err}`); continue; }
+    costs.push(r.cost);
+    const sales = r.moves.filter((m) => m.sale?.kind === 'sale');
+    for (const k of sk.sales) {
+      const f = sales.find((x) => Math.abs(x.ts - k.timestamp) < 120000);
+      if (!f) { missed++; if (notes.length < 12) notes.push(`missed #${sk.num} ${new Date(k.timestamp).toISOString().slice(0, 10)} ${k.priceSol} ${k.source}`); continue; }
+      match++; const ratio = f.sale.price / k.priceSol; ratios.push(ratio);
+      if (Math.abs(ratio - 1) > 0.08) { priceOff++; if (notes.length < 12) notes.push(`price #${sk.num}: ${f.sale.price} vs ${k.priceSol} (${f.sale.market})`); }
+    }
+    extra += sales.filter((f) => !sk.sales.some((k) => Math.abs(f.ts - k.timestamp) < 120000)).length;
+    console.log(`  #${sk.num}: hops ${r.hops}, moves ${r.moves.length}, sales ${sales.length}/${sk.sales.length} known, cost ${r.cost}, complete ${r.complete}`);
+  }
+  log(`- Skulls (20 most traded): matched ${match}, missed ${missed}, extra ${extra}, price off >8%: ${priceOff}`);
+  ratios.sort((a, b) => a - b);
+  if (ratios.length) log(`- price ratio parser/known: median ${ratios[ratios.length >> 1].toFixed(3)}`);
+  for (const n of notes) log(`  - ${n}`);
+  const rc = [];
+  for (const m of randoms) {
+    if (Date.now() > DEADLINE) break;
+    const r = await walkMint(m).catch(() => null);
+    if (!r) continue;
+    rc.push(r.cost);
+    console.log(`  random ${m.slice(0, 6)}: hops ${r.hops}, moves ${r.moves.length}, sales ${r.moves.filter((x) => x.sale?.kind === 'sale').length}, cost ${r.cost}, complete ${r.complete}`);
+  }
+  const avg = (a) => a.reduce((x, y) => x + y, 0) / (a.length || 1);
+  log(`- cost per mint: Skulls avg ${avg(costs).toFixed(0)}, random avg ${avg(rc).toFixed(0)} (max ${Math.max(0, ...rc)})`);
+  log(`- **estimated full backfill ≈ ${Math.round(10000 * avg(rc)).toLocaleString('en')} credits**`);
+}
+
 const t0 = Date.now();
 const assets = await snapshot();
-await backfillSample(assets);
-await webhookShape();
+await chainSpike(assets);
 log('');
 log(`## Credits used (approx): DAS ${credits.das}×10, sigs ${credits.sigs}, getTransaction ${credits.tx}, enhanced ${credits.enhanced}×100 → ~${(credits.das * 10 + credits.sigs + credits.tx + credits.enhanced * 100).toLocaleString('en')} — total time ${((Date.now() - t0) / 60000).toFixed(1)} min`);
 if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, out.join('\n') + '\n');

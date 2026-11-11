@@ -45,25 +45,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css?v=1">
 <style>
-:root{
-  --bg:#0b0d12;--surface:#0e1117;--border:#1a1f29;
-  --card-bg:#12161e;--card-border:#1e2430;
-  --text:#ffffff;--text-muted:#8b94a3;
-  --accent:#4fd8ff;--accent-border:rgba(79,216,255,0.35);--accent-tint:rgba(79,216,255,0.133);--accent-glow:rgba(79,216,255,0.27);
-  --btn-bg:#4fd8ff;--btn-text:#0b0d12;
-  --nft-gradient:linear-gradient(150deg,rgba(79,216,255,0.25),rgba(79,216,255,0) 60%),#12161e;
-  --toggle-track:#232935;
-}
-[data-theme="light"]{
-  --bg:#f5f6f8;--surface:#ffffff;--border:#e6e8ec;
-  --card-bg:#ffffff;--card-border:#e2e5ea;
-  --text:#0b0d12;--text-muted:#5c6577;
-  --accent:#0a8fb5;--accent-border:rgba(10,143,181,0.35);--accent-tint:rgba(10,143,181,0.133);--accent-glow:rgba(10,143,181,0.2);
-  --btn-bg:#0b0d12;--btn-text:#f5f6f8;
-  --nft-gradient:linear-gradient(150deg,rgba(10,143,181,0.14),rgba(10,143,181,0) 60%),#ffffff;
-  --toggle-track:#e2e5ea;
-}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',-apple-system,sans-serif;transition:background .3s ease,color .3s ease;}
 body{min-height:100vh;overflow-x:hidden;}
@@ -141,19 +124,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .cl-wrap{padding:56px 72px 90px;max-width:920px;margin:0 auto;}
 .cl-header{margin-bottom:28px;}
 .kicker{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.15em;margin-bottom:14px;}
-.cl-title{font-size:38px;font-weight:700;margin-bottom:14px;}
-.cl-desc{font-size:15.5px;line-height:1.7;color:var(--text-muted);max-width:640px;margin-bottom:24px;}
-.progress-card{display:flex;gap:48px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 32px;}
+.cl-title{font-size:28px;font-weight:700;margin-bottom:14px;}
+.cl-desc{font-size:15px;line-height:1.7;color:var(--text-muted);max-width:640px;margin-bottom:24px;}
+.progress-card{display:flex;gap:48px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;}
+.progress-main{flex:1;min-width:220px;}
+.progress-side{min-width:140px;}
 .progress-stat-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;margin-bottom:8px;}
 .progress-stat-val{font-size:32px;font-weight:700;}
 .progress-stat-val .of{color:var(--text-muted);font-size:18px;}
-.progress-track{margin-top:12px;height:8px;border-radius:4px;background:var(--toggle-track);overflow:hidden;max-width:280px;}
-.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .3s ease;}
+.progress-track{margin-top:12px;height:8px;border-radius:6px;background:var(--card-border);box-shadow:inset 0 0 0 1px var(--toggle-track);overflow:hidden;max-width:280px;}
+.progress-fill{height:100%;background:var(--accent);border-radius:6px;transition:width .3s ease;}
 
 .cl-cat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;}
 .cl-cat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;gap:12px;}
 .cl-cat-left{display:flex;align-items:center;gap:12px;}
-.cl-cat-icon{flex:none;width:36px;height:36px;border-radius:10px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;color:var(--accent);}
+.cl-cat-icon{flex:none;width:36px;height:36px;border-radius:12px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;color:var(--accent);}
 .cl-cat-icon svg{width:18px;height:18px;}
 .cl-cat-title{font-size:17px;font-weight:600;}
 .cl-cat-sub{font-size:13px;color:var(--text-muted);margin-top:1px;}
@@ -162,20 +147,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .cl-check{flex:none;width:19px;height:19px;border-radius:6px;border:2px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--btn-text);font-weight:700;transition:all .15s;}
 .cl-check.checked{border-color:var(--accent);background:var(--accent);}
 .cl-task-body{flex:1;}
-.cl-task-label{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;}
+.cl-task-label{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;}
 .cl-task-label.checked{text-decoration:line-through;opacity:.6;}
 .cl-task-desc{font-size:13px;color:var(--text-muted);margin-top:1px;}
-.cl-tag{flex:none;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);border:1px solid var(--card-border);border-radius:20px;padding:3px 9px;}
+.cl-tag{flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);border:1px solid var(--card-border);border-radius:20px;padding:3px 9px;}
 
 .dapps-header{margin-top:48px;margin-bottom:20px;}
 .dapps-title{font-size:24px;font-weight:600;}
 .dapps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
 .dapp-card{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-decoration:none;}
-.dapp-icon{flex:none;width:36px;height:36px;border-radius:9px;background:var(--accent-tint);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;}
-.dapp-name{font-size:14.5px;font-weight:600;}
+.dapp-icon{flex:none;width:36px;height:36px;border-radius:8px;background:var(--accent-tint);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;}
+.dapp-name{font-size:14px;font-weight:600;}
 .dapp-cat{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
 
-.calc-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-top:40px;}
+.calc-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-top:40px;}
 .calc-title{font-size:24px;font-weight:600;margin-bottom:24px;}
 .calc-inputs-row{display:flex;gap:16px;flex-wrap:wrap;}
 .calc-field{flex:1;min-width:140px;}
@@ -185,8 +170,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .calc-result{flex:1;min-width:160px;background:var(--bg);border:1px solid var(--card-border);border-radius:12px;padding:18px;}
 .calc-result-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:8px;}
 .calc-result-val{font-size:20px;font-weight:700;}
-.calc-result-usd{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--accent);margin-top:4px;}
-.calc-disclaimer{font-size:11.5px;color:var(--text-muted);margin-top:18px;}
+.calc-result-usd{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-top:4px;}
+.calc-disclaimer{font-size:12px;color:var(--text-muted);margin-top:18px;}
 
 @media(max-width:768px){
   .nav{padding:10px 20px 0;gap:0 12px;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);}
@@ -202,6 +187,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
   .site-footer{padding:36px 20px;}
   .cl-wrap{padding:40px 20px 60px;}
   .hero-title{font-size:34px;}
+  .cl-title{font-size:24px;}
+  .progress-card{gap:20px;padding:18px 20px;flex-wrap:nowrap;}
+  .progress-main{min-width:0;}
+  .progress-side{min-width:0;flex:none;}
+  .cl-task{min-height:48px;}
   .hero-copy{min-width:0;flex:1 1 100%;}
   .nft-wrap{width:100%;}
   .about-label{width:auto;}
@@ -299,12 +289,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
         <div class="cl-desc">Since launch, well over a billion SKR has already gone out to tens of thousands of wallets, and a big chunk of it is already staked. This checklist keeps you on top of the on-chain activity that actually counts toward round 2 of the airdrop.</div>
       </div>
       <div class="progress-card">
-        <div style="flex:1;min-width:220px;">
+        <div class="progress-main">
           <div class="progress-stat-label">DAILY PROGRESS</div>
           <div class="progress-stat-val"><span id="cl-pct">0</span>%</div>
           <div class="progress-track"><div class="progress-fill" id="cl-fill" style="width:0%"></div></div>
         </div>
-        <div style="min-width:140px;">
+        <div class="progress-side">
           <div class="progress-stat-label">TASKS DONE</div>
           <div class="progress-stat-val"><span id="cl-done">0</span><span class="of">/<span id="cl-total">0</span></span></div>
         </div>

@@ -169,7 +169,7 @@
     {
       "num": 831,
       "mint": "G8FJmQzBbuem24DJUYeGruPmv1DHngEGkdd7YzawCwaU",
-      "owner": "7UmGoLqk41RX4E9WUUbp1bYoshD1Ko1tgdThBUozj5QU",
+      "owner": "6skKXWEBH9tJj9Ld3Rjg6VHp98zdb5wSPA81TMyh8kBG",
       "isDomain": false,
       "twitter": null,
       "label": null,
@@ -192,8 +192,8 @@
         }
       ],
       "neverTraded": false,
-      "listed": false,
-      "listPrice": null,
+      "listed": true,
+      "listPrice": 888.8834,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/831.png",
       "meUrl": "https://magiceden.io/item-details/G8FJmQzBbuem24DJUYeGruPmv1DHngEGkdd7YzawCwaU",
       "syncedAt": 1794389136706

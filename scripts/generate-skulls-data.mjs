@@ -218,9 +218,65 @@ function addSales(existing, found) {
 
 // What the newest transactions say about the listing: true/false, or null
 // when nothing listing-related happened in the window.
+// Tensor Marketplace (TCOMP) listings. Listing a Mad Lad there moves the NFT
+// into a Tensor-owned escrow account, and Helius does not always tag the
+// transaction NFT_LISTING — #831's listing (16 Oct 2026, 836.99 SOL) came
+// through as a plain transfer, so the Skull showed as unlisted and "owned" by
+// the escrow account. Reading the instruction itself is unambiguous: Anchor
+// discriminator (first 8 bytes) + the ask in lamports (next 8, little-endian).
+const TCOMP_PROGRAM_ID = 'TCMPhJdwDryooaGtiocG1u3xcYbRpiJzb283XfCZsDp';
+const TCOMP_LIST_DISCRIMINATORS = new Set([
+  '066eff121024081e', // list_legacy
+  'ad4ca77d76470199', // list_core
+  '36aec14311298426', // list
+  '41b3da1996736fab', // list_compressed
+  '09755de6dd04c7d4', // list_t22
+  '17ca668affbe27c4', // list_wns
+]);
+const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+function base58Decode(str) {
+  let n = 0n;
+  for (const ch of str) {
+    const v = BASE58.indexOf(ch);
+    if (v < 0) return null;
+    n = n * 58n + BigInt(v);
+  }
+  let hex = n.toString(16);
+  if (hex.length % 2) hex = '0' + hex;
+  let zeros = 0;
+  for (const ch of str) {
+    if (ch !== '1') break;
+    zeros++;
+  }
+  return Buffer.concat([Buffer.alloc(zeros), Buffer.from(n === 0n ? '' : hex, 'hex')]);
+}
+
+// { rawAsk, seller } when the tx lists this mint on Tensor, else null.
+function tensorListing(tx, mint) {
+  const all = [];
+  for (const ix of tx.instructions || []) {
+    all.push(ix);
+    for (const inner of ix.innerInstructions || []) all.push(inner);
+  }
+  for (const ix of all) {
+    if (ix.programId !== TCOMP_PROGRAM_ID || typeof ix.data !== 'string') continue;
+    const data = base58Decode(ix.data);
+    if (!data || data.length < 16 || !TCOMP_LIST_DISCRIMINATORS.has(data.subarray(0, 8).toString('hex'))) continue;
+    const transfer = (tx.tokenTransfers || []).find((tt) => tt.mint === mint);
+    return {
+      rawAsk: Number(data.readBigUInt64LE(8)) / LAMPORTS_PER_SOL,
+      seller: transfer?.fromUserAccount || (ix.accounts || [])[0] || null,
+    };
+  }
+  return null;
+}
+
 function listingFromTxs(txs, mint) {
   for (const tx of txs) {
     // newest first
+    const tensor = tensorListing(tx, mint);
+    if (tensor) return { listed: true, rawAsk: tensor.rawAsk, seller: tensor.seller };
     if (tx.type === 'NFT_LISTING') return { listed: true, rawAsk: solFromDescription(tx.description) };
     if (tx.type === 'NFT_CANCEL_LISTING' || isSale(tx, mint) || nftMoved(tx, mint)) return { listed: false, rawAsk: null };
   }
@@ -314,7 +370,10 @@ async function updateSkull(prev, defaultSyncedAt, startedAt) {
       listed = asks.length > 0 || !!me?.listed || fromTxs.listed;
       listPrice = asks.length ? +(Math.min(...asks) * BUYER_TOTAL_MULTIPLIER).toFixed(4) : listed ? listPrice : null;
     }
-    if (me?.owner) owner = me.owner;
+    // A Tensor listing parks the NFT in escrow, which Magic Eden and DAS both
+    // report as the "owner" — the seller named in the listing is the real one.
+    if (fromTxs?.seller) owner = fromTxs.seller;
+    else if (me?.owner) owner = me.owner;
     else if (moved && !listed) owner = (await dasOwner(mint)) || owner;
     // A listed Skull's on-chain holder is the marketplace, so without Magic
     // Eden the previous owner is the better guess.

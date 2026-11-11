@@ -268,6 +268,33 @@ function withOwnerTag(entry, ownerTags) {
   };
 }
 
+// Cheap "did anything happen?" check, so the script can run hourly on the free
+// Helius plan. Reading a Skull's parsed history costs 100 credits (Enhanced
+// Transactions); asking the RPC for its newest signature costs 1. Selling,
+// listing, delisting and transferring all touch the mint, so a Skull whose
+// newest successful signature is older than its last sync has nothing new and
+// is skipped. Returns true when the Skull needs the full (100-credit) read —
+// including whenever this check itself fails, so an error never hides a sale.
+const QUICK_CHECK_MARGIN_MS = 5 * 60 * 1000;
+const FULL_SYNC = process.env.FULL_SYNC === '1';
+
+async function hasNewActivity(mint, syncedAt) {
+  try {
+    const res = await fetchWithRetry(HELIUS_RPC, `Helius getSignaturesForAddress ${mint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 'skulls', method: 'getSignaturesForAddress', params: [mint, { limit: 10 }] }),
+    }, 3);
+    const json = await res.json();
+    if (!res.ok || !Array.isArray(json.result)) return true;
+    const newest = json.result.find((sig) => !sig.err && sig.blockTime);
+    if (!newest) return json.result.length > 0; // only failed/untimed txs: be safe
+    return newest.blockTime * 1000 > syncedAt - QUICK_CHECK_MARGIN_MS;
+  } catch (e) {
+    return true;
+  }
+}
+
 async function updateSkull(prev, defaultSyncedAt, startedAt) {
   const mint = prev.mint;
   const syncedAt = prev.syncedAt ?? defaultSyncedAt;
@@ -348,9 +375,20 @@ async function main() {
   const results = [];
   let failed = 0;
   let changed = 0;
+  let skipped = 0;
   for (const [i, prev] of skulls.entries()) {
     let next;
     try {
+      // Hourly runs only pay for the full read when the 1-credit check sees
+      // something new. The daily FULL_SYNC run reads every Skull regardless,
+      // as a safety net for anything the quick check could miss.
+      if (!FULL_SYNC && !(await hasNewActivity(prev.mint, prev.syncedAt ?? defaultSyncedAt))) {
+        skipped++;
+        results.push(withOwnerTag(prev, ownerTags));
+        process.stdout.write(`\r[${i + 1}/${skulls.length}] done...`);
+        await sleep(100);
+        continue;
+      }
       next = await updateSkull(prev, defaultSyncedAt, startedAt);
       if (next.newTxs > 0) changed++;
     } catch (e) {
@@ -364,7 +402,7 @@ async function main() {
     await sleep(250);
   }
 
-  console.log(`\n${changed} Skulls had new transactions, ${failed} failed and kept their previous data.`);
+  console.log(`\n${FULL_SYNC ? 'Full sync' : 'Quick sync'}: ${skipped} Skulls skipped (no new activity), ${changed} had new transactions, ${failed} failed and kept their previous data.`);
   // Every Skull failing means the source itself is broken (bad key, API
   // gone) — fail loudly so the workflow goes red instead of quietly freezing.
   if (failed === skulls.length) throw new Error('Every Skull failed to update — check HELIUS_API_KEY and the Helius API.');

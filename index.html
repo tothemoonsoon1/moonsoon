@@ -36,7 +36,7 @@
   "description": "Mad Lads Skull holder. On-chain research, early Solana plays."
 }
 </script>
-<link rel="preload" as="image" href="/assets/img/mad-lads-skull-9175.jpg">
+<link rel="preload" as="image" href="/assets/img/mad-lads-skull-9175.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -97,6 +97,7 @@ a{color:inherit;}
 .nft-glow{position:absolute;inset:-50px;border-radius:50px;background:radial-gradient(circle,var(--accent-glow),transparent 70%);filter:blur(30px);animation:skullGlow 6s ease-in-out infinite;pointer-events:none;}
 .nft-card{border-radius:18px;padding:14px;background:var(--nft-gradient);border:1px solid var(--card-border);position:relative;z-index:1;animation:skullFloat 6s ease-in-out infinite;}
 .nft-card img{width:100%;height:auto;display:block;border-radius:12px;}
+.nft-card picture{display:block;}
 .nft-foot{display:flex;justify-content:space-between;align-items:center;padding:16px 8px 4px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
 .nft-foot a{text-decoration:none;}
 .mythic-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#f0b84d;background:rgba(240,184,77,0.12);border:1px solid rgba(240,184,77,0.4);border-radius:20px;padding:4px 12px;}
@@ -215,7 +216,7 @@ a{color:inherit;}
         <div class="nft-wrap">
           <div class="nft-glow" aria-hidden="true"></div>
           <div class="nft-card">
-            <img src="/assets/img/mad-lads-skull-9175.jpg" alt="Mad Lads Skull #9175 NFT" width="480" height="600" loading="eager">
+            <picture><source srcset="/assets/img/mad-lads-skull-9175.webp" type="image/webp"><img src="/assets/img/mad-lads-skull-9175.jpg" alt="Mad Lads Skull #9175 NFT" width="480" height="600" loading="eager" fetchpriority="high"></picture>
             <div class="nft-foot">
               <a href="https://orbmarkets.io/token/7yAXKRNaxS1cnZs2hFRYieLTtbAu336bfkGnyZ1Lr8N2/history?hideSpam=true" target="_blank" rel="noopener noreferrer">#9175</a>
               <span class="mythic-badge">MYTHIC</span>

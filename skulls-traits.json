@@ -1,0 +1,894 @@
+{
+ "_comment": "Static Mad Lads metadata attributes keyed by token number. Fetched once from madlads.s3 json; traits never change.",
+ "traits": {
+  "542": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Tuxedo",
+   "Background": "Violet"
+  },
+  "704": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Priest",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "710": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Black Coat",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "749": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Dapper Coat",
+   "Hand": "Python",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "764": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Priest",
+   "Hand": "Golden Broomhandle",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "794": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Three Piece",
+   "Hand": "Peacemaker",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "831": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Milord",
+   "Background": "Purple"
+  },
+  "956": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Milord",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "1052": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Solana Tuxedo",
+   "Background": "White"
+  },
+  "1435": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Three Piece",
+   "Hand": "Eagle",
+   "Glove": "Brown",
+   "Background": "Yellow"
+  },
+  "1457": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Tuxedo",
+   "Background": "Red"
+  },
+  "1495": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Black Coat",
+   "Hand": "Python",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "1703": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Dark Dapper Coat",
+   "Background": "Purple"
+  },
+  "1778": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Classic",
+   "Background": "Grey"
+  },
+  "1792": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Dapper Coat",
+   "Background": "White"
+  },
+  "1846": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Smoke": "White",
+   "Clothing": "Classic",
+   "Hand": "Golden Cigar",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "1885": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Dark Dapper Coat",
+   "Hand": "Blue Ball Cane",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "2196": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Tuxedo",
+   "Background": "Yellow"
+  },
+  "2249": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Winter Battlegear",
+   "Background": "Orange"
+  },
+  "2382": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Winter Battlegear",
+   "Background": "Purple"
+  },
+  "2441": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Tuxedo",
+   "Background": "Purple"
+  },
+  "2540": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Tuxedo",
+   "Hand": "Tommygun",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "2542": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Revolutionary",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "2616": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Don",
+   "Background": "White"
+  },
+  "2704": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Dark Dapper Coat",
+   "Hand": "Tommygun",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "2732": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Revolutionary",
+   "Background": "White"
+  },
+  "2924": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Pinstripes",
+   "Background": "White"
+  },
+  "2953": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "General Uniform",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "2968": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Priest",
+   "Hand": "Golden Peacemaker",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "2996": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Revolutionary",
+   "Hand": "Blue Ball Cane",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "2997": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Sealevel Coat",
+   "Background": "Orange"
+  },
+  "3306": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Classic",
+   "Background": "White"
+  },
+  "3353": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Dark Dapper Coat",
+   "Hand": "Broomhandle",
+   "Glove": "Brown",
+   "Background": "Grey"
+  },
+  "3367": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Dapper Coat",
+   "Hand": "Eagle",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "3417": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Black Coat",
+   "Hand": "Eagle",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "3444": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Solana Tuxedo",
+   "Hand": "Broomhandle",
+   "Glove": "Brown",
+   "Background": "Purple"
+  },
+  "3540": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Black Coat",
+   "Hand": "Blue Ball Cane",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "3627": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Three Piece",
+   "Background": "Red"
+  },
+  "3645": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Priest",
+   "Hand": "Python",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "3676": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Black Coat",
+   "Background": "Red"
+  },
+  "3712": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Priest",
+   "Hand": "Blue Ball Cane",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "3732": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Don",
+   "Background": "Grey"
+  },
+  "3807": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Dark Three Piece",
+   "Background": "White"
+  },
+  "3886": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Black Coat",
+   "Hand": "Jericho",
+   "Glove": "Brown",
+   "Background": "Violet"
+  },
+  "3919": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "General Uniform",
+   "Background": "White"
+  },
+  "3927": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Don",
+   "Hand": "Python",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "4109": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Revolutionary",
+   "Background": "White"
+  },
+  "4424": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Dark Three Piece",
+   "Hand": "Peacemaker",
+   "Glove": "Brown",
+   "Background": "Violet"
+  },
+  "4506": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Sealevel Coat",
+   "Hand": "Blue Ball Cane",
+   "Glove": "Brown",
+   "Background": "Violet"
+  },
+  "4509": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Dark Three Piece",
+   "Background": "Red"
+  },
+  "4544": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Black Coat",
+   "Background": "Red"
+  },
+  "4575": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Three Piece",
+   "Background": "Red"
+  },
+  "4576": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "General Uniform",
+   "Hand": "Blue Ball Cane",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "4580": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Black Coat",
+   "Background": "Red"
+  },
+  "4836": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "General Uniform",
+   "Background": "Grey"
+  },
+  "4862": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Dark Dapper Coat",
+   "Background": "Yellow"
+  },
+  "4909": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Winter Battlegear",
+   "Background": "Violet"
+  },
+  "5091": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Tuxedo",
+   "Background": "Red"
+  },
+  "5340": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Dark Dapper Coat",
+   "Background": "Red"
+  },
+  "5364": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Tuxedo",
+   "Hand": "Eagle",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "5386": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Priest",
+   "Background": "White"
+  },
+  "5519": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Black Coat",
+   "Background": "Red"
+  },
+  "5566": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Classic",
+   "Background": "White"
+  },
+  "5784": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Tuxedo",
+   "Hand": "Jericho",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "5845": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Tuxedo",
+   "Background": "Grey"
+  },
+  "5943": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Priest",
+   "Background": "White"
+  },
+  "6017": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Pinstripes",
+   "Background": "Red"
+  },
+  "6198": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Revolutionary",
+   "Hand": "Golden Broomhandle",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "6408": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Solana Tuxedo",
+   "Hand": "Python",
+   "Glove": "Brown",
+   "Background": "Grey"
+  },
+  "6616": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Milord",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "Purple"
+  },
+  "6882": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Sealevel Coat",
+   "Background": "White"
+  },
+  "7092": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Milord",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "Grey"
+  },
+  "7245": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Smoke": "White",
+   "Clothing": "Pinstripes",
+   "Hand": "Golden Cigar",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "7421": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Milord",
+   "Background": "Grey"
+  },
+  "7577": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Black Coat",
+   "Hand": "Broomhandle",
+   "Glove": "Brown",
+   "Background": "Violet"
+  },
+  "7592": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Milord",
+   "Background": "White"
+  },
+  "7720": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Solana Tuxedo",
+   "Background": "Purple"
+  },
+  "7744": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Priest",
+   "Background": "White"
+  },
+  "7798": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Black Coat",
+   "Background": "Red"
+  },
+  "7972": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Dapper Coat",
+   "Background": "Red"
+  },
+  "8003": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "General Uniform",
+   "Hand": "Tommygun",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "8086": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Tuxedo",
+   "Hand": "Golden Broomhandle",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "8169": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Dark Dapper Coat",
+   "Background": "Yellow"
+  },
+  "8177": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Bloody Tuxedo",
+   "Hand": "Python",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "8396": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Revolutionary",
+   "Background": "White"
+  },
+  "8566": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Classic",
+   "Hand": "Golden Tommygun",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "8634": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Tuxedo",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "8644": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Green",
+   "Clothing": "Dark Dapper Coat",
+   "Hand": "Eagle",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "8902": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Dark Dapper Coat",
+   "Background": "Red"
+  },
+  "9031": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Three Piece",
+   "Hand": "Romeo",
+   "Glove": "Brown",
+   "Background": "Orange"
+  },
+  "9175": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Dapper Coat",
+   "Background": "Red"
+  },
+  "9184": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Black Coat",
+   "Background": "Red"
+  },
+  "9405": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Solana Tuxedo",
+   "Hand": "Eagle",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "9592": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Bloody Three Piece",
+   "Background": "Red"
+  },
+  "9595": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Classic",
+   "Hand": "Jericho",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "9760": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Smoke": "White",
+   "Clothing": "Priest",
+   "Hand": "Golden Cigar",
+   "Glove": "Brown",
+   "Background": "Red"
+  },
+  "9857": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Blue",
+   "Clothing": "Bloody Dapper Coat",
+   "Hand": "Tommygun",
+   "Glove": "Brown",
+   "Background": "White"
+  },
+  "9864": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "General Uniform",
+   "Background": "Violet"
+  },
+  "9937": {
+   "Gender": "Male",
+   "Type": "Skull",
+   "Expression": "Inferno",
+   "Eyes": "Purple",
+   "Clothing": "Solana Tuxedo",
+   "Background": "Purple"
+  }
+ }
+}

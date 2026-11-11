@@ -55,6 +55,7 @@
   --accent-tint2:rgba(79,216,255,0.15);
 }
 [data-theme="light"]{
+  --up:#0a8f55;--down:#d42a4c;--me-text:#7a3fe0;
   --bg:#f5f6f8;--surface:#ffffff;--border:#e6e8ec;
   --card-bg:#ffffff;--card-border:#e2e5ea;
   --text:#0b0d12;--text-muted:#5c6577;
@@ -90,7 +91,7 @@ a{color:inherit;}
 .site-footer .links a{text-decoration:none;}
 
 /* ---- Skulls gallery ---- */
-.sk-wrap{padding:56px 72px 90px;max-width:1280px;margin:0 auto;}
+.sk-wrap{padding:56px 72px 90px;max-width:1600px;margin:0 auto;}
 .sk-header{margin-bottom:28px;}
 .kicker{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.15em;margin-bottom:14px;}
 .sk-title{font-size:38px;font-weight:700;margin-bottom:14px;}
@@ -144,6 +145,68 @@ a{color:inherit;}
 .sk-meta-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);}
 .sk-meta-row .val{color:var(--text);font-weight:600;}
 .sk-links{display:flex;gap:8px;margin-top:12px;}
+html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
+.sk-traits{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px;}
+.sk-trait{font-size:10px;line-height:1.3;padding:3px 6px;border-radius:6px;border:1px solid var(--card-border);color:var(--text-muted);cursor:pointer;background:transparent;font-family:inherit;text-align:left;}
+.sk-trait b{color:var(--text);font-weight:600;}
+.sk-trait.rare{border-color:#9945FF;}
+.sk-trait:hover{border-color:var(--text-muted);}
+.sk-layout{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:20px;align-items:start;}
+.sf{position:sticky;top:16px;border:1px solid var(--card-border);border-radius:14px;padding:14px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;gap:10px;}
+.sf-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;letter-spacing:.08em;}
+.sf-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;margin-left:6px;vertical-align:middle;}
+.sf-all{font-size:11px;color:var(--text-muted);text-decoration:underline;cursor:pointer;background:none;border:none;font-family:inherit;}
+.sf-list{display:flex;flex-direction:column;gap:6px;overflow-y:auto;min-height:0;}
+.sf-row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 8px 6px 6px;border-radius:10px;border:1px solid var(--card-border);text-decoration:none;color:var(--text);}
+.sf-row:hover{border-color:var(--text-muted);}
+.sf-row img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:rgba(127,127,127,.15);}
+.sf-top{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;white-space:nowrap;}
+.sf-sub{white-space:nowrap;}
+.sf-tag{font-size:9.5px;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:5px;color:#0b0d12;background:#14F195;}
+.sf-sub{font-size:11px;color:var(--text-muted);}
+.sf-right{text-align:right;}
+.sf-price{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;}
+.sf-mkt{font-size:11px;font-weight:600;}
+.sf-cmp{grid-column:2 / -1;border-top:1px dashed var(--card-border);padding-top:5px;margin-top:-2px;}
+.sf-mkt.me{color:var(--me-text);}
+.sf-mkt.tensor{color:var(--accent);}
+.sf-note{font-size:10.5px;color:var(--text-muted);margin-top:-4px;}
+.sf-sub{display:block;}
+.pc{font-size:11px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;cursor:help;}
+.pc-up{color:var(--up);}
+.pc-down{color:var(--down);}
+.pc-first{color:var(--text-muted);font-weight:500;}
+.pc-vs{color:var(--text-muted);font-weight:500;}
+.sh-chg{width:150px;text-align:right;flex-shrink:0;}
+.sh-head-row{display:flex;align-items:center;gap:14px;padding:8px 6px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);}
+.sh-h-skull{padding-left:58px;}
+.sh-h-mkt{width:88px;text-align:center;}
+.sh-h-price{width:100px;text-align:right;}
+.sh-h-chg{width:150px;text-align:right;cursor:help;}
+.sh-h-date{width:100px;text-align:right;}
+@media(max-width:1280px){.sk-layout{grid-template-columns:270px minmax(0,1fr);}.sf{grid-column:1 / -1;grid-row:1;position:static;max-height:none;}.sf-list{flex-direction:row;overflow-x:auto;padding-bottom:4px;}.sf-row{min-width:250px;}}
+.tp{position:sticky;top:16px;border:1px solid var(--card-border);border-radius:14px;padding:14px;background:var(--card-bg,transparent);max-height:calc(100vh - 32px);display:flex;flex-direction:column;gap:12px;}
+.tp-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;letter-spacing:.08em;}
+.tp-clear{font-size:11px;color:var(--text-muted);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:inherit;}
+.tp-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.tp-tab{font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:9px 4px;border-radius:10px;border:1px solid var(--card-border);background:transparent;color:var(--text-muted);cursor:pointer;position:relative;}
+.tp-tab.active{color:var(--text);border-color:var(--text-muted);background:rgba(127,127,127,.12);}
+.tp-tab .dot{position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:#9945FF;}
+.tp-list{display:flex;flex-direction:column;gap:6px;overflow-y:auto;min-height:0;}
+.tp-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 8px 6px 6px;border-radius:10px;border:1px solid var(--card-border);background:transparent;color:var(--text);cursor:pointer;font-family:inherit;text-align:left;}
+.tp-row:hover{border-color:var(--text-muted);}
+.tp-row.active{border-color:#9945FF;background:rgba(153,69,255,.12);}
+.tp-row img,.tp-row .ph{width:40px;height:40px;border-radius:8px;object-fit:cover;background:rgba(127,127,127,.15);}
+.tp-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tp-sub{font-size:11px;color:var(--text-muted);}
+.tp-num{text-align:right;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;}
+.tp-num .tp-sub{display:block;font-weight:400;}
+.tp-active{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.tp-active:empty{display:none;}
+@media(max-width:1280px){.tp,.sk-layout>div{grid-row:2;}}
+.sf,.sf-list,.sk-layout>div{min-width:0;}
+.tp-pill{font-family:inherit;font-size:12px;padding:5px 10px;border-radius:20px;border:1px solid #9945FF;background:rgba(153,69,255,.12);color:var(--text);cursor:pointer;}
+@media(max-width:900px){.sk-layout{grid-template-columns:minmax(0,1fr);}.sk-layout>.tp{position:static;max-height:none;grid-row:2;grid-column:1;}.sk-layout>div{grid-row:3;grid-column:1;}.tp-list{max-height:320px;}}
 .sk-links a{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.03em;color:var(--text);background:none;border:1px solid var(--card-border);border-radius:8px;padding:7px 0;text-decoration:none;transition:border-color .15s ease,color .15s ease;}
 .sk-links a:hover{border-color:var(--accent-border);color:var(--accent);}
 
@@ -187,7 +250,9 @@ a{color:inherit;}
 .sh-tensor-pct{color:var(--accent);}
 
 @media(max-width:640px){
-  .sh-pill,.sh-date{display:none;}
+  .sh-pill,.sh-date,.sh-h-mkt,.sh-h-date{display:none;}
+  .sh-chg,.sh-h-chg{width:auto;}
+  .sh-num{width:auto;}
 }
 
 @media(max-width:768px){
@@ -264,6 +329,7 @@ a{color:inherit;}
             <option value="sale-desc">Last Sale: High to Low</option>
             <option value="sale-asc">Last Sale: Low to High</option>
             <option value="price-asc">Price: Low to High</option>
+            <option value="rarity">Rarest Traits First</option>
             <option value="owner">Group by Owner</option>
           </select>
           <label class="ctl-toggle">
@@ -272,8 +338,15 @@ a{color:inherit;}
           </label>
         </div>
 
-        <div class="sk-grid" id="sk-grid"></div>
+        <div class="sk-layout">
+          <aside class="tp" id="sk-trait-panel" hidden></aside>
+          <div>
+            <div class="tp-active" id="sk-trait-active"></div>
+            <div class="sk-grid" id="sk-grid"></div>
         <div class="empty-state" id="sk-empty" style="display:none;">No skulls match your filters.</div>
+          </div>
+          <aside class="sf" id="sk-sale-feed" hidden></aside>
+        </div>
       </div>
 
       <div id="view-history" style="display:none;">
@@ -329,6 +402,12 @@ a{color:inherit;}
           </select>
         </div>
 
+        <div class="sh-head-row" aria-hidden="true">
+          <span class="sh-h-skull">Skull</span><span class="sh-spacer"></span>
+          <span class="sh-h-mkt">Marketplace</span><span class="sh-h-price">Price</span>
+          <span class="sh-h-chg" title="How this sale compares with the same Skull's previous sale: green = seller sold higher, red = sold lower">vs previous sale &#9432;</span>
+          <span class="sh-h-date">Date</span>
+        </div>
         <div class="sh-list" id="sh-list"></div>
         <div class="empty-state" id="sh-empty" style="display:none;">No sales match your filters.</div>
 
@@ -465,6 +544,122 @@ function ownerGroups(){
   return byOwner;
 }
 
+// ---- Traits (static metadata from skulls-traits.json) ----
+// Gender/Type/Expression are identical on all 99 Skulls, so they're hidden.
+var TRAIT_ORDER = ['Clothing','Hand','Background','Eyes','Glove','Smoke'];
+var TRAITS = {};
+var traitFilter = {};
+
+function traitCounts(){
+  var c = {};
+  SKULLS.forEach(function(s){
+    var t = TRAITS[s.num]; if(!t) return;
+    TRAIT_ORDER.forEach(function(k){
+      var v = t[k] || 'None';
+      c[k] = c[k] || {}; c[k][v] = (c[k][v]||0) + 1;
+    });
+  });
+  return c;
+}
+
+// Rarity score: sum of 1/frequency across the varying traits.
+function rarityScore(s, counts){
+  var t = TRAITS[s.num]; if(!t) return 0;
+  return TRAIT_ORDER.reduce(function(sum, k){
+    var n = counts[k] && counts[k][t[k] || 'None'];
+    return sum + (n ? 1/n : 0);
+  }, 0);
+}
+
+var traitCountsCache = null;
+function traitsHtml(s){
+  var t = TRAITS[s.num]; if(!t) return '';
+  var counts = traitCountsCache || traitCounts(), total = SKULLS.length;
+  var chips = TRAIT_ORDER.filter(function(k){ return t[k]; }).map(function(k){
+    var n = counts[k][t[k]], pct = Math.round(n/total*100);
+    return '<button class="sk-trait'+(pct<=5?' rare':'')+'" title="'+escAttr(k)+': '+n+' of '+total+' Skulls" '+
+      'data-k="'+escAttr(k)+'" data-v="'+escAttr(t[k])+'" onclick="setTraitFromChip(this)">'+
+      escAttr(k)+' <b>'+escAttr(t[k])+'</b> '+pct+'%</button>';
+  }).join('');
+  return '<div class="sk-traits">'+chips+'</div>';
+}
+
+var traitTab = 'Clothing';
+
+function renderTraitFilters(){
+  var panel = document.getElementById('sk-trait-panel');
+  var activeEl = document.getElementById('sk-trait-active');
+  if(!Object.keys(TRAITS).length){ panel.hidden = true; activeEl.innerHTML = ''; return; }
+  panel.hidden = false;
+  var counts = traitCounts(), total = SKULLS.length;
+  // Sample image + listed floor per trait value.
+  var sample = {}, floor = {};
+  SKULLS.forEach(function(sk){
+    var t = TRAITS[sk.num]; if(!t) return;
+    TRAIT_ORDER.forEach(function(k){
+      var key = k+'|'+(t[k]||'None');
+      if(!sample[key] && sk.image) sample[key] = thumbUrl(sk);
+      if(sk.listed && sk.listPrice != null && (floor[key] == null || sk.listPrice < floor[key])) floor[key] = sk.listPrice;
+    });
+  });
+  var cats = TRAIT_ORDER.filter(function(k){ return counts[k]; });
+  if(cats.indexOf(traitTab) === -1) traitTab = cats[0];
+  var tabs = cats.map(function(k){
+    return '<button class="tp-tab'+(k===traitTab?' active':'')+'" data-k="'+escAttr(k)+'" onclick="setTraitTab(this)">'+escAttr(k)+(traitFilter[k]?'<span class="dot"></span>':'')+'</button>';
+  }).join('');
+  var vals = Object.keys(counts[traitTab]).sort(function(a,b){ return counts[traitTab][b]-counts[traitTab][a] || a.localeCompare(b); });
+  var rows = vals.map(function(v){
+    var key = traitTab+'|'+v, n = counts[traitTab][v];
+    var img = sample[key] ? '<img src="'+escAttr(sample[key])+'" alt="" loading="lazy">' : '<span class="ph"></span>';
+    var fl = floor[key] != null ? floor[key]+' SOL floor' : 'not listed';
+    return '<button class="tp-row'+(traitFilter[traitTab]===v?' active':'')+'" data-k="'+escAttr(traitTab)+'" data-v="'+escAttr(v)+'" onclick="toggleTraitRow(this)">'+
+      img+'<span style="min-width:0"><div class="tp-name">'+escAttr(v)+'</div><div class="tp-sub">'+fl+'</div></span>'+
+      '<span class="tp-num">'+n+'<span class="tp-sub">'+(n/total*100).toFixed(2)+'%</span></span></button>';
+  }).join('');
+  var any = Object.keys(traitFilter).length;
+  panel.innerHTML = '<div class="tp-head">TRAITS'+(any?'<button class="tp-clear" onclick="clearTraitFilters()">Clear all</button>':'')+'</div>'+
+    '<div class="tp-tabs">'+tabs+'</div><div class="tp-list">'+rows+'</div>';
+  activeEl.innerHTML = Object.keys(traitFilter).map(function(k){
+    return '<button class="tp-pill" data-k="'+escAttr(k)+'" onclick="removeTrait(this)">'+escAttr(k)+': '+escAttr(traitFilter[k])+' &times;</button>';
+  }).join('');
+}
+
+function setTraitTab(btn){ traitTab = btn.getAttribute('data-k'); renderTraitFilters(); }
+window.setTraitTab = setTraitTab;
+
+function toggleTraitRow(btn){
+  var k = btn.getAttribute('data-k'), v = btn.getAttribute('data-v');
+  if(traitFilter[k] === v){ delete traitFilter[k]; } else { traitFilter[k] = v; }
+  renderTraitFilters(); applyFilters();
+}
+window.toggleTraitRow = toggleTraitRow;
+
+function removeTrait(btn){ delete traitFilter[btn.getAttribute('data-k')]; renderTraitFilters(); applyFilters(); }
+window.removeTrait = removeTrait;
+
+function setTraitFromChip(btn){
+  traitFilter[btn.getAttribute('data-k')] = btn.getAttribute('data-v');
+  traitTab = btn.getAttribute('data-k');
+  renderTraitFilters(); applyFilters();
+}
+window.setTraitFromChip = setTraitFromChip;
+
+function clearTraitFilters(){
+  traitFilter = {};
+  renderTraitFilters(); applyFilters();
+}
+window.clearTraitFilters = clearTraitFilters;
+
+// Lightweight local thumbnails (assets/img/skulls/{num}.webp, ~25KB) instead of
+// the ~4.7MB originals on the Mad Lads bucket. Falls back to the original once.
+function thumbUrl(s){ return '/assets/img/skulls/'+s.num+'.webp'; }
+function thumbFallback(img){
+  var full = img.getAttribute('data-full');
+  img.onerror = null;
+  if(full && img.src.indexOf(full) === -1){ img.src = full; }
+}
+window.thumbFallback = thumbFallback;
+
 function cardHtml(s, holderCount){
   var classes = 'sk-card' + (s.neverTraded ? ' never-traded' : '');
   var badges = '';
@@ -492,7 +687,7 @@ function cardHtml(s, holderCount){
     ? '<div class="sk-meta-row"><span>Last Sale</span><span class="val">&mdash;</span></div>'
     : '<div class="sk-meta-row"><span>Last Sale</span><span class="val">'+s.lastSalePrice+' SOL</span></div>';
   var imgHtml = s.image
-    ? '<img src="'+escAttr(s.image)+'" alt="Mad Lads Skull #'+s.num+'" loading="lazy">'
+    ? '<img src="'+thumbUrl(s)+'" data-full="'+escAttr(s.image)+'" onerror="thumbFallback(this)" alt="Mad Lads Skull #'+s.num+'" width="384" height="480" loading="lazy" decoding="async">'
     : '<div class="placeholder-label">NFT IMAGE</div><div class="placeholder-num">#'+s.num+'</div>';
   // Placeholder rows have no mint address, so fall back to the collection page.
   var tensorUrl = s.mint
@@ -506,6 +701,7 @@ function cardHtml(s, holderCount){
       '<div class="sk-owner mono" title="'+escAttr(s.owner)+'">'+escAttr(ownerDisplay)+ownerBadge+'</div>'+
       '<div class="sk-meta-row"><span>Trades</span><span class="val">'+s.trades+'</span></div>'+
       saleRow+
+      traitsHtml(s)+
       '<div class="sk-links">'+
         '<a href="'+escAttr(s.meUrl)+'" target="_blank" rel="noopener noreferrer">Magic Eden</a>'+
         '<a href="'+escAttr(tensorUrl)+'" target="_blank" rel="noopener noreferrer">Tensor</a>'+
@@ -530,12 +726,28 @@ function fmtDate(ts){
   return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
 }
 
+// "vs previous sale" label: how this sale's price compares with the same
+// Skull's previous sale, i.e. whether the seller exited in profit or at a loss.
+function prevChangeHtml(price, prev){
+  if(!prev || !prev.priceSol){
+    return '<span class="pc pc-first" title="First recorded sale of this Skull">first sale</span>';
+  }
+  var pct = (price - prev.priceSol) / prev.priceSol * 100;
+  var up = pct >= 0;
+  var tip = 'Previous sale: '+(Math.round(prev.priceSol*100)/100)+' SOL on '+fmtDate(prev.timestamp)+
+    ' \u2192 seller '+(up ? 'made ' : 'lost ')+Math.abs(Math.round(pct))+'%';
+  return '<span class="pc '+(up?'pc-up':'pc-down')+'" title="'+escAttr(tip)+'">'+(up?'&#9650;':'&#9660;')+Math.abs(Math.round(pct))+'%'+
+    ' <span class="pc-vs">vs '+(Math.round(prev.priceSol*100)/100)+' SOL</span></span>';
+}
+
 function flattenSales(){
   var out = [];
   SKULLS.forEach(function(s){
-    (s.sales || []).forEach(function(sale){
+    var sorted = (s.sales || []).slice().sort(function(a,b){ return a.timestamp - b.timestamp; });
+    sorted.forEach(function(sale, i){
       var marketplace = fmtMarketplace(sale.source);
       out.push({
+        prev: i > 0 ? sorted[i-1] : null,
         num: s.num,
         mint: s.mint,
         image: s.image,
@@ -724,6 +936,7 @@ function renderHistory(){
       '<span class="sh-spacer"></span>'+
       '<span class="sh-pill '+pillClass+'">'+escAttr(s.marketplace)+'</span>'+
       '<span class="sh-price">'+s.priceSol+' SOL</span>'+
+      '<span class="sh-chg">'+prevChangeHtml(s.priceSol, s.prev)+'</span>'+
       '<span class="sh-date">'+fmtDate(s.timestamp)+'</span>'+
     '</a>';
   }).join('');
@@ -754,6 +967,10 @@ function applyFilters(){
   var list = SKULLS.slice();
   if(query){ list = list.filter(function(s){ return String(s.num).indexOf(query) !== -1; }); }
   if(neverOnly){ list = list.filter(function(s){ return s.neverTraded; }); }
+  Object.keys(traitFilter).forEach(function(k){
+    list = list.filter(function(s){ var t = TRAITS[s.num]; return t && (t[k] || 'None') === traitFilter[k]; });
+  });
+  var counts = traitCountsCache = traitCounts();
 
   var byOwner = ownerGroups();
 
@@ -771,6 +988,7 @@ function applyFilters(){
         var ap = a.listPrice==null ? Infinity : a.listPrice;
         var bp = b.listPrice==null ? Infinity : b.listPrice;
         return ap - bp;
+      case 'rarity': return rarityScore(b, counts) - rarityScore(a, counts) || a.num - b.num;
       case 'owner':
         var ac = byOwner[a.owner] ? byOwner[a.owner].length : 1;
         var bc = byOwner[b.owner] ? byOwner[b.owner].length : 1;
@@ -831,8 +1049,47 @@ var savedTheme = null;
 try{ savedTheme = localStorage.getItem('moonsoon_theme'); }catch(e){}
 if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
 
+// ---- Recent sales feed (gallery sidebar) ----
+function timeAgo(ts){
+  var m = Math.floor((Date.now() - ts) / 60000);
+  if(m < 60) return Math.max(m,1)+'m';
+  var h = Math.floor(m/60); if(h < 24) return h+'h';
+  var d = Math.floor(h/24); if(d < 30) return d+'d';
+  var mo = Math.floor(d/30); if(mo < 12) return mo+'mo';
+  return Math.floor(d/365)+'y';
+}
+
+function renderSaleFeed(){
+  var el = document.getElementById('sk-sale-feed');
+  var sales = [];
+  SKULLS.forEach(function(s){
+    var list = (s.sales || []).slice().sort(function(a,b){ return b.timestamp - a.timestamp; });
+    list.forEach(function(sale, i){
+      var prev = list[i+1];
+      sales.push({ s: s, sale: sale, prev: prev || null });
+    });
+  });
+  if(!sales.length){ el.hidden = true; return; }
+  sales.sort(function(a,b){ return b.sale.timestamp - a.sale.timestamp; });
+  el.hidden = false;
+  el.innerHTML = '<div class="sf-head"><span>RECENT SALES<span class="sf-live"></span></span>'+
+    '<button class="sf-all" onclick="switchView(\'history\')">See all &rarr;</button></div>'+
+    '<div class="sf-note">&#9650;/&#9660; = price vs the same Skull\'s previous sale</div>'+
+    '<div class="sf-list">'+sales.slice(0, 30).map(function(x){
+      var mkt = fmtMarketplace(x.sale.source), isMe = mkt === 'Magic Eden';
+      var link = isMe && x.s.meUrl ? x.s.meUrl : (x.s.mint ? 'https://www.tensor.trade/item/'+x.s.mint : 'https://www.tensor.trade/trade/madlads');
+      var img = x.s.image ? '<img src="'+thumbUrl(x.s)+'" data-full="'+escAttr(x.s.image)+'" onerror="thumbFallback(this)" alt="" width="44" height="44" loading="lazy" decoding="async">' : '<img alt="">';
+      return '<a class="sf-row" href="'+escAttr(link)+'" target="_blank" rel="noopener noreferrer" title="'+fmtDate(x.sale.timestamp)+'">'+img+
+        '<span style="min-width:0"><span class="sf-top"><span class="sf-tag">SALE</span>#'+x.s.num+'</span><span class="sf-sub">'+timeAgo(x.sale.timestamp)+' ago</span></span>'+
+        '<span class="sf-right"><div class="sf-price">'+(Math.round(x.sale.priceSol*100)/100)+' SOL</div><div class="sf-mkt '+(isMe?'me':'tensor')+'">'+mkt+'</div></span>'+
+        '<span class="sf-cmp">'+prevChangeHtml(x.sale.priceSol, x.prev)+'</span></a>';
+    }).join('')+'</div>';
+}
+
 function renderAll(){
+  renderSaleFeed();
   renderStats();
+  renderTraitFilters();
   applyFilters();
   if(document.getElementById('view-history').style.display !== 'none'){ renderHistory(); }
 }
@@ -855,6 +1112,13 @@ fetch('/skulls-data.json', { cache: 'no-store' })
     }
   })
   .catch(function(){ /* stay on placeholder data */ });
+
+fetch('/skulls-traits.json')
+  .then(function(res){ return res.ok ? res.json() : null; })
+  .then(function(data){
+    if(data && data.traits){ TRAITS = data.traits; renderTraitFilters(); applyFilters(); }
+  })
+  .catch(function(){ /* traits are optional */ });
 
 })();
 </script>

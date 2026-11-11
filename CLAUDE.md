@@ -6,6 +6,10 @@
 3. Wprowadź zmiany
 4. Commituj bezpośrednio do `main` przez GitHub MCP — zmiany są od razu live
 
+## Zasada pracy
+- Rób sam wszystko, co możesz zrobić swoimi narzędziami (uruchomienie serwera, zrzuty, publikacja podglądu, edycje). Nie każ właścicielowi wykonywać kroków, które możesz wykonać sam.
+- Gdy właściciel prosi o pracę „lokalnie”, a chce coś zobaczyć: localhost w kontenerze nie jest dla niego dostępny — opublikuj prywatny podgląd (Artifact) lub wyślij zrzuty, zamiast podawać localhost.
+
 ## Dane właściciela
 - Twitter/X: @m00nsoon (https://x.com/m00nsoon)
 - GitHub user: `tothemoonsoon1`

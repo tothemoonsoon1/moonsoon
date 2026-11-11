@@ -2,7 +2,11 @@ name: Update Skulls Data
 
 on:
   schedule:
+    # Daily full sync: reads every Skull's history (~9,900 Helius credits).
     - cron: '17 4 * * *'
+    # Hourly quick sync: 1-credit check per Skull, full read only for Skulls
+    # with new on-chain activity (~100 credits on a quiet hour).
+    - cron: '47 * * * *'
   workflow_dispatch:
     inputs:
       debug_only_target:
@@ -12,6 +16,11 @@ on:
 
 permissions:
   contents: write
+
+# Never let two runs race to push skulls-data.json.
+concurrency:
+  group: update-skulls
+  cancel-in-progress: false
 
 jobs:
   update:
@@ -31,6 +40,7 @@ jobs:
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
           DEBUG_ONLY_TARGET: ${{ inputs.debug_only_target && '1' || '' }}
+          FULL_SYNC: ${{ github.event.schedule == '17 4 * * *' && '1' || '' }}
         run: node scripts/generate-skulls-data.mjs
 
       - name: Commit and push if changed

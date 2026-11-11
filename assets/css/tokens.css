@@ -1,0 +1,51 @@
+/* tothemoonsoon design tokens. Single source for index.html, skulls.html and mica.html.
+   This path is cached for a year (netlify.toml): bump ?v= in the three <link> tags after every edit. */
+:root{
+  --bg:#0b0d12;
+  --surface:#0e1117;
+  --border:#1a1f29;
+  --card-bg:#12161e;
+  --card-border:#1e2430;
+  --text:#ffffff;
+  --text-muted:#8b94a3;
+  --accent:#4fd8ff;
+  --accent-border:rgba(79,216,255,0.35);
+  --accent-tint:rgba(79,216,255,0.133);
+  --accent-glow:rgba(79,216,255,0.27);
+  --btn-bg:#4fd8ff;
+  --btn-text:#0b0d12;
+  --nft-gradient:linear-gradient(150deg,rgba(79,216,255,0.25),rgba(79,216,255,0) 60%),#12161e;
+  --toggle-track:#232935;
+  --gold:#f0b84d;
+  --me:#b988ff;
+  --me-tint:rgba(185,136,255,0.15);
+  --accent-tint2:rgba(79,216,255,0.15);
+  --warn:#c98a1f;
+  --warn-tint:rgba(240,184,77,0.12);
+  --no:#3a4150;
+  --rare:#ff4d8d;
+  --uncommon:#ff8a4c;
+}
+[data-theme="light"]{
+  --bg:#f5f6f8;
+  --surface:#ffffff;
+  --border:#e6e8ec;
+  --card-bg:#ffffff;
+  --card-border:#e2e5ea;
+  --text:#0b0d12;
+  --text-muted:#5c6577;
+  --accent:#0a8fb5;
+  --accent-border:rgba(10,143,181,0.35);
+  --accent-tint:rgba(10,143,181,0.133);
+  --accent-glow:rgba(10,143,181,0.2);
+  --btn-bg:#0b0d12;
+  --btn-text:#f5f6f8;
+  --nft-gradient:linear-gradient(150deg,rgba(10,143,181,0.14),rgba(10,143,181,0) 60%),#ffffff;
+  --toggle-track:#e2e5ea;
+  --up:#0a8f55;
+  --down:#d42a4c;
+  --me-text:#7a3fe0;
+  --warn:#c98a1f;
+  --warn-tint:rgba(201,138,31,0.12);
+  --no:#c7ccd6;
+}

@@ -124,58 +124,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .site-footer .links a{text-decoration:none;}
 
 /* ---- Checklist view ---- */
-#checklist-view{display:none;}
-.cl-wrap{padding:56px 72px 90px;max-width:920px;margin:0 auto;}
-.cl-header{margin-bottom:28px;}
 .kicker{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.15em;margin-bottom:14px;}
-.cl-title{font-size:28px;font-weight:700;margin-bottom:14px;}
-.cl-desc{font-size:15px;line-height:1.7;color:var(--text-muted);max-width:640px;margin-bottom:24px;}
-.progress-card{display:flex;gap:48px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;}
-.progress-main{flex:1;min-width:220px;}
-.progress-side{min-width:140px;}
-.progress-stat-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.1em;margin-bottom:8px;}
-.progress-stat-val{font-size:32px;font-weight:700;}
-.progress-stat-val .of{color:var(--text-muted);font-size:18px;}
-.progress-track{margin-top:12px;height:8px;border-radius:6px;background:var(--card-border);box-shadow:inset 0 0 0 1px var(--toggle-track);overflow:hidden;max-width:280px;}
-.progress-fill{height:100%;background:var(--accent);border-radius:6px;transition:width .3s ease;}
 
-.cl-cat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;}
-.cl-cat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;gap:12px;}
-.cl-cat-left{display:flex;align-items:center;gap:12px;}
-.cl-cat-icon{flex:none;width:36px;height:36px;border-radius:12px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;color:var(--accent);}
-.cl-cat-icon svg{width:18px;height:18px;}
-.cl-cat-title{font-size:17px;font-weight:600;}
-.cl-cat-sub{font-size:13px;color:var(--text-muted);margin-top:1px;}
-.cl-cat-count{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);flex-shrink:0;}
-.cl-task{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--border);cursor:pointer;}
-.cl-check{flex:none;width:19px;height:19px;border-radius:6px;border:2px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--btn-text);font-weight:700;transition:all .15s;}
-.cl-check.checked{border-color:var(--accent);background:var(--accent);}
-.cl-task-body{flex:1;}
-.cl-task-label{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;}
-.cl-task-label.checked{text-decoration:line-through;opacity:.6;}
-.cl-task-desc{font-size:13px;color:var(--text-muted);margin-top:1px;}
-.cl-tag{flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);border:1px solid var(--card-border);border-radius:20px;padding:3px 9px;}
 
-.dapps-header{margin-top:48px;margin-bottom:20px;}
-.dapps-title{font-size:24px;font-weight:600;}
-.dapps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
-.dapp-card{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-decoration:none;}
-.dapp-icon{flex:none;width:36px;height:36px;border-radius:8px;background:var(--accent-tint);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;}
-.dapp-name{font-size:14px;font-weight:600;}
-.dapp-cat{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
 
-.calc-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-top:40px;}
-.calc-title{font-size:24px;font-weight:600;margin-bottom:24px;}
-.calc-inputs-row{display:flex;gap:16px;flex-wrap:wrap;}
-.calc-field{flex:1;min-width:140px;}
-.calc-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:8px;display:block;}
-.calc-input{width:100%;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--text);background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:12px 14px;}
-.calc-results-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;}
-.calc-result{flex:1;min-width:160px;background:var(--bg);border:1px solid var(--card-border);border-radius:12px;padding:18px;}
-.calc-result-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:8px;}
-.calc-result-val{font-size:20px;font-weight:700;}
-.calc-result-usd{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-top:4px;}
-.calc-disclaimer{font-size:12px;color:var(--text-muted);margin-top:18px;}
 
 @media(max-width:768px){
   .nav{padding:10px 20px 0;gap:0 12px;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);}
@@ -189,13 +141,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
   .explore{padding:32px 20px;}
   .explore-inner{grid-template-columns:minmax(0,1fr);gap:12px;}
   .site-footer{padding:36px 20px;}
-  .cl-wrap{padding:40px 20px 60px;}
   .hero-title{font-size:34px;}
-  .cl-title{font-size:24px;}
-  .progress-card{gap:20px;padding:18px 20px;flex-wrap:nowrap;}
-  .progress-main{min-width:0;}
-  .progress-side{min-width:0;flex:none;}
-  .cl-task{min-height:48px;}
   .hero-copy{min-width:0;flex:1 1 100%;}
   .nft-wrap{width:100%;}
   .about-label{width:auto;}
@@ -206,11 +152,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 <div class="page">
 
   <nav class="nav" aria-label="Main navigation">
-    <a class="nav-logo" href="/" onclick="goHome();return false;"><span>$</span>MOONSOON</a>
-    <div class="nav-tabs" role="tablist">
-      <button class="nav-tab active" id="tab-home" role="tab" aria-selected="true" onclick="goHome()">Home</button>
+    <a class="nav-logo" href="/"><span>$</span>MOONSOON</a>
+    <div class="nav-tabs">
+      <a class="nav-tab active" href="/" aria-current="page">Home</a>
       <a class="nav-tab" href="/skulls.html">Skulls</a>
-      <button class="nav-tab" id="tab-checklist" role="tab" aria-selected="false" onclick="goChecklist()">Seeker Checklist</button>
+      <a class="nav-tab" href="/checklist.html">Seeker Checklist</a>
       <a class="nav-tab" href="/mica.html">EU Licenses</a>
     </div>
     <div class="nav-right">
@@ -219,7 +165,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
     </div>
   </nav>
 
-  <main id="home-view">
+  <main>
     <section class="hero">
       <div class="hero-inner">
         <div class="hero-copy">
@@ -253,11 +199,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
           <span class="explore-d">All 99 Skulls in one place: owners, sale history and current listings.</span>
           <span class="explore-m"><b id="ex-floor">99</b> <span id="ex-floor-label">Skulls</span></span>
         </a>
-        <a class="explore-card" href="/#checklist" onclick="goChecklist();window.scrollTo(0,0);return false;">
+        <a class="explore-card" href="/checklist.html">
           <span class="explore-k">SEEKER SEASON 2</span>
           <span class="explore-t">Seeker Checklist <span aria-hidden="true">&rarr;</span></span>
           <span class="explore-d">The on-chain activity that counts toward round 2 of the SKR airdrop.</span>
-          <span class="explore-m"><b id="ex-done">0/0</b> <span>tasks done</span></span>
+          <span class="explore-m"><b id="ex-done">Daily</b> <span id="ex-done-label">on-chain tasks</span></span>
         </a>
         <a class="explore-card" href="/mica.html">
           <span class="explore-k">EU REGULATION</span>
@@ -285,56 +231,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
     </section>
   </main>
 
-  <main id="checklist-view">
-    <div class="cl-wrap">
-      <div class="cl-header">
-        <div class="kicker">SEEKER SEASON 2</div>
-        <h1 class="cl-title">Seeker Checklist</h1>
-        <div class="cl-desc">Since launch, well over a billion SKR has already gone out to tens of thousands of wallets, and a big chunk of it is already staked. This checklist keeps you on top of the on-chain activity that actually counts toward round 2 of the airdrop.</div>
-      </div>
-      <div class="progress-card">
-        <div class="progress-main">
-          <div class="progress-stat-label">DAILY PROGRESS</div>
-          <div class="progress-stat-val"><span id="cl-pct">0</span>%</div>
-          <div class="progress-track"><div class="progress-fill" id="cl-fill" style="width:0%"></div></div>
-        </div>
-        <div class="progress-side">
-          <div class="progress-stat-label">TASKS DONE</div>
-          <div class="progress-stat-val"><span id="cl-done">0</span><span class="of">/<span id="cl-total">0</span></span></div>
-        </div>
-      </div>
-
-      <div id="cl-categories" style="margin-top:24px;"></div>
-
-      <div class="dapps-header">
-        <div class="kicker">FEATURED</div>
-        <div class="dapps-title">Featured S2 dApps</div>
-      </div>
-      <div class="dapps-grid" id="cl-dapps"></div>
-
-      <div class="calc-card">
-        <div class="kicker" style="margin-bottom:10px;">CALCULATOR</div>
-        <div class="calc-title">SKR Staking Calculator</div>
-        <div class="calc-inputs-row">
-          <div class="calc-field">
-            <label class="calc-label" for="calc-amount">SKR Amount</label>
-            <input class="calc-input" type="number" id="calc-amount" value="1000" min="0" oninput="calcUpdate()">
-          </div>
-          <div class="calc-field">
-            <label class="calc-label" for="calc-price">SKR Price (USD)</label>
-            <input class="calc-input" type="number" id="calc-price" value="0.021" min="0" step="0.001" oninput="calcUpdate()">
-          </div>
-          <div class="calc-field">
-            <label class="calc-label" for="calc-apy">APY (%)</label>
-            <input class="calc-input" type="number" id="calc-apy" value="19.5" min="0" step="0.1" oninput="calcUpdate()">
-          </div>
-        </div>
-        <div class="calc-results-row" id="calc-results"></div>
-        <div class="calc-disclaimer">Not financial advice.</div>
-      </div>
-    </div>
-  </main>
-
   <footer class="site-footer">
     <div class="copy">&copy; tothemoonsoon</div>
     <div class="links"><a href="https://x.com/m00nsoon" target="_blank" rel="noopener noreferrer">X</a></div>
@@ -344,146 +240,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 <script>
 (function(){
 
-var CL_ICONS = {
-  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
-  chain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V10"/><path d="m3 8 4-4 4 4"/><path d="M7 4v10"/></svg>',
-  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',
-  compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m14.5 9.5-2 5-5 2 2-5 5-2Z"/></svg>',
-  gem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20M12 21 8 9l2-6m4 0 2 6-4 12"/></svg>',
-};
-
-var CHECKLIST_DATA = [
-  { key:'setup', icon:CL_ICONS.gear, title:'Device Setup', subtitle:'One-time configuration', countable:false, tasks:[
-    { id:'setup-1', label:'Enable Usage and Diagnostics', desc:'Settings — Solana Mobile — enable diagnostics', tag:'One-time' },
-    { id:'setup-2', label:'Update wallet to latest version', desc:'dApp Store — update Seed Vault Wallet', tag:'One-time' },
-    { id:'setup-3', label:'Claim Genesis Token and Seeker ID', desc:'Claim your .skr domain', tag:'One-time' },
-  ]},
-  { key:'onchain', icon:CL_ICONS.chain, title:'On-Chain Activity', subtitle:'Do daily — highest airdrop weight', countable:true, tasks:[
-    { id:'onchain-1', label:'Daily swaps', desc:'Diversify swap pairs for a better on-chain score', tag:'Daily' },
-    { id:'onchain-2', label:'Stake SKR tokens', desc:'48h unstaking — key loyalty signal', tag:'Staking' },
-    { id:'onchain-3', label:'DeFi interaction', desc:'Lend, borrow, or trade — diversify beyond swaps', tag:'Daily' },
-    { id:'onchain-4', label:'NFT mint or marketplace interaction', desc:'Boosts on-chain level faster than swaps alone', tag:'Daily' },
-  ]},
-  { key:'usage', icon:CL_ICONS.phone, title:'Daily Device Usage', subtitle:'Consistency may unlock bonus multipliers', countable:true, tasks:[
-    { id:'usage-1', label:'Open dApp Store', desc:'Browse featured and recommendations', tag:'Daily' },
-    { id:'usage-2', label:'Open Seed Vault Wallet', desc:'Check balances, review activity', tag:'Daily' },
-    { id:'usage-3', label:'Open 3+ different dApps', desc:'Rewards variety, not just volume', tag:'Daily' },
-    { id:'usage-4', label:'Check dApp Store notifications', desc:'New weekly activations and rewards', tag:'Daily' },
-  ]},
-  { key:'explore', icon:CL_ICONS.compass, title:'dApp Exploration', subtitle:'Weekly — download early in the week', countable:true, tasks:[
-    { id:'explore-1', label:'Download 3 new apps', desc:'Any new app from the dApp Store', tag:'Weekly' },
-    { id:'explore-2', label:'Use each new app for 5+ minutes', desc:'Complete early — weekend sync may miss it', tag:'Weekly' },
-    { id:'explore-3', label:'Leave a review for an app', desc:'Supports future featured placements', tag:'Weekly' },
-  ]},
-  { key:'staking', icon:CL_ICONS.gem, title:'SKR Staking', subtitle:'Key loyalty signal for S2 airdrop', countable:true, tasks:[
-    { id:'staking-1', label:'Stake SKR to a Guardian node', desc:'Helius, Jito, Anza, DoubleZero or Triton — rewards every 48h', tag:'Staking' },
-  ]},
-];
-
-var FEATURED_DAPPS = [
-  { name:'Phantom', category:'Wallet', url:'https://phantom.com' },
-  { name:'Backpack', category:'Wallet / xNFT', url:'https://backpack.app' },
-  { name:'Solflare', category:'Wallet', url:'https://solflare.com' },
-  { name:'Jupiter', category:'DEX / Aggregator', url:'https://jup.ag' },
-  { name:'Drift', category:'Perps / DEX', url:'https://drift.trade' },
-  { name:'Raydium', category:'AMM / DEX', url:'https://raydium.io' },
-  { name:'Orca', category:'CLMM / DEX', url:'https://orca.so' },
-  { name:'Kamino', category:'Lending / Liquidity', url:'https://kamino.finance' },
-  { name:'MarginFi', category:'Lending / Margin', url:'https://marginfi.com' },
-  { name:'Tensor', category:'NFT Marketplace', url:'https://tensor.trade' },
-  { name:'Magic Eden', category:'NFT Marketplace', url:'https://magiceden.io' },
-  { name:'Jito', category:'Staking / Guardian', url:'https://jito.network' },
-  { name:'Sanctum', category:'LST / Yield', url:'https://sanctum.so' },
-  { name:'Marinade', category:'Liquid Staking', url:'https://marinade.finance' },
-];
-
-var STORAGE_KEY = 'moonsoon_checklist_v1';
-var checked = {};
-try { checked = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){}
-
-function saveChecked(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(checked)); }catch(e){} }
-
-function escAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function toggleTask(id){
-  checked[id] = !checked[id];
-  saveChecked();
-  renderChecklist();
-}
-window.toggleTask = toggleTask;
-
-function renderChecklist(){
-  var tasksDone=0, tasksTotal=0;
-  var html='';
-  CHECKLIST_DATA.forEach(function(cat){
-    var doneCount=0;
-    var taskHtml='';
-    cat.tasks.forEach(function(t){
-      var isChecked = !!checked[t.id];
-      if(cat.countable){ tasksTotal++; if(isChecked) tasksDone++; }
-      if(isChecked) doneCount++;
-      taskHtml += '<div class="cl-task" onclick="toggleTask(\''+t.id+'\')">'+
-        '<div class="cl-check'+(isChecked?' checked':'')+'">'+(isChecked?'&#10003;':'')+'</div>'+
-        '<div class="cl-task-body">'+
-          '<div class="cl-task-label'+(isChecked?' checked':'')+'">'+escAttr(t.label)+'</div>'+
-          '<div class="cl-task-desc">'+escAttr(t.desc)+'</div>'+
-        '</div>'+
-        '<div class="cl-tag">'+escAttr(t.tag)+'</div>'+
-      '</div>';
-    });
-    html += '<div class="cl-cat">'+
-      '<div class="cl-cat-head">'+
-        '<div class="cl-cat-left">'+
-          '<div class="cl-cat-icon">'+cat.icon+'</div>'+
-          '<div><div class="cl-cat-title">'+escAttr(cat.title)+'</div><div class="cl-cat-sub">'+escAttr(cat.subtitle)+'</div></div>'+
-        '</div>'+
-        '<div class="cl-cat-count">'+doneCount+'/'+cat.tasks.length+'</div>'+
-      '</div>'+
-      taskHtml+
-    '</div>';
-  });
-  document.getElementById('cl-categories').innerHTML = html;
-  var pct = tasksTotal ? Math.round((tasksDone/tasksTotal)*100) : 0;
-  document.getElementById('cl-pct').textContent = pct;
-  document.getElementById('cl-fill').style.width = pct+'%';
-  document.getElementById('cl-done').textContent = tasksDone;
-  document.getElementById('cl-total').textContent = tasksTotal;
-}
-
-function renderDapps(){
-  var html = FEATURED_DAPPS.map(function(d){
-    return '<a class="dapp-card" href="'+escAttr(d.url)+'" target="_blank" rel="noopener noreferrer">'+
-      '<div class="dapp-icon">'+escAttr(d.name[0])+'</div>'+
-      '<div><div class="dapp-name">'+escAttr(d.name)+'</div><div class="dapp-cat">'+escAttr(d.category)+'</div></div>'+
-    '</a>';
-  }).join('');
-  document.getElementById('cl-dapps').innerHTML = html;
-}
-
-function fmtNum(n){ return n.toLocaleString(undefined,{maximumFractionDigits:0}); }
-function fmtUsd(n){ return n.toLocaleString(undefined,{maximumFractionDigits:2}); }
-
-function calcUpdate(){
-  var amount = parseFloat(document.getElementById('calc-amount').value) || 0;
-  var price = parseFloat(document.getElementById('calc-price').value) || 0;
-  var apy = parseFloat(document.getElementById('calc-apy').value) || 0;
-  var periods = [{label:'30 DAYS',days:30},{label:'6 MONTHS',days:182},{label:'1 YEAR',days:365}];
-  var html = periods.map(function(p){
-    var growth = amount * Math.pow(1+(apy/100)/365, p.days) - amount;
-    var total = amount + growth;
-    return '<div class="calc-result">'+
-      '<div class="calc-result-label">'+p.label+'</div>'+
-      '<div class="calc-result-val">'+fmtNum(total)+' SKR</div>'+
-      '<div class="calc-result-usd">$'+fmtUsd(total*price)+'</div>'+
-    '</div>';
-  }).join('');
-  document.getElementById('calc-results').innerHTML = html;
-}
-window.calcUpdate = calcUpdate;
+function checklistRedirect(){ if(location.hash==='#checklist'){ location.replace('/checklist.html'); } }
+checklistRedirect();
+window.addEventListener('hashchange', checklistRedirect);
 
 function syncExplore(){
-  var d=document.getElementById('cl-done'),t=document.getElementById('cl-total'),o=document.getElementById('ex-done');
-  if(d&&t&&o){ o.textContent=d.textContent+'/'+t.textContent; }
+  var sum=null;
+  try{ sum=JSON.parse(localStorage.getItem('moonsoon_checklist_summary')||'null'); }catch(e){}
+  if(sum && sum.total){
+    document.getElementById('ex-done').textContent=sum.done+'/'+sum.total;
+    document.getElementById('ex-done-label').textContent='tasks done';
+  }
 }
 function loadExploreFloor(){
   fetch('/skulls-data.json').then(function(r){ return r.json(); }).then(function(data){
@@ -495,33 +262,6 @@ function loadExploreFloor(){
     }
   }).catch(function(){});
 }
-var HOME_TITLE=document.title;
-var CHECKLIST_TITLE='Seeker Checklist: Season 2 airdrop tasks | tothemoonsoon';
-function goHome(){
-  syncExplore();
-  document.title=HOME_TITLE;
-  document.getElementById('home-view').style.display='block';
-  document.getElementById('checklist-view').style.display='none';
-  document.getElementById('tab-home').classList.add('active');
-  document.getElementById('tab-home').setAttribute('aria-selected','true');
-  document.getElementById('tab-checklist').classList.remove('active');
-  document.getElementById('tab-checklist').setAttribute('aria-selected','false');
-  history.replaceState(null,'','#home');
-}
-window.goHome = goHome;
-
-function goChecklist(){
-  document.title=CHECKLIST_TITLE;
-  document.getElementById('home-view').style.display='none';
-  document.getElementById('checklist-view').style.display='block';
-  document.getElementById('tab-checklist').classList.add('active');
-  document.getElementById('tab-checklist').setAttribute('aria-selected','true');
-  document.getElementById('tab-home').classList.remove('active');
-  document.getElementById('tab-home').setAttribute('aria-selected','false');
-  history.replaceState(null,'','#checklist');
-}
-window.goChecklist = goChecklist;
-
 function toggleTheme(){
   var isLight = document.documentElement.getAttribute('data-theme')==='light';
   document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
@@ -533,12 +273,8 @@ var savedTheme = null;
 try{ savedTheme = localStorage.getItem('moonsoon_theme'); }catch(e){}
 if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
 
-renderChecklist();
-renderDapps();
-calcUpdate();
 syncExplore();
 loadExploreFloor();
-if(location.hash==='#checklist'){ goChecklist(); }
 
 })();
 </script>

@@ -1,0 +1,61 @@
+name: Backfill Mad Lads Sales
+
+on:
+  schedule:
+    # Nightly: older sales for the next batch of Lads, within a credit budget.
+    - cron: '12 1 * * *'
+  push:
+    branches: [claude/tender-hopper-p8opwh]
+    paths: ['scripts/backfill-madlads-sales.mjs', '.github/workflows/backfill-madlads.yml']
+  workflow_dispatch:
+    inputs:
+      budget:
+        description: 'Helius credits to spend in this run'
+        default: '12000'
+      check:
+        description: 'Read-only accuracy check against the Skulls data'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# Shares a group with the daily snapshot so the two never push at once.
+concurrency:
+  group: update-madlads
+  cancel-in-progress: false
+
+env:
+  # Push runs on the working branch are a read-only accuracy check.
+  CHECK: ${{ (github.event_name == 'push' || inputs.check) && '1' || '' }}
+  TARGET: ${{ github.event_name == 'schedule' && 'main' || github.ref_name }}
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Backfill sales
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          BUDGET: ${{ inputs.budget || '12000' }}
+        run: node scripts/backfill-madlads-sales.mjs
+
+      - name: Commit and push if changed
+        if: ${{ env.CHECK != '1' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add madlads-*.json
+          git diff --staged --quiet && exit 0
+          git commit -m "chore: Mad Lads sales backfill [automated]"
+          git pull --rebase origin "$TARGET"
+          git push origin "HEAD:$TARGET"

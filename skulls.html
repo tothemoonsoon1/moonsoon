@@ -580,7 +580,7 @@ button.ho-leg:hover{color:var(--text);}
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Sale History</h2>
           <div class="sk-desc">Every recorded on-chain sale across all 99 Skulls — price, marketplace and date.</div>
-          <details class="sh-price-note"><summary>&#9432; How prices are shown</summary>The listing or offer price, before fees. Marketplaces add a 2% fee and the 4.2% Mad Lads royalty (6.2% total), so Tensor and Magic Eden show about 6.2% more when a buyer took a listing, and about 6.2% less when a seller accepted an offer.</details>
+          <details class="sh-price-note"><summary>&#9432; How prices are shown</summary>Every price here — floor, listings and sales — includes the 2% marketplace fee and the 4.2% Mad Lads royalty (6.2% total): the total a buyer pays.</details>
         </div>
 
         <div class="stats-bar">
@@ -661,6 +661,9 @@ button.ho-leg:hover{color:var(--text);}
 (function(){
 
 function escAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// Every displayed price includes the 2% fee + 4.2% royalty (buyer total).
+// listPrice already does (set in the generator); sale prices are raw, so scale them here.
+var PRICE_FEE = 1.062;
 
 /* Deterministic PRNG (mulberry32), seeded so data is stable across loads */
 function mulberry32(seed){
@@ -1425,7 +1428,7 @@ function renderSkullDetail(num){
       '</div><div class="sd-btns">'+
         '<a class="sd-btn primary" href="'+escAttr(s.meUrl)+'" target="_blank" rel="noopener noreferrer">'+(s.listed?'Buy on Magic Eden':'View on Magic Eden')+'</a>'+
         '<a class="sd-btn" href="'+escAttr(tensorUrl)+'" target="_blank" rel="noopener noreferrer">'+(s.listed?'Buy on Tensor':'View on Tensor')+'</a>'+
-      '</div>'+(s.listed ? '<div class="sd-foot">Listed price is the total a buyer pays, incl. 2% fee + 4.2% royalty. Sale prices above exclude them.</div>' : '')+'</div>'+
+      '</div><div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div></div>'+
     '</div>';
   return true;
 }
@@ -1622,7 +1625,7 @@ function renderSaleFeed(){
   }
   el.innerHTML = '<div class="sf-head"><span>RECENT SALES<span class="sf-live"></span></span>'+
     '<button class="sf-all" onclick="switchView(\'history\')">See all &rarr;</button></div>'+filterNote+
-    '<div class="sf-note">&#9650;/&#9660; = price vs the same Skull\'s previous sale<br>Prices exclude the 6.2% marketplace fee + royalty</div>'+
+    '<div class="sf-note">&#9650;/&#9660; = price vs the same Skull\'s previous sale<br>Prices include the 6.2% marketplace fee + royalty</div>'+
     '<div class="sf-list">'+sales.slice(0, 30).map(function(x){
       var mkt = fmtMarketplace(x.sale.source), isMe = mkt === 'Magic Eden';
       var link = isMe && x.s.meUrl ? x.s.meUrl : (x.s.mint ? 'https://www.tensor.trade/item/'+x.s.mint : 'https://www.tensor.trade/trade/madlads');
@@ -1655,6 +1658,10 @@ fetch('/skulls-data.json', { cache: 'no-store' })
   .then(function(res){ return res.ok ? res.json() : null; })
   .then(function(data){
     if(data && Array.isArray(data.skulls) && data.skulls.length){
+      data.skulls.forEach(function(sk){
+        if(sk.lastSalePrice != null){ sk.lastSalePrice = Math.round(sk.lastSalePrice * PRICE_FEE * 100) / 100; }
+        (sk.sales || []).forEach(function(sa){ sa.priceSol = Math.round(sa.priceSol * PRICE_FEE * 100) / 100; });
+      });
       SKULLS = data.skulls;
       renderAll();
     }

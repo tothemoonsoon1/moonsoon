@@ -131,17 +131,26 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sd-traits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .sd-trait{text-align:left;font-family:inherit;color:var(--text);background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:12px;padding:11px 12px;cursor:pointer;min-width:0;}
 .sd-trait{transition:background .15s ease,border-color .15s ease,box-shadow .15s ease;}
-.sd-trait.t-rare{border-color:var(--rare);}
-.sd-trait.t-uncommon{border-color:var(--uncommon);}
+.sd-trait.rtb-mythic{border-color:var(--gold-text);}
+.sd-trait.rtb-legendary{border-color:var(--uncommon);}
+.sd-trait.rtb-epic{border-color:var(--me-text);}
+.sd-trait.rtb-rare{border-color:var(--accent);}
 .sd-trait:hover,.sd-trait:focus-visible{background:rgba(127,127,127,.14);border-color:var(--text-muted);}
-.sd-trait.t-rare:hover,.sd-trait.t-rare:focus-visible{border-color:var(--rare);box-shadow:0 0 0 2px rgba(255,77,141,.35);}
-.sd-trait.t-uncommon:hover,.sd-trait.t-uncommon:focus-visible{border-color:var(--uncommon);box-shadow:0 0 0 2px rgba(255,138,76,.35);}
+.sd-trait.rtb-mythic:hover{box-shadow:0 0 0 2px rgba(240,184,77,.35);}
+.sd-trait.rtb-legendary:hover{box-shadow:0 0 0 2px rgba(255,138,76,.35);}
+.sd-trait.rtb-epic:hover{box-shadow:0 0 0 2px rgba(122,63,224,.35);}
+.sd-trait.rtb-rare:hover{box-shadow:0 0 0 2px var(--accent-glow);}
+.rt{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;padding:1px 6px;border:1px solid currentColor;line-height:1.4;}
+.rt-mythic{color:var(--gold-text);background:rgba(240,184,77,.12);}
+.rt-legendary{color:var(--uncommon);background:rgba(255,138,76,.12);}
+.rt-epic{color:var(--me-text);background:rgba(185,136,255,.15);}
+.rt-rare{color:var(--accent);background:var(--accent-tint);}
+.rt-uncommon{color:var(--up);background:rgba(20,241,149,.1);}
+.rt-common{color:var(--text-muted);background:rgba(127,127,127,.1);}
 .sd-trait-k{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);}
 .sd-trait-v{font-size:15px;font-weight:700;margin:3px 0 7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sd-trait-r{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
-.sd-tier{font-size:12px;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:6px;color:#fff;background:#6b7280;}
-.sd-tier.t-rare{background:#e63a78;}
-.sd-tier.t-uncommon{background:#b85216;}
+
 .sd-shared{font-size:12px;color:var(--text-muted);margin-top:-8px;}
 .sd-h{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
 .sd-owner{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:13px;}
@@ -172,10 +181,14 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sk-trait{font-size:12px;line-height:1.3;padding:3px 6px;border-radius:6px;border:1px solid var(--card-border);color:var(--text-muted);cursor:pointer;background:transparent;font-family:inherit;text-align:left;}
 .sk-trait b{color:var(--text);font-weight:600;}
 .sk-trait:hover{border-color:var(--text-muted);background:rgba(127,127,127,.14);}
-.sk-trait.t-rare,.sk-trait.t-rare:hover{border-color:var(--rare);}
-.sk-trait.t-rare:hover{box-shadow:0 0 0 1.5px rgba(255,77,141,.35);}
-.sk-trait.t-uncommon,.sk-trait.t-uncommon:hover{border-color:var(--uncommon);}
-.sk-trait.t-uncommon:hover{box-shadow:0 0 0 1.5px rgba(255,138,76,.35);}
+.sk-trait.rtt-mythic{border-color:var(--gold-text);}
+.sk-trait.rtt-legendary{border-color:var(--uncommon);}
+.sk-trait.rtt-epic{border-color:var(--me-text);}
+.sk-trait.rtt-rare{border-color:var(--accent);}
+.sk-trait.rtt-mythic:hover{box-shadow:0 0 0 1.5px rgba(240,184,77,.35);}
+.sk-trait.rtt-legendary:hover{box-shadow:0 0 0 1.5px rgba(255,138,76,.35);}
+.sk-trait.rtt-epic:hover{box-shadow:0 0 0 1.5px rgba(122,63,224,.35);}
+.sk-trait.rtt-rare:hover{box-shadow:0 0 0 1.5px var(--accent-glow);}
 .sk-layout{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:20px;align-items:start;}
 .sf{position:sticky;top:16px;border:1px solid var(--card-border);border-radius:14px;padding:14px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;gap:10px;}
 .sf-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;letter-spacing:.08em;}
@@ -326,8 +339,8 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
   .sk-card{display:flex;flex-direction:column;}
   .sk-body{display:flex;flex-direction:column;flex:1;}
   .sk-links{margin-top:auto;padding-top:12px;}
-  .sk-traits .sk-trait:not(.t-rare):not(.t-uncommon){display:none;}
-  .sk-traits:not(:has(.t-rare,.t-uncommon)){display:none;}
+  .sk-traits .sk-trait:not(.rtt-mythic):not(.rtt-legendary):not(.rtt-epic):not(.rtt-rare){display:none;}
+  .sk-traits:not(:has(.rtt-mythic,.rtt-legendary,.rtt-epic,.rtt-rare)){display:none;}
   .sk-trait{display:inline-flex;align-items:center;gap:4px;min-height:28px;font-size:12px;padding:4px 9px;}
 }
 /* ---- Phone and small tablet: view switch sits under the page header ---- */
@@ -795,7 +808,7 @@ function traitsHtml(s){
   var counts = traitCountsCache || traitCounts(), total = SKULLS.length;
   var chips = TRAIT_ORDER.filter(function(k){ return t[k]; }).map(function(k){
     var n = counts[k][t[k]], pct = Math.round(n/total*100);
-    return '<button class="sk-trait '+traitTier(n/total*100).cls+'" title="'+escAttr(k)+': '+n+' of '+total+' Skulls" '+
+    return '<button class="sk-trait rtt-'+traitTier(n/total*100).id+'" title="'+escAttr(k)+': '+n+' of '+total+' Skulls" '+
       'data-k="'+escAttr(k)+'" data-v="'+escAttr(t[k])+'" onclick="event.stopPropagation();setTraitFromChip(this)">'+
       escAttr(k)+' <b>'+escAttr(t[k])+'</b> '+pct+'%</button>';
   }).join('');
@@ -1303,10 +1316,19 @@ var sdLastFocus = null;
 
 function largeUrl(s){ return '/assets/img/skulls/lg/'+s.num+'.webp'; }
 
+// Per-trait rarity by how few Skulls share the value — same six named tiers
+// (and colours) as the Mad Lads page. Counted among the 99 Skulls only.
+var TRAIT_TIERS = [
+  { id: 'mythic', label: 'Mythic', max: 0.5 },
+  { id: 'legendary', label: 'Legendary', max: 1.5 },
+  { id: 'epic', label: 'Epic', max: 4 },
+  { id: 'rare', label: 'Rare', max: 10 },
+  { id: 'uncommon', label: 'Uncommon', max: 25 },
+  { id: 'common', label: 'Common', max: 100 }
+];
 function traitTier(pct){
-  if(pct <= 5) return { cls: 't-rare', label: 'RARE' };
-  if(pct <= 15) return { cls: 't-uncommon', label: 'UNCOMMON' };
-  return { cls: '', label: 'COMMON' };
+  for(var i = 0; i < TRAIT_TIERS.length; i++){ if(pct <= TRAIT_TIERS[i].max) return TRAIT_TIERS[i]; }
+  return TRAIT_TIERS[TRAIT_TIERS.length-1];
 }
 
 function fmtHeld(ms){
@@ -1342,9 +1364,9 @@ function renderSkullDetail(num){
   if(t){
     traitsHtmlStr = '<div><div class="sd-traits">'+TRAIT_ORDER.map(function(k){
       var v = t[k] || 'None', n = (counts[k] && counts[k][v]) || 0, pct = n / total * 100, tier = traitTier(pct);
-      return '<button class="sd-trait '+tier.cls+'" data-k="'+escAttr(k)+'" data-v="'+escAttr(v)+'" onclick="sdFilterTrait(this)" title="Show all '+n+' Skulls with '+escAttr(k)+': '+escAttr(v)+'">'+
+      return '<button class="sd-trait rtb-'+tier.id+'" data-k="'+escAttr(k)+'" data-v="'+escAttr(v)+'" onclick="sdFilterTrait(this)" title="Show all '+n+' Skulls with '+escAttr(k)+': '+escAttr(v)+'">'+
         '<div class="sd-trait-k">'+escAttr(k)+'</div><div class="sd-trait-v">'+escAttr(v)+'</div>'+
-        '<div class="sd-trait-r"><span class="sd-tier '+tier.cls+'">'+tier.label+'</span>'+pct.toFixed(1)+'% &middot; '+n+'/'+total+'</div></button>';
+        '<div class="sd-trait-r"><span class="rt rt-'+tier.id+'">'+tier.label+'</span>'+pct.toFixed(1)+'% &middot; '+n+'/'+total+'</div></button>';
     }).join('')+'</div></div>'+
     '<div class="sd-shared">All 99 share Type: Skull &middot; Expression: Inferno &middot; Gender: Male. Rarity is counted among Skulls only.</div>';
   }

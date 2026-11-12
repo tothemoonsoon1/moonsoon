@@ -34,6 +34,7 @@
   var draft = null;
   var feed = [];
   var seen = {};
+  var lastPing = {};       // mint -> cheapest price we have already pinged
   var primed = false;
   var timer = null;
 
@@ -252,7 +253,19 @@
     }
     // The first pass only learns what is already listed. Without it the tab
     // would fire a hundred notifications the moment it is opened.
-    if (!primed) { primed = true; return; }
+    if (!primed) {
+      primed = true;
+      // Remember what each mint is already listed at, so the first event after
+      // priming is judged against a real price rather than treated as new.
+      for (var s0 = 0; s0 < list.length; s0++) {
+        var a0 = list[s0];
+        if (a0 && a0.type === 'list' && a0.tokenMint && typeof a0.price === 'number') {
+          var p0 = withFee(a0.price);
+          if (lastPing[a0.tokenMint] == null || p0 < lastPing[a0.tokenMint]) lastPing[a0.tokenMint] = p0;
+        }
+      }
+      return;
+    }
     fresh.sort(function (x, y) { return (x.blockTime || 0) - (y.blockTime || 0); });
     for (var j = 0; j < fresh.length; j++) consider(fresh[j]);
   }
@@ -262,16 +275,27 @@
     if (!lad || typeof act.price !== 'number') return;
     var price = withFee(act.price);
 
+    // Most "list" events are one bot re-listing the same few Lads every half
+    // minute, each time a hair dearer: 28 listings in an eight-minute window
+    // came from three mints. Pinging each one would bury any real listing, so
+    // a mint only pings again when it comes back meaningfully cheaper.
+    var before = lastPing[act.tokenMint];
+    if (before != null && price >= before * 0.99) return;
+
     var matched = [];
     for (var i = 0; i < rules.length; i++) {
       if (rules[i].enabled && matches(rules[i], lad, price)) matched.push(rules[i]);
     }
     if (!matched.length) return;
+    lastPing[act.tokenMint] = price;
 
     for (var j = 0; j < matched.length; j++) matched[j].hits = (matched[j].hits || 0) + 1;
     save();
 
-    var ref = thresholdFor(matched[0], matchedTraitsFor(matched[0], lad));
+    var basis = matched[0].cap && matched[0].cap.basis;
+    var ref = (basis === 'trait' || basis === 'floor')
+      ? thresholdFor(matched[0], matchedTraitsFor(matched[0], lad))
+      : null;
     var hit = {
       num: lad.num,
       price: price,

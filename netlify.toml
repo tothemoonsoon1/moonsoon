@@ -34,3 +34,15 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Magic Eden allowlists CORS to its own domain, so the browser cannot call their
+# API directly. This serves it from our own origin instead, with a short cache so
+# every visitor polling at once still costs one upstream call.
+[[edge_functions]]
+  path = "/api/me/*"
+  function = "me-proxy"
+
+[[headers]]
+  for = "/api/me/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"

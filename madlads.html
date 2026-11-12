@@ -453,6 +453,67 @@ button.ho-leg:hover{color:var(--text);}
   .ho-legend{flex-direction:column;}
   .ho-leg{min-height:32px;}
 }
+
+/* ---- Trait Alerts tab ---- */
+.al-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start;}
+.al-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:14px;}
+.al-cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.al-cat{font-family:inherit;font-size:12px;font-weight:600;padding:8px 11px;min-height:38px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.al-cat:hover{color:var(--text);border-color:var(--text-muted);}
+.al-cat.active{color:var(--text);border-color:var(--accent);background:var(--accent-tint);}
+.al-cat-n{font-size:11px;font-weight:700;color:var(--accent);}
+.al-find{margin-bottom:8px;width:100%;}
+.al-rows{max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.al-row.active{border-color:var(--accent);background:var(--accent-tint);}
+.al-rail h4{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);font-weight:500;margin:0 0 8px;}
+.al-rail-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.al-rail-row h4{margin:0;}
+.al-floor{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums;}
+.al-seg{display:inline-flex;border:1px solid var(--card-border);border-radius:20px;padding:3px;}
+.al-seg button{font-family:inherit;border:none;background:none;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;color:var(--text-muted);cursor:pointer;}
+.al-seg button.on{background:var(--accent);color:var(--btn-text);}
+.al-chips{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.al-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--card-border);border-radius:8px;padding:7px 9px;font-size:13px;}
+.al-chip-k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);}
+.al-x{margin-left:auto;border:none;background:none;color:var(--text-muted);font-size:16px;line-height:1;cursor:pointer;padding:0 2px;}
+.al-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.al-pill{font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 11px;min-height:34px;border-radius:20px;border:1px solid var(--card-border);background:var(--surface);color:var(--text-muted);cursor:pointer;}
+.al-pill:hover{color:var(--text);border-color:var(--text-muted);}
+.al-pill.on{background:var(--accent);border-color:var(--accent);color:var(--btn-text);font-weight:700;}
+.al-hint{font-size:12px;color:var(--text-muted);margin:0 0 14px;}
+.al-hint b{color:var(--text);font-variant-numeric:tabular-nums;}
+.al-save{width:100%;justify-content:center;min-height:44px;}
+.al-save[disabled]{opacity:.45;cursor:not-allowed;}
+.al-foot{font-size:11px;color:var(--text-muted);text-align:center;margin:10px 0 0;}
+.al-empty{font-size:12px;color:var(--text-muted);border:1px dashed var(--card-border);border-radius:8px;padding:12px;text-align:center;}
+.al-empty-box{font-size:13px;color:var(--text-muted);border:1px dashed var(--card-border);border-radius:12px;padding:20px;text-align:center;}
+.al-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:10px 14px;margin-bottom:18px;}
+.al-status-t{font-size:13px;color:var(--text-muted);}
+.al-dot{width:8px;height:8px;border-radius:50%;background:var(--no);flex-shrink:0;}
+.al-dot.on{background:var(--up);}
+.al-dot.bad{background:var(--down);}
+.al-rule{display:grid;grid-template-columns:4px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+.al-stripe{width:4px;align-self:stretch;min-height:36px;border-radius:4px;background:var(--up);}
+.al-stripe.off{background:var(--no);}
+.al-stripe.warn{background:var(--warn);}
+.al-rule-t{font-size:14px;font-weight:600;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;}
+.al-rule-s{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);}
+.al-rule-r{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.al-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:20px;border:1px solid var(--card-border);color:var(--text-muted);white-space:nowrap;}
+.al-tag.hit{color:var(--accent);border-color:var(--accent);background:var(--accent-tint);}
+.al-tag.warn{color:var(--warn);border-color:var(--warn);}
+.al-mini{font-family:inherit;font-size:11px;font-weight:600;padding:5px 10px;min-height:30px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-muted);cursor:pointer;}
+.al-mini:hover{color:var(--text);border-color:var(--text-muted);}
+.al-hit{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:10px 12px;margin-bottom:8px;text-decoration:none;color:inherit;}
+.al-hit:hover{border-color:var(--accent);}
+.al-hit img{border-radius:8px;display:block;}
+.al-hit-t{font-size:14px;font-weight:600;}
+.al-hit-s{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.al-hit-p{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.al-over{font-size:11px;font-weight:600;color:var(--text-muted);}
+.al-over.under{color:var(--up);}
+.al-sub-h{font-size:16px;font-weight:700;margin:26px 0 10px;}
+@media(max-width:900px){.al-grid{grid-template-columns:minmax(0,1fr);}}
 </style>
 </head>
 <body>
@@ -480,6 +541,7 @@ button.ho-leg:hover{color:var(--text);}
         <button class="view-toggle-btn active" id="vt-gallery" onclick="switchView('gallery')">Gallery</button>
         <button class="view-toggle-btn" id="vt-holders" onclick="switchView('holders')">Holders</button>
         <button class="view-toggle-btn" id="vt-sales" onclick="switchView('sales')">Sales</button>
+        <button class="view-toggle-btn" id="vt-alerts" onclick="switchView('alerts')">Alerts</button>
       </div>
 
       <!-- ================= Gallery ================= -->
@@ -650,6 +712,28 @@ button.ho-leg:hover{color:var(--text);}
         </div>
       </div>
 
+      <!-- ================= Trait Alerts ================= -->
+      <div id="view-alerts" style="display:none;">
+        <div class="sk-header">
+          <div class="kicker">TRAIT ALERTS</div>
+          <h1 class="sk-title">Trait Alerts</h1>
+          <div class="sk-desc">Pick the traits or ranks you want and get a ping the moment one is listed under your price cap. Rules live in this browser and run while the tab is open.</div>
+        </div>
+
+        <div class="al-status" id="al-status"></div>
+
+        <div class="al-grid">
+          <div class="al-card" id="al-picker"></div>
+          <div class="al-card al-rail" id="al-rail"></div>
+        </div>
+
+        <h2 class="al-sub-h">Your alerts</h2>
+        <div id="al-rules"></div>
+
+        <h2 class="al-sub-h">Recent hits</h2>
+        <div id="al-feed"></div>
+      </div>
+
     </div>
   </main>
 
@@ -662,6 +746,7 @@ button.ho-leg:hover{color:var(--text);}
 <div class="sd-back" id="sd-back" hidden onclick="if(event.target===this)closeLad()">
   <div class="sd" id="sd" role="dialog" aria-modal="true" aria-labelledby="sd-title"></div>
 </div>
+<script src="/assets/js/alerts.js?v=1" defer></script>
 <script>
 (function(){
 
@@ -1395,7 +1480,7 @@ function renderSales(){
 window.renderSales = renderSales;
 
 // ---- Views ----
-var VIEWS = ['gallery','holders','sales'], view = 'gallery';
+var VIEWS = ['gallery','holders','sales','alerts'], view = 'gallery';
 function switchView(v){
   if(VIEWS.indexOf(v) === -1) v = 'gallery';
   view = v;
@@ -1406,6 +1491,7 @@ function switchView(v){
   if(location.hash.slice(1) !== v) history.replaceState(null, '', v === 'gallery' ? location.pathname : '#'+v);
   if(v === 'holders'){ renderHolderStats(); renderMoves(); renderHolders(); }
   if(v === 'sales'){ shPage = 1; renderSales(); loadAllYears().then(function(){ if(view === 'sales') renderSales(); }); }
+  if(v === 'alerts' && window.MLAlerts) MLAlerts.onShow();
 }
 window.switchView = switchView;
 window.addEventListener('hashchange', function(){
@@ -1423,6 +1509,29 @@ window.toggleTheme = toggleTheme;
 var savedTheme = null;
 try{ savedTheme = localStorage.getItem('moonsoon_theme'); }catch(e){}
 if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
+
+
+// ---- Trait Alerts bridge ----
+// The alerts module lives in /assets/js/alerts.js so a mistake there cannot take
+// the gallery down with it. It gets the collection we already hold in memory.
+var BY_MINT = null;
+function initAlerts(){
+  if(!window.MLAlerts || !LADS.length) return;
+  if(!BY_MINT){
+    BY_MINT = {};
+    LADS.forEach(function(l){ if(l.mint) BY_MINT[l.mint] = l; });
+  }
+  try{
+    MLAlerts.init({
+      LADS: LADS, KEYS: KEYS, VALUES: VALUES, COUNTS: COUNTS, SAMPLE: SAMPLE, TIERS: TIERS,
+      PRICE_FEE: PRICE_FEE, esc: esc, thumb: thumb,
+      byMint: function(m){ return BY_MINT[m] || null; },
+      byNum: function(n){ return BY[n] || null; }
+    });
+  }catch(e){ /* the gallery must survive a broken alerts module */ }
+}
+// `defer` means alerts.js may still be loading when the data arrives.
+window.addEventListener('load', function(){ if(window.MLAlerts && !BY_MINT) initAlerts(); });
 
 function renderAll(){
   renderStats(); renderTraitPanel(); applyFilters();
@@ -1443,6 +1552,7 @@ pStatic.then(function(s){
   if(!s || !s.lads){ document.getElementById('ml-count').textContent = 'Could not load Mad Lads data. Please refresh.'; return; }
   buildStatic(s);
   renderAll();
+  initAlerts();
   return pData.then(function(d){
     if(!d) return;
     buildData(d);

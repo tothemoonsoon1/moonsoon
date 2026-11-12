@@ -222,7 +222,7 @@
     return loadMarket()
       .then(function () {
         if (!activeRules().length) { pollState.status = 'idle'; render(); return; }
-        return fetchJson(API + 'activities?type=list&offset=0&limit=100').then(onActivities);
+        return fetchJson(API + 'activities?offset=0&limit=100').then(onActivities);
       })
       .then(function () {
         if (pollState.status !== 'idle') { pollState.status = 'ok'; pollState.at = Date.now(); pollState.error = null; }
@@ -235,6 +235,12 @@
       });
   }
 
+  // Fetched unfiltered on purpose. Magic Eden's ?type=list filter answers from
+  // a stale index: measured against the live feed it was returning listings
+  // nine hours old while unfiltered showed the same collection's listings from
+  // seconds ago. So we take the mixed feed and pick the listings out here.
+  // 100 mixed entries cover about 8 minutes of this collection's activity,
+  // roughly ten times the poll interval, so nothing falls through the gap.
   function onActivities(list) {
     if (Object.prototype.toString.call(list) !== '[object Array]') return;
     var fresh = [];

@@ -23,13 +23,13 @@
  * writes an emptier file.
  */
 import fs from 'node:fs';
+import { ROOT, readJson, writeJson, mergeSales, salesYearsOnDisk } from './madlads-lib.mjs';
 
 const KEY = process.env.HELIUS_API_KEY;
 if (!KEY) { console.error('Missing HELIUS_API_KEY'); process.exit(1); }
 const RPC = `https://mainnet.helius-rpc.com/?api-key=${KEY}`;
 const ME = 'https://api-mainnet.magiceden.dev/v2/collections/mad_lads';
 const COLLECTION = 'J1S9H3QjnRtBbbuD4HjPV6RpRhwuk4zKbxsnCHuTgh9w';
-const ROOT = new URL('../', import.meta.url);
 const FEE = 1 + 0.02 + 0.042; // marketplace fee + Mad Lads royalty, added on top of the ask
 const MOVES_KEEP_MS = 45 * 86400000;
 const MOVES_MAX = 4000;
@@ -81,8 +81,6 @@ async function meGet(path) {
   throw new Error(`Magic Eden ${path} retries exhausted`);
 }
 
-const readJson = (name) => { try { return JSON.parse(fs.readFileSync(new URL(name, ROOT), 'utf8')); } catch { return null; } };
-const writeJson = (name, data) => fs.writeFileSync(new URL(name, ROOT), JSON.stringify(data) + '\n');
 
 // ---------- base58 (for reading Tensor list-state accounts) ----------
 const B58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
@@ -167,38 +165,6 @@ async function meSales() {
     await sleep(600);
   }
   return out;
-}
-
-// Sales files: { w: [wallets], s: [[time, num, price, market, sig, buyerIdx, sellerIdx]] }
-// market: 0 Magic Eden, 1 Tensor, 2 other.
-function mergeSales(found, numByMint) {
-  const byYear = new Map();
-  for (const s of found) {
-    const num = numByMint.get(s.mint);
-    if (num == null) continue;
-    const y = new Date(s.t * 1000).getUTCFullYear();
-    if (!byYear.has(y)) byYear.set(y, []);
-    byYear.get(y).push({ ...s, num });
-  }
-  const years = new Set((readJson('madlads-data.json')?.salesYears) || []);
-  let added = 0;
-  for (const [y, list] of byYear) {
-    const file = `madlads-sales-${y}.json`;
-    const prev = readJson(file) || { w: [], s: [] };
-    const wIdx = new Map(prev.w.map((w, i) => [w, i]));
-    const idx = (w) => { if (!w) return -1; if (!wIdx.has(w)) { wIdx.set(w, prev.w.length); prev.w.push(w); } return wIdx.get(w); };
-    const seen = new Set(prev.s.map((r) => r[4]));
-    for (const s of list) {
-      if (seen.has(s.sig)) continue;
-      seen.add(s.sig);
-      prev.s.push([s.t, s.num, Math.round(s.p * 1000) / 1000, s.m, s.sig, idx(s.b), idx(s.s)]);
-      added++;
-    }
-    prev.s.sort((a, b) => a[0] - b[0]);
-    writeJson(file, prev);
-    years.add(y);
-  }
-  return { years: [...years].sort(), added };
 }
 
 // ---------- main ----------
@@ -290,7 +256,7 @@ if (prevData?.nums && prevData.ownerOf) {
 moves = moves.slice(-MOVES_MAX);
 
 // Sales.
-let salesYears = prevData?.salesYears || [];
+let salesYears = salesYearsOnDisk();
 try {
   const found = await meSales();
   const r = mergeSales(found, numByMint);

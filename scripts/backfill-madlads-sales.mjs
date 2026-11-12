@@ -23,15 +23,22 @@
  *   CHECK=1 ...   read-only accuracy check against skulls-data.json
  */
 import fs from 'node:fs';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { ROOT, readJson, writeJson, mergeSales } from './madlads-lib.mjs';
 
 const KEY = process.env.HELIUS_API_KEY;
 if (!KEY) { console.error('Missing HELIUS_API_KEY'); process.exit(1); }
 const RPC = `https://mainnet.helius-rpc.com/?api-key=${KEY}`;
-const BUDGET = Number(process.env.BUDGET || 12000);      // credits per run
+const BUDGET = Number(process.env.BUDGET || 200000);     // credits per run
 const PER_LAD_CAP = Number(process.env.PER_LAD_CAP || 700);
 const PER_ACCOUNT_CAP = 60;                               // transactions read one by one on a token account before switching to a search
-const TIME_LIMIT_MS = Number(process.env.TIME_LIMIT_MIN || 300) * 60000;
+const TIME_LIMIT_MS = Number(process.env.TIME_LIMIT_MIN || 320) * 60000;
+// Several Lads are walked at once so the request rate, not the round-trip
+// latency, is what limits the run. RPS stays under the Helius plan's limit
+// (9 of the free plan's 10); WORKERS only has to be large enough to keep
+// that rate saturated.
+const WORKERS = Number(process.env.WORKERS || 3);
+const RPS = Number(process.env.RPS || 9);
 const CHECK = process.env.CHECK === '1';
 const FEE = 0.02 + 0.042; // marketplace fee + Mad Lads royalty
 
@@ -49,18 +56,34 @@ const MARKETS = {
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// Credits spent by the walk a request belongs to: with several workers the
+// global counter is everyone's, so the per-Lad cap needs its own tally.
+const walkCredits = new AsyncLocalStorage();
 let credits = 0;
 const startedAt = Date.now();
+
+// One shared slot queue for every worker: each request takes the next free
+// 1/RPS slot, so the whole process never exceeds the plan's request rate.
+let nextSlot = 0;
+async function gate() {
+  const now = Date.now();
+  nextSlot = Math.max(now, nextSlot) + 1000 / RPS;
+  const wait = nextSlot - 1000 / RPS - now;
+  if (wait > 0) await sleep(wait);
+}
 
 async function rpc(method, params) {
   for (let i = 0; i < 9; i++) {
     let res;
+    await gate();
     try {
       res = await fetch(RPC, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'bf', method, params }) });
     } catch { await sleep(Math.min(30000, 1000 * 2 ** i)); continue; }
     if (res.ok) {
       const j = await res.json();
       credits++;
+      const own = walkCredits.getStore();
+      if (own) own.n++;
       if (j.error) throw new Error(`${method}: ${JSON.stringify(j.error)}`);
       return j.result;
     }
@@ -192,8 +215,14 @@ function saleOf(tx, mint, move) {
 }
 
 // Walks one Lad back to its mint. cursor = { acct, before } to resume.
+// Returns `spent`: the credits this walk alone used.
 async function walk(mint, cursor, cap) {
-  const start = credits;
+  const own = { n: 0 };
+  const r = await walkCredits.run(own, () => walkInner(mint, cursor, cap));
+  return { ...r, spent: own.n };
+}
+async function walkInner(mint, cursor, cap) {
+  const own = walkCredits.getStore();
   let acct = cursor?.acct, before = cursor?.before;
   if (!acct) {
     const largest = await rpc('getTokenLargestAccounts', [mint]);
@@ -212,7 +241,7 @@ async function walk(mint, cursor, cap) {
         const inc = tx && incoming(tx, mint, acct);
         if (inc) { found = { ...inc, sig: s.signature, tx }; break scan; }
         if (scanned >= PER_ACCOUNT_CAP) break scan;
-        if (credits - start >= cap) return { sales, status: 'partial', cursor: { acct, before } };
+        if (own.n >= cap) return { sales, status: 'partial', cursor: { acct, before } };
       }
       if (sigs.length < 100) { ended = true; break; }
       page = sigs[sigs.length - 1].signature;
@@ -226,7 +255,7 @@ async function walk(mint, cursor, cap) {
       return { sales, status: 'done' }; // reached the mint
     }
     acct = found.srcAcct; before = found.sig;
-    if (credits - start >= cap) return { sales, status: 'partial', cursor: { acct, before } };
+    if (own.n >= cap) return { sales, status: 'partial', cursor: { acct, before } };
   }
   return { sales, status: 'skip', why: 'too many hops' };
 }
@@ -281,30 +310,76 @@ const flush = () => {
   if (data) { data.salesYears = fs.readdirSync(ROOT).map((f) => /^madlads-sales-(\d{4})\.json$/.exec(f)).filter(Boolean).map((m) => Number(m[1])).sort(); writeJson('madlads-data.json', data); }
 };
 
-try {
-  while ((state.retry.length || state.next < lads.length) && credits < BUDGET && Date.now() - startedAt < TIME_LIMIT_MS) {
-    const retrying = state.retry.length > 0;
-    const lad = retrying ? ladByNum.get(state.retry[0]) : lads[state.next];
-    if (!lad) { state.retry.shift(); continue; }
-    const resume = state.partial && state.partial.num === lad.num ? state.partial : null;
-    const spentBefore = resume?.spent || 0;
-    const before = credits;
-    const r = await walk(lad.mint, resume, Math.max(50, PER_LAD_CAP - spentBefore));
-    pending.push(...r.sales);
-    if (r.status === 'partial' && spentBefore + (credits - before) < PER_LAD_CAP * 3) {
-      state.partial = { num: lad.num, ...r.cursor, spent: spentBefore + (credits - before) };
-      flush();
-      continue;
-    }
-    if (r.status !== 'done') state.skipped[lad.num] = r.why || 'history too long'; else delete state.skipped[lad.num];
-    state.partial = null;
-    if (retrying) state.retry.shift(); else state.next++;
-    processed++;
-    if (processed % 20 === 0) { flush(); console.log(`  #${lad.num} · ${processed} Lads · ${credits} credits`); }
+// A partial Lad from an older single-threaded run.
+state.partials = state.partials || {};
+if (state.partial) { state.partials[state.partial.num] = { acct: state.partial.acct, before: state.partial.before, spent: state.partial.spent || 0 }; }
+delete state.partial;
+
+// Work is handed out in number order, but finishes out of order with several
+// workers, so `next` only moves across the finished run of indexes at the
+// front. "Lad #N and below have full history" therefore stays true, and a run
+// that stops mid-flight resumes every unfinished Lad, not just the lowest.
+const retryQueue = [...state.retry];
+let scanIdx = state.next;
+const doneIdx = new Set();
+const outOfBudget = () => credits >= BUDGET || Date.now() - startedAt >= TIME_LIMIT_MS;
+
+function nextJob() {
+  if (outOfBudget()) return null;
+  while (retryQueue.length) {
+    const num = retryQueue.shift();
+    const lad = ladByNum.get(num);
+    if (lad) return { lad, idx: null };
   }
-} catch (e) {
-  console.error(`stopped on error, progress is saved: ${e.message}`);
+  while (scanIdx < lads.length) {
+    const idx = scanIdx++;
+    if (lads[idx]) return { lad: lads[idx], idx };
+  }
+  return null;
 }
+
+const advance = () => { while (doneIdx.has(state.next)) { doneIdx.delete(state.next); state.next++; } };
+
+async function finishedLad(lad, idx, r, spent) {
+  if (r.status === 'partial' && spent < PER_LAD_CAP * 3) {
+    // Out of budget mid-walk: keep the cursor and leave the Lad unfinished so
+    // the next run picks it up again. `next` must not move past it.
+    state.partials[lad.num] = { ...r.cursor, spent };
+    if (idx === null && !state.retry.includes(lad.num)) state.retry.push(lad.num);
+    return;
+  }
+  if (r.status === 'done') delete state.skipped[lad.num];
+  else state.skipped[lad.num] = r.why || 'history too long';
+  delete state.partials[lad.num];
+  if (idx === null) state.retry = state.retry.filter((n) => n !== lad.num);
+  else { doneIdx.add(idx); advance(); }
+  processed++;
+  if (processed % 20 === 0) { flush(); console.log(`  #${lad.num} · ${processed} Lads · ${credits} credits · next ${state.next}/${lads.length}`); }
+}
+
+async function worker() {
+  for (;;) {
+    const job = nextJob();
+    if (!job) return;
+    const { lad, idx } = job;
+    const resume = state.partials[lad.num] || null;
+    const spentBefore = resume?.spent || 0;
+    let r;
+    try {
+      r = await walk(lad.mint, resume, Math.max(50, PER_LAD_CAP - spentBefore));
+    } catch (e) {
+      console.error(`  #${lad.num} failed, skipped: ${e.message}`);
+      r = { sales: [], status: 'skip', why: `error: ${e.message}`, spent: 0 };
+    }
+    pending.push(...r.sales);
+    await finishedLad(lad, idx, r, spentBefore + (r.spent || 0));
+  }
+}
+
+await Promise.all(Array.from({ length: Math.max(1, WORKERS) }, worker));
+
 state.credits += credits;
 flush();
-console.log(`backfill: ${processed} Lads this run (${state.next}/${lads.length} total), ${state.sales} sales added so far, ${Object.keys(state.skipped).length} skipped, ${credits} credits this run, ${state.credits} in total`);
+const remaining = lads.length - state.next;
+console.log(`backfill: ${processed} Lads this run (${state.next}/${lads.length} total, ${remaining} to go), ${state.sales} sales added so far, ${Object.keys(state.skipped).length} skipped, ${credits} credits this run, ${state.credits} in total`);
+if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `remaining=${remaining}\n`);

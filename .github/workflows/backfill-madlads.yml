@@ -2,16 +2,25 @@ name: Backfill Mad Lads Sales
 
 on:
   schedule:
-    # Nightly: older sales for the next batch of Lads, within a credit budget.
-    - cron: '12 1 * * *'
+    # Every three hours until the whole collection is covered. The work is
+    # ~24 hours of walking at the free plan's 9 requests/second, so eight
+    # chunks a day finish it in a bit over a day. Each chunk stops after
+    # 145 minutes, which leaves the daily snapshot a gap to run in (the two
+    # share a concurrency group so they never push at once). Once the
+    # backfill is done these runs exit in seconds; drop the schedule back to
+    # daily then.
+    - cron: '12 */3 * * *'
   push:
-    branches: [claude/tender-hopper-p8opwh]
+    branches: [claude/bold-thompson-jy7fuk]
     paths: ['scripts/backfill-madlads-sales.mjs', '.github/workflows/backfill-madlads.yml']
   workflow_dispatch:
     inputs:
       budget:
         description: 'Helius credits to spend in this run'
-        default: '12000'
+        default: '200000'
+      minutes:
+        description: 'Minutes to spend in this run'
+        default: '145'
       check:
         description: 'Read-only accuracy check against the Skulls data'
         type: boolean
@@ -32,7 +41,7 @@ env:
 jobs:
   backfill:
     runs-on: ubuntu-latest
-    timeout-minutes: 340
+    timeout-minutes: 170
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,10 +52,16 @@ jobs:
           node-version: 20
 
       - name: Backfill sales
+        id: backfill
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
           # A push to the working branch runs a small batch.
-          BUDGET: ${{ inputs.budget || (github.event_name == 'push' && '4000' || '12000') }}
+          BUDGET: ${{ inputs.budget || (github.event_name == 'push' && '4000' || '200000') }}
+          TIME_LIMIT_MIN: ${{ inputs.minutes || (github.event_name == 'push' && '10' || '145') }}
+          # Lads walked at once, and the request ceiling they share. Keep RPS
+          # under the Helius plan's limit (free: 10/s).
+          WORKERS: '3'
+          RPS: '9'
         run: node scripts/backfill-madlads-sales.mjs
 
       - name: Commit and push if changed
@@ -59,3 +74,11 @@ jobs:
           git commit -m "chore: Mad Lads sales backfill [automated]"
           git pull --rebase origin "$TARGET"
           git push origin "HEAD:$TARGET"
+
+
+      - name: Coverage
+        if: ${{ always() && env.CHECK != '1' }}
+        run: |
+          node -e 'const s=require("./madlads-backfill.json");
+            const pct=(s.next/s.total*100).toFixed(1);
+            console.log(`${s.next}/${s.total} Lads (${pct}%), ${s.total-s.next} to go, ${s.sales} sales, ${s.credits} credits spent in total`);' >> "$GITHUB_STEP_SUMMARY"

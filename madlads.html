@@ -380,6 +380,8 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .ml-type{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);margin-left:4px;}
 .sk-listed-badge{white-space:nowrap;}
 .sh-pill{white-space:nowrap;width:100px;}
+.sh-pill.other{color:var(--text-muted);background:rgba(127,127,127,.15);}
+.sf-mkt.other{color:var(--text-muted);}
 .sh-h-mkt{width:100px;}
 @media(min-width:641px){.sk-grid{grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:14px;}}
 .ho-moves[hidden]{display:none;}
@@ -560,7 +562,7 @@ button.ho-leg:hover{color:var(--text);}
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Sales</h2>
           <div class="sk-desc" id="sh-coverage">Recorded Mad Lads sales: price, marketplace and date.</div>
-          <details class="sh-price-note"><summary>&#9432; How prices are shown</summary>The listing or offer price, before fees. Marketplaces add a 2% fee and the 4.2% Mad Lads royalty (6.2% total) on top.</details>
+          <details class="sh-price-note"><summary>&#9432; How prices are shown</summary>The listing or offer price, before fees. Marketplaces add a 2% fee and the 4.2% Mad Lads royalty (6.2% total) on top. OTC = a direct deal between two wallets, outside the marketplaces; when several Mad Lads changed hands for one payment, it is split evenly.</details>
         </div>
 
         <div class="stats-bar">
@@ -588,6 +590,7 @@ button.ho-leg:hover{color:var(--text);}
             <option value="all">All marketplaces</option>
             <option value="0">Magic Eden</option>
             <option value="1">Tensor</option>
+            <option value="2">OTC</option>
           </select>
           <select class="ctl-select" id="sh-sort" onchange="shPage=1;renderSales()" aria-label="Sort">
             <option value="newest">Newest first</option>
@@ -644,7 +647,8 @@ window.thumbFallback = thumbFallback;
 
 var X_ICON = '<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var MARKETS = ['Magic Eden','Tensor','Other'];
+var MARKETS = ['Magic Eden','Tensor','OTC'], MKT_CLS = ['me','tensor','other'];
+var BF = null; // nightly backfill progress: Lads before index BF.next have full history
 
 // ---- State ----
 var LADS = [], BY = {}, KEYS = [], VALUES = [], COUNTS = [], SAMPLE = [];
@@ -662,6 +666,7 @@ function traitTier(p){
   if(p <= 5) return { cls: 't-uncommon', label: 'UNCOMMON' };
   return { cls: '', label: 'COMMON' };
 }
+function fullHistory(l){ return !!BF && l.i < BF.next && !(BF.skipped && BF.skipped[l.num]); }
 function escName(o){ return o.escrow.length > 30 ? 'Program account' : o.escrow; }
 function valName(ki, vi){ return vi < 0 ? 'None' : VALUES[ki][vi]; }
 
@@ -687,8 +692,8 @@ function buildStatic(s){
   KEYS = s.keys; VALUES = s.values;
   COUNTS = KEYS.map(function(k, i){ var a = []; for(var j = 0; j <= VALUES[i].length; j++) a.push(0); return a; });
   SAMPLE = KEYS.map(function(){ return []; });
-  LADS = s.lads.map(function(r){
-    var lad = { num: r[0], mint: r[1], t: r.slice(2), owner: null, listPrice: null, listMkt: null, sales: [] };
+  LADS = s.lads.map(function(r, idx){
+    var lad = { i: idx, num: r[0], mint: r[1], t: r.slice(2), owner: null, listPrice: null, listMkt: null, sales: [] };
     for(var i = 0; i < KEYS.length; i++){
       var v = lad.t[i] + 1; // 0 = None
       COUNTS[i][v]++;
@@ -967,7 +972,7 @@ function renderSaleFeed(){
       return '<a class="sf-row" href="#" onclick="openLad('+s.num+');return false" title="'+fmtDate(s.t)+'">'+
         '<img src="'+thumb(s.num, 96)+'" data-num="'+s.num+'" onerror="thumbFallback(this)" alt="" width="44" height="44" loading="lazy" decoding="async">'+
         '<span style="min-width:0"><span class="sf-top"><span class="sf-tag">SALE</span>#'+s.num+'</span><span class="sf-sub">'+timeAgo(s.t)+' ago</span></span>'+
-        '<span class="sf-right"><div class="sf-price">'+fmtSol(s.p)+' SOL</div><div class="sf-mkt '+(s.m===0?'me':'tensor')+'">'+MARKETS[s.m]+'</div></span>'+
+        '<span class="sf-right"><div class="sf-price">'+fmtSol(s.p)+' SOL</div><div class="sf-mkt '+MKT_CLS[s.m]+'">'+MARKETS[s.m]+'</div></span>'+
         (cmp ? '<span class="sf-cmp">'+cmp+'</span>' : '')+'</a>';
     }).join('')+'</div>';
 }
@@ -1005,7 +1010,7 @@ function renderLad(num){
     ? '<div class="sd-sales">'+sales.map(function(s){
         return '<div class="sd-sale"><span class="d">'+fmtDate(s.t)+' &middot; '+MARKETS[s.m]+'</span><span>'+prevChangeHtml(s)+'</span><span class="p">'+fmtSol(s.p)+' SOL</span></div>';
       }).join('')+'</div>'
-    : '<div class="sd-none">No sale recorded yet. Older history is still being added.</div>';
+    : '<div class="sd-none">'+(fullHistory(l) ? 'Never sold. Still with its first owner, or only moved between wallets.' : 'No sale recorded yet. Older history is still being added.')+'</div>';
 
   var listed = l.listPrice != null;
   var meUrl = 'https://magiceden.io/item-details/'+l.mint, tsUrl = 'https://www.tensor.trade/item/'+l.mint;
@@ -1022,7 +1027,7 @@ function renderLad(num){
       '<div><h2 class="sd-title" id="sd-title">Mad Lad #'+l.num+'</h2><div class="sd-sub">'+sub.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div></div>'+
       '<div><div class="sd-traits">'+traits+'</div></div>'+
       '<div><div class="sd-h">Holder</div><div class="sd-owner">'+ownerBits+'</div></div>'+
-      '<div><div class="sd-h">Recorded sales &middot; '+sales.length+'</div>'+salesHtml+'</div>'+
+      '<div><div class="sd-h">'+(fullHistory(l) ? 'Sale history' : 'Recorded sales')+' &middot; '+sales.length+'</div>'+salesHtml+'</div>'+
       '<div class="sd-buy"><div class="sd-stats">'+
         '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(listed?'':' dim')+'">'+(listed ? l.listPrice+' <small>SOL</small>' : 'Not listed')+'</div></div>'+
         '<div><div class="sd-stat-l">Last sale</div><div class="sd-stat-v'+(sales.length?'':' dim')+'">'+(sales.length ? fmtSol(sales[0].p)+' <small>SOL</small>' : '&mdash;')+'</div></div>'+
@@ -1246,8 +1251,16 @@ function renderSales(){
   document.getElementById('sh-stat-me-pct').textContent = (total ? Math.round(me/total*100) : 0)+'%';
   document.getElementById('sh-stat-tensor-pct').textContent = (total ? Math.round(ts/total*100) : 0)+'%';
   if(SALES.length){
-    document.getElementById('sh-coverage').innerHTML = 'Recorded Mad Lads sales since <b style="color:var(--text)">'+fmtDate(SALES[0].t)+'</b>. '+
-      'So far these are Magic Eden sales; older history and other marketplaces are being added step by step.';
+    var cov;
+    if(BF && BF.next > 0){
+      var lastFull = LADS[Math.min(BF.next, LADS.length) - 1];
+      cov = BF.next >= LADS.length
+        ? 'Every recorded Mad Lads sale on every marketplace, back to the mint in April 2023.'
+        : 'Full sale history on every marketplace for <b style="color:var(--text)">Mad Lads #1 to #'+lastFull.num+'</b> ('+fmtNum(BF.next)+' of '+fmtNum(LADS.length)+'), with more added every night. For the rest: Magic Eden sales since August 2026.';
+    } else {
+      cov = 'Recorded Mad Lads sales since <b style="color:var(--text)">'+fmtDate(SALES[0].t)+'</b>. So far these are Magic Eden sales; older history and other marketplaces are being added step by step.';
+    }
+    document.getElementById('sh-coverage').innerHTML = cov;
   }
 
   shByYear = {};
@@ -1284,7 +1297,7 @@ function renderSales(){
       '<img class="sh-thumb" src="'+thumb(s.num, 96)+'" data-num="'+s.num+'" onerror="thumbFallback(this)" alt="Mad Lad #'+s.num+'" width="44" height="44" loading="lazy" decoding="async">'+
       '<span class="sh-num">#'+s.num+'</span>'+
       '<span class="sh-spacer"></span>'+
-      '<span class="sh-pill '+(s.m===0?'me':'tensor')+'">'+MARKETS[s.m]+'</span>'+
+      '<span class="sh-pill '+MKT_CLS[s.m]+'">'+MARKETS[s.m]+'</span>'+
       '<span class="sh-price">'+fmtSol(s.p)+' SOL</span>'+
       '<span class="sh-chg">'+prevChangeHtml(s)+'</span>'+
       '<span class="sh-date">'+fmtDate(s.t)+'</span></a>';
@@ -1338,6 +1351,7 @@ if(VIEWS.indexOf(startHash) > 0) switchView(startHash);
 document.getElementById('ml-count').textContent = 'Loading Mad Lads…';
 
 var pStatic = fetch('/madlads-static.json').then(function(r){ return r.ok ? r.json() : null; });
+fetch('/madlads-backfill.json', { cache: 'no-cache' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(b){ if(b){ BF = b; if(view === 'sales') renderSales(); } }).catch(function(){});
 var pData = fetch('/madlads-data.json', { cache: 'no-cache' }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
 pStatic.then(function(s){

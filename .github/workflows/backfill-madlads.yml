@@ -26,8 +26,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Push runs on the working branch are a read-only accuracy check.
-  CHECK: ${{ (github.event_name == 'push' || inputs.check) && '1' || '' }}
+  CHECK: ${{ inputs.check && '1' || '' }}
   TARGET: ${{ github.event_name == 'schedule' && 'main' || github.ref_name }}
 
 jobs:
@@ -46,7 +45,8 @@ jobs:
       - name: Backfill sales
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
-          BUDGET: ${{ inputs.budget || '12000' }}
+          # A push to the working branch runs a small batch.
+          BUDGET: ${{ inputs.budget || (github.event_name == 'push' && '4000' || '12000') }}
         run: node scripts/backfill-madlads-sales.mjs
 
       - name: Commit and push if changed

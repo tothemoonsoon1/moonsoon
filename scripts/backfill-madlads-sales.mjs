@@ -102,25 +102,41 @@ function saleOf(tx, mint, move) {
   const fee = m.fee / 1e9;
   const gainOf = (addr) => { const i = keys.indexOf(addr); if (i < 0) return 0; return delta(i) + (i === 0 ? fee : 0); };
 
-  let seller = move.from, gain = gainOf(move.from);
-  if (!(gain > 0.3)) {
-    // Listed from an escrow: the seller is whoever received the most SOL.
-    seller = null; gain = 0;
-    for (let i = 0; i < keys.length; i++) {
-      const d = delta(i) + (i === 0 ? fee : 0);
-      if (d > gain && keys[i] !== move.to) { gain = d; seller = keys[i]; }
-    }
+  // The seller is whoever received the most SOL. The account the NFT left is
+  // only trusted when it received a comparable amount: for escrowed listings
+  // it is a marketplace account that merely collects a ~1% fee.
+  let seller = null, gain = 0;
+  for (let i = 0; i < keys.length; i++) {
+    const d = delta(i) + (i === 0 ? fee : 0);
+    if (d > gain && keys[i] !== move.to) { gain = d; seller = keys[i]; }
   }
+  const fromGain = gainOf(move.from);
+  if (fromGain > 0.3 && fromGain >= gain * 0.5) { seller = move.from; gain = fromGain; }
   if (!(gain > 0.3)) return null;
+  // The largest payment out of any one account (buyer, bid escrow or pool).
+  let paid = 0;
+  for (let i = 0; i < keys.length; i++) {
+    if (keys[i] === seller) continue;
+    const d = -(delta(i) + (i === 0 ? fee : 0));
+    if (d > paid) paid = d;
+  }
   if (market == null) {
-    // No marketplace involved: only count it when the new owner clearly paid.
-    const paid = -gainOf(move.to);
-    if (!(paid > 0.3)) return null;
+    // No marketplace involved (an OTC deal): only count it when the new owner clearly paid.
+    if (!(-gainOf(move.to) > 0.3)) return null;
     market = 2;
   }
+  // Several NFTs for one payment (a sweep or a bundle deal): split it evenly.
+  const moved = new Set();
+  for (const b of m.postTokenBalances || []) {
+    if (b.uiTokenAmount.decimals !== 0 || b.uiTokenAmount.amount !== '1' || b.owner !== move.to) continue;
+    const pre = (m.preTokenBalances || []).find((x) => x.accountIndex === b.accountIndex);
+    if (!pre || pre.uiTokenAmount.amount === '0') moved.add(b.mint);
+  }
+  const bundle = market === 2 && moved.size > 1 ? moved.size : 1;
+  // Seller accepted an offer: the offer is what left the bidder's account.
   const acceptedOffer = signer === seller;
-  const price = acceptedOffer ? gain / (1 - FEE) : gain;
-  return { t: tx.blockTime, mint, p: price, m: market, sig: tx.transaction.signatures[0], b: move.to, s: seller };
+  const price = (acceptedOffer && paid > gain ? paid : gain) / bundle;
+  return { t: tx.blockTime, mint, p: price, m: market, sig: tx.transaction.signatures[0], b: move.to, s: seller, dbg: `gain ${gain.toFixed(2)} paid ${paid.toFixed(2)} ${acceptedOffer ? 'offer' : 'listing'} x${bundle}` };
 }
 
 // Walks one Lad back to its mint. cursor = { acct, before } to resume.
@@ -175,11 +191,11 @@ if (CHECK) {
       if (!f) { missed++; console.log(`  missed #${sk.num} ${new Date(k.timestamp).toISOString().slice(0, 10)} ${k.priceSol} ${k.source}`); continue; }
       match++;
       const ratio = f.p / k.priceSol; ratios.push(ratio);
-      if (Math.abs(ratio - 1) > 0.03) { off++; console.log(`  price #${sk.num} ${new Date(k.timestamp).toISOString().slice(0, 10)}: ${f.p.toFixed(2)} vs known ${k.priceSol} (${k.source}) ${f.sig.slice(0, 12)}`); }
+      if (Math.abs(ratio - 1) > 0.03) { off++; console.log(`  price #${sk.num} ${new Date(k.timestamp).toISOString().slice(0, 10)}: ${f.p.toFixed(2)} vs known ${k.priceSol} (${k.source}) [${f.dbg}] ${f.sig.slice(0, 12)}`); }
       const knownMkt = k.source.startsWith('MAGICEDEN') ? 0 : 1;
       if (f.m !== knownMkt) mkt++;
     }
-    for (const f of found) if (!sk.sales.some((k) => Math.abs(f.ts - k.timestamp) < 120000)) { extra++; console.log(`  extra #${sk.num} ${new Date(f.ts).toISOString().slice(0, 10)} ${f.p.toFixed(2)} SOL market ${f.m} ${f.sig}`); }
+    for (const f of found) if (!sk.sales.some((k) => Math.abs(f.ts - k.timestamp) < 120000)) { extra++; console.log(`  extra #${sk.num} ${new Date(f.ts).toISOString().slice(0, 10)} ${f.p.toFixed(2)} SOL market ${f.m} [${f.dbg}] ${f.sig.slice(0, 16)}`); }
     console.log(`#${sk.num}: ${r.status}${r.why ? ' (' + r.why + ')' : ''}, found ${found.length}, known ${sk.sales.length}`);
   }
   ratios.sort((a, b) => a - b);

@@ -225,6 +225,11 @@ if (!prevStatic || prevStatic.lads.length !== lads.length) {
   console.log(`static: wrote ${rows.length} Lads, traits ${keys.join(', ')}`);
 }
 
+// Magic Eden listings (keep yesterday's on failure).
+let meListed = null;
+try { meListed = await meListings(); console.log(`Magic Eden listings: ${meListed.size}`); }
+catch (e) { console.warn(`Magic Eden listings failed, keeping previous: ${e.message}`); }
+
 // Escrows.
 const uniqueOwners = [...new Set(lads.map((l) => l.owner))];
 const programAccounts = await classifyOwners(uniqueOwners);
@@ -235,6 +240,9 @@ for (const l of lads) {
   if (!acc) continue;
   const name = PROGRAMS[acc.program] || acc.program;
   escrowStats[name] = (escrowStats[name] || 0) + 1;
+  // Listed on Magic Eden from its escrow: the seller is still the holder.
+  const me = meListed?.get(l.mint);
+  if (me?.seller) { l.owner = me.seller; l.escrow = null; continue; }
   if (acc.program === 'TCMPhJdwDryooaGtiocG1u3xcYbRpiJzb283XfCZsDp') {
     const ls = tensorListState(acc.data, l.mint);
     if (ls) { tensorListed.set(l.mint, ls); l.owner = ls.seller; l.escrow = null; continue; }
@@ -242,11 +250,6 @@ for (const l of lads) {
   l.escrow = name;
 }
 console.log('program-owned holders:', JSON.stringify(escrowStats), `| Tensor listings read: ${tensorListed.size}`);
-
-// Magic Eden listings (keep yesterday's on failure).
-let meListed = null;
-try { meListed = await meListings(); console.log(`Magic Eden listings: ${meListed.size}`); }
-catch (e) { console.warn(`Magic Eden listings failed, keeping previous: ${e.message}`); }
 
 const numByMint = new Map(lads.map((l) => [l.mint, l.num]));
 const listed = {};

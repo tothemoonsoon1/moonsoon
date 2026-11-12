@@ -112,6 +112,9 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - Obrazki: miniatury z CDN Magic Eden (`img-cdn.magiceden.dev`), nic w repo. Oryginały mają ~5 MB.
 - Etykiety portfeli: wspólny `owner-tags.json` (ten sam co Skulls).
 - Progi: whale = 20+ Ladów, shark = 5–19.
+- Rzadkość: rangi z HowRare (te same pokazuje Magic Eden), zapisane w `madlads-static.json` (`rank`). Poziomy wg rangi: Mythic top 1%, Legendary 5%, Epic 15%, Rare 35%, Uncommon 60%, Common.
+- Historia sprzedaży: `scripts/backfill-madlads-sales.mjs` (workflow `backfill-madlads.yml`, co noc, limit 12 000 kredytów). Idzie po łańcuchu kont, które trzymały NFT (ok. 80 kredytów na Lada), po kolei numerami; stan w `madlads-backfill.json`. Ceny jak w Skulls: cena wystawienia lub oferty, bez opłat.
+- Skulls ma te same wzorce co Mad Lads: zakładka Holders (whale = 3+, shark = 2) i filtr cech jako rozwijane sekcje.
 
 ## Kluczowe wzorce w kodzie
 - Sekcje zwijane: `toggleSection(id)`

@@ -77,7 +77,8 @@
 
 /* ---- About / Connect / Footer ---- */
 .explore{padding:56px 72px;background:var(--bg);border-top:1px solid var(--border);}
-.explore-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1296px;margin:0 auto;}
+.explore-inner{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;max-width:1296px;margin:0 auto;}
+@media(max-width:1100px){.explore-inner{grid-template-columns:repeat(2,minmax(0,1fr));}}
 .explore-card{display:flex;flex-direction:column;gap:8px;padding:22px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;text-decoration:none;color:var(--text);transition:border-color .15s ease,transform .15s ease;}
 .explore-card:hover{border-color:var(--accent-border);transform:translateY(-2px);}
 .explore-k{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.15em;color:var(--accent);}
@@ -122,6 +123,7 @@
     <a class="nav-logo" href="/"><span>$</span>MOONSOON</a>
     <div class="nav-tabs">
       <a class="nav-tab active" href="/" aria-current="page">Home</a>
+      <a class="nav-tab" href="/madlads.html">Mad Lads</a>
       <a class="nav-tab" href="/skulls.html">Skulls</a>
       <a class="nav-tab" href="/checklist.html">Seeker Checklist</a>
       <a class="nav-tab" href="/mica.html">EU Licenses</a>
@@ -160,6 +162,12 @@
 
     <section class="explore" aria-label="Explore the site">
       <div class="explore-inner">
+        <a class="explore-card" href="/madlads.html">
+          <span class="explore-k">MAD LADS</span>
+          <span class="explore-t">Mad Lads Gallery <span aria-hidden="true">&rarr;</span></span>
+          <span class="explore-d">All 10,000 Mad Lads: holders and whales, traits, listings and sales.</span>
+          <span class="explore-m"><b>10K</b> <span>Mad Lads</span></span>
+        </a>
         <a class="explore-card" href="/skulls.html">
           <span class="explore-k">MAD LADS</span>
           <span class="explore-t">Skulls Gallery <span aria-hidden="true">&rarr;</span></span>

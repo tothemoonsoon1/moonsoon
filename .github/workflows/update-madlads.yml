@@ -1,0 +1,45 @@
+name: Update Mad Lads Data
+
+on:
+  schedule:
+    # Daily snapshot of all holders + listings (~200 Helius credits).
+    - cron: '38 3 * * *'
+  # While the page is being built: also run on the working branch.
+  push:
+    branches: [claude/tender-hopper-p8opwh]
+    paths: ['scripts/generate-madlads-data.mjs', '.github/workflows/update-madlads.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-madlads
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      # Scheduled runs always use main; a push or manual run uses its own branch.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'schedule' && 'main' || github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate Mad Lads data
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+        run: node scripts/generate-madlads-data.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add madlads-*.json
+          git diff --staged --quiet || git commit -m "chore: update Mad Lads data [automated]"
+          git push origin HEAD:${{ github.event_name == 'schedule' && 'main' || github.ref_name }}

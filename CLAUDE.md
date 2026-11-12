@@ -115,6 +115,7 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - Rzadkość: rangi z HowRare (te same pokazuje Magic Eden), zapisane w `madlads-static.json` (`rank`). Poziomy wg rangi: Mythic top 1%, Legendary 5%, Epic 15%, Rare 35%, Uncommon 60%, Common.
 - Historia sprzedaży: `scripts/backfill-madlads-sales.mjs` (workflow `backfill-madlads.yml`, co noc, limit 12 000 kredytów). Idzie po łańcuchu kont, które trzymały NFT (ok. 80 kredytów na Lada), po kolei numerami; stan w `madlads-backfill.json`. Ceny jak w Skulls: cena wystawienia lub oferty, bez opłat.
 - Skulls ma te same wzorce co Mad Lads: zakładka Holders (whale = 3+, shark = 2) i filtr cech jako rozwijane sekcje.
+- Rzadkość cech na stronie Skulls liczona jest wśród CAŁEJ kolekcji (~10k), tak samo jak w Mad Lads, żeby ten sam Skull pokazywał identyczne poziomy/% na obu stronach. Globalne liczniki są wstrzyknięte w `skulls-traits.json` (`global`, `globalAbsent`, `globalTotal`) — niezmienne. Ranga Skulla pozostaje liczona wśród 99.
 
 ## Kluczowe wzorce w kodzie
 - Sekcje zwijane: `toggleSection(id)`

@@ -778,6 +778,13 @@ function ownerGroups(){
 // Gender/Type/Expression are identical on all 99 Skulls, so they're hidden.
 var TRAIT_ORDER = ['Clothing','Hand','Background','Eyes','Glove','Smoke'];
 var TRAITS = {};
+// Trait counts across ALL Mad Lads (skulls-traits.json), so a Skull's trait
+// rarity reads the same here as on the Mad Lads page.
+var GTRAIT = {}, GABSENT = {}, GTOTAL = 9968;
+function gCount(k, v){ return v === 'None' ? (GABSENT[k] || 0) : (GTRAIT[k+'|'+v] || 0); }
+function gPct(k, v){ return GTOTAL ? gCount(k, v) / GTOTAL * 100 : 0; }
+function gTier(k, v){ return traitTier(gPct(k, v)); }
+function fmtN(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 var traitFilter = {};
 var ownerFilter = null;
 
@@ -807,10 +814,10 @@ function traitsHtml(s){
   var t = TRAITS[s.num]; if(!t) return '';
   var counts = traitCountsCache || traitCounts(), total = SKULLS.length;
   var chips = TRAIT_ORDER.filter(function(k){ return t[k]; }).map(function(k){
-    var n = counts[k][t[k]], pct = Math.round(n/total*100);
-    return '<button class="sk-trait rtt-'+traitTier(n/total*100).id+'" title="'+escAttr(k)+': '+n+' of '+total+' Skulls" '+
+    var g = gCount(k, t[k]), pct = gPct(k, t[k]);
+    return '<button class="sk-trait rtt-'+gTier(k, t[k]).id+'" title="'+escAttr(k)+': '+escAttr(t[k])+' — '+fmtN(g)+' of '+fmtN(GTOTAL)+' Mad Lads ('+(pct<1?pct.toFixed(1):Math.round(pct))+'%)" '+
       'data-k="'+escAttr(k)+'" data-v="'+escAttr(t[k])+'" onclick="event.stopPropagation();setTraitFromChip(this)">'+
-      escAttr(k)+' <b>'+escAttr(t[k])+'</b> '+pct+'%</button>';
+      escAttr(k)+' <b>'+escAttr(t[k])+'</b> '+(pct<1?pct.toFixed(1):Math.round(pct))+'%</button>';
   }).join('');
   return '<div class="sk-traits">'+chips+'</div>';
 }
@@ -1363,12 +1370,13 @@ function renderSkullDetail(num){
   var traitsHtmlStr = '';
   if(t){
     traitsHtmlStr = '<div><div class="sd-traits">'+TRAIT_ORDER.map(function(k){
-      var v = t[k] || 'None', n = (counts[k] && counts[k][v]) || 0, pct = n / total * 100, tier = traitTier(pct);
-      return '<button class="sd-trait rtb-'+tier.id+'" data-k="'+escAttr(k)+'" data-v="'+escAttr(v)+'" onclick="sdFilterTrait(this)" title="Show all '+n+' Skulls with '+escAttr(k)+': '+escAttr(v)+'">'+
+      var v = t[k] || 'None', n99 = (counts[k] && counts[k][v]) || 0;
+      var g = gCount(k, v), pct = gPct(k, v), tier = traitTier(pct);
+      return '<button class="sd-trait rtb-'+tier.id+'" data-k="'+escAttr(k)+'" data-v="'+escAttr(v)+'" onclick="sdFilterTrait(this)" title="Show all '+n99+' Skulls with '+escAttr(k)+': '+escAttr(v)+'">'+
         '<div class="sd-trait-k">'+escAttr(k)+'</div><div class="sd-trait-v">'+escAttr(v)+'</div>'+
-        '<div class="sd-trait-r"><span class="rt rt-'+tier.id+'">'+tier.label+'</span>'+pct.toFixed(1)+'% &middot; '+n+'/'+total+'</div></button>';
+        '<div class="sd-trait-r"><span class="rt rt-'+tier.id+'">'+tier.label+'</span>'+(pct<1?pct.toFixed(2):pct.toFixed(1))+'% &middot; '+fmtN(g)+'</div></button>';
     }).join('')+'</div></div>'+
-    '<div class="sd-shared">All 99 share Type: Skull &middot; Expression: Inferno &middot; Gender: Male. Rarity is counted among Skulls only.</div>';
+    '<div class="sd-shared">Trait rarity is across all '+fmtN(GTOTAL)+' Mad Lads, same as the Mad Lads page. The rank above is among the 99 Skulls. All 99 share Type: Skull &middot; Expression: Inferno &middot; Gender: Male.</div>';
   }
 
   var ownerText = s.isDomain ? s.owner : shortAddr(s.owner || '');
@@ -1656,7 +1664,12 @@ fetch('/skulls-data.json', { cache: 'no-store' })
 fetch('/skulls-traits.json')
   .then(function(res){ return res.ok ? res.json() : null; })
   .then(function(data){
-    if(data && data.traits){ TRAITS = data.traits; renderTraitFilters(); applyFilters(); }
+    if(data && data.traits){
+      TRAITS = data.traits;
+      GTRAIT = data.global || {}; GABSENT = data.globalAbsent || {};
+      if(data.globalTotal){ GTOTAL = data.globalTotal; }
+      renderTraitFilters(); applyFilters();
+    }
   })
   .catch(function(){ /* traits are optional */ });
 

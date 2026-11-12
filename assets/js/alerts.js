@@ -24,6 +24,9 @@
 
   var STORE_KEY = 'moonsoon_ml_alerts';
   var POLL_MS = 45000;        // how often new listings are checked
+  var SLOW_MS = 300000;       // the same check once the tab has been left alone
+  var IDLE_SLOW_MS = 1800000; // no interaction for 30 min -> slow down
+  var IDLE_STOP_MS = 43200000;// no interaction for 12 h -> stop and offer resume
   var MARKET_MS = 300000;     // how often trait floors are recomputed (far steadier)
   var FEED_MAX = 40;
   var API = '/api/me/collections/mad_lads/';
@@ -40,6 +43,9 @@
   var timer = null;
   var visible = false;     // is the Alerts tab on screen
   var marketPending = false;
+  var lastTouch = Date.now();  // last sign of a person at the keyboard
+  var tickMs = POLL_MS;        // interval the timer is currently running at
+  var asleep = false;          // stopped after a long idle; resumable
 
   var floor = null;        // collection floor, fees included
   var traitFloor = [];     // traitFloor[categoryIndex][valueIndex+1] = floor
@@ -340,18 +346,53 @@
   // Nothing is fetched for a visitor who never opens this tab and has no rules.
   // Polling on every gallery page load would have cost three proxy calls every
   // 45 seconds per visitor, forever, for people not using alerts at all.
-  function needsPolling() { return activeRules().length > 0 || visible; }
+  function needsPolling() { return (activeRules().length > 0 || visible) && !asleep; }
+
+  // A tab left open and forgotten is the likeliest way this feature ends up
+  // running: someone arms an alert precisely so they can stop watching. Polling
+  // it at full rate for days costs about as much as a production deploy, so an
+  // untouched tab slows down, then stops with a resume button. It keeps running
+  // at full rate in the background for as long as someone is actually around,
+  // because a hidden tab is exactly when the alert is supposed to work.
+  function idleFor() { return Date.now() - lastTouch; }
+
+  function wantedInterval() { return idleFor() >= IDLE_SLOW_MS ? SLOW_MS : POLL_MS; }
+
+  function touch() {
+    var wasSlow = tickMs !== POLL_MS;
+    lastTouch = Date.now();
+    if (asleep) { asleep = false; syncTimer(); renderStatus(); return; }
+    if (wasSlow) syncTimer();
+  }
 
   function syncTimer() {
-    if (needsPolling() && !timer) {
-      timer = setInterval(poll, POLL_MS);
-      poll();
+    // Stop entirely once nobody has touched the page for a long time.
+    if (!asleep && timer && idleFor() >= IDLE_STOP_MS) {
+      asleep = true;
+      clearInterval(timer); timer = null;
+      renderStatus();
+      return;
+    }
+    var want = wantedInterval();
+    if (needsPolling() && (!timer || tickMs !== want)) {
+      if (timer) clearInterval(timer);
+      tickMs = want;
+      timer = setInterval(tick, tickMs);
+      if (!pollState.at) poll();
     } else if (!needsPolling() && timer) {
       clearInterval(timer);
       timer = null;
       pollState.status = 'idle';
       renderStatus();
     }
+  }
+
+  // Every tick re-checks whether the tab has gone quiet, so the slowdown and the
+  // stop happen without a second timer running alongside.
+  function tick() {
+    if (idleFor() >= IDLE_STOP_MS) { syncTimer(); return; }
+    if (wantedInterval() !== tickMs) { syncTimer(); return; }
+    poll();
   }
 
   // ---- rendering -----------------------------------------------------------
@@ -593,10 +634,19 @@
       cls = 'on';
     } else { txt = 'Watching ' + n + (n === 1 ? ' alert' : ' alerts'); cls = 'on'; }
 
+    if (asleep) {
+      txt = 'Paused after 12 hours untouched';
+      cls = 'off';
+    } else if (n && tickMs === SLOW_MS) {
+      txt = 'Watching ' + n + (n === 1 ? ' alert' : ' alerts') + ' · slowed down while you are away';
+      cls = 'on';
+    }
+
+    var resume = asleep ? '<button class="al-mini" onclick="MLAlerts.resume()">Resume</button>' : '';
     var perm = (typeof Notification !== 'undefined') ? Notification.permission : 'unsupported';
     var ask = (n && perm === 'default') ? '<button class="al-mini" onclick="MLAlerts.askPermission()">Enable notifications</button>' : '';
     var warn = (n && perm === 'denied') ? '<span class="al-tag warn">Notifications blocked — hits still show below</span>' : '';
-    el.innerHTML = '<span class="al-dot ' + cls + '"></span><span class="al-status-t">' + esc(txt) + '</span>' + ask + warn;
+    el.innerHTML = '<span class="al-dot ' + cls + '"></span><span class="al-status-t">' + esc(txt) + '</span>' + resume + ask + warn;
   }
 
   // ---- public actions ------------------------------------------------------
@@ -608,9 +658,19 @@
       render();
       syncTimer();   // fetches only if rules are already armed
       setInterval(renderStatus, 10000);
+      // Any sign of a person resets the idle clock. Passive events only, so
+      // this costs nothing on a page nobody is using.
+      ['pointerdown', 'keydown', 'focus'].forEach(function (ev) {
+        window.addEventListener(ev, touch, { passive: true });
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) touch();
+      });
     },
+    resume: function () { touch(); },
     setVisible: function (on) {
       visible = !!on;
+      if (on) touch();
       if (on) render();
       syncTimer();
     },

@@ -1510,7 +1510,7 @@ function switchView(v){
   if(location.hash.slice(1) !== v) history.replaceState(null, '', v === 'gallery' ? location.pathname : '#'+v);
   if(v === 'holders'){ renderHolderStats(); renderMoves(); renderHolders(); }
   if(v === 'sales'){ shPage = 1; renderSales(); loadAllYears().then(function(){ if(view === 'sales') renderSales(); }); }
-  if(v === 'alerts' && window.MLAlerts) MLAlerts.onShow();
+  if(window.MLAlerts && MLAlerts.setVisible) MLAlerts.setVisible(v === 'alerts');
 }
 window.switchView = switchView;
 window.addEventListener('hashchange', function(){

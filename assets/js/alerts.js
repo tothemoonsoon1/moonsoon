@@ -23,7 +23,8 @@
   'use strict';
 
   var STORE_KEY = 'moonsoon_ml_alerts';
-  var POLL_MS = 45000;
+  var POLL_MS = 45000;        // how often new listings are checked
+  var MARKET_MS = 300000;     // how often trait floors are recomputed (far steadier)
   var FEED_MAX = 40;
   var API = '/api/me/collections/mad_lads/';
   var LIST_PAGE = 100;
@@ -37,6 +38,8 @@
   var lastPing = {};       // mint -> cheapest price we have already pinged
   var primed = false;
   var timer = null;
+  var visible = false;     // is the Alerts tab on screen
+  var marketPending = false;
 
   var floor = null;        // collection floor, fees included
   var traitFloor = [];     // traitFloor[categoryIndex][valueIndex+1] = floor
@@ -220,7 +223,11 @@
   function poll() {
     pollState.status = 'checking';
     renderStatus();
-    return loadMarket()
+    // Trait floors move far more slowly than listings appear, and refreshing
+    // them costs two calls against the one an activity check costs. So the
+    // market is reloaded every MARKET_MS, not on every poll.
+    var stale = marketAt == null || (Date.now() - marketAt) > MARKET_MS;
+    return (stale ? loadMarket() : Promise.resolve())
       .then(function () {
         if (!activeRules().length) { pollState.status = 'idle'; render(); return; }
         return fetchJson(API + 'activities?offset=0&limit=100').then(onActivities);
@@ -330,8 +337,21 @@
 
   function activeRules() { return rules.filter(function (r) { return r.enabled; }); }
 
+  // Nothing is fetched for a visitor who never opens this tab and has no rules.
+  // Polling on every gallery page load would have cost three proxy calls every
+  // 45 seconds per visitor, forever, for people not using alerts at all.
+  function needsPolling() { return activeRules().length > 0 || visible; }
+
   function syncTimer() {
-    if (!timer) { timer = setInterval(poll, POLL_MS); }
+    if (needsPolling() && !timer) {
+      timer = setInterval(poll, POLL_MS);
+      poll();
+    } else if (!needsPolling() && timer) {
+      clearInterval(timer);
+      timer = null;
+      pollState.status = 'idle';
+      renderStatus();
+    }
   }
 
   // ---- rendering -----------------------------------------------------------
@@ -586,11 +606,15 @@
       rules = load();
       draft = newDraft();
       render();
-      poll();
-      syncTimer();
+      syncTimer();   // fetches only if rules are already armed
       setInterval(renderStatus, 10000);
     },
-    onShow: function () { render(); },
+    setVisible: function (on) {
+      visible = !!on;
+      if (on) render();
+      syncTimer();
+    },
+    onShow: function () { api.setVisible(true); },
     setCat: function (i) { draft.cat = i; renderPicker(); },
     find: function (input) {
       var q = input.value.trim().toLowerCase();
@@ -645,9 +669,10 @@
       draft = newDraft();
       api.askPermission();
       render();
+      syncTimer();
     },
-    toggleRule: function (i) { if (rules[i]) { rules[i].enabled = !rules[i].enabled; save(); render(); } },
-    removeRule: function (i) { if (rules[i]) { rules.splice(i, 1); save(); render(); } },
+    toggleRule: function (i) { if (rules[i]) { rules[i].enabled = !rules[i].enabled; save(); render(); syncTimer(); } },
+    removeRule: function (i) { if (rules[i]) { rules.splice(i, 1); save(); render(); syncTimer(); } },
     askPermission: function () {
       try {
         if (typeof Notification === 'undefined' || Notification.permission !== 'default') { renderStatus(); return; }

@@ -386,7 +386,19 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 @media(min-width:641px){.sk-grid{grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:14px;}}
 .ho-moves[hidden]{display:none;}
 .sk-card .sk-owner{margin-bottom:6px;}
-.tp-select{width:100%;}
+.tp-cat{border:1px solid var(--card-border);border-radius:12px;flex-shrink:0;}
+.tp-cat.open{border-color:var(--text-muted);}
+.tp-cat-h{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 12px;background:none;border:none;border-radius:12px;color:var(--text);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left;}
+.tp-cat-h:hover{background:rgba(127,127,127,.08);}
+.tp-cat-name{flex:1;min-width:0;}
+.tp-cat-n{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:var(--text-muted);}
+.tp-cat-sel{font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid var(--accent-border);border-radius:20px;padding:3px 10px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tp-cat-h::after{content:"";width:7px;height:7px;flex-shrink:0;border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);transform:rotate(45deg) translateY(-2px);transition:transform .15s ease;}
+.tp-cat-h[aria-expanded="true"]::after{transform:rotate(-135deg) translateY(-2px);}
+.tp-cat-body{display:flex;flex-direction:column;gap:6px;padding:2px 8px 8px;max-height:420px;overflow-y:auto;}
+.tp-cat-body .tp-row{flex-shrink:0;}
+.tp-find{padding:8px 12px;font-size:13px;flex-shrink:0;}
+@media(max-width:640px){.tp-find{font-size:16px;min-height:44px;}.tp-list{max-height:none !important;}}
 .view-toggle-btn{padding:8px 16px;}
 .sk-header{padding-right:330px;}
 .ho-dist{display:flex;height:18px;border-radius:6px;overflow:hidden;gap:2px;margin-top:12px;}
@@ -785,28 +797,48 @@ function renderTraitPanel(){
   var panel = document.getElementById('ml-trait-panel');
   if(!LADS.length){ panel.hidden = true; return; }
   panel.hidden = false;
-  var total = LADS.length, ki = traitTab, floors = traitFloors(ki);
-  var opts = KEYS.map(function(k, i){
-    return '<option value="'+i+'"'+(i===ki?' selected':'')+'>'+esc(k)+(traitFilter[i] != null ? ' •' : '')+' ('+VALUES[i].length+')</option>';
-  }).join('');
-  var vals = [];
-  for(var v = 0; v <= VALUES[ki].length; v++){ if(COUNTS[ki][v]) vals.push(v); }
-  vals.sort(function(a,b){ return COUNTS[ki][b] - COUNTS[ki][a]; });
-  var rows = vals.map(function(v){
-    var n = COUNTS[ki][v], active = traitFilter[ki] === v - 1;
-    var fl = floors[v] != null ? floors[v]+' SOL floor' : 'not listed';
-    return '<button class="tp-row'+(active?' active':'')+'" onclick="toggleTrait('+ki+','+(v-1)+')">'+
-      '<img src="'+thumb(SAMPLE[ki][v], 96)+'" data-num="'+SAMPLE[ki][v]+'" onerror="thumbFallback(this)" alt="" loading="lazy" width="40" height="40">'+
-      '<span style="min-width:0"><div class="tp-name">'+esc(valName(ki, v-1))+'</div><div class="tp-sub">'+fl+'</div></span>'+
-      '<span class="tp-num">'+fmtNum(n)+'<span class="tp-sub">'+pct(n, total, 2)+'</span></span></button>';
+  var total = LADS.length;
+  var keepScroll = panel.querySelector('.tp-list') ? panel.querySelector('.tp-list').scrollTop : 0;
+  var cats = KEYS.map(function(k, ki){
+    var open = ki === traitTab, picked = traitFilter[ki] != null;
+    var head = '<button class="tp-cat-h" aria-expanded="'+open+'" onclick="setTraitTab('+ki+')">'+
+      '<span class="tp-cat-name">'+esc(k)+'</span>'+
+      (picked ? '<span class="tp-cat-sel">'+esc(valName(ki, traitFilter[ki]))+'</span>' : '<span class="tp-cat-n">'+VALUES[ki].length+'</span>')+
+      '</button>';
+    if(!open) return '<div class="tp-cat'+(picked?' picked':'')+'">'+head+'</div>';
+    var floors = traitFloors(ki), vals = [];
+    for(var v = 0; v <= VALUES[ki].length; v++){ if(COUNTS[ki][v]) vals.push(v); }
+    vals.sort(function(a,b){ return COUNTS[ki][b] - COUNTS[ki][a]; });
+    var rows = vals.map(function(v){
+      var n = COUNTS[ki][v], active = traitFilter[ki] === v - 1, name = valName(ki, v-1);
+      var fl = floors[v] != null ? floors[v]+' SOL floor' : 'not listed';
+      return '<button class="tp-row'+(active?' active':'')+'" data-name="'+esc(name.toLowerCase())+'" onclick="toggleTrait('+ki+','+(v-1)+')">'+
+        '<img src="'+thumb(SAMPLE[ki][v], 96)+'" data-num="'+SAMPLE[ki][v]+'" onerror="thumbFallback(this)" alt="" loading="lazy" width="40" height="40">'+
+        '<span style="min-width:0"><div class="tp-name">'+esc(name)+'</div><div class="tp-sub">'+fl+'</div></span>'+
+        '<span class="tp-num">'+fmtNum(n)+'<span class="tp-sub">'+pct(n, total, 2)+'</span></span></button>';
+    }).join('');
+    var search = vals.length > 10 ? '<input class="ctl-input tp-find" type="text" placeholder="Search '+esc(k.toLowerCase())+'" oninput="tpFind(this)" autocomplete="off" spellcheck="false" aria-label="Search '+esc(k)+'">' : '';
+    return '<div class="tp-cat open'+(picked?' picked':'')+'">'+head+'<div class="tp-cat-body">'+search+rows+'</div></div>';
   }).join('');
   var any = Object.keys(traitFilter).length;
   panel.innerHTML = '<div class="tp-head">TRAITS'+(any?'<button class="tp-clear" onclick="clearTraits()">Clear all</button>':'')+'</div>'+
-    '<select class="ctl-select tp-select" aria-label="Trait category" onchange="setTraitTab(+this.value)">'+opts+'</select>'+
-    '<div class="tp-list">'+rows+'</div>';
+    '<div class="tp-list">'+cats+'</div>';
+  panel.querySelector('.tp-list').scrollTop = keepScroll;
 }
-function setTraitTab(i){ traitTab = i; renderTraitPanel(); }
+// One category open at a time; clicking the open one closes it.
+function setTraitTab(i){
+  traitTab = traitTab === i ? -1 : i;
+  renderTraitPanel();
+  var open = document.querySelector('#ml-trait-panel .tp-cat.open');
+  if(open && open.scrollIntoView) open.scrollIntoView({ block: 'nearest' });
+}
 window.setTraitTab = setTraitTab;
+function tpFind(input){
+  var q = input.value.trim().toLowerCase();
+  var rows = input.parentNode.querySelectorAll('.tp-row');
+  for(var i = 0; i < rows.length; i++) rows[i].style.display = !q || rows[i].getAttribute('data-name').indexOf(q) !== -1 ? '' : 'none';
+}
+window.tpFind = tpFind;
 function toggleTrait(ki, vi){
   if(traitFilter[ki] === vi) delete traitFilter[ki]; else traitFilter[ki] = vi;
   renderTraitPanel(); applyFilters();

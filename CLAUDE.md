@@ -91,12 +91,15 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - Umami Analytics: `data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"`
 
 ## Design system
-- Strony w menu: Home + Seeker Checklist (`index.html`), Mad Lads (`madlads.html`), Skulls (`skulls.html`), EU Licenses (`mica.html`)
-- Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla trzech stron. Nie kopiuj `:root` do stron.
-- UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich trzech stronach.
-- Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#0a8fb5`); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
+- Strony w menu: Home (`index.html`), Mad Lads (`madlads.html`), Skulls (`skulls.html`), Seeker Checklist (`checklist.html`), EU Licenses (`mica.html`). Nawigacja jest identyczna na wszystkich pięciu — zmieniaj ją wszędzie naraz.
+- Home czyta postęp checklisty z `localStorage` (`moonsoon_checklist_summary`, zapisywany przez `checklist.html`); stary adres `/#checklist` przekierowuje na `/checklist.html`
+- Wspólne style (reset, nawigacja, przyciski, przełącznik motywu, fokus, stopka) są w `/assets/css/base.css` — zmieniaj je tam, nie w stronach. Style specyficzne dla strony zostają inline w jej `<style>`. Po zmianie `base.css` podbij `?v=` tak jak przy `tokens.css`.
+- Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla pięciu stron. Nie kopiuj `:root` do stron.
+- UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich pięciu stronach.
+- Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#066682`, dobrany tak, by tekst miał kontrast co najmniej 4.5:1); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
+- Motyw jasny: każdy nowy kolor tekstu sprawdź też na jasnym tle (min. 4.5:1). Złoty tekst używa `--gold-text`, nie `--gold`. Motyw jest ustawiany skryptem w `<head>` przed arkuszami, żeby nie było mignięcia ciemnego tła.
 - Fonty: Space Grotesk (treść, nagłówki), JetBrains Mono (logo, kickery, etykiety)
-- Skala tekstu: 11, 12, 13, 14, 15, 16, 18, 20, 24, 28px (+ hero 34/48). Minimum 11px, bez wartości połówkowych.
+- Skala tekstu: 12, 13, 14, 15, 16, 18, 20, 24, 28px (+ hero 34/48). Minimum 12px, bez wartości połówkowych.
 - Promienie: 6 (znaczniki), 8 (przyciski, pola), 12 (wiersze), 14 (karty), 20 (pigułki)
 - Nagłówek strony: kicker tekstowy (mono, akcent) + tytuł 28px (24px na telefonie) + opis, do lewej
 - Telefon: nawigacja sticky w dwóch rzędach, cele dotykowe min. 44px

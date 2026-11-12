@@ -175,8 +175,19 @@ if (lads.length < 9000) throw new Error(`Snapshot returned only ${lads.length} L
 console.log(`snapshot: ${lads.length} Lads`);
 
 // Static file: mint + traits. Rewritten only when the set of Lads changes.
+// Rarity ranks from HowRare (the ranking Magic Eden shows), one free call.
+// Ranks never change, so they are fetched only when the static file is rebuilt.
+async function howRareRanks() {
+  try {
+    const res = await fetch('https://api.howrare.is/v0.1/collections/madlads/only_rarity');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const items = (await res.json())?.result?.data?.items || [];
+    return new Map(items.map((x) => [x.mint, x.rank]));
+  } catch (e) { console.warn(`HowRare ranks unavailable: ${e.message}`); return new Map(); }
+}
+
 const prevStatic = readJson('madlads-static.json');
-if (!prevStatic || prevStatic.lads.length !== lads.length) {
+if (!prevStatic || prevStatic.lads.length !== lads.length || !prevStatic.rank) {
   const keys = TRAIT_KEYS.filter((k) => lads.some((l) => l.attrs[k]));
   for (const l of lads) for (const k of Object.keys(l.attrs)) if (!keys.includes(k)) keys.push(k);
   const values = keys.map(() => []);
@@ -187,7 +198,9 @@ if (!prevStatic || prevStatic.lads.length !== lads.length) {
     if (!vIdx[i].has(v)) { vIdx[i].set(v, values[i].length); values[i].push(v); }
     return vIdx[i].get(v);
   })]);
-  writeJson('madlads-static.json', { keys, values, lads: rows });
+  const hr = await howRareRanks();
+  const rank = hr.size ? lads.map((l) => hr.get(l.mint) || 0) : (prevStatic?.rank && prevStatic.lads.length === lads.length ? prevStatic.rank : null);
+  writeJson('madlads-static.json', { keys, values, lads: rows, ...(rank ? { rank } : {}) });
   console.log(`static: wrote ${rows.length} Lads, traits ${keys.join(', ')}`);
 }
 

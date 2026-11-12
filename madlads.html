@@ -334,7 +334,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 /* ---- Phone and small tablet: view switch sits under the page header ---- */
 @media(max-width:768px){
   .sk-wrap{display:flex;flex-direction:column;}
-  #view-gallery,#view-history{display:contents;}
+  #view-gallery,#view-holders,#view-sales{display:contents;}
   .sk-wrap>*,#view-gallery>*,#view-history>*{min-width:0;}
   .sk-header{order:-2;}
   .view-toggle{order:-1;margin-bottom:14px;}
@@ -377,6 +377,14 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 /* ---- Mad Lads page additions ---- */
 .ml-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:10px;min-height:0;}
 .ml-count:empty{display:none;}
+.rt{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;padding:1px 6px;border:1px solid currentColor;line-height:1.4;}
+.rt-mythic{color:var(--gold-text);background:rgba(240,184,77,.12);}
+.rt-legendary{color:var(--uncommon);background:rgba(255,138,76,.12);}
+.rt-epic{color:var(--me-text);background:var(--me-tint);}
+.rt-rare{color:var(--accent);background:var(--accent-tint);}
+.rt-uncommon{color:var(--up);background:rgba(20,241,149,.1);}
+.rt-common{color:var(--text-muted);background:rgba(127,127,127,.1);}
+.sd-sub .rt{letter-spacing:.06em;}
 .ml-type{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);margin-left:4px;}
 .sk-listed-badge{white-space:nowrap;}
 .sh-pill{white-space:nowrap;width:100px;}
@@ -432,6 +440,8 @@ button.ho-leg:hover{color:var(--text);}
 @media(max-width:768px){.sk-header{padding-right:0;}}
 @media(max-width:640px){
   .view-toggle-btn{padding:8px 6px;}
+  #ml-sort,#ml-tier{flex:1 1 40%;}
+  #tp-toggle{flex:1 1 100%;}
   .ho-rank,.ho-h-rank{width:34px;}
   .ho-num,.ho-h-num{width:58px;font-size:13px;}
   .ho-listed,.ho-h-listed{display:none;}
@@ -494,6 +504,15 @@ button.ho-leg:hover{color:var(--text);}
             <option value="rarity">Rarest First</option>
             <option value="sale-new">Recently Sold</option>
             <option value="owner">Group by Holder</option>
+          </select>
+          <select class="ctl-select" id="ml-tier" onchange="applyFilters()" aria-label="Rarity">
+            <option value="">All rarities</option>
+            <option value="mythic">Mythic (top 1%)</option>
+            <option value="legendary">Legendary (top 5%)</option>
+            <option value="epic">Epic (top 15%)</option>
+            <option value="rare">Rare (top 35%)</option>
+            <option value="uncommon">Uncommon (top 60%)</option>
+            <option value="common">Common</option>
           </select>
           <button class="ctl-traits" id="tp-toggle" type="button" aria-expanded="false" aria-controls="ml-trait-panel" onclick="this.setAttribute('aria-expanded',document.body.classList.toggle('tp-open'))">Filter by trait</button>
           <label class="ctl-toggle">
@@ -680,6 +699,21 @@ function traitTier(p){
 }
 function fullHistory(l){ return !!BF && l.i < BF.next && !(BF.skipped && BF.skipped[l.num]); }
 function escName(o){ return o.escrow.length > 30 ? 'Program account' : o.escrow; }
+// Rarity tiers by rank, the same cut-offs Magic Eden uses.
+var TIERS = [
+  { id: 'mythic', label: 'Mythic', top: 1 },
+  { id: 'legendary', label: 'Legendary', top: 5 },
+  { id: 'epic', label: 'Epic', top: 15 },
+  { id: 'rare', label: 'Rare', top: 35 },
+  { id: 'uncommon', label: 'Uncommon', top: 60 },
+  { id: 'common', label: 'Common', top: 100 }
+];
+function rarityTier(rank, total){
+  var p = rank / total * 100;
+  for(var i = 0; i < TIERS.length; i++){ if(p <= TIERS[i].top) return TIERS[i]; }
+  return TIERS[TIERS.length-1];
+}
+function tierBadge(l){ return '<span class="rt rt-'+l.tier.id+'">'+l.tier.label+'</span>'; }
 function valName(ki, vi){ return vi < 0 ? 'None' : VALUES[ki][vi]; }
 
 function tagOf(addr){
@@ -720,7 +754,11 @@ function buildStatic(s){
     for(var i = 0; i < KEYS.length; i++) score += 1 / COUNTS[i][l.t[i]+1];
     l.score = score;
   });
+  // Rank: HowRare's (what Magic Eden shows). The few Lads it does not list
+  // fall back to our own trait-frequency rank.
   LADS.slice().sort(function(a,b){ return b.score - a.score || a.num - b.num; }).forEach(function(l, i){ l.rank = i + 1; });
+  if(s.rank){ LADS.forEach(function(l){ if(s.rank[l.i]) l.rank = s.rank[l.i]; }); }
+  LADS.forEach(function(l){ l.tier = rarityTier(l.rank, total); });
   // Only offer trait categories that actually vary.
   traitTab = 0;
   attachSales();
@@ -884,7 +922,7 @@ function cardHtml(l){
     '<div class="sk-body">'+
       '<div class="sk-num">#'+l.num+' <span class="ml-type">'+esc(valName(0, l.t[0]))+'</span></div>'+
       '<div class="sk-owner mono">'+ownerLine+'</div>'+
-      '<div class="sk-meta-row"><span>Rarity rank</span><span class="val">#'+fmtNum(l.rank)+'</span></div>'+
+      '<div class="sk-meta-row"><span>'+tierBadge(l)+'</span><span class="val">#'+fmtNum(l.rank)+'</span></div>'+
       '<div class="sk-meta-row"><span>Last sale</span><span class="val">'+(last ? fmtSol(last.p)+' SOL' : '&mdash;')+'</span></div>'+
     '</div></div>';
 }
@@ -914,6 +952,7 @@ function applyFilters(){
   var q = document.getElementById('ml-search').value.trim().replace(/^[#@]/, '');
   var sort = document.getElementById('ml-sort').value;
   var listedOnly = document.getElementById('ml-listed-only').checked;
+  var tierPick = document.getElementById('ml-tier').value;
   var list = LADS;
   if(q){
     if(/^\d+$/.test(q)){
@@ -928,6 +967,7 @@ function applyFilters(){
     }
   }
   if(listedOnly) list = list.filter(function(l){ return l.listPrice != null; });
+  if(tierPick) list = list.filter(function(l){ return l.tier.id === tierPick; });
   if(ownerFilter) list = list.filter(function(l){ return l.owner === ownerFilter; });
   if(Object.keys(traitFilter).length) list = list.filter(matchesTraits);
   list = list.slice();
@@ -1016,7 +1056,7 @@ function renderLad(num){
   var l = BY[num]; if(!l) return false;
   var total = LADS.length, o = l.owner ? OWN[l.owner] : null;
   var sales = l.sales.slice().reverse();
-  var sub = ['Rank <b>#'+fmtNum(l.rank)+'</b> of '+fmtNum(total)];
+  var sub = [tierBadge(l)+' <span class="sd-tip" title="Rarity rank from HowRare, the ranking Magic Eden shows. '+l.tier.label+' = top '+l.tier.top+'% of the collection.">Rank <b>#'+fmtNum(l.rank)+'</b> of '+fmtNum(total)+' &#9432;</span>'];
   if(sales.length) sub.push('Last sold <b>'+timeAgo(sales[0].t)+' ago</b>');
 
   var traits = '';
@@ -1347,7 +1387,7 @@ function switchView(v){
   if(VIEWS.indexOf(v) === -1) v = 'gallery';
   view = v;
   VIEWS.forEach(function(x){
-    document.getElementById('view-'+x).style.display = x === v ? 'block' : 'none';
+    document.getElementById('view-'+x).style.display = x === v ? '' : 'none';
     document.getElementById('vt-'+x).classList.toggle('active', x === v);
   });
   if(location.hash.slice(1) !== v) history.replaceState(null, '', v === 'gallery' ? location.pathname : '#'+v);

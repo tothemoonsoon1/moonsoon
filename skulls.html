@@ -333,7 +333,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 /* ---- Phone and small tablet: view switch sits under the page header ---- */
 @media(max-width:768px){
   .sk-wrap{display:flex;flex-direction:column;}
-  #view-gallery,#view-history{display:contents;}
+  #view-gallery,#view-holders,#view-history{display:contents;}
   .sk-wrap>*,#view-gallery>*,#view-history>*{min-width:0;}
   .sk-header{order:-2;}
   .view-toggle{order:-1;margin-bottom:14px;}
@@ -373,6 +373,61 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
   .sk-never-badge{left:6px;}
   .sk-listed-badge{right:6px;}
 }
+
+/* ---- Trait filter as expandable sections, Holders view (same as the Mad Lads page) ---- */
+.tp-cat{border:1px solid var(--card-border);border-radius:12px;flex-shrink:0;}
+.tp-cat.open{border-color:var(--text-muted);}
+.tp-cat-h{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 12px;background:none;border:none;border-radius:12px;color:var(--text);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left;}
+.tp-cat-h:hover{background:rgba(127,127,127,.08);}
+.tp-cat-name{flex:1;min-width:0;}
+.tp-cat-n{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:var(--text-muted);}
+.tp-cat-sel{font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-tint);border:1px solid var(--accent-border);border-radius:20px;padding:3px 10px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tp-cat-h::after{content:"";width:7px;height:7px;flex-shrink:0;border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);transform:rotate(45deg) translateY(-2px);transition:transform .15s ease;}
+.tp-cat-h[aria-expanded="true"]::after{transform:rotate(-135deg) translateY(-2px);}
+.tp-cat-body{display:flex;flex-direction:column;gap:6px;padding:2px 8px 8px;max-height:420px;overflow-y:auto;}
+.tp-cat-body .tp-row{flex-shrink:0;}
+.tp-find{padding:8px 12px;font-size:13px;flex-shrink:0;}
+@media(max-width:640px){.tp-find{font-size:16px;min-height:44px;}.tp-list{max-height:none !important;}}
+.ho-dist{display:flex;height:18px;border-radius:6px;overflow:hidden;gap:2px;margin-top:12px;}
+.ho-seg{min-width:3px;}
+.ho-legend{display:flex;flex-wrap:wrap;gap:6px 22px;margin:12px 0 6px;}
+.ho-leg{display:inline-flex;align-items:center;gap:7px;font-family:inherit;font-size:12px;color:var(--text-muted);background:none;border:none;padding:0;cursor:pointer;text-align:left;}
+span.ho-leg{cursor:default;}
+button.ho-leg:hover{color:var(--text);}
+.ho-leg b{color:var(--text);font-weight:600;}
+.ho-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.ho-row{cursor:pointer;}
+.ho-rank,.ho-h-rank{width:44px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-muted);}
+.ho-wallet{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;font-size:14px;min-width:0;}
+.ho-wallet a.sd-addr{text-decoration:none;}
+.ho-wallet a.sd-addr:hover{text-decoration:underline;}
+.ho-emoji{width:20px;text-align:center;}
+.ho-h-wallet{padding-left:28px;}
+.ho-thumbs,.ho-h-thumbs{display:flex;align-items:center;gap:4px;width:240px;flex-shrink:0;justify-content:flex-end;}
+.ho-thumbs img{width:36px;height:36px;border-radius:8px;object-fit:cover;background:var(--nft-gradient);}
+.ho-more{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);min-width:34px;text-align:right;}
+.ho-num,.ho-h-num{width:76px;text-align:right;flex-shrink:0;font-size:14px;font-variant-numeric:tabular-nums;}
+.ho-num b{font-size:15px;}
+.ho-moves{border:1px solid var(--card-border);border-radius:14px;padding:14px;margin-bottom:14px;display:flex;flex-direction:column;gap:10px;}
+.ho-mv-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px;max-height:232px;overflow-y:auto;}
+.ho-mv{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 10px 6px 6px;border:1px solid var(--card-border);border-radius:12px;text-decoration:none;color:var(--text);font-size:13px;}
+.ho-mv:hover{border-color:var(--text-muted);}
+.ho-mv img{width:36px;height:36px;border-radius:8px;object-fit:cover;background:var(--nft-gradient);}
+.ho-mv-t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ho-mv-n{color:var(--text-muted);font-size:12px;}
+@media(max-width:900px){.ho-thumbs,.ho-h-thumbs{display:none;}}
+.sk-header{padding-right:330px;}
+.view-toggle-btn{padding:8px 16px;}
+@media(max-width:768px){.sk-header{padding-right:0;}}
+@media(max-width:640px){
+  .view-toggle-btn{padding:8px 6px;}
+  .ho-rank,.ho-h-rank{width:34px;}
+  .ho-num,.ho-h-num{width:58px;font-size:13px;}
+  .ho-listed,.ho-h-listed{display:none;}
+  .ho-row{min-height:52px;}
+  .ho-legend{flex-direction:column;}
+  .ho-leg{min-height:32px;}
+}
 </style>
 </head>
 <body>
@@ -398,6 +453,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 
       <div class="view-toggle" role="tablist">
         <button class="view-toggle-btn active" id="view-toggle-gallery" onclick="switchView('gallery')">Gallery</button>
+        <button class="view-toggle-btn" id="view-toggle-holders" onclick="switchView('holders')">Holders</button>
         <button class="view-toggle-btn" id="view-toggle-history" onclick="switchView('history')">Sale History</button>
       </div>
 
@@ -460,6 +516,50 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
           </div>
           <aside class="sf" id="sk-sale-feed" hidden></aside>
         </div>
+      </div>
+
+      <div id="view-holders" style="display:none;">
+        <div class="sk-header">
+          <div class="kicker">MAD LADS</div>
+          <h2 class="sk-title">Skull Holders</h2>
+          <div class="sk-desc">Every wallet holding a Skull, ranked. Whales hold 3 or more, sharks hold 2.</div>
+        </div>
+
+        <div class="stats-bar">
+          <div class="stat-card"><div class="stat-label">HOLDERS</div><div class="stat-val" id="ho-stat-holders">&mdash;</div><div class="stat-sub" id="ho-stat-unique"></div></div>
+          <div class="stat-card"><div class="stat-label">WHALES &middot; 3+</div><div class="stat-val" id="ho-stat-whales">&mdash;</div><div class="stat-sub" id="ho-stat-whales-sub"></div></div>
+          <div class="stat-card"><div class="stat-label">SHARKS &middot; 2</div><div class="stat-val" id="ho-stat-sharks">&mdash;</div><div class="stat-sub" id="ho-stat-sharks-sub"></div></div>
+          <div class="stat-card"><div class="stat-label">TOP 5 HOLD</div><div class="stat-val" id="ho-stat-top">&mdash;</div><div class="stat-sub">of all Skulls</div></div>
+        </div>
+
+        <div class="sh-chart-card">
+          <div class="sh-chart-head">
+            <div class="stat-label">WHO HOLDS THE SKULLS</div>
+            <div class="sh-chart-detail">share of the 99 Skulls, by holder size</div>
+          </div>
+          <div class="ho-dist" id="ho-dist"></div>
+          <div class="ho-legend" id="ho-legend"></div>
+        </div>
+
+        <div class="controls">
+          <div class="ctl-search">
+            <input class="ctl-input" type="text" id="ho-search" placeholder="Search wallet or @handle" oninput="renderHolders()" autocomplete="off" spellcheck="false">
+          </div>
+          <select class="ctl-select" id="ho-tier" onchange="renderHolders()" aria-label="Holder size">
+            <option value="all">All holders</option>
+            <option value="whale">Whales (3+)</option>
+            <option value="shark">Sharks (2)</option>
+            <option value="single">1 Skull</option>
+            <option value="tagged">Tagged wallets</option>
+          </select>
+        </div>
+
+        <div class="sh-head-row" aria-hidden="true">
+          <span class="ho-h-rank">#</span><span class="ho-h-wallet">Wallet</span><span class="sh-spacer"></span>
+          <span class="ho-h-thumbs"></span><span class="ho-h-num">Skulls</span><span class="ho-h-num">Supply</span><span class="ho-h-num ho-h-listed">Listed</span>
+        </div>
+        <div class="sh-list" id="ho-list"></div>
+        <div class="empty-state" id="ho-empty" style="display:none;">No holders match your search.</div>
       </div>
 
       <div id="view-history" style="display:none;">
@@ -666,6 +766,7 @@ function ownerGroups(){
 var TRAIT_ORDER = ['Clothing','Hand','Background','Eyes','Glove','Smoke'];
 var TRAITS = {};
 var traitFilter = {};
+var ownerFilter = null;
 
 function traitCounts(){
   var c = {};
@@ -720,29 +821,51 @@ function renderTraitFilters(){
     });
   });
   var cats = TRAIT_ORDER.filter(function(k){ return counts[k]; });
-  if(cats.indexOf(traitTab) === -1) traitTab = cats[0];
-  var tabs = cats.map(function(k){
-    return '<button class="tp-tab'+(k===traitTab?' active':'')+'" data-k="'+escAttr(k)+'" onclick="setTraitTab(this)">'+escAttr(k)+(traitFilter[k]?'<span class="dot"></span>':'')+'</button>';
-  }).join('');
-  var vals = Object.keys(counts[traitTab]).sort(function(a,b){ return counts[traitTab][b]-counts[traitTab][a] || a.localeCompare(b); });
-  var rows = vals.map(function(v){
-    var key = traitTab+'|'+v, n = counts[traitTab][v];
-    var img = sample[key] ? '<img src="'+escAttr(sample[key])+'" alt="" loading="lazy">' : '<span class="ph"></span>';
-    var fl = floor[key] != null ? floor[key]+' SOL floor' : 'not listed';
-    return '<button class="tp-row'+(traitFilter[traitTab]===v?' active':'')+'" data-k="'+escAttr(traitTab)+'" data-v="'+escAttr(v)+'" onclick="toggleTraitRow(this)">'+
-      img+'<span style="min-width:0"><div class="tp-name">'+escAttr(v)+'</div><div class="tp-sub">'+fl+'</div></span>'+
-      '<span class="tp-num">'+n+'<span class="tp-sub">'+(n/total*100).toFixed(2)+'%</span></span></button>';
+  var listEl = panel.querySelector('.tp-list'), keepScroll = listEl ? listEl.scrollTop : 0;
+  var sections = cats.map(function(k){
+    var open = k === traitTab, picked = traitFilter[k] != null;
+    var vals = Object.keys(counts[k]).sort(function(a,b){ return counts[k][b]-counts[k][a] || a.localeCompare(b); });
+    var head = '<button class="tp-cat-h" aria-expanded="'+open+'" data-k="'+escAttr(k)+'" onclick="setTraitTab(this)">'+
+      '<span class="tp-cat-name">'+escAttr(k)+'</span>'+
+      (picked ? '<span class="tp-cat-sel">'+escAttr(traitFilter[k])+'</span>' : '<span class="tp-cat-n">'+vals.length+'</span>')+'</button>';
+    if(!open) return '<div class="tp-cat">'+head+'</div>';
+    var rows = vals.map(function(v){
+      var key = k+'|'+v, n = counts[k][v];
+      var img = sample[key] ? '<img src="'+escAttr(sample[key])+'" alt="" loading="lazy">' : '<span class="ph"></span>';
+      var fl = floor[key] != null ? floor[key]+' SOL floor' : 'not listed';
+      return '<button class="tp-row'+(traitFilter[k]===v?' active':'')+'" data-k="'+escAttr(k)+'" data-v="'+escAttr(v)+'" data-name="'+escAttr(v.toLowerCase())+'" onclick="toggleTraitRow(this)">'+
+        img+'<span style="min-width:0"><div class="tp-name">'+escAttr(v)+'</div><div class="tp-sub">'+fl+'</div></span>'+
+        '<span class="tp-num">'+n+'<span class="tp-sub">'+(n/total*100).toFixed(2)+'%</span></span></button>';
+    }).join('');
+    var search = vals.length > 10 ? '<input class="ctl-input tp-find" type="text" placeholder="Search '+escAttr(k.toLowerCase())+'" oninput="tpFind(this)" autocomplete="off" spellcheck="false" aria-label="Search '+escAttr(k)+'">' : '';
+    return '<div class="tp-cat open">'+head+'<div class="tp-cat-body">'+search+rows+'</div></div>';
   }).join('');
   var any = Object.keys(traitFilter).length;
   panel.innerHTML = '<div class="tp-head">TRAITS'+(any?'<button class="tp-clear" onclick="clearTraitFilters()">Clear all</button>':'')+'</div>'+
-    '<div class="tp-tabs">'+tabs+'</div><div class="tp-list">'+rows+'</div>';
-  activeEl.innerHTML = Object.keys(traitFilter).map(function(k){
+    '<div class="tp-list">'+sections+'</div>';
+  panel.querySelector('.tp-list').scrollTop = keepScroll;
+  var pills = Object.keys(traitFilter).map(function(k){
     return '<button class="tp-pill" data-k="'+escAttr(k)+'" onclick="removeTrait(this)">'+escAttr(k)+': '+escAttr(traitFilter[k])+' &times;</button>';
   }).join('');
+  if(ownerFilter){ pills += '<button class="tp-pill" onclick="clearOwnerFilter()">Holder: '+escAttr(ownerName(ownerFilter))+' &times;</button>'; }
+  activeEl.innerHTML = pills;
 }
 
-function setTraitTab(btn){ traitTab = btn.getAttribute('data-k'); renderTraitFilters(); }
+// One section open at a time; clicking the open one closes it.
+function setTraitTab(btn){
+  var k = btn.getAttribute('data-k');
+  traitTab = traitTab === k ? null : k;
+  renderTraitFilters();
+  var open = document.querySelector('#sk-trait-panel .tp-cat.open');
+  if(open && open.scrollIntoView) open.scrollIntoView({ block: 'nearest' });
+}
 window.setTraitTab = setTraitTab;
+function tpFind(input){
+  var q = input.value.trim().toLowerCase();
+  var rows = input.parentNode.querySelectorAll('.tp-row');
+  for(var i = 0; i < rows.length; i++) rows[i].style.display = !q || rows[i].getAttribute('data-name').indexOf(q) !== -1 ? '' : 'none';
+}
+window.tpFind = tpFind;
 
 function toggleTraitRow(btn){
   var k = btn.getAttribute('data-k'), v = btn.getAttribute('data-v');
@@ -1065,14 +1188,20 @@ function renderHistory(){
 }
 window.renderHistory = renderHistory;
 
+var VIEWS = ['gallery','holders','history'];
+function currentView(){
+  for(var i = 0; i < VIEWS.length; i++){ if(document.getElementById('view-'+VIEWS[i]).style.display !== 'none') return VIEWS[i]; }
+  return 'gallery';
+}
 function switchView(view){
-  var isHistory = view === 'history';
-  document.getElementById('view-gallery').style.display = isHistory ? 'none' : '';
-  document.getElementById('view-history').style.display = isHistory ? '' : 'none';
-  document.getElementById('view-toggle-gallery').classList.toggle('active', !isHistory);
-  document.getElementById('view-toggle-history').classList.toggle('active', isHistory);
+  if(VIEWS.indexOf(view) === -1) view = 'gallery';
+  VIEWS.forEach(function(v){
+    document.getElementById('view-'+v).style.display = v === view ? '' : 'none';
+    document.getElementById('view-toggle-'+v).classList.toggle('active', v === view);
+  });
   if(location.hash !== '#'+view){ location.hash = view; }
-  if(isHistory){ shPage = 1; renderHistory(); }
+  if(view === 'history'){ shPage = 1; renderHistory(); }
+  if(view === 'holders'){ renderHolders(); }
 }
 window.switchView = switchView;
 
@@ -1084,6 +1213,7 @@ function applyFilters(){
   var list = SKULLS.slice();
   if(query){ list = list.filter(function(s){ return String(s.num).indexOf(query) !== -1; }); }
   if(neverOnly){ list = list.filter(function(s){ return s.neverTraded; }); }
+  if(ownerFilter){ list = list.filter(function(s){ return s.owner === ownerFilter; }); }
   Object.keys(traitFilter).forEach(function(k){
     list = list.filter(function(s){ var t = TRAITS[s.num]; return t && (t[k] || 'None') === traitFilter[k]; });
   });
@@ -1232,7 +1362,7 @@ function renderSkullDetail(num){
       : ' <span class="sd-chip"'+tagStyle+'>'+escAttr(tagLabel)+'</span>';
   }
   if(holderCount > 1){
-    ownerBits += ' <button class="sd-chip" onclick="sdShowOwner()" title="Group the gallery by owner">'+holderEmoji(holderCount)+' holds '+holderCount+' Skulls</button>';
+    ownerBits += ' <button class="sd-chip" onclick="sdShowOwner()" title="Show all Skulls of this wallet">'+holderEmoji(holderCount)+' holds '+holderCount+' Skulls</button>';
   }
 
   var salesHtml = sales.length
@@ -1309,9 +1439,11 @@ function sdFilterTrait(btn){
 window.sdFilterTrait = sdFilterTrait;
 
 function sdShowOwner(){
+  var s = null;
+  for(var i = 0; i < SKULLS.length; i++){ if(SKULLS[i].num === sdOpenNum){ s = SKULLS[i]; break; } }
   closeSkull();
-  document.getElementById('sk-sort').value = 'owner';
-  applyFilters();
+  if(s){ ownerFilter = s.owner; traitFilter = {}; }
+  renderTraitFilters(); applyFilters();
   document.querySelector('.sk-layout').scrollIntoView({ block: 'start' });
 }
 window.sdShowOwner = sdShowOwner;
@@ -1322,6 +1454,100 @@ document.addEventListener('keydown', function(e){
   else if(e.key === 'ArrowLeft'){ sdStep(-1); }
   else if(e.key === 'ArrowRight'){ sdStep(1); }
 });
+
+// ---- Holders view ----
+function ownerName(addr){
+  for(var i = 0; i < SKULLS.length; i++){
+    var s = SKULLS[i];
+    if(s.owner !== addr) continue;
+    if(s.tagOnly && s.tagText) return s.tagText;
+    return s.label || (s.twitter ? '@'+s.twitter : (s.isDomain ? s.owner : shortAddr(s.owner)));
+  }
+  return shortAddr(addr);
+}
+function holderTier(n){ return n >= 3 ? 'whale' : n === 2 ? 'shark' : 'single'; }
+function holderList(){
+  var by = ownerGroups();
+  var list = Object.keys(by).map(function(addr){
+    var skulls = by[addr].slice().sort(function(a,b){ return a.num - b.num; }), f = skulls[0];
+    return { addr: addr, skulls: skulls, n: skulls.length, first: f,
+      listed: skulls.filter(function(x){ return x.listed; }).length,
+      search: (addr+' '+(f.label||'')+' '+(f.twitter||'')+' '+(f.tagText||'')).toLowerCase() };
+  }).sort(function(a,b){ return b.n - a.n || a.skulls[0].num - b.skulls[0].num; });
+  list.forEach(function(o, i){ o.rank = i + 1; });
+  return list;
+}
+function holderTagChip(f){
+  var url = f.twitterUrl || (f.twitter ? 'https://x.com/'+encodeURIComponent(f.twitter) : null);
+  var text = f.tagOnly ? (f.tagText || '') : (f.label || (f.twitter ? '@'+f.twitter : ''));
+  if(!text) return '';
+  var style = f.tagColor ? ' style="border-color:'+escAttr(f.tagColor)+'"' : '';
+  return url
+    ? '<a class="sd-chip"'+style+' href="'+escAttr(url)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">'+X_ICON_SVG+' '+escAttr(text)+'</a>'
+    : '<span class="sd-chip"'+style+'>'+escAttr(text)+'</span>';
+}
+function renderHolders(){
+  var all = holderList(), total = SKULLS.length;
+  var g = { whale: { n: 0, k: 0 }, shark: { n: 0, k: 0 }, single: { n: 0, k: 0 } };
+  all.forEach(function(o){ var t = g[holderTier(o.n)]; t.n++; t.k += o.n; });
+  var pc = function(k){ return total ? (k/total*100).toFixed(1)+'%' : '0%'; };
+  var top = all.slice(0, 5).reduce(function(a, o){ return a + o.n; }, 0);
+  document.getElementById('ho-stat-holders').textContent = all.length;
+  document.getElementById('ho-stat-unique').textContent = 'for '+total+' Skulls';
+  document.getElementById('ho-stat-whales').textContent = g.whale.n;
+  document.getElementById('ho-stat-whales-sub').textContent = 'hold '+g.whale.k+' Skulls ('+pc(g.whale.k)+')';
+  document.getElementById('ho-stat-sharks').textContent = g.shark.n;
+  document.getElementById('ho-stat-sharks-sub').textContent = 'hold '+g.shark.k+' Skulls ('+pc(g.shark.k)+')';
+  document.getElementById('ho-stat-top').textContent = pc(top);
+  var segs = [['whale','🐋 Whales (3+)','var(--accent)'],['shark','🦈 Sharks (2)','var(--me)'],['single','1 Skull','var(--text-muted)']];
+  document.getElementById('ho-dist').innerHTML = segs.map(function(x){
+    return g[x[0]].k ? '<div class="ho-seg" style="flex:'+g[x[0]].k+';background:'+x[2]+'" title="'+x[1]+': '+g[x[0]].k+' Skulls"></div>' : '';
+  }).join('');
+  document.getElementById('ho-legend').innerHTML = segs.map(function(x){
+    return '<button class="ho-leg" onclick="hoSetTier(\''+x[0]+'\')"><span class="ho-dot" style="background:'+x[2]+'"></span><b>'+x[1]+'</b> '+g[x[0]].n+' wallets &middot; '+pc(g[x[0]].k)+' of Skulls</button>';
+  }).join('');
+
+  var q = document.getElementById('ho-search').value.trim().replace(/^@/, '').toLowerCase();
+  var tier = document.getElementById('ho-tier').value;
+  var list = all.filter(function(o){
+    if(tier === 'tagged'){ if(!(o.first.label || o.first.twitter || o.first.tagText)) return false; }
+    else if(tier !== 'all' && holderTier(o.n) !== tier) return false;
+    return !q || o.search.indexOf(q) !== -1;
+  });
+  document.getElementById('ho-empty').style.display = list.length ? 'none' : 'block';
+  document.getElementById('ho-list').innerHTML = list.map(function(o){
+    var f = o.first;
+    var thumbs = o.skulls.slice(0, 5).map(function(x){
+      return '<img src="'+thumbUrl(x)+'" alt="" width="36" height="36" loading="lazy" decoding="async">';
+    }).join('')+(o.n > 5 ? '<span class="ho-more">+'+(o.n-5)+'</span>' : '');
+    var name = f.isDomain ? escAttr(o.addr) : escAttr(shortAddr(o.addr));
+    var wallet = f.isDomain ? '<span class="sd-addr">'+name+'</span>'
+      : '<a class="sd-addr" href="https://solscan.io/account/'+escAttr(o.addr)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="'+escAttr(o.addr)+'">'+name+'</a>';
+    return '<div class="sh-row ho-row" tabindex="0" role="button" data-owner="'+escAttr(o.addr)+'" onclick="viewOwner(this)" onkeydown="if(event.key===\'Enter\')viewOwner(this)" title="Show this wallet\'s Skulls">'+
+      '<span class="ho-rank">'+o.rank+'</span>'+
+      '<span class="ho-wallet"><span class="ho-emoji">'+holderEmoji(o.n)+'</span>'+wallet+holderTagChip(f)+'</span>'+
+      '<span class="sh-spacer"></span>'+
+      '<span class="ho-thumbs">'+thumbs+'</span>'+
+      '<span class="ho-num"><b>'+o.n+'</b></span>'+
+      '<span class="ho-num">'+pc(o.n)+'</span>'+
+      '<span class="ho-num ho-listed">'+(o.listed ? o.listed : '&mdash;')+'</span></div>';
+  }).join('');
+}
+window.renderHolders = renderHolders;
+function hoSetTier(t){ document.getElementById('ho-tier').value = t; renderHolders(); }
+window.hoSetTier = hoSetTier;
+function viewOwner(el){
+  ownerFilter = el.getAttribute('data-owner');
+  traitFilter = {};
+  document.getElementById('sk-search').value = '';
+  document.getElementById('sk-never-only').checked = false;
+  switchView('gallery');
+  renderTraitFilters(); applyFilters();
+  document.querySelector('.controls').scrollIntoView({ block: 'start' });
+}
+window.viewOwner = viewOwner;
+function clearOwnerFilter(){ ownerFilter = null; renderTraitFilters(); applyFilters(); }
+window.clearOwnerFilter = clearOwnerFilter;
 
 // ---- Recent sales feed (gallery sidebar) ----
 function timeAgo(ts){
@@ -1382,14 +1608,15 @@ function renderAll(){
   renderStats();
   renderTraitFilters();
   applyFilters();
-  if(document.getElementById('view-history').style.display !== 'none'){ renderHistory(); }
+  var v = currentView();
+  if(v === 'history'){ renderHistory(); }
+  if(v === 'holders'){ renderHolders(); }
 }
 
-if(location.hash === '#history'){ switchView('history'); }
+if(location.hash === '#history' || location.hash === '#holders'){ switchView(location.hash.slice(1)); }
 window.addEventListener('hashchange', function(){
-  var view = location.hash === '#history' ? 'history' : 'gallery';
-  var current = document.getElementById('view-history').style.display !== 'none' ? 'history' : 'gallery';
-  if(view !== current){ switchView(view); }
+  var view = VIEWS.indexOf(location.hash.slice(1)) !== -1 ? location.hash.slice(1) : 'gallery';
+  if(view !== currentView()){ switchView(view); }
 });
 
 renderAll();

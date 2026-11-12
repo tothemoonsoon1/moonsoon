@@ -1398,6 +1398,8 @@ pStatic.then(function(s){
     return (latest ? loadYear(latest) : Promise.resolve()).then(function(){
       renderAll();
       if(/^\d+$/.test(startHash)) openLad(+startHash);
+      // Opened straight on #sales: the list of years was not known yet.
+      if(view === 'sales') loadAllYears().then(function(){ if(view === 'sales') renderSales(); });
     });
   });
 }).catch(function(){ document.getElementById('ml-count').textContent = 'Could not load Mad Lads data. Please refresh.'; });

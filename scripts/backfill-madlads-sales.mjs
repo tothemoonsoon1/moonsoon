@@ -92,7 +92,7 @@ async function rpc(method, params) {
   }
   throw new Error(`${method} retries exhausted`);
 }
-const getTx = (sig) => rpc('getTransaction', [sig, { maxSupportedTransactionVersion: 0, encoding: 'jsonParsed' }]);
+const getTx = (sig) => rpc('getTransaction', [sig, { maxSupportedTransactionVersion: 1, encoding: 'jsonParsed' }]);
 
 const keysOf = (tx) => tx.transaction.message.accountKeys.map((k) => (typeof k === 'string' ? k : k.pubkey));
 
@@ -298,6 +298,8 @@ if (state.v !== 2) {
   state.v = 2;
 }
 state.retry = state.retry || [];
+// Lads skipped on a request error (e.g. a newer transaction version) get another try.
+for (const n of Object.keys(state.skipped)) if (/^error:/.test(state.skipped[n]) && !state.retry.includes(Number(n))) state.retry.push(Number(n));
 const ladByNum = new Map(lads.map((l) => [l.num, l]));
 
 let pending = [];

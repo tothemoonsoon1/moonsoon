@@ -30,7 +30,7 @@ if (!KEY) { console.error('Missing HELIUS_API_KEY'); process.exit(1); }
 const RPC = `https://mainnet.helius-rpc.com/?api-key=${KEY}`;
 const BUDGET = Number(process.env.BUDGET || 12000);      // credits per run
 const PER_LAD_CAP = Number(process.env.PER_LAD_CAP || 700);
-const PER_ACCOUNT_CAP = 250;                              // transactions read on one token account before giving up
+const PER_ACCOUNT_CAP = 60;                               // transactions read one by one on a token account before switching to a search
 const TIME_LIMIT_MS = Number(process.env.TIME_LIMIT_MIN || 300) * 60000;
 const CHECK = process.env.CHECK === '1';
 const FEE = 0.02 + 0.042; // marketplace fee + Mad Lads royalty
@@ -83,6 +83,58 @@ function incoming(tx, mint, acct) {
   const src = (m.preTokenBalances || []).find((x) => x.mint === mint && Number(x.uiTokenAmount.amount) > 0 && keys[x.accountIndex] !== acct);
   const dst = (m.postTokenBalances || []).find((x) => x.mint === mint && keys[x.accountIndex] === acct);
   return { srcAcct: src ? keys[src.accountIndex] : null, from: src?.owner || null, to: dst?.owner || null };
+}
+
+// Balance of the NFT in `acct` after this transaction (null = not mentioned).
+function balanceAfter(tx, mint, acct) {
+  const m = tx?.meta;
+  if (!m) return null;
+  const keys = keysOf(tx);
+  const find = (list) => (list || []).find((x) => x.mint === mint && keys[x.accountIndex] === acct);
+  const post = find(m.postTokenBalances), pre = find(m.preTokenBalances);
+  if (!post && !pre) return null;
+  return post ? Number(post.uiTokenAmount.amount) : 0;
+}
+
+// A token account with hundreds of transactions (a wallet that relists all
+// the time) is too expensive to read one by one. Its balance over time is a
+// step: empty, then holding the Lad. Jump back in growing steps until a
+// transaction that left it empty, then bisect to the one that filled it.
+// A list-and-delist round trip inside the gap is skipped, which loses no
+// sale; a sale and re-buy into the very same account would be missed.
+async function findIncomingFast(mint, acct, startBefore) {
+  const sigs = [];
+  let page = startBefore;
+  for (let i = 0; i < 60; i++) {
+    const r = await rpc('getSignaturesForAddress', [acct, { limit: 1000, ...(page ? { before: page } : {}) }]);
+    sigs.push(...r.filter((x) => !x.err).map((x) => x.signature));
+    if (r.length < 1000) break;
+    page = r[r.length - 1].signature;
+  }
+  if (!sigs.length) return null;
+  const cache = new Map();
+  const txAt = async (i) => { if (!cache.has(i)) cache.set(i, await getTx(sigs[i])); return cache.get(i); };
+  const emptyAt = async (i) => balanceAfter(await txAt(i), mint, acct) === 0;
+  let lo = 0, hi = null; // lo: holding after sigs[lo] (or unknown); hi: empty after sigs[hi]
+  for (let step = 1; step < sigs.length; step *= 2) {
+    if (await emptyAt(step)) { hi = step; break; }
+    lo = step;
+  }
+  if (hi == null) {
+    if (await emptyAt(sigs.length - 1)) hi = sigs.length - 1; else lo = sigs.length - 1;
+  }
+  while (hi != null && hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (await emptyAt(mid)) hi = mid; else lo = mid;
+  }
+  // The filling transaction is sigs[lo], give or take one the balance check could not read.
+  for (const i of [lo, lo - 1, lo + 1, lo - 2, lo + 2]) {
+    if (i < 0 || i >= sigs.length) continue;
+    const tx = await txAt(i);
+    const inc = tx && incoming(tx, mint, acct);
+    if (inc) return { ...inc, sig: sigs[i], tx };
+  }
+  return null;
 }
 
 // Is this move a sale, and for how much?
@@ -165,6 +217,7 @@ async function walk(mint, cursor, cap) {
       if (sigs.length < 100) { ended = true; break; }
       page = sigs[sigs.length - 1].signature;
     }
+    if (!found && !ended) found = await findIncomingFast(mint, acct, before);
     if (!found) return { sales, status: 'skip', why: ended ? 'trail ends before the mint' : `busy account ${acct}` };
     if (found.srcAcct) {
       const sale = saleOf(found.tx, mint, found);
@@ -210,6 +263,13 @@ const lads = stat.lads.map((r) => ({ num: r[0], mint: r[1] }));
 const numByMint = new Map(lads.map((l) => [l.mint, l.num]));
 const state = readJson('madlads-backfill.json') || { next: 0, total: lads.length, skipped: {}, partial: null, sales: 0, credits: 0 };
 state.total = lads.length;
+// Lads skipped by an earlier version for a busy account get one more try.
+if (state.v !== 2) {
+  state.retry = Object.keys(state.skipped).filter((n) => /^busy account/.test(state.skipped[n])).map(Number);
+  state.v = 2;
+}
+state.retry = state.retry || [];
+const ladByNum = new Map(lads.map((l) => [l.num, l]));
 
 let pending = [];
 let processed = 0;
@@ -222,8 +282,10 @@ const flush = () => {
 };
 
 try {
-  while (state.next < lads.length && credits < BUDGET && Date.now() - startedAt < TIME_LIMIT_MS) {
-    const lad = lads[state.next];
+  while ((state.retry.length || state.next < lads.length) && credits < BUDGET && Date.now() - startedAt < TIME_LIMIT_MS) {
+    const retrying = state.retry.length > 0;
+    const lad = retrying ? ladByNum.get(state.retry[0]) : lads[state.next];
+    if (!lad) { state.retry.shift(); continue; }
     const resume = state.partial && state.partial.num === lad.num ? state.partial : null;
     const spentBefore = resume?.spent || 0;
     const before = credits;
@@ -234,9 +296,9 @@ try {
       flush();
       continue;
     }
-    if (r.status !== 'done') state.skipped[lad.num] = r.why || 'history too long';
+    if (r.status !== 'done') state.skipped[lad.num] = r.why || 'history too long'; else delete state.skipped[lad.num];
     state.partial = null;
-    state.next++;
+    if (retrying) state.retry.shift(); else state.next++;
     processed++;
     if (processed % 20 === 0) { flush(); console.log(`  #${lad.num} · ${processed} Lads · ${credits} credits`); }
   }

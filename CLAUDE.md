@@ -91,7 +91,7 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - Umami Analytics: `data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"`
 
 ## Design system
-- Strony w menu: Home + Seeker Checklist (`index.html`), Skulls (`skulls.html`), EU Licenses (`mica.html`)
+- Strony w menu: Home + Seeker Checklist (`index.html`), Mad Lads (`madlads.html`), Skulls (`skulls.html`), EU Licenses (`mica.html`)
 - Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla trzech stron. Nie kopiuj `:root` do stron.
 - UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich trzech stronach.
 - Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#0a8fb5`); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
@@ -101,6 +101,14 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - Nagłówek strony: kicker tekstowy (mono, akcent) + tytuł 28px (24px na telefonie) + opis, do lewej
 - Telefon: nawigacja sticky w dwóch rzędach, cele dotykowe min. 44px
 - Pełny opis: design system https://claude.ai/artifact/GKACuCg96FVQCGJUiHVsS9
+
+## Mad Lads (`madlads.html`) — dane
+- Cała kolekcja (~10k) NIE może być czytana per-NFT jak Skulls: jeden Lad ma ~6 000 transakcji (bidy), pełny odczyt to ~62 mln kredytów Helius.
+- `scripts/generate-madlads-data.mjs` (workflow `update-madlads.yml`, raz dziennie, ~200 kredytów): jeden zrzut kolekcji (`getAssetsByGroup`) + listingi i ostatnie sprzedaże z darmowego API Magic Eden.
+- Pliki: `madlads-static.json` (mint + cechy, niezmienne), `madlads-data.json` (właściciele, listingi, ruchy holderów), `madlads-sales-ROK.json` (sprzedaże, scalane po sygnaturze).
+- Obrazki: miniatury z CDN Magic Eden (`img-cdn.magiceden.dev`), nic w repo. Oryginały mają ~5 MB.
+- Etykiety portfeli: wspólny `owner-tags.json` (ten sam co Skulls).
+- Progi: whale = 20+ Ladów, shark = 5–19.
 
 ## Kluczowe wzorce w kodzie
 - Sekcje zwijane: `toggleSection(id)`

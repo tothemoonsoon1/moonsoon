@@ -132,11 +132,15 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sd-traits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .sd-trait{text-align:left;font-family:inherit;color:var(--text);background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:12px;padding:11px 12px;cursor:pointer;min-width:0;}
 .sd-trait{transition:background .15s ease,border-color .15s ease,box-shadow .15s ease;}
-.sd-trait.t-rare{border-color:var(--rare);}
-.sd-trait.t-uncommon{border-color:var(--uncommon);}
+.sd-trait.rtb-mythic{border-color:var(--gold-text);}
+.sd-trait.rtb-legendary{border-color:var(--uncommon);}
+.sd-trait.rtb-epic{border-color:var(--me-text);}
+.sd-trait.rtb-rare{border-color:var(--accent);}
 .sd-trait:hover,.sd-trait:focus-visible{background:rgba(127,127,127,.14);border-color:var(--text-muted);}
-.sd-trait.t-rare:hover,.sd-trait.t-rare:focus-visible{border-color:var(--rare);box-shadow:0 0 0 2px rgba(255,77,141,.35);}
-.sd-trait.t-uncommon:hover,.sd-trait.t-uncommon:focus-visible{border-color:var(--uncommon);box-shadow:0 0 0 2px rgba(255,138,76,.35);}
+.sd-trait.rtb-mythic:hover{box-shadow:0 0 0 2px rgba(240,184,77,.35);}
+.sd-trait.rtb-legendary:hover{box-shadow:0 0 0 2px rgba(255,138,76,.35);}
+.sd-trait.rtb-epic:hover{box-shadow:0 0 0 2px rgba(122,63,224,.35);}
+.sd-trait.rtb-rare:hover{box-shadow:0 0 0 2px var(--accent-glow);}
 .sd-trait-k{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);}
 .sd-trait-v{font-size:15px;font-weight:700;margin:3px 0 7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sd-trait-r{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
@@ -692,10 +696,18 @@ var hasOwners = false, generatedAt = null;
 // Whale = 20+ Lads, shark = 5–19.
 function tierOf(n){ return n >= 20 ? 'whale' : n >= 5 ? 'shark' : n >= 2 ? 'multi' : 'single'; }
 function holderEmoji(n){ return n >= 20 ? '🐋' : n >= 5 ? '🦈' : ''; }
+// Per-trait rarity by how few Lads share the value, same names as the rank.
+var TRAIT_TIERS = [
+  { id: 'mythic', label: 'Mythic', max: 0.5 },
+  { id: 'legendary', label: 'Legendary', max: 1.5 },
+  { id: 'epic', label: 'Epic', max: 4 },
+  { id: 'rare', label: 'Rare', max: 10 },
+  { id: 'uncommon', label: 'Uncommon', max: 25 },
+  { id: 'common', label: 'Common', max: 100 }
+];
 function traitTier(p){
-  if(p <= 1) return { cls: 't-rare', label: 'RARE' };
-  if(p <= 5) return { cls: 't-uncommon', label: 'UNCOMMON' };
-  return { cls: '', label: 'COMMON' };
+  for(var i = 0; i < TRAIT_TIERS.length; i++){ if(p <= TRAIT_TIERS[i].max) return TRAIT_TIERS[i]; }
+  return TRAIT_TIERS[TRAIT_TIERS.length-1];
 }
 function fullHistory(l){ return !!BF && l.i < BF.next && !(BF.skipped && BF.skipped[l.num]); }
 function escName(o){ return o.escrow.length > 30 ? 'Program account' : o.escrow; }
@@ -1063,9 +1075,9 @@ function renderLad(num){
   for(var i = 0; i < KEYS.length; i++){
     if(l.t[i] < 0) continue;
     var n = COUNTS[i][l.t[i]+1], p = n/total*100, tier = traitTier(p);
-    traits += '<button class="sd-trait '+tier.cls+'" onclick="sdFilterTrait('+i+','+l.t[i]+')" title="Show all '+n+' Mad Lads with '+esc(KEYS[i])+': '+esc(VALUES[i][l.t[i]])+'">'+
+    traits += '<button class="sd-trait rtb-'+tier.id+'" onclick="sdFilterTrait('+i+','+l.t[i]+')" title="Show all '+n+' Mad Lads with '+esc(KEYS[i])+': '+esc(VALUES[i][l.t[i]])+'">'+
       '<div class="sd-trait-k">'+esc(KEYS[i])+'</div><div class="sd-trait-v">'+esc(VALUES[i][l.t[i]])+'</div>'+
-      '<div class="sd-trait-r"><span class="sd-tier '+tier.cls+'">'+tier.label+'</span>'+(p < 1 ? p.toFixed(2) : p.toFixed(1))+'% &middot; '+fmtNum(n)+'</div></button>';
+      '<div class="sd-trait-r"><span class="rt rt-'+tier.id+'">'+tier.label+'</span>'+(p < 1 ? p.toFixed(2) : p.toFixed(1))+'% &middot; '+fmtNum(n)+'</div></button>';
   }
 
   var ownerBits = '<span class="sd-none">Holder data is loading.</span>';

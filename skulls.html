@@ -222,7 +222,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sh-chg{width:150px;text-align:right;flex-shrink:0;}
 .sh-head-row{display:flex;align-items:center;gap:14px;padding:8px 6px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);}
 .sh-h-skull{padding-left:58px;}
-.sh-h-mkt{width:88px;text-align:center;}
+.sh-h-mkt{width:100px;text-align:center;}
 .sh-h-price{width:100px;text-align:right;}
 .sh-h-chg{width:150px;text-align:right;cursor:help;}
 .sh-h-date{width:100px;text-align:right;}
@@ -280,7 +280,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sh-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--nft-gradient);flex-shrink:0;}
 .sh-num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--text);width:70px;flex-shrink:0;}
 .sh-spacer{flex:1;}
-.sh-pill{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.03em;border-radius:14px;padding:4px 10px;width:88px;text-align:center;flex-shrink:0;}
+.sh-pill{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.03em;border-radius:14px;padding:4px 10px;width:100px;white-space:nowrap;text-align:center;flex-shrink:0;}
 .sh-pill.me{color:var(--me);background:var(--me-tint);}
 .sh-pill.tensor{color:var(--accent);background:var(--accent-tint2);}
 .sh-price{font-size:15px;font-weight:700;color:var(--text);width:100px;text-align:right;flex-shrink:0;}
@@ -585,11 +585,11 @@ button.ho-leg:hover{color:var(--text);}
 
         <div class="stats-bar">
           <div class="stat-card">
-            <div class="stat-label">TOTAL SALES</div>
+            <div class="stat-label">SALES</div>
             <div class="stat-val" id="sh-stat-total">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">TOTAL VOLUME</div>
+            <div class="stat-label">VOLUME</div>
             <div class="stat-val" id="sh-stat-volume">0 SOL</div>
           </div>
           <div class="stat-card">
@@ -1148,7 +1148,7 @@ function renderHistory(){
   var volume = filtered.reduce(function(sum, s){ return sum + s.priceSol; }, 0);
   var meCount = filtered.filter(function(s){ return s.marketplace === 'Magic Eden'; }).length;
   document.getElementById('sh-stat-total').textContent = total;
-  document.getElementById('sh-stat-volume').textContent = Math.round(volume) + ' SOL';
+  document.getElementById('sh-stat-volume').textContent = Math.round(volume).toLocaleString('en-US') + ' SOL';
   document.getElementById('sh-stat-avg').textContent = (total ? Math.round((volume/total)*10)/10 : 0) + ' SOL';
   document.getElementById('sh-stat-me-pct').textContent = (total ? Math.round(meCount/total*100) : 0) + '%';
   document.getElementById('sh-stat-tensor-pct').textContent = (total ? Math.round((total-meCount)/total*100) : 0) + '%';

@@ -25,3 +25,35 @@ function tpFind(input){
   var rows = input.parentNode.querySelectorAll('.tp-row');
   for(var i = 0; i < rows.length; i++) rows[i].style.display = !q || rows[i].getAttribute('data-name').indexOf(q) !== -1 ? '' : 'none';
 }
+
+// Nav dropdowns: mark the section you're on, and close after a click on the same page.
+(function(){
+  function mark(){
+    var subs = document.querySelectorAll('.nav-sub');
+    for(var i = 0; i < subs.length; i++){
+      var links = subs[i].querySelectorAll('a'), hashes = [];
+      for(var j = 0; j < links.length; j++) hashes.push(links[j].hash);
+      var here = hashes.indexOf(location.hash) !== -1 ? location.hash : hashes[0];
+      for(var k = 0; k < links.length; k++){
+        var on = links[k].pathname === location.pathname && links[k].hash === here;
+        links[k].classList.toggle('current', on);
+        if(on) links[k].setAttribute('aria-current', 'location'); else links[k].removeAttribute('aria-current');
+      }
+    }
+  }
+  function init(){
+    mark();
+    var items = document.querySelectorAll('.nav-item');
+    for(var i = 0; i < items.length; i++){
+      items[i].addEventListener('click', function(e){
+        if(e.target.closest('.nav-sub a')){ this.classList.add('closed'); if(document.activeElement) document.activeElement.blur(); }
+      });
+      items[i].addEventListener('mouseleave', function(){ this.classList.remove('closed'); });
+    }
+  }
+  window.addEventListener('hashchange', mark);
+  // Pages rewrite the hash with replaceState when switching views; catch that too.
+  var rs = history.replaceState;
+  history.replaceState = function(){ var r = rs.apply(history, arguments); mark(); return r; };
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();

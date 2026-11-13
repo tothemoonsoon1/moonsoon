@@ -48,7 +48,7 @@
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
 <script>try{var t=null;try{t=localStorage.getItem('moonsoon_theme');}catch(e){}if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=2">
-<link rel="stylesheet" href="/assets/css/base.css?v=3">
+<link rel="stylesheet" href="/assets/css/base.css?v=4">
 <style>
 
 /* ---- Nav (shared) ---- */
@@ -543,7 +543,7 @@ button.ho-leg:hover{color:var(--text);}
         <div class="sk-header">
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Holders</h2>
-          <div class="sk-desc">Every wallet holding a Mad Lad, ranked. Whales hold 20 or more, sharks 5 to 19. Updated daily.</div>
+          <div class="sk-desc">Every wallet holding a Mad Lad, ranked. Whales hold 20 or more, sharks 5 to 19. Updated every 3 hours.</div>
         </div>
 
         <div class="stats-bar">
@@ -662,7 +662,7 @@ button.ho-leg:hover{color:var(--text);}
 <div class="sd-back" id="sd-back" hidden onclick="if(event.target===this)closeLad()">
   <div class="sd" id="sd" role="dialog" aria-modal="true" aria-labelledby="sd-title"></div>
 </div>
-<script src="/assets/js/common.js?v=1"></script>
+<script src="/assets/js/common.js?v=2"></script>
 <script>
 (function(){
 
@@ -1330,7 +1330,7 @@ function renderSales(){
         ? 'Sales on every marketplace since <b style="color:var(--text)">'+fmtDate(BF.cutoff*1000)+'</b> for '+(BF.next >= LADS.length ? 'the whole collection' : '<b style="color:var(--text)">Mad Lads #1 to #'+lastFull.num+'</b> ('+fmtNum(BF.next)+' of '+fmtNum(LADS.length)+'), more added every few hours')+'. Older sales: complete for #1 to #'+(BF.fullNext ? LADS[BF.fullNext-1].num : 0)+', the rest is being added next.'
         : BF.next >= LADS.length
         ? 'Every recorded Mad Lads sale on every marketplace, back to the mint in April 2023.'
-        : 'Full sale history on every marketplace for <b style="color:var(--text)">Mad Lads #1 to #'+lastFull.num+'</b> ('+fmtNum(BF.next)+' of '+fmtNum(LADS.length)+'), with more added every night. For the rest: Magic Eden sales since August 2026.';
+        : 'Full sale history on every marketplace for <b style="color:var(--text)">Mad Lads #1 to #'+lastFull.num+'</b> ('+fmtNum(BF.next)+' of '+fmtNum(LADS.length)+'), with more added every few hours. For the rest: Magic Eden sales since August 2026.';
     } else {
       cov = 'Recorded Mad Lads sales since <b style="color:var(--text)">'+fmtDate(SALES[0].t)+'</b>. So far these are Magic Eden sales; older history and other marketplaces are being added step by step.';
     }

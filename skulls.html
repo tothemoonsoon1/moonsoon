@@ -150,6 +150,8 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sd-trait-k{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);}
 .sd-trait-v{font-size:15px;font-weight:700;margin:3px 0 7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sd-trait-r{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.sd-trait-f{margin-top:6px;font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sd-trait-f b{color:var(--text);font-weight:600;}
 
 .sd-shared{font-size:12px;color:var(--text-muted);margin-top:-8px;}
 .sd-h{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
@@ -1357,12 +1359,18 @@ function renderSkullDetail(num){
 
   var traitsHtmlStr = '';
   if(t){
+    var tFloor = {};
+    SKULLS.forEach(function(sk){
+      var st = TRAITS[sk.num]; if(!st || !sk.listed || sk.listPrice == null) return;
+      TRAIT_ORDER.forEach(function(k2){ var key = k2+'|'+(st[k2]||'None'); if(tFloor[key] == null || sk.listPrice < tFloor[key]) tFloor[key] = sk.listPrice; });
+    });
     traitsHtmlStr = '<div><div class="sd-traits">'+TRAIT_ORDER.map(function(k){
       var v = t[k] || 'None', n99 = (counts[k] && counts[k][v]) || 0;
       var g = gCount(k, v), pct = gPct(k, v), tier = traitTier(pct);
       return '<button class="sd-trait rtb-'+tier.id+'" data-k="'+escAttr(k)+'" data-v="'+escAttr(v)+'" onclick="sdFilterTrait(this)" title="Show all '+n99+' Skulls with '+escAttr(k)+': '+escAttr(v)+'">'+
         '<div class="sd-trait-k">'+escAttr(k)+'</div><div class="sd-trait-v">'+escAttr(v)+'</div>'+
-        '<div class="sd-trait-r"><span class="rt rt-'+tier.id+'">'+tier.label+'</span>'+(pct<1?pct.toFixed(2):pct.toFixed(1))+'% &middot; '+fmtN(g)+'</div></button>';
+        '<div class="sd-trait-r"><span class="rt rt-'+tier.id+'">'+tier.label+'</span>'+(pct<1?pct.toFixed(2):pct.toFixed(1))+'% &middot; '+fmtN(g)+'</div>'+
+        '<div class="sd-trait-f">'+(tFloor[k+'|'+v] != null ? 'Floor <b>'+tFloor[k+'|'+v]+' SOL</b>' : 'None listed')+'</div></button>';
     }).join('')+'</div></div>'+
     '<div class="sd-shared">Trait rarity is across all '+fmtN(GTOTAL)+' Mad Lads, same as the Mad Lads page. The rank above is among the 99 Skulls. All 99 share Type: Skull &middot; Expression: Inferno &middot; Gender: Male.</div>';
   }

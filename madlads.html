@@ -710,7 +710,8 @@ function traitTier(p){
   for(var i = 0; i < TRAIT_TIERS.length; i++){ if(p <= TRAIT_TIERS[i].max) return TRAIT_TIERS[i]; }
   return TRAIT_TIERS[TRAIT_TIERS.length-1];
 }
-function fullHistory(l){ return !!BF && l.i < BF.next && !(BF.skipped && BF.skipped[l.num]); }
+// With a stage-1 cut-off, Lads from fullNext on are covered back to the cut-off only.
+function fullHistory(l){ return !!BF && l.i < (BF.cutoff ? (BF.fullNext || 0) : BF.next) && !(BF.skipped && BF.skipped[l.num]); }
 function escName(o){ return o.escrow.length > 30 ? 'Program account' : o.escrow; }
 // Rarity tiers by rank, the same cut-offs Magic Eden uses.
 var TIERS = [
@@ -1339,7 +1340,9 @@ function renderSales(){
     var cov;
     if(BF && BF.next > 0){
       var lastFull = LADS[Math.min(BF.next, LADS.length) - 1];
-      cov = BF.next >= LADS.length
+      cov = BF.cutoff
+        ? 'Sales on every marketplace since <b style="color:var(--text)">'+fmtDate(BF.cutoff*1000)+'</b> for '+(BF.next >= LADS.length ? 'the whole collection' : '<b style="color:var(--text)">Mad Lads #1 to #'+lastFull.num+'</b> ('+fmtNum(BF.next)+' of '+fmtNum(LADS.length)+'), more added every few hours')+'. Older sales: complete for #1 to #'+(BF.fullNext ? LADS[BF.fullNext-1].num : 0)+', the rest is being added next.'
+        : BF.next >= LADS.length
         ? 'Every recorded Mad Lads sale on every marketplace, back to the mint in April 2023.'
         : 'Full sale history on every marketplace for <b style="color:var(--text)">Mad Lads #1 to #'+lastFull.num+'</b> ('+fmtNum(BF.next)+' of '+fmtNum(LADS.length)+'), with more added every night. For the rest: Magic Eden sales since August 2026.';
     } else {

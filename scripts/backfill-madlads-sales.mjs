@@ -37,6 +37,10 @@ const TIME_LIMIT_MS = Number(process.env.TIME_LIMIT_MIN || 320) * 60000;
 // latency, is what limits the run. RPS stays under the Helius plan's limit
 // (9 of the free plan's 10); WORKERS only has to be large enough to keep
 // that rate saturated.
+// Stage 1 walks each Lad back only as far as this many days and keeps a
+// cursor at that point (madlads-backfill-deep.json), so stage 2 can carry on
+// to the mint later without paying for the newer hops again. 0 = to the mint.
+const CUTOFF_DAYS = Number(process.env.CUTOFF_DAYS ?? 365);
 const WORKERS = Number(process.env.WORKERS || 3);
 const RPS = Number(process.env.RPS || 9);
 const CHECK = process.env.CHECK === '1';
@@ -216,12 +220,12 @@ function saleOf(tx, mint, move) {
 
 // Walks one Lad back to its mint. cursor = { acct, before } to resume.
 // Returns `spent`: the credits this walk alone used.
-async function walk(mint, cursor, cap) {
+async function walk(mint, cursor, cap, cutoff = 0) {
   const own = { n: 0 };
-  const r = await walkCredits.run(own, () => walkInner(mint, cursor, cap));
+  const r = await walkCredits.run(own, () => walkInner(mint, cursor, cap, cutoff));
   return { ...r, spent: own.n };
 }
-async function walkInner(mint, cursor, cap) {
+async function walkInner(mint, cursor, cap, cutoff) {
   const own = walkCredits.getStore();
   let acct = cursor?.acct, before = cursor?.before;
   if (!acct) {
@@ -255,6 +259,8 @@ async function walkInner(mint, cursor, cap) {
       return { sales, status: 'done' }; // reached the mint
     }
     acct = found.srcAcct; before = found.sig;
+    // Everything older than the cut-off waits for stage 2.
+    if (cutoff && found.tx.blockTime < cutoff) return { sales, status: 'cutoff', cursor: { acct, before } };
     if (own.n >= cap) return { sales, status: 'partial', cursor: { acct, before } };
   }
   return { sales, status: 'skip', why: 'too many hops' };
@@ -307,13 +313,26 @@ let processed = 0;
 const flush = () => {
   if (pending.length) { const r = mergeSales(pending, numByMint); state.sales += r.added; pending = []; }
   state.updatedAt = new Date().toISOString();
+  state.deep = Object.keys(deep).length;
   writeJson('madlads-backfill.json', state);
+  if (deepDirty) {
+    const lines = Object.keys(deep).map(Number).sort((a, b) => a - b).map((n) => `${JSON.stringify(String(n))}:${JSON.stringify(deep[n])}`);
+    fs.writeFileSync(new URL('madlads-backfill-deep.json', ROOT), `{\n${lines.join(',\n')}\n}\n`);
+    deepDirty = false;
+  }
   const data = readJson('madlads-data.json');
   if (data) { data.salesYears = fs.readdirSync(ROOT).map((f) => /^madlads-sales-(\d{4})\.json$/.exec(f)).filter(Boolean).map((m) => Number(m[1])).sort(); writeJson('madlads-data.json', data); }
 };
 
 // A partial Lad from an older single-threaded run.
 state.partials = state.partials || {};
+// The cut-off is fixed when stage 1 starts so it does not drift each day.
+// Lads before `fullNext` were walked to the mint before stage 1 began.
+if (CUTOFF_DAYS > 0 && !state.cutoff) { state.cutoff = Math.floor(Date.now() / 1000) - CUTOFF_DAYS * 86400; state.fullNext = state.next; }
+if (CUTOFF_DAYS === 0) { delete state.cutoff; }
+const cutoff = state.cutoff || 0;
+const deep = readJson('madlads-backfill-deep.json') || {};
+let deepDirty = false;
 if (state.partial) { state.partials[state.partial.num] = { acct: state.partial.acct, before: state.partial.before, spent: state.partial.spent || 0 }; }
 delete state.partial;
 
@@ -350,7 +369,9 @@ async function finishedLad(lad, idx, r, spent) {
     if (idx === null && !state.retry.includes(lad.num)) state.retry.push(lad.num);
     return;
   }
-  if (r.status === 'done') delete state.skipped[lad.num];
+  if (r.status === 'cutoff') { deep[lad.num] = [r.cursor.acct, r.cursor.before]; deepDirty = true; }
+  else if (deep[lad.num]) { delete deep[lad.num]; deepDirty = true; }
+  if (r.status === 'done' || r.status === 'cutoff') delete state.skipped[lad.num];
   else state.skipped[lad.num] = r.why || 'history too long';
   delete state.partials[lad.num];
   if (idx === null) state.retry = state.retry.filter((n) => n !== lad.num);
@@ -368,7 +389,7 @@ async function worker() {
     const spentBefore = resume?.spent || 0;
     let r;
     try {
-      r = await walk(lad.mint, resume, Math.max(50, PER_LAD_CAP - spentBefore));
+      r = await walk(lad.mint, resume, Math.max(50, PER_LAD_CAP - spentBefore), cutoff);
     } catch (e) {
       console.error(`  #${lad.num} failed, skipped: ${e.message}`);
       r = { sales: [], status: 'skip', why: `error: ${e.message}`, spent: 0 };

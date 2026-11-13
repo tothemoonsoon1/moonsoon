@@ -274,6 +274,13 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sh-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--nft-gradient);flex-shrink:0;}
 .sh-num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--text);width:70px;flex-shrink:0;}
 .sh-spacer{flex:1;}
+.sh-ctx{flex:1;min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;font-size:13px;color:var(--text-muted);}
+.sh-ctx>span{white-space:nowrap;}
+.sh-ctx .sh-rank{font-family:'JetBrains Mono',monospace;font-size:12px;}
+.sh-ctx .sh-chip{border:1px solid var(--border);border-radius:6px;padding:1px 7px;font-size:12px;}
+.sh-ctx .sh-chip.flip{color:var(--warn);border-color:currentColor;}
+.sh-ctx .sh-chip.big{color:var(--text);}
+@media(max-width:768px){.sh-ctx>*{display:none;}}
 .sh-pill{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.03em;border-radius:14px;padding:4px 10px;width:88px;text-align:center;flex-shrink:0;}
 .sh-pill.me{color:var(--me);background:var(--me-tint);}
 .sh-pill.tensor{color:var(--accent);background:var(--accent-tint2);}
@@ -1019,6 +1026,22 @@ if('IntersectionObserver' in window){
 
 // ---- Recent sales feed (gallery sidebar) ----
 function fmtDate(ts){ var d = new Date(ts); return MONTHS[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(); }
+// Context for a sale row: rarity, how long the seller held it, who bought.
+function saleCtxHtml(s){
+  var l = BY[s.num], out = [];
+  if(l) out.push('<span>'+tierBadge(l)+'</span><span class="sh-rank" title="HowRare rank">#'+fmtNum(l.rank)+'</span>');
+  if(s.prev && s.prev.t){
+    var d = Math.max(0, Math.round((s.t - s.prev.t) / 86400000));
+    var held = d < 1 ? '<1d' : d < 60 ? d+'d' : d < 730 ? Math.round(d/30)+'mo' : (d/365).toFixed(1)+'y';
+    out.push('<span class="sh-chip'+(d < 7 ? ' flip' : '')+'" title="Time since this Lad\'s previous recorded sale">'+(d < 7 ? 'Flip &middot; ' : 'Held ')+held+'</span>');
+  }
+  var tag = s.b && tagOf(s.b), own = s.b && OWN[s.b], n = own && !own.escrow ? own.lads.length : 0;
+  if(tag && tag.text) out.push('<span class="sh-chip big" title="Buyer">Buyer '+esc(tag.text)+'</span>');
+  else if(n >= 20) out.push('<span class="sh-chip big" title="Buyer holds '+n+' Mad Lads now">Whale buyer</span>');
+  else if(n >= 5) out.push('<span class="sh-chip" title="Buyer holds '+n+' Mad Lads now">Shark buyer</span>');
+  return out.join('');
+}
+
 function prevChangeHtml(s){
   if(!s.prev || !s.prev.p) return '';
   var c = (s.p - s.prev.p) / s.prev.p * 100, up = c >= 0;
@@ -1374,7 +1397,7 @@ function renderSales(){
     return '<a class="sh-row" href="#" onclick="openLad('+s.num+');return false">'+
       '<img class="sh-thumb" src="'+thumb(s.num, 96)+'" data-num="'+s.num+'" onerror="thumbFallback(this)" alt="Mad Lad #'+s.num+'" width="44" height="44" loading="lazy" decoding="async">'+
       '<span class="sh-num">#'+s.num+'</span>'+
-      '<span class="sh-spacer"></span>'+
+      '<span class="sh-ctx">'+saleCtxHtml(s)+'</span>'+
       '<span class="sh-pill '+MKT_CLS[s.m]+'">'+MARKETS[s.m]+'</span>'+
       '<span class="sh-price">'+fmtSol(s.p)+' SOL</span>'+
       '<span class="sh-chg">'+prevChangeHtml(s)+'</span>'+

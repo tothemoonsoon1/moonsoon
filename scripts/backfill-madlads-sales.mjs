@@ -41,6 +41,10 @@ const TIME_LIMIT_MS = Number(process.env.TIME_LIMIT_MIN || 320) * 60000;
 // cursor at that point (madlads-backfill-deep.json), so stage 2 can carry on
 // to the mint later without paying for the newer hops again. 0 = to the mint.
 const CUTOFF_DAYS = Number(process.env.CUTOFF_DAYS ?? 365);
+// Stage 2: once stage 1 has covered every Lad, carry each cursor in
+// madlads-backfill-deep.json on to the mint (~60 credits a Lad). Off unless
+// STAGE2=1, so the owner decides when to spend those credits.
+const STAGE2 = process.env.STAGE2 === '1';
 const WORKERS = Number(process.env.WORKERS || 3);
 const RPS = Number(process.env.RPS || 9);
 const CHECK = process.env.CHECK === '1';
@@ -328,7 +332,7 @@ const flush = () => {
 state.partials = state.partials || {};
 // The cut-off is fixed when stage 1 starts so it does not drift each day.
 // Lads before `fullNext` were walked to the mint before stage 1 began.
-if (CUTOFF_DAYS > 0 && !state.cutoff) { state.cutoff = Math.floor(Date.now() / 1000) - CUTOFF_DAYS * 86400; state.fullNext = state.next; }
+if (CUTOFF_DAYS > 0 && !state.cutoff && !state.stage2Done) { state.cutoff = Math.floor(Date.now() / 1000) - CUTOFF_DAYS * 86400; state.fullNext = state.next; }
 if (CUTOFF_DAYS === 0) { delete state.cutoff; }
 const cutoff = state.cutoff || 0;
 const deep = readJson('madlads-backfill-deep.json') || {};
@@ -341,6 +345,9 @@ delete state.partial;
 // front. "Lad #N and below have full history" therefore stays true, and a run
 // that stops mid-flight resumes every unfinished Lad, not just the lowest.
 const retryQueue = [...state.retry];
+// Stage 2 queue: Lads stopped at the cut-off, lowest number first. Taken only
+// after stage 1 has nothing left, so the two never compete for the budget.
+const deepQueue = STAGE2 ? Object.keys(deep).map(Number).sort((a, b) => a - b) : [];
 let scanIdx = state.next;
 const doneIdx = new Set();
 const outOfBudget = () => credits >= BUDGET || Date.now() - startedAt >= TIME_LIMIT_MS;
@@ -356,12 +363,29 @@ function nextJob() {
     const idx = scanIdx++;
     if (lads[idx]) return { lad: lads[idx], idx };
   }
+  while (deepQueue.length) {
+    const num = deepQueue.shift();
+    const lad = ladByNum.get(num);
+    if (lad && deep[num]) return { lad, idx: null, deep: true };
+  }
   return null;
 }
 
 const advance = () => { while (doneIdx.has(state.next)) { doneIdx.delete(state.next); state.next++; } };
 
-async function finishedLad(lad, idx, r, spent) {
+async function finishedLad(lad, idx, r, spent, isDeep) {
+  if (isDeep) {
+    // Stage 2: the Lad keeps its deep entry until the walk ends, so a partial
+    // walk is picked up again next run (resuming from `partials`).
+    if (r.status === 'partial' && spent < PER_LAD_CAP * 3) { state.partials[lad.num] = { ...r.cursor, spent }; return; }
+    delete deep[lad.num]; deepDirty = true;
+    delete state.partials[lad.num];
+    if (r.status === 'done') delete state.skipped[lad.num];
+    else state.skipped[lad.num] = r.why || 'history too long';
+    processed++;
+    if (processed % 20 === 0) { flush(); console.log(`  stage 2 #${lad.num} · ${processed} Lads · ${credits} credits · ${Object.keys(deep).length} left`); }
+    return;
+  }
   if (r.status === 'partial' && spent < PER_LAD_CAP * 3) {
     // Out of budget mid-walk: keep the cursor and leave the Lad unfinished so
     // the next run picks it up again. `next` must not move past it.
@@ -385,24 +409,30 @@ async function worker() {
     const job = nextJob();
     if (!job) return;
     const { lad, idx } = job;
-    const resume = state.partials[lad.num] || null;
+    const resume = state.partials[lad.num] || (job.deep ? { acct: deep[lad.num][0], before: deep[lad.num][1] } : null);
     const spentBefore = resume?.spent || 0;
     let r;
     try {
-      r = await walk(lad.mint, resume, Math.max(50, PER_LAD_CAP - spentBefore), cutoff);
+      r = await walk(lad.mint, resume, Math.max(50, PER_LAD_CAP - spentBefore), job.deep ? 0 : cutoff);
     } catch (e) {
       console.error(`  #${lad.num} failed, skipped: ${e.message}`);
       r = { sales: [], status: 'skip', why: `error: ${e.message}`, spent: 0 };
     }
     pending.push(...r.sales);
-    await finishedLad(lad, idx, r, spentBefore + (r.spent || 0));
+    await finishedLad(lad, idx, r, spentBefore + (r.spent || 0), job.deep);
   }
 }
 
 await Promise.all(Array.from({ length: Math.max(1, WORKERS) }, worker));
 
 state.credits += credits;
+// Stage 2 finished: every Lad now has its history to the mint, so the page
+// stops describing a cut-off.
+if (STAGE2 && state.next >= lads.length && !Object.keys(deep).length && state.cutoff) {
+  delete state.cutoff; state.fullNext = lads.length; state.stage2Done = true; deepDirty = true;
+  console.log('stage 2 complete: full history for the whole collection');
+}
 flush();
 const remaining = lads.length - state.next;
-console.log(`backfill: ${processed} Lads this run (${state.next}/${lads.length} total, ${remaining} to go), ${state.sales} sales added so far, ${Object.keys(state.skipped).length} skipped, ${credits} credits this run, ${state.credits} in total`);
+console.log(`backfill${STAGE2 ? ' (stage 2 on)' : ''}: ${Object.keys(deep).length} Lads waiting for stage 2; ${processed} Lads this run (${state.next}/${lads.length} total, ${remaining} to go), ${state.sales} sales added so far, ${Object.keys(state.skipped).length} skipped, ${credits} credits this run, ${state.credits} in total`);
 if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `remaining=${remaining}\n`);

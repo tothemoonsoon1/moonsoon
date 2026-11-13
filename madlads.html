@@ -279,6 +279,7 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sh-ctx .sh-rank{font-family:'JetBrains Mono',monospace;font-size:12px;}
 .sh-ctx .sh-chip{border:1px solid var(--border);border-radius:6px;padding:1px 7px;font-size:12px;}
 .sh-ctx .sh-chip.flip{color:var(--warn);border-color:currentColor;}
+.sh-ctx .sh-chip.diamond{color:var(--accent);border-color:currentColor;}
 .sh-ctx .sh-chip.big{color:var(--text);}
 @media(max-width:768px){.sh-ctx>*{display:none;}}
 .sh-pill{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.03em;border-radius:14px;padding:4px 10px;width:88px;text-align:center;flex-shrink:0;}
@@ -1033,7 +1034,7 @@ function saleCtxHtml(s){
   if(s.prev && s.prev.t){
     var d = Math.max(0, Math.round((s.t - s.prev.t) / 86400000));
     var held = d < 1 ? '<1d' : d < 60 ? d+'d' : d < 365 ? Math.round(d/30)+'mo' : (d/365).toFixed(1)+'y';
-    out.push('<span class="sh-chip'+(d < 7 ? ' flip' : '')+'" title="Time since this Lad\'s previous recorded sale">'+(d < 7 ? 'Flip &middot; ' : 'Held ')+held+'</span>');
+    out.push('<span class="sh-chip'+(d < 7 ? ' flip' : d >= 365 ? ' diamond' : '')+'" title="'+(d >= 365 ? 'Diamond hands: held over a year. ' : '')+'Time since this Lad\'s previous recorded sale">'+(d < 7 ? 'Flip &middot; ' : d >= 365 ? '&#128142; Held ' : 'Held ')+held+'</span>');
   }
   var tag = s.b && tagOf(s.b), own = s.b && OWN[s.b], n = own && !own.escrow ? own.lads.length : 0;
   if(tag && tag.text) out.push('<span class="sh-chip big" title="Buyer">Buyer '+esc(tag.text)+'</span>');

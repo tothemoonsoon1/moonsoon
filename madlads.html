@@ -662,10 +662,10 @@ button.ho-leg:hover{color:var(--text);}
 <div class="sd-back" id="sd-back" hidden onclick="if(event.target===this)closeLad()">
   <div class="sd" id="sd" role="dialog" aria-modal="true" aria-labelledby="sd-title"></div>
 </div>
+<script src="/assets/js/common.js?v=1"></script>
 <script>
 (function(){
 
-function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function shortAddr(a){ return a ? a.slice(0,4)+'...'+a.slice(-4) : ''; }
 function fmtNum(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 function fmtSol(p){ return (Math.round(p*100)/100).toString(); }
@@ -885,12 +885,6 @@ function setTraitTab(i){
   if(open && open.scrollIntoView) open.scrollIntoView({ block: 'nearest' });
 }
 window.setTraitTab = setTraitTab;
-function tpFind(input){
-  var q = input.value.trim().toLowerCase();
-  var rows = input.parentNode.querySelectorAll('.tp-row');
-  for(var i = 0; i < rows.length; i++) rows[i].style.display = !q || rows[i].getAttribute('data-name').indexOf(q) !== -1 ? '' : 'none';
-}
-window.tpFind = tpFind;
 function toggleTrait(ki, vi){
   if(traitFilter[ki] === vi) delete traitFilter[ki]; else traitFilter[ki] = vi;
   renderTraitPanel(); applyFilters();
@@ -1022,14 +1016,6 @@ if('IntersectionObserver' in window){
 }
 
 // ---- Recent sales feed (gallery sidebar) ----
-function timeAgo(ts){
-  var m = Math.floor((Date.now() - ts) / 60000);
-  if(m < 60) return Math.max(m,1)+'m';
-  var h = Math.floor(m/60); if(h < 24) return h+'h';
-  var d = Math.floor(h/24); if(d < 30) return d+'d';
-  var mo = Math.floor(d/30); if(mo < 12) return mo+'mo';
-  return Math.floor(d/365)+'y';
-}
 function fmtDate(ts){ var d = new Date(ts); return MONTHS[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(); }
 function prevChangeHtml(s){
   if(!s.prev || !s.prev.p) return '';
@@ -1417,13 +1403,6 @@ window.addEventListener('hashchange', function(){
   if(h !== view && VIEWS.indexOf(h || 'gallery') !== -1) switchView(h || 'gallery');
 });
 
-function toggleTheme(){
-  var isLight = document.documentElement.getAttribute('data-theme')==='light';
-  document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
-  try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
-  var tc=document.querySelector('meta[name="theme-color"]'); if(tc){ tc.setAttribute('content', isLight?'#0b0d12':'#f5f6f8'); }
-}
-window.toggleTheme = toggleTheme;
 
 function renderAll(){
   renderStats(); renderTraitPanel(); applyFilters();

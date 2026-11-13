@@ -657,10 +657,10 @@ button.ho-leg:hover{color:var(--text);}
 <div class="sd-back" id="sd-back" hidden onclick="if(event.target===this)closeSkull()">
   <div class="sd" id="sd" role="dialog" aria-modal="true" aria-labelledby="sd-title"></div>
 </div>
+<script src="/assets/js/common.js?v=1"></script>
 <script>
 (function(){
 
-function escAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 // Every displayed price includes the 2% fee + 4.2% royalty (buyer total).
 // listPrice already does (set in the generator); sale prices are raw, so scale them here.
 var PRICE_FEE = 1.062;
@@ -883,12 +883,6 @@ function setTraitTab(btn){
   if(open && open.scrollIntoView) open.scrollIntoView({ block: 'nearest' });
 }
 window.setTraitTab = setTraitTab;
-function tpFind(input){
-  var q = input.value.trim().toLowerCase();
-  var rows = input.parentNode.querySelectorAll('.tp-row');
-  for(var i = 0; i < rows.length; i++) rows[i].style.display = !q || rows[i].getAttribute('data-name').indexOf(q) !== -1 ? '' : 'none';
-}
-window.tpFind = tpFind;
 
 function toggleTraitRow(btn){
   var k = btn.getAttribute('data-k'), v = btn.getAttribute('data-v');
@@ -1309,13 +1303,6 @@ function applyFilters(){
 }
 window.applyFilters = applyFilters;
 
-function toggleTheme(){
-  var isLight = document.documentElement.getAttribute('data-theme')==='light';
-  document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
-  try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
-  var tc=document.querySelector('meta[name="theme-color"]'); if(tc){ tc.setAttribute('content', isLight?'#0b0d12':'#f5f6f8'); }
-}
-window.toggleTheme = toggleTheme;
 
 
 // ---- Skull detail view (opens on card click) ----
@@ -1581,14 +1568,6 @@ function clearOwnerFilter(){ ownerFilter = null; renderTraitFilters(); applyFilt
 window.clearOwnerFilter = clearOwnerFilter;
 
 // ---- Recent sales feed (gallery sidebar) ----
-function timeAgo(ts){
-  var m = Math.floor((Date.now() - ts) / 60000);
-  if(m < 60) return Math.max(m,1)+'m';
-  var h = Math.floor(m/60); if(h < 24) return h+'h';
-  var d = Math.floor(h/24); if(d < 30) return d+'d';
-  var mo = Math.floor(d/30); if(mo < 12) return mo+'mo';
-  return Math.floor(d/365)+'y';
-}
 
 function renderSaleFeed(){
   var el = document.getElementById('sk-sale-feed');

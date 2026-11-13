@@ -249,10 +249,10 @@
   </footer>
 </div>
 
+<script src="/assets/js/common.js?v=1"></script>
 <script>
 (function(){
 
-function escAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 var YES = 'yes', PROGRESS = 'progress', NO = 'no';
 var PAGE_SIZE = 8;
@@ -359,13 +359,6 @@ document.getElementById('mica-rows').addEventListener('click', function(e){
   if(row) window.open(row.getAttribute('data-join'), '_blank', 'noopener,noreferrer');
 });
 
-function toggleTheme(){
-  var isLight = document.documentElement.getAttribute('data-theme')==='light';
-  document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
-  try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
-  var tc=document.querySelector('meta[name="theme-color"]'); if(tc){ tc.setAttribute('content', isLight?'#0b0d12':'#f5f6f8'); }
-}
-window.toggleTheme = toggleTheme;
 
 
 render();

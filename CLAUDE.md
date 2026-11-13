@@ -38,6 +38,7 @@
 moonsoon/
 ├── index.html, skulls.html, madlads.html, checklist.html, mica.html  ← pięć stron (style/skrypty stron inline)
 ├── assets/css/tokens.css, base.css   ← kolory i wspólne style
+├── assets/js/common.js               ← wspólne funkcje (escAttr/esc, toggleTheme, timeAgo, tpFind)
 ├── assets/img/
 ├── *.json                            ← dane (część commituje bot)
 ├── scripts/                          ← generatory danych (GitHub Actions)
@@ -91,6 +92,8 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 - Rzadkość cech na stronie Skulls liczona jest wśród CAŁEJ kolekcji (~10k), tak samo jak w Mad Lads, żeby ten sam Skull pokazywał identyczne poziomy/% na obu stronach. Globalne liczniki są wstrzyknięte w `skulls-traits.json` (`global`, `globalAbsent`, `globalTotal`) — niezmienne. Ranga Skulla pozostaje liczona wśród 99.
 
 ## Inne zasady
+- Skrypty stron są w IIFE; funkcje używane w `onclick` wystawiaj przez `window.nazwa = nazwa`.
+- `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind` są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>`.
 - Motyw: zapisany wybór w `localStorage` (`moonsoon_theme`), a bez niego ustawienie systemu (`prefers-color-scheme`).
 - Wiersze/karty z `role="button"` obsługują Enter i Spację.
 - Nagłówki bezpieczeństwa są w `netlify.toml` dla `/*` (także adresy bez `.html`).

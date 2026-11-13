@@ -212,6 +212,7 @@
   </footer>
 </div>
 
+<script src="/assets/js/common.js?v=1"></script>
 <script>
 (function(){
 
@@ -237,13 +238,6 @@ function loadExploreFloor(){
     }
   }).catch(function(){});
 }
-function toggleTheme(){
-  var isLight = document.documentElement.getAttribute('data-theme')==='light';
-  document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
-  try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
-  var tc=document.querySelector('meta[name="theme-color"]'); if(tc){ tc.setAttribute('content', isLight?'#0b0d12':'#f5f6f8'); }
-}
-window.toggleTheme = toggleTheme;
 
 
 syncExplore();

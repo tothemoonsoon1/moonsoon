@@ -38,7 +38,7 @@
 moonsoon/
 ├── index.html, skulls.html, madlads.html, checklist.html, mica.html  ← pięć stron (style/skrypty stron inline)
 ├── assets/css/tokens.css, base.css   ← kolory i wspólne style
-├── assets/js/common.js               ← wspólne funkcje (escAttr/esc, toggleTheme, timeAgo, tpFind)
+├── assets/js/common.js               ← wspólne funkcje (escAttr/esc, toggleTheme, timeAgo, tpFind) + obsługa podmenu w nawigacji
 ├── assets/img/
 ├── *.json                            ← dane (część commituje bot)
 ├── scripts/                          ← generatory danych (GitHub Actions)
@@ -57,6 +57,9 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 
 ## Design system
 - Strony w menu: Home (`index.html`), Mad Lads (`madlads.html`), Skulls (`skulls.html`), Seeker Checklist (`checklist.html`), EU Licenses (`mica.html`). Nawigacja jest identyczna na wszystkich pięciu — zmieniaj ją wszędzie naraz.
+- Podmenu w nawigacji (tylko desktop, >768px): Skulls i Mad Lads mają rozwijaną listę Gallery / Holders / Sale History (`.nav-item` > `.nav-tab` + `.nav-sub`), linki z hashem: Skulls `#gallery`/`#holders`/`#history`, Mad Lads `#gallery`/`#holders`/`#sales`. Otwiera się na hover i fokus, ma strzałkę, bieżący widok jest pogrubiony z paskiem akcentu (klasa `current`, ustawia `common.js`), po kliknięciu na tej samej stronie się zamyka. Na telefonie podmenu nie ma — strony mają własny przełącznik widoków. Nowy widok na stronie = nowy link w `.nav-sub` na wszystkich pięciu stronach.
+- Zakładki widoków na Skulls i Mad Lads nazywają się tak samo: Gallery, Holders, Sale History.
+- Panele i rozwijane listy jak karty: obramowanie `--card-border`, promień 14, bez rozmytych cieni (design system nie używa `box-shadow` poza obwódkami).
 - Home czyta postęp checklisty z `localStorage` (`moonsoon_checklist_summary`, zapisywany przez `checklist.html`); stary adres `/#checklist` przekierowuje na `/checklist.html`
 - Wspólne style (reset, nawigacja, przyciski, przełącznik motywu, fokus, stopka) są w `/assets/css/base.css` — zmieniaj je tam, nie w stronach. Style specyficzne dla strony zostają inline w jej `<style>`. Po zmianie `base.css` podbij `?v=` tak jak przy `tokens.css`.
 - Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla pięciu stron. Nie kopiuj `:root` do stron.
@@ -93,7 +96,7 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 
 ## Inne zasady
 - Skrypty stron są w IIFE; funkcje używane w `onclick` wystawiaj przez `window.nazwa = nazwa`.
-- `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind` są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>`.
+- `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind` i obsługa podmenu są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>` (teraz `common.js?v=2`, `base.css?v=4`, `tokens.css?v=2`).
 - Motyw: zapisany wybór w `localStorage` (`moonsoon_theme`), a bez niego ustawienie systemu (`prefers-color-scheme`).
 - Wiersze/karty z `role="button"` obsługują Enter i Spację.
 - Nagłówki bezpieczeństwa są w `netlify.toml` dla `/*` (także adresy bez `.html`).

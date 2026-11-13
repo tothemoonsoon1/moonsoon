@@ -113,7 +113,16 @@ Jeśli `dev` przestał działać (biała strona, martwe przyciski, brak newsów)
 - Etykiety portfeli: wspólny `owner-tags.json` (ten sam co Skulls).
 - Progi: whale = 20+ Ladów, shark = 5–19.
 - Rzadkość: rangi z HowRare (te same pokazuje Magic Eden), zapisane w `madlads-static.json` (`rank`). Poziomy wg rangi: Mythic top 1%, Legendary 5%, Epic 15%, Rare 35%, Uncommon 60%, Common.
-- Historia sprzedaży: `scripts/backfill-madlads-sales.mjs` (workflow `backfill-madlads.yml`, co noc, limit 12 000 kredytów). Idzie po łańcuchu kont, które trzymały NFT (ok. 80 kredytów na Lada), po kolei numerami; stan w `madlads-backfill.json`. W plikach zapisana jest cena wystawienia lub oferty, bez opłat; strony (Mad Lads i Skulls) pokazują wszystkie ceny — floor, listingi i sprzedaże — z opłatami (×1,062, `PRICE_FEE`), czyli kwotę, którą płaci kupujący.
+- Historia sprzedaży: `scripts/backfill-madlads-sales.mjs` (workflow `backfill-madlads.yml`). Idzie po łańcuchu kont, które trzymały NFT, po kolei numerami; stan w `madlads-backfill.json`. W plikach zapisana jest cena wystawienia lub oferty, bez opłat; strony (Mad Lads i Skulls) pokazują wszystkie ceny — floor, listingi i sprzedaże — z opłatami (×1,062, `PRICE_FEE`), czyli kwotę, którą płaci kupujący.
+- Backfill — jak działa teraz (listopad 2026):
+  - Helius jest na planie **Free: 1M kredytów/mc, 10 zapytań/s**. Skrypt chodzi równolegle (`WORKERS=3`) ze wspólnym limitem `RPS=9`. Nie podnoś RPS powyżej 9 na tym planie.
+  - Workflow startuje co 3 h (cron `12 */3 * * *`), każdy przebieg trwa do 145 min, bez limitu kredytów (ogranicza czas i RPS). Dzieli grupę `concurrency` z dziennym snapshotem, żeby nie pushowały naraz.
+  - **Etap 1 (w toku):** każdy Lad tylko do granicy `state.cutoff` (365 dni wstecz, ustalona raz), ok. 21 kredytów na Lada. W tym miejscu zapisywany jest kursor do `madlads-backfill-deep.json` (jeden Lad na linię). `fullNext` = Lady przed tym indeksem mają pełną historię do mintu (#1–169).
+  - **Etap 2 (jeszcze nie):** `CUTOFF_DAYS=0` + przejście po kursorach z `madlads-backfill-deep.json` do mintu (ok. 60 kredytów na Lada, ~580 tys. za całość). Kod etapu 2 trzeba jeszcze dopisać. Decyzja właściciela: teraz czy po resecie limitu Heliusa.
+  - Po zakończeniu etapu 1 przebiegi kończą się w kilka sekund; cron można wtedy przestawić na raz dziennie.
+  - **Nie edytuj ręcznie** `madlads-backfill*.json`, `madlads-sales-*.json` ani `madlads-data.json`, gdy backfill trwa — bot commituje je na `main` co kilka godzin (z `git pull --rebase`). Zmiany w HTML/CSS/JS się z nimi nie gryzą.
+  - Postęp: podsumowanie każdego przebiegu w zakładce Actions (krok „Coverage”) i `next`/`total` w `madlads-backfill.json`.
+- Przed pracą na `dev`: zsynchronizuj go z `main` (bot commituje dane na `main`, więc `dev` szybko zostaje w tyle).
 - Skulls ma te same wzorce co Mad Lads: zakładka Holders (whale = 3+, shark = 2) i filtr cech jako rozwijane sekcje.
 - Rzadkość cech na stronie Skulls liczona jest wśród CAŁEJ kolekcji (~10k), tak samo jak w Mad Lads, żeby ten sam Skull pokazywał identyczne poziomy/% na obu stronach. Globalne liczniki są wstrzyknięte w `skulls-traits.json` (`global`, `globalAbsent`, `globalTotal`) — niezmienne. Ranga Skulla pozostaje liczona wśród 99.
 

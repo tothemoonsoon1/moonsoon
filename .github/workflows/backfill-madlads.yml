@@ -21,6 +21,10 @@ on:
       minutes:
         description: 'Minutes to spend in this run'
         default: '145'
+      stage2:
+        description: 'Stage 2: carry Lads stopped at the cut-off on to the mint'
+        type: boolean
+        default: false
       check:
         description: 'Read-only accuracy check against the Skulls data'
         type: boolean
@@ -62,6 +66,9 @@ jobs:
           # under the Helius plan's limit (free: 10/s).
           WORKERS: '3'
           RPS: '9'
+          # Stage 2 (~60 credits a Lad, ~580k in total): off until the owner
+          # decides. Set to '1' here to run it on schedule once stage 1 is done.
+          STAGE2: ${{ inputs.stage2 && '1' || '0' }}
         run: node scripts/backfill-madlads-sales.mjs
 
       - name: Commit and push if changed

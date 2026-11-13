@@ -46,9 +46,9 @@
 <link rel="dns-prefetch" href="https://magiceden.io">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
-<script>try{if(localStorage.getItem('moonsoon_theme')==='light'){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
+<script>try{var t=null;try{t=localStorage.getItem('moonsoon_theme');}catch(e){}if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=2">
-<link rel="stylesheet" href="/assets/css/base.css?v=1">
+<link rel="stylesheet" href="/assets/css/base.css?v=2">
 <style>
 
 /* ---- Nav (shared) ---- */
@@ -502,9 +502,9 @@ button.ho-leg:hover{color:var(--text);}
             <input class="ctl-input" type="text" id="ml-search" placeholder="Search number, wallet or @handle" oninput="applyFilters()" autocomplete="off" spellcheck="false">
           </div>
           <select class="ctl-select" id="ml-sort" onchange="applyFilters()" aria-label="Sort">
-            <option value="num-asc">Number: Low to High</option>
-            <option value="num-desc">Number: High to Low</option>
-            <option value="price-asc">Price: Low to High</option>
+            <option value="num-asc">Number ↑</option>
+            <option value="num-desc">Number ↓</option>
+            <option value="price-asc">Price ↑</option>
             <option value="rarity">Rarest First</option>
             <option value="sale-new">Recently Sold</option>
             <option value="owner">Group by Holder</option>
@@ -630,8 +630,8 @@ button.ho-leg:hover{color:var(--text);}
           <select class="ctl-select" id="sh-sort" onchange="shPage=1;renderSales()" aria-label="Sort">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price ↓</option>
+            <option value="price-asc">Price ↑</option>
           </select>
         </div>
 
@@ -931,7 +931,7 @@ function cardHtml(l){
     ownerLine = o.escrow ? esc(escName(o)) : esc(shortAddr(l.owner))+(count > 1 ? ' <span class="sk-holder-tag">'+holderEmoji(count)+' &times;'+count+'</span>' : '');
   }
   var last = l.sales.length ? l.sales[l.sales.length-1] : null;
-  return '<div class="sk-card" data-num="'+l.num+'" tabindex="0" role="button" aria-label="Open Mad Lad #'+l.num+'" onclick="openLad('+l.num+')" onkeydown="if(event.key===\'Enter\')openLad('+l.num+')">'+
+  return '<div class="sk-card" data-num="'+l.num+'" tabindex="0" role="button" aria-label="Open Mad Lad #'+l.num+'" onclick="openLad('+l.num+')" onkeydown="if((event.key===\'Enter\'||event.key===\' \')){event.preventDefault();openLad('+l.num+')}">'+
     '<div class="sk-img">'+badges+'<img src="'+thumb(l.num, 320)+'" data-num="'+l.num+'" onerror="thumbFallback(this)" alt="Mad Lad #'+l.num+'" width="320" height="320" loading="lazy" decoding="async"></div>'+
     '<div class="sk-body">'+
       '<div class="sk-num">#'+l.num+' <span class="ml-type">'+esc(valName(0, l.t[0]))+'</span></div>'+
@@ -1260,7 +1260,7 @@ function renderHolders(){
     var thumbs = o.lads.slice(0, 5).map(function(num){
       return '<img src="'+thumb(num, 96)+'" data-num="'+num+'" onerror="thumbFallback(this)" alt="" width="36" height="36" loading="lazy" decoding="async">';
     }).join('')+(n > 5 ? '<span class="ho-more">+'+(n-5)+'</span>' : '');
-    return '<div class="sh-row ho-row" tabindex="0" role="button" onclick="viewOwner(\''+esc(o.addr)+'\')" onkeydown="if(event.key===\'Enter\')viewOwner(\''+esc(o.addr)+'\')" title="Show this wallet\'s Mad Lads">'+
+    return '<div class="sh-row ho-row" tabindex="0" role="button" onclick="viewOwner(\''+esc(o.addr)+'\')" onkeydown="if((event.key===\'Enter\'||event.key===\' \')){event.preventDefault();viewOwner(\''+esc(o.addr)+'\')}" title="Show this wallet\'s Mad Lads">'+
       '<span class="ho-rank">'+o.rank+'</span>'+
       '<span class="ho-wallet"><span class="ho-emoji">'+holderEmoji(n)+'</span><a class="sd-addr" href="https://solscan.io/account/'+esc(o.addr)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="'+esc(o.addr)+'">'+esc(shortAddr(o.addr))+'</a>'+tagChip(o.addr)+'</span>'+
       '<span class="sh-spacer"></span>'+
@@ -1421,11 +1421,9 @@ function toggleTheme(){
   var isLight = document.documentElement.getAttribute('data-theme')==='light';
   document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
   try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
+  var tc=document.querySelector('meta[name="theme-color"]'); if(tc){ tc.setAttribute('content', isLight?'#0b0d12':'#f5f6f8'); }
 }
 window.toggleTheme = toggleTheme;
-var savedTheme = null;
-try{ savedTheme = localStorage.getItem('moonsoon_theme'); }catch(e){}
-if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
 
 function renderAll(){
   renderStats(); renderTraitPanel(); applyFilters();

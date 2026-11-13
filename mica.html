@@ -61,9 +61,9 @@
 <link rel="dns-prefetch" href="https://www.esma.europa.eu">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
-<script>try{if(localStorage.getItem('moonsoon_theme')==='light'){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
+<script>try{var t=null;try{t=localStorage.getItem('moonsoon_theme');}catch(e){}if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=2">
-<link rel="stylesheet" href="/assets/css/base.css?v=1">
+<link rel="stylesheet" href="/assets/css/base.css?v=2">
 <style>
 
 /* ---- Nav (shared) ---- */
@@ -106,6 +106,7 @@
 .mica-ex-name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .mica-ex-name{font-size:16px;font-weight:600;}
 .mica-featured-tag{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);border:1px solid var(--accent-border);border-radius:20px;padding:2px 8px;}
+.nowrap{white-space:nowrap;}
 .mica-entity{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-top:2px;}
 
 .mica-checks{display:contents;}
@@ -303,7 +304,7 @@ function rowHtml(ex){
         '</div>' +
         '<div class="mica-ex-info">' +
           '<div class="mica-ex-name-row"><span class="mica-ex-name">' + escAttr(ex.name) + '</span>' + featTag + '</div>' +
-          '<div class="mica-entity">' + escAttr(ex.entity) + '</div>' +
+          '<div class="mica-entity">' + escAttr(ex.entity).replace(/([A-Z][a-z]{2} \d{4})$/, '<span class="nowrap">$1</span>') + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="mica-checks">' +
@@ -362,12 +363,10 @@ function toggleTheme(){
   var isLight = document.documentElement.getAttribute('data-theme')==='light';
   document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
   try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
+  var tc=document.querySelector('meta[name="theme-color"]'); if(tc){ tc.setAttribute('content', isLight?'#0b0d12':'#f5f6f8'); }
 }
 window.toggleTheme = toggleTheme;
 
-var savedTheme = null;
-try{ savedTheme = localStorage.getItem('moonsoon_theme'); }catch(e){}
-if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
 
 render();
 

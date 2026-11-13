@@ -45,9 +45,9 @@
 <link rel="dns-prefetch" href="https://magiceden.io">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
-<script>try{if(localStorage.getItem('moonsoon_theme')==='light'){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
+<script>try{var t=null;try{t=localStorage.getItem('moonsoon_theme');}catch(e){}if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=2">
-<link rel="stylesheet" href="/assets/css/base.css?v=1">
+<link rel="stylesheet" href="/assets/css/base.css?v=2">
 <style>
 
 /* ---- Nav (shared) ---- */
@@ -85,7 +85,7 @@
 .ctl-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted);cursor:pointer;user-select:none;white-space:nowrap;}
 .ctl-toggle input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
 
-.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;}
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;}
 .sk-card{position:relative;display:block;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--text);transition:transform .15s ease,border-color .15s ease;}
 .sk-card:hover:not(:has(.sk-owner-badge:hover)){transform:translateY(-3px);border-color:var(--accent-border);}
 .sk-card.never-traded{border:1.5px solid var(--gold);}
@@ -503,13 +503,13 @@ button.ho-leg:hover{color:var(--text);}
             <input class="ctl-input" type="text" id="sk-search" placeholder="Search by number (e.g. 9175)" oninput="applyFilters()">
           </div>
           <select class="ctl-select" id="sk-sort" onchange="applyFilters()">
-            <option value="num-asc">Number: Low to High</option>
-            <option value="num-desc">Number: High to Low</option>
+            <option value="num-asc">Number ↑</option>
+            <option value="num-desc">Number ↓</option>
             <option value="trades-desc">Most Traded</option>
             <option value="trades-asc">Least Traded</option>
             <option value="sale-desc">Last Sale: High to Low</option>
             <option value="sale-asc">Last Sale: Low to High</option>
-            <option value="price-asc">Price: Low to High</option>
+            <option value="price-asc">Price ↑</option>
             <option value="rarity">Rarest Traits First</option>
             <option value="owner">Group by Owner</option>
           </select>
@@ -624,8 +624,8 @@ button.ho-leg:hover{color:var(--text);}
           <select class="ctl-select" id="sh-sort" onchange="renderHistory()">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price ↓</option>
+            <option value="price-asc">Price ↑</option>
           </select>
         </div>
 
@@ -956,7 +956,7 @@ function cardHtml(s, holderCount){
   var tensorUrl = s.mint
     ? 'https://www.tensor.trade/item/'+s.mint
     : 'https://www.tensor.trade/trade/madlads';
-  return '<div class="'+classes+'" data-num="'+s.num+'" tabindex="0" role="button" aria-label="Open details for Skull #'+s.num+'" onclick="openSkull('+s.num+')" onkeydown="if(event.key===\'Enter\'&&event.target===this)openSkull('+s.num+')">'+
+  return '<div class="'+classes+'" data-num="'+s.num+'" tabindex="0" role="button" aria-label="Open details for Skull #'+s.num+'" onclick="openSkull('+s.num+')" onkeydown="if((event.key===\'Enter\'||event.key===\' \')&&event.target===this){event.preventDefault();openSkull('+s.num+')}">'+
     '<div class="sk-img">'+badges+imgHtml+
     '</div>'+
     '<div class="sk-body">'+
@@ -1313,12 +1313,10 @@ function toggleTheme(){
   var isLight = document.documentElement.getAttribute('data-theme')==='light';
   document.documentElement.setAttribute('data-theme', isLight?'dark':'light');
   try{ localStorage.setItem('moonsoon_theme', isLight?'dark':'light'); }catch(e){}
+  var tc=document.querySelector('meta[name="theme-color"]'); if(tc){ tc.setAttribute('content', isLight?'#0b0d12':'#f5f6f8'); }
 }
 window.toggleTheme = toggleTheme;
 
-var savedTheme = null;
-try{ savedTheme = localStorage.getItem('moonsoon_theme'); }catch(e){}
-if(savedTheme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
 
 // ---- Skull detail view (opens on card click) ----
 var sdOpenNum = null;
@@ -1556,7 +1554,7 @@ function renderHolders(){
     var name = f.isDomain ? escAttr(o.addr) : escAttr(shortAddr(o.addr));
     var wallet = f.isDomain ? '<span class="sd-addr">'+name+'</span>'
       : '<a class="sd-addr" href="https://solscan.io/account/'+escAttr(o.addr)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="'+escAttr(o.addr)+'">'+name+'</a>';
-    return '<div class="sh-row ho-row" tabindex="0" role="button" data-owner="'+escAttr(o.addr)+'" onclick="viewOwner(this)" onkeydown="if(event.key===\'Enter\')viewOwner(this)" title="Show this wallet\'s Skulls">'+
+    return '<div class="sh-row ho-row" tabindex="0" role="button" data-owner="'+escAttr(o.addr)+'" onclick="viewOwner(this)" onkeydown="if((event.key===\'Enter\'||event.key===\' \')){event.preventDefault();viewOwner(this)}" title="Show this wallet\'s Skulls">'+
       '<span class="ho-rank">'+o.rank+'</span>'+
       '<span class="ho-wallet"><span class="ho-emoji">'+holderEmoji(o.n)+'</span>'+wallet+holderTagChip(f)+'</span>'+
       '<span class="sh-spacer"></span>'+
@@ -1654,7 +1652,7 @@ window.addEventListener('hashchange', function(){
 
 renderAll();
 
-fetch('/skulls-data.json', { cache: 'no-store' })
+fetch('/skulls-data.json', { cache: 'no-cache' })
   .then(function(res){ return res.ok ? res.json() : null; })
   .then(function(data){
     if(data && Array.isArray(data.skulls) && data.skulls.length){

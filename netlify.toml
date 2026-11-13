@@ -23,14 +23,11 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Security headers for every path, including pretty URLs like /madlads (no .html).
 [[headers]]
-  for = "/"
+  for = "/*"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"

@@ -2,6 +2,7 @@
 
 ## WAŻNE — jak zacząć każdą sesję
 1. Przeczytaj ten plik
+   oraz `TODO.md` — lista otwartych i odłożonych spraw (aktualizuj ją, gdy coś zrobisz albo odłożysz)
 2. Pobierz aktualny plik który chcesz edytować z GitHub przed zmianami
 3. Wprowadź zmiany
 4. Pushuj na `dev` (patrz Release flow); `main` tylko po akceptacji właściciela

@@ -1301,7 +1301,7 @@ function applyFilters(){
           var handleText = s.tagOnly
             ? '<span class="ogh-tag-pill" style="background:'+escAttr(s.tagColor||'#fff')+';color:'+(s.tagColor?'#fff':'#0b0d12')+'">'+escAttr(s.tagText||'TAG')+'</span>'
             : (s.label ? escAttr(s.label) : (s.twitter ? '@'+escAttr(s.twitter) : ''));
-          var handleColorStyle = (!s.tagOnly && s.tagColor) ? ' style="color:'+escAttr(s.tagColor)+'"' : '';
+          var handleColorStyle = '';  // tag colours are pill backgrounds (white text); as text colour they miss 4.5:1 in one theme or the other
           var handleSuffix = handleText
             ? (handleUrl
                 ? ' &middot; <a class="ogh-handle'+(s.tagOnly?' ogh-handle-tagonly':'')+'"'+handleColorStyle+' href="'+escAttr(handleUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">'+handleText+'</a>'

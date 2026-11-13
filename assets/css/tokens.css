@@ -22,6 +22,7 @@
   --accent-tint2:rgba(79,216,255,0.15);
   --warn:#c98a1f;
   --warn-tint:rgba(240,184,77,0.12);
+  --warn-text:#c98a1f;
   --no:#6b7487;
   --rare:#ff4d8d;
   --uncommon:#ff8a4c;
@@ -48,6 +49,7 @@
   --me-text:#7a3fe0;
   --warn:#c98a1f;
   --warn-tint:rgba(201,138,31,0.12);
+  --warn-text:#8f5d0e;
   --no:#727b8c;
   --accent-tint2:rgba(6,102,130,0.15);
   --me:#7a3fe0;

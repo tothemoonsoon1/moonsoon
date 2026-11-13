@@ -65,7 +65,7 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 - Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla pięciu stron. Nie kopiuj `:root` do stron.
 - UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich pięciu stronach.
 - Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#066682`, dobrany tak, by tekst miał kontrast co najmniej 4.5:1); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
-- Motyw jasny: każdy nowy kolor tekstu sprawdź też na jasnym tle (min. 4.5:1). Złoty tekst używa `--gold-text`, nie `--gold`. Motyw jest ustawiany skryptem w `<head>` przed arkuszami, żeby nie było mignięcia ciemnego tła.
+- Motyw jasny: każdy nowy kolor tekstu sprawdź też na jasnym tle (min. 4.5:1). Złoty tekst używa `--gold-text`, nie `--gold`; pomarańczowy (ostrzeżenie) `--warn-text`, nie `--warn`. Motyw jest ustawiany skryptem w `<head>` przed arkuszami, żeby nie było mignięcia ciemnego tła.
 - Fonty: Space Grotesk (treść, nagłówki), JetBrains Mono (logo, kickery, etykiety)
 - Skala tekstu: 12, 13, 14, 15, 16, 18, 20, 24, 28px (+ hero 34/48). Minimum 12px, bez wartości połówkowych.
 - Promienie: 6 (znaczniki), 8 (przyciski, pola), 12 (wiersze), 14 (karty), 20 (pigułki)
@@ -96,7 +96,7 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 
 ## Inne zasady
 - Skrypty stron są w IIFE; funkcje używane w `onclick` wystawiaj przez `window.nazwa = nazwa`.
-- `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind` i obsługa podmenu są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>` (teraz `common.js?v=2`, `base.css?v=4`, `tokens.css?v=2`).
+- `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind` i obsługa podmenu są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>` (teraz `common.js?v=2`, `base.css?v=4`, `tokens.css?v=3`).
 - Motyw: zapisany wybór w `localStorage` (`moonsoon_theme`), a bez niego ustawienie systemu (`prefers-color-scheme`).
 - Wiersze/karty z `role="button"` obsługują Enter i Spację.
 - Nagłówki bezpieczeństwa są w `netlify.toml` dla `/*` (także adresy bez `.html`).

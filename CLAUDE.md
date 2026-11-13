@@ -71,7 +71,7 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 
 ## Mad Lads (`madlads.html`) — dane
 - Cała kolekcja (~10k) NIE może być czytana per-NFT jak Skulls: jeden Lad ma ~6 000 transakcji (bidy), pełny odczyt to ~62 mln kredytów Helius.
-- `scripts/generate-madlads-data.mjs` (workflow `update-madlads.yml`, raz dziennie, ~200 kredytów): jeden zrzut kolekcji (`getAssetsByGroup`) + listingi i ostatnie sprzedaże z darmowego API Magic Eden.
+- `scripts/generate-madlads-data.mjs` (workflow `update-madlads.yml`, co 3 h, ~200 kredytów na przebieg): jeden zrzut kolekcji (`getAssetsByGroup`) + listingi i ostatnie sprzedaże z darmowego API Magic Eden.
 - Pliki: `madlads-static.json` (mint + cechy, niezmienne), `madlads-data.json` (właściciele, listingi, ruchy holderów), `madlads-sales-ROK.json` (sprzedaże, scalane po sygnaturze).
 - Obrazki: miniatury z CDN Magic Eden (`img-cdn.magiceden.dev`), nic w repo. Oryginały mają ~5 MB.
 - Etykiety portfeli: wspólny `owner-tags.json` (ten sam co Skulls).

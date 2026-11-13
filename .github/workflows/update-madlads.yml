@@ -2,8 +2,10 @@ name: Update Mad Lads Data
 
 on:
   schedule:
-    # Daily snapshot of all holders + listings (~200 Helius credits).
-    - cron: '38 3 * * *'
+    # Snapshot of holders + listings every 3 h (~200 Helius credits each, ~48k/month).
+    # :38 lands while the backfill (starts :12, up to 145 min) runs, so it queues
+    # and goes right after it, before the next backfill at :12.
+    - cron: '38 */3 * * *'
   # While the page is being built: also run on the working branch.
   push:
     branches: [claude/tender-hopper-p8opwh]

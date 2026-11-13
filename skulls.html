@@ -282,6 +282,12 @@ html{--up:#14F195;--down:#ff5c7a;--me-text:#b988ff;}
 .sh-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--nft-gradient);flex-shrink:0;}
 .sh-num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--text);width:70px;flex-shrink:0;}
 .sh-spacer{flex:1;}
+.sh-ctx{flex:1;min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;font-size:13px;color:var(--text-muted);}
+.sh-ctx>span{white-space:nowrap;}
+.sh-ctx .sh-rank{font-family:'JetBrains Mono',monospace;font-size:12px;}
+.sh-ctx .sh-chip{border:1px solid var(--border);border-radius:6px;padding:1px 7px;font-size:12px;}
+.sh-ctx .sh-chip.flip{color:var(--warn);border-color:currentColor;}
+@media(max-width:768px){.sh-ctx>*{display:none;}}
 .sh-pill{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.03em;border-radius:14px;padding:4px 10px;width:100px;white-space:nowrap;text-align:center;flex-shrink:0;}
 .sh-pill.me{color:var(--me);background:var(--me-tint);}
 .sh-pill.tensor{color:var(--accent);background:var(--accent-tint2);}
@@ -1184,7 +1190,15 @@ function renderHistory(){
   if(shPage > pageCount) shPage = pageCount;
   var pageRows = filtered.slice((shPage-1)*SH_PAGE_SIZE, shPage*SH_PAGE_SIZE);
 
+  var ranks = rarityRanks();
   list.innerHTML = pageRows.map(function(s){
+    var ctx = '';
+    if(ranks[s.num]) ctx += '<span class="sh-rank" title="Rarity rank among the 99 Skulls">Rank #'+ranks[s.num]+' / 99</span>';
+    if(s.prev && s.prev.timestamp){
+      var d = Math.max(0, Math.round((s.timestamp - s.prev.timestamp) / 86400000));
+      var held = d < 1 ? '<1d' : d < 60 ? d+'d' : d < 365 ? Math.round(d/30)+'mo' : (d/365).toFixed(1)+'y';
+      ctx += '<span class="sh-chip'+(d < 7 ? ' flip' : '')+'" title="Time since this Skull\'s previous recorded sale">'+(d < 7 ? 'Flip &middot; ' : 'Held ')+held+'</span>';
+    }
     var thumb = s.image
       ? '<img class="sh-thumb" src="'+thumbUrl(s)+'" data-full="'+escAttr(s.image)+'" onerror="thumbFallback(this)" alt="Skull #'+s.num+'" width="44" height="44" loading="lazy" decoding="async">'
       : '<div class="sh-thumb"></div>';
@@ -1192,7 +1206,7 @@ function renderHistory(){
     return '<a class="sh-row" href="'+escAttr(s.link)+'" target="_blank" rel="noopener noreferrer">'+
       thumb+
       '<span class="sh-num">#'+s.num+'</span>'+
-      '<span class="sh-spacer"></span>'+
+      '<span class="sh-ctx">'+ctx+'</span>'+
       '<span class="sh-pill '+pillClass+'">'+escAttr(s.marketplace)+'</span>'+
       '<span class="sh-price">'+s.priceSol+' SOL</span>'+
       '<span class="sh-chg">'+prevChangeHtml(s.priceSol, s.prev)+'</span>'+

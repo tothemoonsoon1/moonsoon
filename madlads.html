@@ -1032,7 +1032,7 @@ function saleCtxHtml(s){
   if(l) out.push('<span>'+tierBadge(l)+'</span><span class="sh-rank" title="HowRare rank">#'+fmtNum(l.rank)+'</span>');
   if(s.prev && s.prev.t){
     var d = Math.max(0, Math.round((s.t - s.prev.t) / 86400000));
-    var held = d < 1 ? '<1d' : d < 60 ? d+'d' : d < 730 ? Math.round(d/30)+'mo' : (d/365).toFixed(1)+'y';
+    var held = d < 1 ? '<1d' : d < 60 ? d+'d' : d < 365 ? Math.round(d/30)+'mo' : (d/365).toFixed(1)+'y';
     out.push('<span class="sh-chip'+(d < 7 ? ' flip' : '')+'" title="Time since this Lad\'s previous recorded sale">'+(d < 7 ? 'Flip &middot; ' : 'Held ')+held+'</span>');
   }
   var tag = s.b && tagOf(s.b), own = s.b && OWN[s.b], n = own && !own.escrow ? own.lads.length : 0;

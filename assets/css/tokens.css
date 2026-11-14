@@ -1,5 +1,5 @@
-/* tothemoonsoon design tokens. Single source for index.html, skulls.html and mica.html.
-   This path is cached for a year (netlify.toml): bump ?v= in the three <link> tags after every edit. */
+/* tothemoonsoon design tokens. Single source for all five pages.
+   This path is cached for a year (netlify.toml): bump ?v= in the five <link> tags after every edit. */
 :root{
   --bg:#0b0d12;
   --surface:#0e1117;
@@ -27,6 +27,9 @@
   --rare:#ff4d8d;
   --uncommon:#ff8a4c;
   --gold-text:#f0b84d;
+  --up:#14F195;
+  --down:#ff5c7a;
+  --me-text:#b988ff;
 }
 [data-theme="light"]{
   --bg:#f5f6f8;

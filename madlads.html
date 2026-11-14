@@ -574,7 +574,24 @@ function cardHtml(l){
       '<div class="sk-owner mono">'+ownerLine+'</div>'+
       '<div class="sk-meta-row"><span>'+tierBadge(l)+'</span><span class="val">#'+fmtNum(l.rank)+'</span></div>'+
       '<div class="sk-meta-row"><span>Last sale</span><span class="val">'+(last ? fmtSol(last.p)+' SOL' : '&mdash;')+'</span></div>'+
+      cardTraits(l)+
     '</div></div>';
+}
+
+// The Lad's three rarest traits as chips, like the Skulls cards. A chip filters by that trait.
+function cardTraits(l){
+  var total = LADS.length, list = [];
+  for(var i = 0; i < KEYS.length; i++){
+    if(l.t[i] < 0) continue;
+    var n = COUNTS[i][l.t[i]+1]; if(!n) continue;
+    list.push({ i: i, v: l.t[i], n: n, p: n/total*100 });
+  }
+  list.sort(function(a, b){ return a.n - b.n; });
+  return '<div class="sk-traits">'+list.slice(0, 3).map(function(x){
+    var k = KEYS[x.i], v = VALUES[x.i][x.v];
+    return '<button type="button" class="sk-trait rtt-'+traitTier(x.p).id+'" title="'+esc(k)+': '+esc(v)+' \u2014 '+fmtNum(x.n)+' of '+fmtNum(total)+' Mad Lads" onclick="event.stopPropagation();sdFilterTrait('+x.i+','+x.v+')">'+
+      esc(k)+' <b>'+esc(v)+'</b> '+(x.p < 1 ? x.p.toFixed(1) : Math.round(x.p))+'%</button>';
+  }).join('')+'</div>';
 }
 
 function ownerHeader(l){

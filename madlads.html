@@ -24,7 +24,7 @@
 <meta property="og:image:height" content="400">
 <meta property="og:site_name" content="tothemoonsoon">
 <meta property="og:locale" content="en_US">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@m00nsoon">
 <meta name="twitter:creator" content="@m00nsoon">
 <meta name="twitter:title" content="Mad Lads Gallery — Holders, Whales, Traits &amp; Sales">
@@ -40,15 +40,15 @@
   "author": { "@type": "Person", "name": "tothemoonsoon", "url": "https://x.com/m00nsoon" }
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://img-cdn.magiceden.dev">
 <link rel="dns-prefetch" href="https://magiceden.io">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
 <script>try{var t=null;try{t=localStorage.getItem('moonsoon_theme');}catch(e){}if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
+<script>function preJson(u,o){return fetch(u,o).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});}window.ML_PRE={stat:preJson('/madlads-traits.json'),data:preJson('/madlads-data.json',{cache:'no-cache'}),bf:preJson('/madlads-backfill.json',{cache:'no-cache'})};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
-<link rel="stylesheet" href="/assets/css/base.css?v=4">
+<link rel="stylesheet" href="/assets/css/base.css?v=5">
 <link rel="stylesheet" href="/assets/css/gallery.css?v=1">
 <style>
 /* ---- Mad Lads page only (shared gallery styles: /assets/css/gallery.css) ---- */
@@ -90,10 +90,10 @@
   <main>
     <div class="sk-wrap">
 
-      <div class="view-toggle" role="tablist">
-        <button class="view-toggle-btn active" id="vt-gallery" onclick="switchView('gallery')">Gallery</button>
-        <button class="view-toggle-btn" id="vt-holders" onclick="switchView('holders')">Holders</button>
-        <button class="view-toggle-btn" id="vt-sales" onclick="switchView('sales')">Sale History</button>
+      <div class="view-toggle" role="group" aria-label="View">
+        <button class="view-toggle-btn active" id="vt-gallery" aria-pressed="true" onclick="switchView('gallery')">Gallery</button>
+        <button class="view-toggle-btn" id="vt-holders" aria-pressed="false" onclick="switchView('holders')">Holders</button>
+        <button class="view-toggle-btn" id="vt-sales" aria-pressed="false" onclick="switchView('sales')">Sale History</button>
       </div>
 
       <!-- ================= Gallery ================= -->
@@ -113,7 +113,7 @@
 
         <div class="controls">
           <div class="ctl-search">
-            <input class="ctl-input" type="text" id="ml-search" placeholder="Search number, wallet or @handle" oninput="applyFilters()" autocomplete="off" spellcheck="false">
+            <input class="ctl-input" type="text" id="ml-search" aria-label="Search Mad Lads" placeholder="Search number, wallet or @handle" oninput="applyFiltersSoon()" autocomplete="off" spellcheck="false">
           </div>
           <select class="ctl-select" id="ml-sort" onchange="applyFilters()" aria-label="Sort">
             <option value="num-asc">Number ↑</option>
@@ -180,7 +180,7 @@
 
         <div class="controls">
           <div class="ctl-search">
-            <input class="ctl-input" type="text" id="ho-search" placeholder="Search wallet or @handle" oninput="hoPage=1;renderHolders()" autocomplete="off" spellcheck="false">
+            <input class="ctl-input" type="text" id="ho-search" aria-label="Search holders" placeholder="Search wallet or @handle" oninput="hoPage=1;renderHolders()" autocomplete="off" spellcheck="false">
           </div>
           <select class="ctl-select" id="ho-tier" onchange="hoPage=1;renderHolders()" aria-label="Holder size">
             <option value="all">All holders</option>
@@ -211,7 +211,7 @@
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Sale History</h2>
           <div class="sk-desc" id="sh-coverage">Recorded Mad Lads sales: price, marketplace and date.</div>
-          <details class="sh-price-note"><summary>&#9432; How prices are shown</summary>The listing or offer price, before fees. Every price here — floor, listings and sales — includes the 2% marketplace fee and the 4.2% Mad Lads royalty (6.2% total): the total a buyer pays. OTC = a direct deal between two wallets, outside the marketplaces; when several Mad Lads changed hands for one payment, it is split evenly.</details>
+          <details class="sh-price-note"><summary>&#9432; How prices are shown</summary>Every price here — floor, listings and sales — includes the 2% marketplace fee and the 4.2% Mad Lads royalty (6.2% total): the total a buyer pays. OTC = a direct deal between two wallets, outside the marketplaces; when several Mad Lads changed hands for one payment, it is split evenly.</details>
         </div>
 
         <div class="stats-bar">
@@ -233,7 +233,7 @@
 
         <div class="controls">
           <div class="ctl-search">
-            <input class="ctl-input" type="text" id="sh-search" placeholder="Search number or wallet" oninput="shPage=1;renderSales()" autocomplete="off" spellcheck="false">
+            <input class="ctl-input" type="text" id="sh-search" aria-label="Search sales" placeholder="Search number or wallet" oninput="shPage=1;renderSales()" autocomplete="off" spellcheck="false">
           </div>
           <select class="ctl-select" id="sh-market" onchange="shPage=1;renderSales()" aria-label="Marketplace">
             <option value="all">All marketplaces</option>
@@ -276,7 +276,7 @@
 <div class="sd-back" id="sd-back" hidden onclick="if(event.target===this)closeLad()">
   <div class="sd" id="sd" role="dialog" aria-modal="true" aria-labelledby="sd-title"></div>
 </div>
-<script src="/assets/js/common.js?v=2"></script>
+<script src="/assets/js/common.js?v=3"></script>
 <script>
 (function(){
 
@@ -361,13 +361,17 @@ function tagChip(addr){
     : '<span class="sd-chip"'+style+'>'+esc(t.text)+'</span>';
 }
 
-// ---- Build from the two data files ----
+// ---- Build from the data files ----
+// The page loads lighter copies written by the generator (scripts/madlads-lib.mjs):
+// madlads-traits.json has no mint column and the yearly .min.json sales have no
+// signatures. Mints are only needed for marketplace links, so they are fetched
+// the first time a Lad is opened.
 function buildStatic(s){
   KEYS = s.keys; VALUES = s.values;
   COUNTS = KEYS.map(function(k, i){ var a = []; for(var j = 0; j <= VALUES[i].length; j++) a.push(0); return a; });
   SAMPLE = KEYS.map(function(){ return []; });
   LADS = s.lads.map(function(r, idx){
-    var lad = { i: idx, num: r[0], mint: r[1], t: r.slice(2), owner: null, listPrice: null, listMkt: null, sales: [] };
+    var lad = { i: idx, num: r[0], mint: null, t: r.slice(1), owner: null, listPrice: null, listMkt: null, sales: [] };
     for(var i = 0; i < KEYS.length; i++){
       var v = lad.t[i] + 1; // 0 = None
       COUNTS[i][v]++;
@@ -425,15 +429,26 @@ function attachSales(){
 
 function loadYear(y){
   if(yearLoaded[y]) return yearLoaded[y];
-  return yearLoaded[y] = fetch('/madlads-sales-'+y+'.json').then(function(r){ return r.ok ? r.json() : null; }).then(function(f){
+  return yearLoaded[y] = fetch('/madlads-sales-'+y+'.min.json').then(function(r){ return r.ok ? r.json() : null; }).then(function(f){
     if(!f) return;
     f.s.forEach(function(r){
-      SALES.push({ t: r[0]*1000, num: r[1], p: Math.round(r[2] * PRICE_FEE * 1000) / 1000, m: r[3], sig: r[4], b: f.w[r[5]] || null, s: f.w[r[6]] || null });
+      SALES.push({ t: r[0]*1000, num: r[1], p: Math.round(r[2] * PRICE_FEE * 1000) / 1000, m: r[3], b: f.w[r[4]] || null, s: f.w[r[5]] || null });
     });
     attachSales();
   }).catch(function(){});
 }
 function loadAllYears(){ return Promise.all(salesYears.map(loadYear)); }
+
+var mintsLoading = null;
+function loadMints(){
+  return mintsLoading || (mintsLoading = fetch('/madlads-mints.json').then(function(r){ return r.ok ? r.json() : null; }).then(function(m){
+    if(!m){ mintsLoading = null; return; }
+    LADS.forEach(function(l){ l.mint = m[l.i] || null; });
+  }).catch(function(){ mintsLoading = null; }));
+}
+// Until the mint is known the buttons lead to the collection page.
+function meUrlOf(l){ return l.mint ? 'https://magiceden.io/item-details/'+l.mint : 'https://magiceden.io/marketplace/mad_lads'; }
+function tsUrlOf(l){ return l.mint ? 'https://www.tensor.trade/item/'+l.mint : 'https://www.tensor.trade/trade/madlads'; }
 
 // ---- Stats ----
 function renderStats(){
@@ -618,6 +633,10 @@ function applyFilters(){
   renderSaleFeed();
 }
 window.applyFilters = applyFilters;
+// Typing filters 10,000 Lads and redraws the grid: wait for a short pause.
+var searchTimer = null;
+function applyFiltersSoon(){ clearTimeout(searchTimer); searchTimer = setTimeout(applyFilters, 150); }
+window.applyFiltersSoon = applyFiltersSoon;
 
 if('IntersectionObserver' in window){
   new IntersectionObserver(function(entries){
@@ -717,9 +736,9 @@ function renderLad(num){
     : '<div class="sd-none">'+(fullHistory(l) ? 'Never sold. Still with its first owner, or only moved between wallets.' : 'No sale recorded yet. Older history is still being added.')+'</div>';
 
   var listed = l.listPrice != null;
-  var meUrl = 'https://magiceden.io/item-details/'+l.mint, tsUrl = 'https://www.tensor.trade/item/'+l.mint;
-  var meBtn = '<a class="sd-btn'+(l.listMkt !== 1 ? ' primary' : '')+'" href="'+meUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 0 ? 'Buy on Magic Eden' : 'View on Magic Eden')+'</a>';
-  var tsBtn = '<a class="sd-btn'+(l.listMkt === 1 ? ' primary' : '')+'" href="'+tsUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 1 ? 'Buy on Tensor' : 'View on Tensor')+'</a>';
+  var meUrl = meUrlOf(l), tsUrl = tsUrlOf(l);
+  var meBtn = '<a id="sd-me" class="sd-btn'+(l.listMkt !== 1 ? ' primary' : '')+'" href="'+meUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 0 ? 'Buy on Magic Eden' : 'View on Magic Eden')+'</a>';
+  var tsBtn = '<a id="sd-ts" class="sd-btn'+(l.listMkt === 1 ? ' primary' : '')+'" href="'+tsUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 1 ? 'Buy on Tensor' : 'View on Tensor')+'</a>';
 
   document.getElementById('sd').innerHTML =
     '<button class="sd-close" id="sd-close" onclick="closeLad()" aria-label="Close">&times;</button>'+
@@ -751,6 +770,13 @@ function openLad(num){
   document.body.style.overflow = 'hidden';
   document.getElementById('sd').scrollTop = 0;
   document.getElementById('sd-close').focus();
+  var l = BY[num];
+  if(!l.mint) loadMints().then(function(){
+    if(sdOpenNum !== num) return;
+    var me = document.getElementById('sd-me'), ts = document.getElementById('sd-ts');
+    if(me) me.href = meUrlOf(l);
+    if(ts) ts.href = tsUrlOf(l);
+  });
 }
 window.openLad = openLad;
 function closeLad(){
@@ -1023,6 +1049,7 @@ function switchView(v){
   VIEWS.forEach(function(x){
     document.getElementById('view-'+x).style.display = x === v ? '' : 'none';
     document.getElementById('vt-'+x).classList.toggle('active', x === v);
+    document.getElementById('vt-'+x).setAttribute('aria-pressed', x === v);
   });
   if(location.hash.slice(1) !== v) history.replaceState(null, '', v === 'gallery' ? location.pathname : '#'+v);
   if(v === 'holders'){ renderHolderStats(); renderMoves(); renderHolders(); }
@@ -1047,9 +1074,10 @@ var startHash = location.hash.slice(1);
 if(VIEWS.indexOf(startHash) > 0) switchView(startHash);
 document.getElementById('ml-count').textContent = 'Loading Mad Lads…';
 
-var pStatic = fetch('/madlads-static.json').then(function(r){ return r.ok ? r.json() : null; });
-fetch('/madlads-backfill.json', { cache: 'no-cache' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(b){ if(b){ BF = b; if(view === 'sales') renderSales(); } }).catch(function(){});
-var pData = fetch('/madlads-data.json', { cache: 'no-cache' }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+// The three files are requested from <head>, so they download while the styles load.
+var pre = window.ML_PRE || {};
+var pStatic = Promise.resolve(pre.stat), pData = Promise.resolve(pre.data);
+Promise.resolve(pre.bf).then(function(b){ if(b){ BF = b; if(view === 'sales') renderSales(); } });
 
 pStatic.then(function(s){
   if(!s || !s.lads){ document.getElementById('ml-count').textContent = 'Could not load Mad Lads data. Please refresh.'; return; }

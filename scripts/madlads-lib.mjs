@@ -39,7 +39,33 @@ export function mergeSales(found, numByMint) {
     if (!n) continue;
     prev.s.sort((a, b) => a[0] - b[0]);
     writeJson(file, prev);
+    writePageSales(y, prev);
     added += n;
   }
   return { years: salesYearsOnDisk(), added };
+}
+
+// ---- Page-facing copies ----
+// The page never needs a sale's signature, and draws the grid without the mint
+// addresses. Those two are more than half of the bytes (they do not compress),
+// so the page loads these lighter copies instead of the files above:
+//   madlads-sales-YEAR.min.json  { w, s: [[time, num, price, market, buyerIdx, sellerIdx]] }
+//   madlads-traits.json          madlads-static.json without the mint column
+//   madlads-mints.json           [mint, ...] in the same order, fetched when a Lad is opened
+// They are rebuilt from the full files, never edited on their own.
+const writeIfChanged = (name, data) => {
+  const next = JSON.stringify(data) + '\n';
+  let prev = null;
+  try { prev = fs.readFileSync(new URL(name, ROOT), 'utf8'); } catch { /* new file */ }
+  if (prev !== next) fs.writeFileSync(new URL(name, ROOT), next);
+};
+export function writePageSales(year, full) {
+  writeIfChanged(`madlads-sales-${year}.min.json`, { w: full.w, s: full.s.map((r) => [r[0], r[1], r[2], r[3], r[5], r[6]]) });
+}
+export function writePageFiles() {
+  for (const y of salesYearsOnDisk()) { const full = readJson(`madlads-sales-${y}.json`); if (full) writePageSales(y, full); }
+  const stat = readJson('madlads-static.json');
+  if (!stat) return;
+  writeIfChanged('madlads-traits.json', { keys: stat.keys, values: stat.values, lads: stat.lads.map((r) => [r[0], ...r.slice(2)]), ...(stat.rank ? { rank: stat.rank } : {}) });
+  writeIfChanged('madlads-mints.json', stat.lads.map((r) => r[1]));
 }

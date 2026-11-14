@@ -26,6 +26,19 @@ function tpFind(input){
   for(var i = 0; i < rows.length; i++) rows[i].style.display = !q || rows[i].getAttribute('data-name').indexOf(q) !== -1 ? '' : 'none';
 }
 
+// Detail dialog (#sd-back on Skulls and Mad Lads): keep Tab inside it while it is open.
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Tab') return;
+  var back = document.getElementById('sd-back');
+  if(!back || back.hidden) return;
+  var f = back.querySelectorAll('a[href],button:not([disabled]),input,select,[tabindex]:not([tabindex="-1"])');
+  if(!f.length) return;
+  var first = f[0], last = f[f.length-1], at = document.activeElement;
+  if(!back.contains(at)){ e.preventDefault(); first.focus(); }
+  else if(e.shiftKey && at === first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey && at === last){ e.preventDefault(); first.focus(); }
+});
+
 // Nav dropdowns: mark the section you're on, and close after a click on the same page.
 (function(){
   function mark(){

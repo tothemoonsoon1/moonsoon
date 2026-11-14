@@ -1,6 +1,9 @@
 /* tothemoonsoon shared styles: reset, nav, buttons, theme toggle, focus, footer.
    Used by index.html, madlads.html, skulls.html, checklist.html and mica.html. Page-specific rules stay inline in each page.
    Cached for a year (netlify.toml): bump ?v= in the five <link> tags after every edit. */
+/* Fonts are served from this site (latin subset, variable weight) - no third-party font requests. */
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400 700;font-display:swap;src:url(/assets/fonts/space-grotesk-latin.woff2) format('woff2');}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 700;font-display:swap;src:url(/assets/fonts/jetbrains-mono-latin.woff2) format('woff2');}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',-apple-system,sans-serif;transition:background .3s ease,color .3s ease;}
 body{min-height:100vh;overflow-x:hidden;}

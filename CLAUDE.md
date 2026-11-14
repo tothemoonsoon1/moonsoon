@@ -39,6 +39,8 @@
 moonsoon/
 ├── index.html, skulls.html, madlads.html, checklist.html, mica.html  ← pięć stron (style/skrypty stron inline)
 ├── assets/css/tokens.css, base.css   ← kolory i wspólne style
+├── assets/css/gallery.css            ← wspólne style Skulls + Mad Lads (siatka, karty, okno szczegółów, panel cech, holders, historia)
+├── assets/fonts/                     ← Space Grotesk i JetBrains Mono (woff2, latin, zmienna grubość)
 ├── assets/js/common.js               ← wspólne funkcje (escAttr/esc, toggleTheme, timeAgo, tpFind) + obsługa podmenu w nawigacji
 ├── assets/img/
 ├── *.json                            ← dane (część commituje bot)
@@ -54,6 +56,7 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 
 ## Tech stack
 - Czysty HTML/CSS/JS (zero frameworków, zero build step)
+- Karty na X: `twitter:card` = `summary` (obrazek `og-avatar.jpg` jest kwadratem 400×400; duża karta wymaga grafiki 1200×630).
 - Umami Analytics: `data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"`
 
 ## Design system
@@ -62,12 +65,13 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 - Zakładki widoków na Skulls i Mad Lads nazywają się tak samo: Gallery, Holders, Sale History.
 - Panele i rozwijane listy jak karty: obramowanie `--card-border`, promień 14, bez rozmytych cieni (design system nie używa `box-shadow` poza obwódkami).
 - Home czyta postęp checklisty z `localStorage` (`moonsoon_checklist_summary`, zapisywany przez `checklist.html`); stary adres `/#checklist` przekierowuje na `/checklist.html`
-- Wspólne style (reset, nawigacja, przyciski, przełącznik motywu, fokus, stopka) są w `/assets/css/base.css` — zmieniaj je tam, nie w stronach. Style specyficzne dla strony zostają inline w jej `<style>`. Po zmianie `base.css` podbij `?v=` tak jak przy `tokens.css`.
+- Wspólne style (reset, czcionki, nawigacja, przyciski, przełącznik motywu, fokus, stopka) są w `/assets/css/base.css` — zmieniaj je tam, nie w stronach. Style specyficzne dla strony zostają inline w jej `<style>`. Po zmianie `base.css` podbij `?v=` tak jak przy `tokens.css`.
+- Style wspólne dla `skulls.html` i `madlads.html` są w `/assets/css/gallery.css` (ładują go tylko te dwie strony). `skulls.html` nie ma własnego `<style>`; `madlads.html` ma w `<style>` tylko kilka reguł właściwych dla siebie. Nie kopiuj reguł z `gallery.css` do stron. Po zmianie podbij `?v=` w obu tagach `<link>`.
 - Wszystkie kolory (motyw ciemny i jasny) są w `/assets/css/tokens.css` — jedyne źródło dla pięciu stron. Nie kopiuj `:root` do stron.
 - UWAGA: `/assets/css/*` jest cache'owane na rok (`netlify.toml`). Po każdej zmianie `tokens.css` podbij `?v=` w tagu `<link>` na wszystkich pięciu stronach.
 - Tło `#0b0d12`, jeden akcent `#4fd8ff` (jasny motyw `#066682`, dobrany tak, by tekst miał kontrast co najmniej 4.5:1); kolory znaczeniowe: `--gold`, `--rare`, `--uncommon`, `--up`, `--down`, `--warn`, `--me`
 - Motyw jasny: każdy nowy kolor tekstu sprawdź też na jasnym tle (min. 4.5:1). Złoty tekst używa `--gold-text`, nie `--gold`; pomarańczowy (ostrzeżenie) `--warn-text`, nie `--warn`. Motyw jest ustawiany skryptem w `<head>` przed arkuszami, żeby nie było mignięcia ciemnego tła.
-- Fonty: Space Grotesk (treść, nagłówki), JetBrains Mono (logo, kickery, etykiety)
+- Fonty: Space Grotesk (treść, nagłówki), JetBrains Mono (logo, kickery, etykiety). Serwowane z własnej domeny (`/assets/fonts/`, `@font-face` w `base.css`, preload w `<head>`) — bez Google Fonts. Pliki mają tylko znaki łacińskie podstawowe; inne znaki (np. strzałki →) rysuje czcionka systemowa, tak jak wcześniej.
 - Skala tekstu: 12, 13, 14, 15, 16, 18, 20, 24, 28px (+ hero 34/48). Minimum 12px, bez wartości połówkowych.
 - Promienie: 6 (znaczniki), 8 (przyciski, pola), 12 (wiersze), 14 (karty), 20 (pigułki)
 - Nagłówek strony: kicker tekstowy (mono, akcent) + tytuł 28px (24px na telefonie) + opis, do lewej
@@ -78,6 +82,7 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 - Cała kolekcja (~10k) NIE może być czytana per-NFT jak Skulls: jeden Lad ma ~6 000 transakcji (bidy), pełny odczyt to ~62 mln kredytów Helius.
 - `scripts/generate-madlads-data.mjs` (workflow `update-madlads.yml`, co 3 h, ~200 kredytów na przebieg): jeden zrzut kolekcji (`getAssetsByGroup`) + listingi i ostatnie sprzedaże z darmowego API Magic Eden.
 - Pliki: `madlads-static.json` (mint + cechy, niezmienne), `madlads-data.json` (właściciele, listingi, ruchy holderów), `madlads-sales-ROK.json` (sprzedaże, scalane po sygnaturze).
+- Strona NIE ładuje `madlads-static.json` ani `madlads-sales-ROK.json`, tylko ich lżejsze kopie (ponad połowa mniej danych): `madlads-traits.json` (bez adresów mint), `madlads-mints.json` (same minty, pobierane dopiero przy pierwszym otwarciu Lada — do linków Magic Eden/Tensor) i `madlads-sales-ROK.min.json` (bez sygnatur). Kopie pisze bot: `writePageFiles()`/`writePageSales()` w `scripts/madlads-lib.mjs`, zawsze z pełnych plików. Zmieniasz format pełnego pliku → zmień też kopię i kod strony.
 - Obrazki: miniatury z CDN Magic Eden (`img-cdn.magiceden.dev`), nic w repo. Oryginały mają ~5 MB.
 - Etykiety portfeli: wspólny `owner-tags.json` (ten sam co Skulls).
 - Progi: whale = 20+ Ladów, shark = 5–19.
@@ -97,7 +102,10 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 
 ## Inne zasady
 - Skrypty stron są w IIFE; funkcje używane w `onclick` wystawiaj przez `window.nazwa = nazwa`.
-- `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind` i obsługa podmenu są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>` (teraz `common.js?v=2`, `base.css?v=4`, `tokens.css?v=3`).
+- Dane galerii są pobierane małym skryptem w `<head>` (`window.SKULLS_PRE`, `window.ML_PRE`), żeby ściągały się równolegle ze stylami; skrypt strony tylko odbiera te obietnice.
+- Żadnych zmyślonych danych zastępczych: zanim przyjdą dane, strona pokazuje „Loading…” i kreski, a przy błędzie komunikat z prośbą o odświeżenie.
+- Przełączniki widoków i filtry-pigułki to przyciski z `aria-pressed` (nie `role="tablist"`). Okno szczegółów (`#sd-back`) trzyma fokus w środku — obsługa w `common.js`.
+- `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind`, obsługa podmenu i pułapka fokusu okna szczegółów są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>` (teraz `common.js?v=3`, `base.css?v=5`, `tokens.css?v=4`, `gallery.css?v=1`).
 - Motyw: zapisany wybór w `localStorage` (`moonsoon_theme`), a bez niego ustawienie systemu (`prefers-color-scheme`).
 - Wiersze/karty z `role="button"` obsługują Enter i Spację.
 - Nagłówki bezpieczeństwa są w `netlify.toml` dla `/*` (także adresy bez `.html`).

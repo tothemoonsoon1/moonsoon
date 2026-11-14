@@ -25,7 +25,7 @@
 <meta property="og:site_name" content="tothemoonsoon">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="https://x.com/m00nsoon">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@m00nsoon">
 <meta name="twitter:creator" content="@m00nsoon">
 <meta name="twitter:title" content="Which Crypto Exchanges Are MiCA Licensed in the EU?">
@@ -56,18 +56,14 @@
   ]
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="dns-prefetch" href="https://www.esma.europa.eu">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
 <script>try{var t=null;try{t=localStorage.getItem('moonsoon_theme');}catch(e){}if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
-<link rel="stylesheet" href="/assets/css/base.css?v=4">
+<link rel="stylesheet" href="/assets/css/base.css?v=5">
 <style>
-
-/* ---- Nav (shared) ---- */
-
 
 /* ---- Hero ---- */
 .mica-hero{padding:28px 72px 22px;}
@@ -160,7 +156,7 @@
 
   <nav class="nav" aria-label="Main navigation">
     <a class="nav-logo" href="/"><span>$</span>MOONSOON</a>
-    <div class="nav-tabs" role="tablist">
+    <div class="nav-tabs">
       <a class="nav-tab" href="/">Home</a>
       <div class="nav-item"><a class="nav-tab" href="/skulls.html">Skulls</a><div class="nav-sub" aria-label="Skulls sections"><a href="/skulls.html#gallery">Gallery</a><a href="/skulls.html#holders">Holders</a><a href="/skulls.html#history">Sale History</a></div></div>
       <div class="nav-item"><a class="nav-tab" href="/madlads.html">Mad Lads</a><div class="nav-sub" aria-label="Mad Lads sections"><a href="/madlads.html#gallery">Gallery</a><a href="/madlads.html#holders">Holders</a><a href="/madlads.html#sales">Sale History</a></div></div>
@@ -188,7 +184,7 @@
         <span class="mica-count" id="mica-count"></span>
       </div>
 
-      <div class="mica-filters" id="mica-filters">
+      <div class="mica-filters" id="mica-filters" role="group" aria-label="Filter exchanges">
         <button class="mica-chip active" data-filter="all">All</button>
         <button class="mica-chip" data-filter="licensed">MiCA licensed</button>
         <button class="mica-chip" data-filter="in_progress">In progress</button>
@@ -249,7 +245,7 @@
   </footer>
 </div>
 
-<script src="/assets/js/common.js?v=2"></script>
+<script src="/assets/js/common.js?v=3"></script>
 <script>
 (function(){
 
@@ -341,8 +337,10 @@ function render(){
 
   Array.prototype.forEach.call(document.querySelectorAll('#mica-filters .mica-chip[data-filter]'), function(btn){
     btn.classList.toggle('active', btn.getAttribute('data-filter')===state.filter);
+    btn.setAttribute('aria-pressed', btn.getAttribute('data-filter')===state.filter);
   });
   document.getElementById('mica-mifid-toggle').classList.toggle('active', state.mifidOnly);
+  document.getElementById('mica-mifid-toggle').setAttribute('aria-pressed', state.mifidOnly);
 }
 
 document.getElementById('mica-filters').addEventListener('click', function(e){

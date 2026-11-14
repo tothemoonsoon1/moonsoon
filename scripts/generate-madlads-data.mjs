@@ -18,12 +18,14 @@
  *   madlads-static.json      mint + traits per Lad. Never changes after mint.
  *   madlads-data.json        owners, listings, escrow info, holder moves.
  *   madlads-sales-YYYY.json  sales per year, merged by signature.
+ *   madlads-traits.json, madlads-mints.json, madlads-sales-YYYY.min.json
+ *                            lighter copies of the above that the page loads (see madlads-lib.mjs).
  *
  * A failed source keeps the previous file's values for that part, it never
  * writes an emptier file.
  */
 import fs from 'node:fs';
-import { ROOT, readJson, writeJson, mergeSales, salesYearsOnDisk } from './madlads-lib.mjs';
+import { ROOT, readJson, writeJson, mergeSales, salesYearsOnDisk, writePageFiles } from './madlads-lib.mjs';
 
 const KEY = process.env.HELIUS_API_KEY;
 if (!KEY) { console.error('Missing HELIUS_API_KEY'); process.exit(1); }
@@ -293,6 +295,8 @@ writeJson('madlads-data.json', {
   moves,
   salesYears,
 });
+// Lighter copies the page loads (no mints, no signatures); see madlads-lib.mjs.
+writePageFiles();
 const sizes = fs.readdirSync(ROOT).filter((f) => f.startsWith('madlads-')).map((f) => `${f} ${(fs.statSync(new URL(f, ROOT)).size / 1024).toFixed(0)}KB`);
 console.log(`done: ${owners.length} holders, ${Object.keys(listed).length} listed, ~${credits} Helius credits, ${((Date.now() - startedAt) / 1000).toFixed(0)}s`);
 console.log(sizes.join(' | '));

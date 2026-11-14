@@ -1,4 +1,4 @@
-# TODO — otwarte sprawy (stan: 13.11.2026)
+# TODO — otwarte sprawy (stan: 14.11.2026)
 
 Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu punktu usuń go stąd (albo przenieś do „Zrobione”) w tym samym commicie.
 
@@ -23,6 +23,16 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 ## 4. Posty na X o stronie Skulls
 - Szkice (krótki i długi) są w sesji „Traits w zakładce ze skullami” (7–11.11). Przed publikacją poprawić „this week” i „hourly” (Skulls synchronizuje się teraz co godzinę o :47 i raz dziennie pełny zrzut).
 
+## 5. Po przeglądzie z 14.11 — do decyzji właściciela
+- **Limit Netlify:** bot commituje dane na `main` ok. 30 razy na dobę i każdy commit to wdrożenie produkcyjne. Sprawdzić w panelu Netlify (Usage) zużycie minut/kredytów. Jeśli jest blisko limitu darmowego planu: rzadziej commitować dane (np. Skulls co 3 h) albo serwować JSON-y spoza wdrożeń.
+- **Checklist:** „Daily progress” nigdy się nie zeruje — zadania dzienne i tygodniowe zostają odhaczone na zawsze. Propozycja: dzienne zerować o północy, tygodniowe w poniedziałek.
+- **Duża karta na X:** grafika 1200×630 (logo + Skull) i powrót do `summary_large_image`.
+- Strona 404 w stylu serwisu (dziś domyślna Netlify).
+- `mica.html`: wiersz Backpack (link polecający) otwiera się tylko kliknięciem myszą; `Article` w JSON-LD nie ma `dateModified`.
+- Workflowy: usunąć stare wyzwalacze `push` na gałęzie `claude/bold-thompson-jy7fuk` i `claude/tender-hopper-p8opwh`; `update-skulls.yml` i `update-madlads.yml` pushują bez `git pull --rebase` (przebieg pada, jeśli w tym czasie ktoś zmerguje `dev` → `main`; następny przebieg nadrabia).
+- Po zakończeniu backfillu: `madlads-data.json` (236 KB po kompresji, z czego 210 KB to adresy portfeli) to teraz najcięższy plik strony Mad Lads — można rozważyć skrócone adresy na pierwsze ładowanie.
+
 ## Zrobione
+- 14.11: przegląd kodu, designu, SEO i wydajności — wspólny `gallery.css`, czcionki z własnej domeny, lżejsze dane Mad Lads (ok. 1,07 MB → 0,47 MB na pierwsze wejście), Skulls bez zmyślonych danych zastępczych, poprawki dostępności i metadanych.
 - 13.11: znacznik „MYSTERY” (MadLads Team Wallet) ma kontrast 5,3:1 — kolor `#c2365a` w `owner-tags.json`; kolory tagów nie są już używane jako kolor tekstu.
 - 13.11: domena ewip.eu wskazuje na Netlify i działa.

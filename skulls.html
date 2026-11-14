@@ -124,6 +124,10 @@
           </select>
           <button class="ctl-traits" id="tp-toggle" type="button" aria-expanded="false" aria-controls="sk-trait-panel" onclick="this.setAttribute('aria-expanded',document.body.classList.toggle('tp-open'))">Filter by trait</button>
           <label class="ctl-toggle">
+            <input type="checkbox" id="sk-listed-only" onchange="applyFilters()">
+            Listed only
+          </label>
+          <label class="ctl-toggle">
             <input type="checkbox" id="sk-never-only" onchange="applyFilters()">
             Never sold only
           </label>
@@ -779,6 +783,7 @@ function applyFilters(){
   var list = SKULLS.slice();
   if(query){ list = list.filter(function(s){ return String(s.num).indexOf(query) !== -1; }); }
   if(neverOnly){ list = list.filter(function(s){ return s.neverTraded; }); }
+  if(document.getElementById('sk-listed-only').checked){ list = list.filter(function(s){ return s.listed; }); }
   if(ownerFilter){ list = list.filter(function(s){ return s.owner === ownerFilter; }); }
   Object.keys(traitFilter).forEach(function(k){
     list = list.filter(function(s){ var t = TRAITS[s.num]; return t && (t[k] || 'None') === traitFilter[k]; });
@@ -1123,6 +1128,7 @@ function viewOwner(el){
   traitFilter = {};
   document.getElementById('sk-search').value = '';
   document.getElementById('sk-never-only').checked = false;
+  document.getElementById('sk-listed-only').checked = false;
   switchView('gallery');
   renderTraitFilters(); applyFilters();
   document.querySelector('.controls').scrollIntoView({ block: 'start' });

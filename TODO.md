@@ -16,7 +16,9 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 - Sprawdzić, czy zrzut `update-madlads.yml` rusza sam co 3 h (13.11 GitHub nie uruchomił go z harmonogramu, odpalony ręcznie).
 
 ## 3. Odłożone na słowo właściciela
-- **Webhook Helius ze sprzedażami na żywo — priorytet** (14.11): bez niego nowe sprzedaże z Tensora nie trafiają na stronę. Plan: Helius → funkcja Netlify → Netlify Blobs → strona; raz dziennie przepisanie do `madlads-sales-ROK.json`; zrzut co 3 h jako rezerwa. Najpierw sprawdzić warunki planu Free Heliusa.
+- **Webhook Helius ze sprzedażami na żywo — priorytet** (14.11): bez niego nowe sprzedaże z Tensora nie trafiają na stronę. Plan: Helius → funkcja Netlify → Netlify Blobs → strona; raz dziennie przepisanie do `madlads-sales-ROK.json`; zrzut co 3 h jako rezerwa. Warunki Free: 1 kredyt za zdarzenie, 100 za utworzenie/edycję/usunięcie, do 100 tys. adresów na webhook.
+  - **Test w toku od 14.11 13:17 UTC:** webhook `0fa5432e-d273-4b04-9339-49fa0833e559` (enhanced, NFT_SALE, wszystkie 9 968 mintów) → odbiornik na `dev`: `https://dev--moonsoon.netlify.app/.netlify/functions/helius-webhook` (GET pokazuje liczniki = zużyte kredyty). Zarządzanie: workflow `helius-webhook.yml` (create/list/delete). Odbiornik jest bez autoryzacji — przed produkcją ustawić `authHeader` w Heliusie i `HELIUS_WEBHOOK_AUTH` w Netlify.
+  - Po dobie: jeśli zdarzeń jest ~tyle, ile sprzedaży (kilkadziesiąt), budujemy wersję produkcyjną; jeśli dużo więcej (np. oferty) — usunąć webhook (`delete` z tym id).
 - Bieżące sprzedaże z łańcucha (z Tensorem) w „Recent sales” — dziś są tylko z API Magic Eden. Właściciel 12.11: „zostawmy jak jest”.
 - Sprzedaże z przyjętej oferty są zawyżone o ~6% (cena już z opłatami, a strona dolicza ×1,062). Poprawka: zapisywać typ sprzedaży przy backfillu.
 

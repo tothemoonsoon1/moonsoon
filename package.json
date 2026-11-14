@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Only for Netlify Functions (netlify/functions). The site itself has no build step.",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

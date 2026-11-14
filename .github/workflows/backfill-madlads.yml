@@ -66,10 +66,10 @@ jobs:
           # under the Helius plan's limit (free: 10/s).
           WORKERS: '3'
           RPS: '9'
-          # Stage 2 (~60 credits a Lad, ~545k in total): on for scheduled runs
-          # since 14 Nov 2026 (owner's decision). A manual run only does it
-          # when the stage2 box is ticked.
-          STAGE2: ${{ (inputs.stage2 || github.event_name == 'schedule') && '1' || '0' }}
+          # Stage 2 (~60 credits a Lad, ~545k in total): off until the Helius
+          # credits reset (owner's decision, 14 Nov 2026). To run it on schedule,
+          # use: (inputs.stage2 || github.event_name == 'schedule') && '1' || '0'
+          STAGE2: ${{ inputs.stage2 && '1' || '0' }}
         run: node scripts/backfill-madlads-sales.mjs
 
       - name: Commit and push if changed

@@ -11,7 +11,7 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 
 ## 2. Backfill historii sprzedaży Mad Lads
 - Etap 1 zakończony 14.11 (9 968/9 968; pominięty #8378 „busy account”). Sprawdzić, czy wykres miesięczny 2026 się wyrównał.
-- Etap 2 włączony 14.11 (decyzja właściciela), w toku: 9 076 Ladów, ok. 545 tys. kredytów Heliusa. Pilnować limitu 1 mln/mc w panelu Heliusa. Każdy przebieg z commitem to wdrożenie Netlify (15 kredytów).
+- Etap 2 odłożony do resetu limitu Heliusa (ok. 3.12.2026): 9 076 Ladów, ok. 545 tys. kredytów. 14.11 zostało 627 tys. na 19 dni, a z resztą bota wyszłoby ok. 808 tys. Przy włączaniu: pełny odczyt Skulls raz w tygodniu i bezpiecznik na łączne zużycie w skrypcie.
 - Po obu etapach: cron `backfill-madlads.yml` przestawić na raz dziennie.
 - Sprawdzić, czy zrzut `update-madlads.yml` rusza sam co 3 h (13.11 GitHub nie uruchomił go z harmonogramu, odpalony ręcznie).
 

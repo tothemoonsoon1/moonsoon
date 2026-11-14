@@ -243,6 +243,7 @@
 .sh-pill.tensor{color:var(--accent);background:var(--accent-tint2);}
 .sh-price{font-size:15px;font-weight:700;color:var(--text);width:100px;text-align:right;flex-shrink:0;}
 .sh-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);width:100px;text-align:right;flex-shrink:0;}
+.sh-ago{display:block;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);}
 .sh-pagination{display:flex;justify-content:center;align-items:center;gap:14px;padding:22px 0 4px;}
 .sh-page-btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);background:none;border:1px solid var(--border);border-radius:8px;padding:8px 16px;cursor:pointer;}
 .sh-page-btn:disabled{opacity:.4;cursor:default;}

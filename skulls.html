@@ -50,7 +50,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.SKULLS_PRE={data:preJson('skulls-data.json',{cache:'no-cache'},true),traits:preJson('skulls-traits.json')};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=4">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=5">
 </head>
 <body>
 <div class="page">
@@ -459,7 +459,7 @@ window.thumbFallback = thumbFallback;
 function cardHtml(s, holderCount){
   var classes = 'sk-card' + (s.neverTraded ? ' never-traded' : '');
   var badges = '';
-  if(s.listed){ badges += '<div class="sk-listed-badge">LISTED &middot; '+s.listPrice+' SOL</div>'; }
+  if(s.listed){ badges += '<div class="sk-listed-badge" title="Listed'+(s.listMarket ? ' on '+(s.listMarket === 'tensor' ? 'Tensor' : 'Magic Eden') : '')+'">'+(s.listPrice != null ? Math.round(s.listPrice*100)/100+' SOL' : 'LISTED')+(s.listMarket ? ' &middot; '+(s.listMarket === 'tensor' ? 'Tensor' : 'ME') : '')+'</div>'; }
   if(s.neverTraded){ badges += '<div class="sk-never-badge">NEVER SOLD</div>'; }
   if(s.label){
     var tagUrl = s.twitterUrl || (s.twitter ? 'https://x.com/'+encodeURIComponent(s.twitter) : null);
@@ -949,7 +949,8 @@ function renderSkullDetail(num){
     : '<div class="sd-none">No on-chain sale recorded for this Skull.</div>';
 
   var tensorUrl = s.mint ? 'https://www.tensor.trade/item/'+s.mint : 'https://www.tensor.trade/trade/madlads';
-  var flag = s.listed ? '<span class="sd-flag listed">LISTED</span>' : (s.neverTraded ? '<span class="sd-flag never">NEVER SOLD</span>' : '');
+  var onTensor = s.listed && s.listMarket === 'tensor', onMe = s.listed && s.listMarket === 'me';
+  var flag = s.listed ? '<span class="sd-flag listed">LISTED'+(s.listMarket ? ' ON '+(onTensor ? 'TENSOR' : 'MAGIC EDEN') : '')+'</span>' : (s.neverTraded ? '<span class="sd-flag never">NEVER SOLD</span>' : '');
   var img = s.image
     ? '<img src="'+largeUrl(s)+'" data-full="'+escAttr(s.image)+'" onerror="thumbFallback(this)" alt="Mad Lads Skull #'+s.num+'" width="768" height="960">'
     : '';
@@ -965,12 +966,16 @@ function renderSkullDetail(num){
       '<div><div class="sd-h">Owner</div><div class="sd-owner">'+ownerBits+'</div></div>'+
       '<div><div class="sd-h">Sale history &middot; '+sales.length+' trade'+(sales.length===1?'':'s')+'</div>'+salesHtml+'</div>'+
       '<div class="sd-buy"><div class="sd-stats">'+
-        '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(s.listed?'':' dim')+'">'+(s.listed && s.listPrice != null ? s.listPrice+' <small>SOL</small>' : 'Not listed')+'</div></div>'+
+        '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(s.listed?'':' dim')+'">'+(s.listed && s.listPrice != null ? Math.round(s.listPrice*100)/100+' <small>SOL'+(s.listMarket ? ' on '+(onTensor ? 'Tensor' : 'Magic Eden') : '')+'</small>' : 'Not listed')+'</div></div>'+
         '<div><div class="sd-stat-l">Last sale</div><div class="sd-stat-v'+(s.lastSalePrice!=null?'':' dim')+'">'+(s.lastSalePrice != null ? s.lastSalePrice+' <small>SOL</small>' : '&mdash;')+'</div></div>'+
         '<div><div class="sd-stat-l">Trades</div><div class="sd-stat-v">'+s.trades+'</div></div>'+
       '</div><div class="sd-btns">'+
-        '<a class="sd-btn primary" href="'+escAttr(s.meUrl)+'" target="_blank" rel="noopener noreferrer">'+(s.listed?'Buy on Magic Eden':'View on Magic Eden')+'</a>'+
-        '<a class="sd-btn" href="'+escAttr(tensorUrl)+'" target="_blank" rel="noopener noreferrer">'+(s.listed?'Buy on Tensor':'View on Tensor')+'</a>'+
+        (function(){
+          // The marketplace holding the listing gets the primary button and goes first.
+          var me = '<a class="sd-btn'+(onTensor ? '' : ' primary')+'" href="'+escAttr(s.meUrl)+'" target="_blank" rel="noopener noreferrer">'+(onMe || (s.listed && !s.listMarket) ? 'Buy on Magic Eden' : 'View on Magic Eden')+'</a>';
+          var ts = '<a class="sd-btn'+(onTensor ? ' primary' : '')+'" href="'+escAttr(tensorUrl)+'" target="_blank" rel="noopener noreferrer">'+(onTensor || (s.listed && !s.listMarket) ? 'Buy on Tensor' : 'View on Tensor')+'</a>';
+          return onTensor ? ts+me : me+ts;
+        })()+
       '</div><div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div></div>'+
     '</div>';
   return true;

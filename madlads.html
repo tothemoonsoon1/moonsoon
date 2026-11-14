@@ -51,7 +51,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.ML_PRE={stat:preJson('madlads-traits.json'),data:preJson('madlads-data.json',{cache:'no-cache'},true),bf:preJson('madlads-backfill.json',{cache:'no-cache'},true)};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=4">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=5">
 <style>
 /* ---- Mad Lads page only (shared gallery styles: /assets/css/gallery.css) ---- */
 .ml-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:10px;min-height:0;}
@@ -546,7 +546,7 @@ function matchesTraits(l){
 function cardHtml(l){
   var o = l.owner ? OWN[l.owner] : null, count = o ? o.lads.length : 0;
   var badges = '';
-  if(l.listPrice != null) badges += '<div class="sk-listed-badge">'+l.listPrice+' SOL</div>';
+  if(l.listPrice != null) badges += '<div class="sk-listed-badge" title="Listed on '+(l.listMkt === 1 ? 'Tensor' : 'Magic Eden')+'">'+fmtSol(l.listPrice)+' SOL &middot; '+(l.listMkt === 1 ? 'Tensor' : 'ME')+'</div>';
   var t = l.owner ? tagOf(l.owner) : null;
   if(t && t.text){
     badges += '<div class="sk-owner-badge">'+(t.color ? '<span class="sk-owner-badge-label" style="background:'+esc(t.color)+';color:#fff">TAG</span> ' : '')+esc(t.text)+'</div>';
@@ -745,7 +745,7 @@ function renderLad(num){
   document.getElementById('sd').innerHTML =
     '<button class="sd-close" id="sd-close" onclick="closeLad()" aria-label="Close">&times;</button>'+
     '<div class="sd-art"><img src="'+thumb(l.num, 768, 960)+'" data-num="'+l.num+'" onerror="thumbFallback(this)" alt="Mad Lad #'+l.num+'" width="768" height="960">'+
-      (listed ? '<span class="sd-flag listed">LISTED</span>' : '')+
+      (listed ? '<span class="sd-flag listed">LISTED ON '+(l.listMkt === 1 ? 'TENSOR' : 'MAGIC EDEN')+'</span>' : '')+
       '<button class="sd-nav prev" onclick="sdStep(-1)" aria-label="Previous">&larr;</button>'+
       '<button class="sd-nav next" onclick="sdStep(1)" aria-label="Next">&rarr;</button></div>'+
     '<div class="sd-info">'+
@@ -754,7 +754,7 @@ function renderLad(num){
       '<div><div class="sd-h">Holder</div><div class="sd-owner">'+ownerBits+'</div></div>'+
       '<div><div class="sd-h">'+(fullHistory(l) ? 'Sale history' : 'Recorded sales')+' &middot; '+sales.length+'</div>'+salesHtml+'</div>'+
       '<div class="sd-buy"><div class="sd-stats">'+
-        '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(listed?'':' dim')+'">'+(listed ? l.listPrice+' <small>SOL</small>' : 'Not listed')+'</div></div>'+
+        '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(listed?'':' dim')+'">'+(listed ? fmtSol(l.listPrice)+' <small>SOL on '+(l.listMkt === 1 ? 'Tensor' : 'Magic Eden')+'</small>' : 'Not listed')+'</div></div>'+
         '<div><div class="sd-stat-l">Last sale</div><div class="sd-stat-v'+(sales.length?'':' dim')+'">'+(sales.length ? fmtSol(sales[0].p)+' <small>SOL</small>' : '&mdash;')+'</div></div>'+
         '<div><div class="sd-stat-l">Rarity</div><div class="sd-stat-v">#'+fmtNum(l.rank)+'</div></div>'+
       '</div><div class="sd-btns">'+(l.listMkt === 1 ? tsBtn+meBtn : meBtn+tsBtn)+'</div>'+

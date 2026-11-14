@@ -276,8 +276,8 @@ function listingFromTxs(txs, mint) {
   for (const tx of txs) {
     // newest first
     const tensor = tensorListing(tx, mint);
-    if (tensor) return { listed: true, rawAsk: tensor.rawAsk, seller: tensor.seller };
-    if (tx.type === 'NFT_LISTING') return { listed: true, rawAsk: solFromDescription(tx.description) };
+    if (tensor) return { listed: true, rawAsk: tensor.rawAsk, seller: tensor.seller, market: 'tensor' };
+    if (tx.type === 'NFT_LISTING') return { listed: true, rawAsk: solFromDescription(tx.description), market: /TENSOR/.test(tx.source || '') ? 'tensor' : 'me' };
     if (tx.type === 'NFT_CANCEL_LISTING' || isSale(tx, mint) || nftMoved(tx, mint)) return { listed: false, rawAsk: null };
   }
   return null;
@@ -357,18 +357,20 @@ async function updateSkull(prev, defaultSyncedAt, startedAt) {
   const txs = await heliusTransactionsSince(mint, syncedAt - SYNC_OVERLAP_MS);
 
   const sales = addSales(prev.sales || [], txs.filter((tx) => isSale(tx, mint)).map(saleFromTx));
-  let { owner, listed, listPrice } = prev;
+  let { owner, listed, listPrice, listMarket } = prev;
 
   const moved = txs.some((tx) => nftMoved(tx, mint));
   const fromTxs = listingFromTxs(txs, mint);
   if (fromTxs || moved) {
     const me = await meToken(mint);
     const asks = [];
-    if (fromTxs?.listed && fromTxs.rawAsk != null) asks.push(fromTxs.rawAsk);
-    if (me?.listed && me.rawAsk != null) asks.push(me.rawAsk);
+    if (fromTxs?.listed && fromTxs.rawAsk != null) asks.push({ ask: fromTxs.rawAsk, market: fromTxs.market || null });
+    if (me?.listed && me.rawAsk != null) asks.push({ ask: me.rawAsk, market: 'me' });
     if (fromTxs) {
       listed = asks.length > 0 || !!me?.listed || fromTxs.listed;
-      listPrice = asks.length ? +(Math.min(...asks) * BUYER_TOTAL_MULTIPLIER).toFixed(4) : listed ? listPrice : null;
+      const best = asks.reduce((a, b) => (!a || b.ask < a.ask ? b : a), null);
+      listPrice = best ? +(best.ask * BUYER_TOTAL_MULTIPLIER).toFixed(4) : listed ? listPrice : null;
+      listMarket = best ? best.market : listed ? (listMarket || (me?.listed ? 'me' : fromTxs.market || null)) : null;
     }
     // A Tensor listing parks the NFT in escrow, which Magic Eden and DAS both
     // report as the "owner" — the seller named in the listing is the real one.
@@ -377,6 +379,12 @@ async function updateSkull(prev, defaultSyncedAt, startedAt) {
     else if (moved && !listed) owner = (await dasOwner(mint)) || owner;
     // A listed Skull's on-chain holder is the marketplace, so without Magic
     // Eden the previous owner is the better guess.
+  }
+  // Listed before listMarket existed: ask Magic Eden once. Listed there → 'me';
+  // listed but not on Magic Eden → it can only be Tensor.
+  if (listed && !listMarket) {
+    const me = await meToken(mint);
+    if (me) listMarket = me.listed ? 'me' : 'tensor';
   }
 
   return {
@@ -388,6 +396,9 @@ async function updateSkull(prev, defaultSyncedAt, startedAt) {
     neverTraded: sales.length === 0,
     listed: !!listed,
     listPrice: listed ? listPrice : null,
+    // 'me' | 'tensor' | null. Skulls listed before this field existed get it on
+    // their next listing change; until then the page shows no marketplace.
+    listMarket: listed ? (listMarket || null) : null,
     syncedAt: startedAt,
     newTxs: txs.length,
   };

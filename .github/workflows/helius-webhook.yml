@@ -33,4 +33,4 @@ jobs:
           ACTION: ${{ inputs.action }}
           URL: ${{ inputs.url }}
           ID: ${{ inputs.id }}
-        run: node scripts/helius-webhook.mjs >> "$GITHUB_STEP_SUMMARY"
+        run: node scripts/helius-webhook.mjs | tee -a "$GITHUB_STEP_SUMMARY"

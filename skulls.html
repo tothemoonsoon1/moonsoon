@@ -50,7 +50,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.SKULLS_PRE={data:preJson('skulls-data.json',{cache:'no-cache'},true),traits:preJson('skulls-traits.json')};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=7">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=9">
 </head>
 <body>
 <div class="page">
@@ -246,7 +246,7 @@
           <span class="sh-h-skull">Skull</span><span class="sh-spacer"></span>
           <span class="sh-h-mkt">Marketplace</span><span class="sh-h-price">Price</span>
           <span class="sh-h-chg" title="How this sale compares with the same Skull's previous sale: green = seller sold higher, red = sold lower">vs previous sale &#9432;</span>
-          <span class="sh-h-date">Date</span>
+          <span class="sh-h-date">Date</span><span class="sh-h-tx" aria-hidden="true"></span>
         </div>
         <div class="sh-list" id="sh-list"></div>
         <div class="empty-state" id="sh-empty" style="display:none;">No sales match your filters.</div>
@@ -540,6 +540,15 @@ function prevChangeHtml(price, prev){
     ' <span class="pc-vs">vs '+(Math.round(prev.priceSol*100)/100)+' SOL</span></span>';
 }
 
+// Transaction link on Solscan. Sales recorded before signatures were saved
+// link to the Skull's own activity on Solscan instead.
+function txBtn(sig, mint){
+  var url = sig ? 'https://solscan.io/tx/'+sig : (mint ? 'https://solscan.io/token/'+mint+'#txs' : null);
+  if(!url) return '';
+  var title = sig ? 'View transaction on Solscan' : 'View this Skull\'s transactions on Solscan';
+  return '<button type="button" class="sh-tx" title="'+title+'" aria-label="'+title+'" data-url="'+escAttr(url)+'" onclick="event.stopPropagation();event.preventDefault();window.open(this.dataset.url,\'_blank\',\'noopener\')">&#8599;</button>';
+}
+
 function flattenSales(){
   var out = [];
   SKULLS.forEach(function(s){
@@ -553,6 +562,7 @@ function flattenSales(){
         image: s.image,
         priceSol: sale.priceSol,
         timestamp: sale.timestamp,
+        sig: sale.sig || null,
         marketplace: marketplace,
         link: (marketplace === 'Magic Eden' && s.meUrl) ? s.meUrl
           : (s.mint ? 'https://www.tensor.trade/item/'+s.mint : 'https://www.tensor.trade/trade/madlads')
@@ -746,7 +756,7 @@ function renderHistory(){
       '<span class="sh-pill '+pillClass+'">'+escAttr(s.marketplace)+'</span>'+
       '<span class="sh-price">'+s.priceSol+' SOL</span>'+
       '<span class="sh-chg">'+prevChangeHtml(s.priceSol, s.prev)+'</span>'+
-      (Date.now() - s.timestamp < 7*86400000 ? '<span class="sh-date" title="'+fmtDate(s.timestamp)+'"><b class="sh-ago">'+timeAgo(s.timestamp)+' ago</b>'+fmtDate(s.timestamp)+'</span>' : '<span class="sh-date">'+fmtDate(s.timestamp)+'</span>')+''+
+      (Date.now() - s.timestamp < 7*86400000 ? '<span class="sh-date" title="'+fmtDate(s.timestamp)+'"><b class="sh-ago">'+timeAgo(s.timestamp)+' ago</b>'+fmtDate(s.timestamp)+'</span>' : '<span class="sh-date">'+fmtDate(s.timestamp)+'</span>')+txBtn(s.sig, s.mint)+
     '</a>';
   }).join('');
 
@@ -949,7 +959,7 @@ function renderSkullDetail(num){
   var salesHtml = sales.length
     ? '<div class="sd-sales">'+sales.map(function(sale, i){
         return '<div class="sd-sale"><span class="d">'+fmtDate(sale.timestamp)+' &middot; '+fmtMarketplace(sale.source)+'</span>'+
-          '<span>'+prevChangeHtml(sale.priceSol, sales[i+1])+'</span><span class="p">'+(Math.round(sale.priceSol*100)/100)+' SOL</span></div>';
+          '<span>'+prevChangeHtml(sale.priceSol, sales[i+1])+'</span><span class="p">'+(Math.round(sale.priceSol*100)/100)+' SOL</span>'+txBtn(sale.sig, s.mint)+'</div>';
       }).join('')+'</div>'
     : '<div class="sd-none">No on-chain sale recorded for this Skull.</div>';
 

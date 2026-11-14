@@ -201,6 +201,7 @@ function saleFromTx(tx) {
     timestamp: (tx.timestamp ?? 0) * 1000,
     priceSol: +priceSol.toFixed(3),
     source: tx.source === 'MAGIC_EDEN' ? 'MAGICEDEN_V2' : touchesTensor(tx) ? 'TENSOR' : tx.source || null,
+    sig: tx.signature || null,
   };
 }
 
@@ -210,8 +211,9 @@ function saleFromTx(tx) {
 function addSales(existing, found) {
   const sales = [...existing];
   for (const s of found) {
-    const dup = sales.some((e) => Math.abs(e.timestamp - s.timestamp) < 2000 && Math.abs(e.priceSol - s.priceSol) < 0.01);
+    const dup = sales.find((e) => Math.abs(e.timestamp - s.timestamp) < 2000 && Math.abs(e.priceSol - s.priceSol) < 0.01);
     if (!dup) sales.push(s);
+    else if (!dup.sig && s.sig) dup.sig = s.sig;
   }
   return sales.sort((a, b) => b.timestamp - a.timestamp);
 }

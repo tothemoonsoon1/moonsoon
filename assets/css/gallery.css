@@ -111,7 +111,7 @@
 .sd-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:14px;border:1px solid var(--card-border);background:var(--card-bg);font-family:inherit;color:var(--text);cursor:pointer;text-decoration:none;}
 .sd-chip:hover{border-color:var(--text-muted);text-decoration:none !important;}
 .sd-sales{display:flex;flex-direction:column;}
-.sd-sale{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.sd-sale{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
 .sd-sale:last-child{border-bottom:none;}
 .sd-sale .d{color:var(--text-muted);font-size:12px;}
 .sd-sale .p{font-weight:700;font-variant-numeric:tabular-nums;}
@@ -177,6 +177,7 @@
 .sh-h-price{width:100px;text-align:right;}
 .sh-h-chg{width:150px;text-align:right;cursor:help;}
 .sh-h-date{width:100px;text-align:right;}
+.sh-h-tx{width:38px;flex-shrink:0;}
 @media(max-width:1280px){.sk-layout{grid-template-columns:270px minmax(0,1fr);}.sf{grid-column:1 / -1;grid-row:1;position:static;max-height:none;}.sf-list{flex-direction:row;overflow-x:auto;padding-bottom:4px;}.sf-row{min-width:250px;}}
 .tp{position:sticky;top:16px;border:1px solid var(--card-border);border-radius:14px;padding:14px;background:var(--card-bg,transparent);max-height:calc(100vh - 32px);display:flex;flex-direction:column;gap:12px;}
 .tp-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;letter-spacing:.08em;}
@@ -245,6 +246,9 @@
 .sh-pill.tensor{color:var(--accent);background:var(--accent-tint2);}
 .sh-price{font-size:15px;font-weight:700;color:var(--text);width:100px;text-align:right;flex-shrink:0;}
 .sh-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);width:100px;text-align:right;flex-shrink:0;}
+.sh-tx{flex-shrink:0;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;margin-left:6px;border:1px solid var(--card-border);border-radius:8px;background:transparent;color:var(--text-muted);font-size:14px;cursor:pointer;font-family:inherit;}
+.sh-tx:hover{color:var(--accent);border-color:var(--accent-border);}
+.sd-sale .sh-tx{width:28px;height:28px;}
 .sh-ago{display:block;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);}
 .sh-pagination{display:flex;justify-content:center;align-items:center;gap:14px;padding:22px 0 4px;}
 .sh-page-btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);background:none;border:1px solid var(--border);border-radius:8px;padding:8px 16px;cursor:pointer;}

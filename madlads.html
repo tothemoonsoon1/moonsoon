@@ -51,7 +51,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.ML_PRE={stat:preJson('madlads-traits.json'),data:preJson('madlads-data.json',{cache:'no-cache'},true),bf:preJson('madlads-backfill.json',{cache:'no-cache'},true)};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=7">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=9">
 <style>
 /* ---- Mad Lads page only (shared gallery styles: /assets/css/gallery.css) ---- */
 .ml-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:10px;min-height:0;}
@@ -255,7 +255,7 @@
           <span class="sh-h-skull">Mad Lad</span><span class="sh-spacer"></span>
           <span class="sh-h-mkt">Marketplace</span><span class="sh-h-price">Price</span>
           <span class="sh-h-chg" title="How this sale compares with the same Mad Lad's previous recorded sale">vs previous sale &#9432;</span>
-          <span class="sh-h-date">Date</span>
+          <span class="sh-h-date">Date</span><span class="sh-h-tx" aria-hidden="true"></span>
         </div>
         <div class="sh-list" id="sh-list"></div>
         <div class="empty-state" id="sh-empty" style="display:none;">No sales match your filters.</div>
@@ -440,6 +440,26 @@ function loadYear(y){
   }).catch(function(){});
 }
 function loadAllYears(){ return Promise.all(salesYears.map(loadYear)); }
+
+// Transaction links. The page's sales files carry no signatures (they are half
+// the bytes), so the full year file is fetched only when someone clicks one.
+// The tab opens right away (popup blockers allow that) and is pointed at
+// Solscan once the signature is found.
+var fullYear = {};
+function openSaleTx(t, num){
+  var w = window.open('about:blank', '_blank');
+  if(w) w.opener = null;
+  var y = new Date(t).getUTCFullYear();
+  (fullYear[y] = fullYear[y] || preJson('madlads-sales-'+y+'.json', null, true)).then(function(f){
+    var r = f && f.s.find(function(x){ return x[0]*1000 === t && x[1] === num; });
+    var url = r && r[4] ? 'https://solscan.io/tx/'+r[4] : 'https://magiceden.io/marketplace/mad_lads';
+    if(w) w.location.href = url; else window.open(url, '_blank', 'noopener');
+  }).catch(function(){ if(w) w.close(); });
+}
+window.openSaleTx = openSaleTx;
+function txBtn(t, num){
+  return '<button type="button" class="sh-tx" title="View transaction on Solscan" aria-label="View transaction on Solscan" onclick="event.stopPropagation();event.preventDefault();openSaleTx('+t+','+num+')">&#8599;</button>';
+}
 
 var mintsLoading = null;
 function loadMints(){
@@ -750,7 +770,7 @@ function renderLad(num){
 
   var salesHtml = sales.length
     ? '<div class="sd-sales">'+sales.map(function(s){
-        return '<div class="sd-sale"><span class="d">'+fmtDate(s.t)+' &middot; '+MARKETS[s.m]+'</span><span>'+prevChangeHtml(s)+'</span><span class="p">'+fmtSol(s.p)+' SOL</span></div>';
+        return '<div class="sd-sale"><span class="d">'+fmtDate(s.t)+' &middot; '+MARKETS[s.m]+'</span><span>'+prevChangeHtml(s)+'</span><span class="p">'+fmtSol(s.p)+' SOL</span>'+txBtn(s.t, s.num)+'</div>';
       }).join('')+'</div>'
     : '<div class="sd-none">'+(fullHistory(l) ? 'Never sold. Still with its first owner, or only moved between wallets.' : 'No sale recorded yet. Older history is still being added.')+'</div>';
 
@@ -1085,7 +1105,7 @@ function renderSales(){
       '<span class="sh-pill '+MKT_CLS[s.m]+'">'+MARKETS[s.m]+'</span>'+
       '<span class="sh-price">'+fmtSol(s.p)+' SOL</span>'+
       '<span class="sh-chg">'+prevChangeHtml(s)+'</span>'+
-      (Date.now() - s.t < 7*86400000 ? '<span class="sh-date" title="'+fmtDate(s.t)+'"><b class="sh-ago">'+timeAgo(s.t)+' ago</b>'+fmtDate(s.t)+'</span>' : '<span class="sh-date">'+fmtDate(s.t)+'</span>')+'</a>';
+      (Date.now() - s.t < 7*86400000 ? '<span class="sh-date" title="'+fmtDate(s.t)+'"><b class="sh-ago">'+timeAgo(s.t)+' ago</b>'+fmtDate(s.t)+'</span>' : '<span class="sh-date">'+fmtDate(s.t)+'</span>')+txBtn(s.t, s.num)+'</a>';
   }).join('');
   pag.style.display = pages > 1 ? 'flex' : 'none';
   document.getElementById('sh-page-label').textContent = 'Page '+shPage+' / '+pages;

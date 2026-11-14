@@ -1,0 +1,36 @@
+name: Helius webhook (Mad Lads sales)
+
+# Manual only. Creates, lists or deletes the Helius webhook that sends every
+# Mad Lads sale (NFT_SALE, all marketplaces) to the Netlify function.
+# Each create/edit/delete costs 100 Helius credits; each delivered event 1.
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'create, list or delete'
+        default: 'list'
+      url:
+        description: 'Endpoint for create'
+        default: 'https://dev--moonsoon.netlify.app/.netlify/functions/helius-webhook'
+      id:
+        description: 'Webhook id for delete'
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  webhook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          ACTION: ${{ inputs.action }}
+          URL: ${{ inputs.url }}
+          ID: ${{ inputs.id }}
+        run: node scripts/helius-webhook.mjs >> "$GITHUB_STEP_SUMMARY"

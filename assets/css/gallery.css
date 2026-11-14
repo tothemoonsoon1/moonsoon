@@ -43,6 +43,8 @@
 .sk-img img{width:100%;height:100%;object-fit:cover;display:block;}
 .sk-listed-badge{position:absolute;top:10px;right:10px;white-space:nowrap;max-width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.04em;color:var(--btn-text);background:var(--accent);border-radius:20px;padding:4px 10px;}
 .sk-never-badge{position:absolute;top:10px;left:10px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.04em;color:#0b0d12;background:var(--gold);border-radius:20px;padding:4px 10px;}
+/* Listed and never sold together: stack them on the right instead of overlapping on narrow cards. */
+.sk-listed-badge + .sk-never-badge{top:42px;left:auto;right:10px;}
 .sk-owner-badge{position:absolute;bottom:10px;right:10px;display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:#fff;background:rgba(11,13,18,0.82);backdrop-filter:blur(4px);border-radius:20px;padding:5px 12px 5px 6px;text-decoration:none;max-width:calc(100% - 20px);}
 .sk-owner-badge:hover{background:rgba(11,13,18,0.95);}
 .sk-owner-badge-label{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.05em;color:#0b0d12;background:#fff;border-radius:14px;padding:3px 8px;}
@@ -344,6 +346,7 @@
   .sk-never-badge,.sk-listed-badge{top:6px;font-size:12px;}
   .sk-never-badge{left:6px;}
   .sk-listed-badge{right:6px;}
+  .sk-listed-badge + .sk-never-badge{top:34px;left:auto;right:6px;}
 }
 
 /* ---- Trait filter as expandable sections, Holders view (same as the Mad Lads page) ---- */

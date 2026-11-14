@@ -139,10 +139,6 @@
             <input type="checkbox" id="ml-listed-only" onchange="applyFilters()">
             Listed only
           </label>
-          <label class="ctl-toggle" title="Sale history reaches back at least 12 months for every Lad; full history to the mint is still being added, so 'never sold' is not shown yet.">
-            <input type="checkbox" id="ml-unsold-only" onchange="unsoldToggle()">
-            No sale in 12 months
-          </label>
         </div>
 
         <div class="sk-layout">
@@ -444,13 +440,6 @@ function loadYear(y){
   }).catch(function(){});
 }
 function loadAllYears(){ return Promise.all(salesYears.map(loadYear)); }
-// "No sale in 12 months" needs last year's file too, not just the current one.
-function unsoldToggle(){
-  if(!document.getElementById('ml-unsold-only').checked){ applyFilters(); return; }
-  document.getElementById('ml-count').textContent = 'Loading sales…';
-  loadAllYears().then(applyFilters, applyFilters);
-}
-window.unsoldToggle = unsoldToggle;
 
 var mintsLoading = null;
 function loadMints(){
@@ -634,10 +623,6 @@ function applyFilters(){
     }
   }
   if(listedOnly) list = list.filter(function(l){ return l.listPrice != null; });
-  if(document.getElementById('ml-unsold-only').checked){
-    var yearAgo = Date.now() - 365*86400000;
-    list = list.filter(function(l){ return !l.sales.some(function(s){ return s.t >= yearAgo; }); });
-  }
   if(tierPick) list = list.filter(function(l){ return l.tier.id === tierPick; });
   if(ownerFilter) list = list.filter(function(l){ return l.owner === ownerFilter; });
   if(Object.keys(traitFilter).length) list = list.filter(matchesTraits);
@@ -841,7 +826,6 @@ function viewOwner(addr){
   ownerFilter = addr; traitFilter = {};
   document.getElementById('ml-search').value = '';
   document.getElementById('ml-listed-only').checked = false;
-  document.getElementById('ml-unsold-only').checked = false;
   switchView('gallery');
   renderTraitPanel(); applyFilters();
   document.querySelector('.controls').scrollIntoView({ block: 'start' });

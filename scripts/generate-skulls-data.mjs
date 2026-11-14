@@ -454,7 +454,14 @@ async function main() {
       // as a safety net for anything the quick check could miss.
       if (!FULL_SYNC && !(await hasNewActivity(prev.mint, prev.syncedAt ?? defaultSyncedAt))) {
         skipped++;
-        results.push(withOwnerTag(prev, ownerTags));
+        // Listed before listMarket existed: fill it in without a full read
+        // (one free Magic Eden call; not listed there means Tensor).
+        let kept = prev;
+        if (prev.listed && !prev.listMarket) {
+          const me = await meToken(prev.mint);
+          if (me) kept = { ...prev, listMarket: me.listed ? 'me' : 'tensor' };
+        }
+        results.push(withOwnerTag(kept, ownerTags));
         process.stdout.write(`\r[${i + 1}/${skulls.length}] done...`);
         await sleep(100);
         continue;

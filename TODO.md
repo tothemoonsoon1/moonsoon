@@ -10,8 +10,8 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 - Do sprawdzenia tylko na prawdziwym Netlify (`dev--moonsoon.netlify.app/madlads.html#alerts`): czy działa proxy `/api/me/*` i czy przeglądarka pyta o zgodę na powiadomienia i je pokazuje.
 
 ## 2. Backfill historii sprzedaży Mad Lads
-- Etap 1 w toku (szczegóły w `CLAUDE.md`). Po zakończeniu: sprawdzić, czy wykres miesięczny 2026 się wyrównał.
-- Etap 2: kod gotowy i wyłączony. Włączyć **po resecie limitu Heliusa** (decyzja właściciela z 13.11) — ok. 580 tys. kredytów.
+- Etap 1 zakończony 14.11 (9 968/9 968; pominięty #8378 „busy account”). Sprawdzić, czy wykres miesięczny 2026 się wyrównał.
+- Etap 2 włączony 14.11 (decyzja właściciela), w toku: 9 076 Ladów, ok. 545 tys. kredytów Heliusa. Pilnować limitu 1 mln/mc w panelu Heliusa. Każdy przebieg z commitem to wdrożenie Netlify (15 kredytów).
 - Po obu etapach: cron `backfill-madlads.yml` przestawić na raz dziennie.
 - Sprawdzić, czy zrzut `update-madlads.yml` rusza sam co 3 h (13.11 GitHub nie uruchomił go z harmonogramu, odpalony ręcznie).
 

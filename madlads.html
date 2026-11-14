@@ -51,7 +51,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.ML_PRE={stat:preJson('madlads-traits.json'),data:preJson('madlads-data.json',{cache:'no-cache'},true),bf:preJson('madlads-backfill.json',{cache:'no-cache'},true)};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=1">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=2">
 <style>
 /* ---- Mad Lads page only (shared gallery styles: /assets/css/gallery.css) ---- */
 .ml-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:10px;min-height:0;}
@@ -863,22 +863,39 @@ function walletLabel(addr){
   return (n >= 5 ? holderEmoji(n)+' ' : '')+(t && t.text ? esc(t.text) : esc(shortAddr(addr)))+(n ? ' <span class="ho-mv-n">&times;'+n+'</span>' : '');
 }
 
-// Holder changes between daily snapshots. Only shows moves that involve a
-// wallet holding 5+ Lads or a tagged wallet, so it reads as "what whales did".
+// Holder changes between snapshots, grouped per big wallet: one row says
+// "this whale/shark gained (or let go of) N Lads", not one tile per Lad.
+// The data only shows a change of owner, so rows say gained/let go, not bought/sold.
 function renderMoves(){
   var el = document.getElementById('ho-moves');
-  var big = MOVES.filter(function(m){
-    var a = OWN[m[2]], b = OWN[m[3]];
-    return (a && !a.escrow && a.lads.length >= 5) || (b && !b.escrow && b.lads.length >= 5) || TAGS[m[2]] || TAGS[m[3]];
-  }).slice(-40).reverse();
-  if(!big.length){ el.hidden = true; return; }
+  var bigOf = function(a){ var o = OWN[a]; return (o && !o.escrow && o.lads.length >= 5) || TAGS[a]; };
+  var groups = {}, order = [];
+  MOVES.forEach(function(m){
+    var from = m[2], to = m[3], who, dir;
+    if(bigOf(to)){ who = to; dir = 1; } else if(bigOf(from)){ who = from; dir = -1; } else return;
+    var day = Math.floor(m[0] / 86400), key = who+'|'+dir+'|'+day;
+    var g = groups[key];
+    if(!g){ g = groups[key] = { who: who, dir: dir, t: m[0], nums: [], others: {} }; order.push(g); }
+    g.t = Math.max(g.t, m[0]); g.nums.push(m[1]); g.others[dir > 0 ? from : to] = 1;
+  });
+  var rows = order.sort(function(a, b){ return b.t - a.t; }).slice(0, 30);
+  if(!rows.length){ el.hidden = true; return; }
   el.hidden = false;
-  el.innerHTML = '<div class="sf-head"><span>WHALE MOVES<span class="sf-live"></span></span><span class="sf-sub">Lads that changed hands, last 45 days</span></div>'+
-    '<div class="ho-mv-list">'+big.map(function(m){
-      return '<a class="ho-mv" href="#" onclick="openLad('+m[1]+');return false">'+
-        '<img src="'+thumb(m[1], 96)+'" data-num="'+m[1]+'" onerror="thumbFallback(this)" alt="" width="36" height="36" loading="lazy">'+
-        '<span class="ho-mv-t"><b>#'+m[1]+'</b> '+walletLabel(m[2])+' &rarr; '+walletLabel(m[3])+'</span>'+
-        '<span class="sf-sub">'+timeAgo(m[0]*1000)+' ago</span></a>';
+  el.innerHTML = '<div class="sf-head"><span>BIG HOLDER MOVES<span class="sf-live"></span></span><span class="sf-sub">Wallets with 5+ Lads, last 45 days</span></div>'+
+    '<div class="ho-mv-list">'+rows.map(function(g){
+      var o = OWN[g.who], n = o && !o.escrow ? o.lads.length : 0, t = tagOf(g.who);
+      var name = (n >= 5 ? holderEmoji(n)+' ' : '')+(t && t.text ? esc(t.text) : esc(shortAddr(g.who)));
+      var others = Object.keys(g.others), k = g.nums.length;
+      var thumbs = g.nums.slice(0, 4).map(function(num){
+        return '<img src="'+thumb(num, 96)+'" data-num="'+num+'" onerror="thumbFallback(this)" alt="Mad Lad #'+num+'" width="32" height="32" loading="lazy">';
+      }).join('')+(k > 4 ? '<span class="ho-mv-more">+'+(k-4)+'</span>' : '');
+      var peer = others.length === 1 ? (TAGS[others[0]] && tagOf(others[0]).text ? esc(tagOf(others[0]).text) : esc(shortAddr(others[0]))) : others.length+' wallets';
+      return '<button type="button" class="ho-mv" data-owner="'+esc(g.who)+'" onclick="viewOwner(this.dataset.owner)" title="Show this wallet\'s Lads">'+
+        '<span class="ho-mv-th">'+thumbs+'</span>'+
+        '<span class="ho-mv-t"><span class="ho-mv-w"><b>'+name+'</b>'+(n ? ' <span class="ho-mv-n">&middot; holds '+n+'</span>' : '')+'</span>'+
+          '<span class="ho-mv-d">'+(g.dir > 0 ? 'from ' : 'to ')+peer+'</span></span>'+
+        '<span class="ho-mv-k '+(g.dir > 0 ? 'up' : 'down')+'">'+(g.dir > 0 ? '+' : '&minus;')+k+' Lad'+(k === 1 ? '' : 's')+'</span>'+
+        '<span class="sf-sub">'+timeAgo(g.t*1000)+' ago</span></button>';
     }).join('')+'</div>';
 }
 

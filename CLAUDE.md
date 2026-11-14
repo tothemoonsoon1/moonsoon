@@ -24,7 +24,11 @@
 - Repo: `moonsoon`
 - Branch: `main`
 - Deployed at: https://tothemoonsoon.xyz
-- Hosting: statyczny (Netlify) — commit = live
+- Hosting: statyczny (Netlify) — commit ze zmianą strony = live
+- **Netlify liczy 15 kredytów za każde wdrożenie produkcyjne** (darmowy plan: 300/mc, po wyczerpaniu strona jest wstrzymywana; wdrożenia gałęzi `dev` są darmowe). Dlatego:
+  - Dane, które commituje bot (`skulls-data.json`, `madlads-data.json`, `madlads-backfill.json`, `madlads-sales-ROK.min.json`), strony czytają prosto z GitHuba (`raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/…`, odświeżane co ok. 5 min), a kopia na Netlify jest tylko zapasem, gdy GitHub nie odpowie. Robi to `preJson(plik, opcje, true)` w `<head>` stron.
+  - `netlify.toml` (`[build] ignore`) pomija wdrożenie, gdy commit zmienia tylko dane bota, `scripts/`, `.github/` albo pliki `.md`.
+  - Zmiany strony zbieraj na `dev` i merguj na `main` jednym commitem, nie po kawałku.
 
 ## Release flow
 1. Claude pushuje zmiany na branch `dev`
@@ -102,7 +106,7 @@ Jeśli `dev` się zepsuł: nie łataj go — weź czysty plik z `main`, nanieś 
 
 ## Inne zasady
 - Skrypty stron są w IIFE; funkcje używane w `onclick` wystawiaj przez `window.nazwa = nazwa`.
-- Dane galerii są pobierane małym skryptem w `<head>` (`window.SKULLS_PRE`, `window.ML_PRE`), żeby ściągały się równolegle ze stylami; skrypt strony tylko odbiera te obietnice.
+- Dane galerii są pobierane małym skryptem w `<head>` (`preJson`, `window.SKULLS_PRE`, `window.ML_PRE`), żeby ściągały się równolegle ze stylami; skrypt strony tylko odbiera te obietnice. `preJson` jest wklejony w `skulls.html` i `madlads.html` (musi działać przed arkuszami) — zmieniaj w obu naraz. Nowy plik danych bota = `live=true` i wpis w `ignore` w `netlify.toml`.
 - Żadnych zmyślonych danych zastępczych: zanim przyjdą dane, strona pokazuje „Loading…” i kreski, a przy błędzie komunikat z prośbą o odświeżenie.
 - Przełączniki widoków i filtry-pigułki to przyciski z `aria-pressed` (nie `role="tablist"`). Okno szczegółów (`#sd-back`) trzyma fokus w środku — obsługa w `common.js`.
 - `escAttr`/`esc`, `toggleTheme`, `timeAgo`, `tpFind`, obsługa podmenu i pułapka fokusu okna szczegółów są w `/assets/js/common.js` — nie kopiuj ich do stron. Po zmianie podbij `?v=` w pięciu tagach `<script>` (teraz `common.js?v=3`, `base.css?v=5`, `tokens.css?v=4`, `gallery.css?v=1`).

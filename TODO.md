@@ -24,7 +24,8 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 - Szkice (krótki i długi) są w sesji „Traits w zakładce ze skullami” (7–11.11). Przed publikacją poprawić „this week” i „hourly” (Skulls synchronizuje się teraz co godzinę o :47 i raz dziennie pełny zrzut).
 
 ## 5. Po przeglądzie z 14.11 — do decyzji właściciela
-- **Limit Netlify:** bot commituje dane na `main` ok. 30 razy na dobę i każdy commit to wdrożenie produkcyjne. Sprawdzić w panelu Netlify (Usage) zużycie minut/kredytów. Jeśli jest blisko limitu darmowego planu: rzadziej commitować dane (np. Skulls co 3 h) albo serwować JSON-y spoza wdrożeń.
+- **Limit Netlify:** 14.11 zużyte 637 kredytów (42 wdrożenia po 15). Dane bota idą teraz poza wdrożeniami (patrz `CLAUDE.md`, Repozytorium). Po merge'u sprawdzić w Netlify → Usage, czy commity bota przestały tworzyć wdrożenia.
+- **Webhook Helius dla Skulls** (zamiast sprawdzania co godzinę): plan w sesji z 14.11; wymaga od właściciela tokenu GitHub w zmiennych Netlify.
 - **Checklist:** „Daily progress” nigdy się nie zeruje — zadania dzienne i tygodniowe zostają odhaczone na zawsze. Propozycja: dzienne zerować o północy, tygodniowe w poniedziałek.
 - **Duża karta na X:** grafika 1200×630 (logo + Skull) i powrót do `summary_large_image`.
 - Strona 404 w stylu serwisu (dziś domyślna Netlify).

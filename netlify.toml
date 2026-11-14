@@ -1,3 +1,11 @@
+# The bot commits fresh data several times a day. The pages read those files
+# straight from GitHub, so a commit that only touches them is not deployed
+# (each production deploy costs Netlify credits). The same goes for commits
+# that only change the bot's scripts, the workflows or the .md notes.
+# Exit 0 = skip the build.
+[build]
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)madlads-*.json' ':(exclude)skulls-data.json' ':(exclude)scripts' ':(exclude).github' ':(exclude)*.md'"
+
 [[headers]]
   for = "/*.json"
   [headers.values]

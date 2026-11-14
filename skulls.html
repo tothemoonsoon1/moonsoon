@@ -42,10 +42,12 @@
 </script>
 <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
 <link rel="dns-prefetch" href="https://magiceden.io">
 <script defer src="https://cloud.umami.is/script.js" data-website-id="289eb289-b024-4df5-b133-5c2b376c29de"></script>
 <script>try{var t=null;try{t=localStorage.getItem('moonsoon_theme');}catch(e){}if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m){m.setAttribute('content','#f5f6f8');}}}catch(e){}</script>
-<script>function preJson(u,o){return fetch(u,o).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});}window.SKULLS_PRE={data:preJson('/skulls-data.json',{cache:'no-cache'}),traits:preJson('/skulls-traits.json')};</script>
+<!-- Data the bot commits (live=true) is read straight from GitHub, so a data commit needs no Netlify deploy; the copy on this site is the fallback. -->
+<script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.SKULLS_PRE={data:preJson('skulls-data.json',{cache:'no-cache'},true),traits:preJson('skulls-traits.json')};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
 <link rel="stylesheet" href="/assets/css/gallery.css?v=1">

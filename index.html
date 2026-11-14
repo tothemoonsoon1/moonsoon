@@ -222,7 +222,9 @@ function syncExplore(){
   }
 }
 function loadExploreFloor(){
-  fetch('/skulls-data.json').then(function(r){ return r.json(); }).then(function(data){
+  // Same source as the Skulls page: GitHub first, the copy on this site as the fallback.
+  fetch('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/skulls-data.json').then(function(r){ if(!r.ok) throw 0; return r.json(); })
+  .catch(function(){ return fetch('/skulls-data.json').then(function(r){ return r.json(); }); }).then(function(data){
     var floor=null;
     (data.skulls||[]).forEach(function(s){ if(s.listed && s.listPrice!=null && (floor==null || s.listPrice<floor)){ floor=s.listPrice; } });
     if(floor!=null){

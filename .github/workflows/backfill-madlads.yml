@@ -1,15 +1,8 @@
 name: Backfill Mad Lads Sales
 
 on:
-  schedule:
-    # Every three hours until the whole collection is covered. The work is
-    # ~24 hours of walking at the free plan's 9 requests/second, so eight
-    # chunks a day finish it in a bit over a day. Each chunk stops after
-    # 145 minutes, which leaves the daily snapshot a gap to run in (the two
-    # share a concurrency group so they never push at once). Once the
-    # backfill is done these runs exit in seconds; drop the schedule back to
-    # daily then.
-    - cron: '12 */3 * * *'
+  # No schedule: stage 1 covered every Lad (14.11.2026). Stage 2 runs by hand
+  # (Run workflow -> stage2) once the Helius credit limit resets.
   push:
     branches: [claude/bold-thompson-jy7fuk]
     paths: ['scripts/backfill-madlads-sales.mjs', '.github/workflows/backfill-madlads.yml']

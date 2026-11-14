@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T07:02:50.049Z",
+  "generatedAt": "2026-11-14T18:11:47.865Z",
   "skulls": [
     {
       "num": 542,
@@ -196,7 +196,8 @@
       "listPrice": 888.8834,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/831.png",
       "meUrl": "https://magiceden.io/item-details/G8FJmQzBbuem24DJUYeGruPmv1DHngEGkdd7YzawCwaU",
-      "syncedAt": 1794614001638
+      "syncedAt": 1794614001638,
+      "listMarket": "tensor"
     },
     {
       "num": 956,
@@ -424,7 +425,8 @@
       "listPrice": 180.54,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1792.png",
       "meUrl": "https://magiceden.io/item-details/HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx",
-      "syncedAt": 1794614001638
+      "syncedAt": 1794614001638,
+      "listMarket": "me"
     },
     {
       "num": 1846,
@@ -1963,7 +1965,8 @@
       "listPrice": 420.021,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6198.png",
       "meUrl": "https://magiceden.io/item-details/GtfaHTSodBZ8je4BZW3ket8B18Zvxwwq2U2GbbuyQWEq",
-      "syncedAt": 1794614001638
+      "syncedAt": 1794614001638,
+      "listMarket": "me"
     },
     {
       "num": 6408,
@@ -2021,7 +2024,8 @@
       "listPrice": 138.06,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/6616.png",
       "meUrl": "https://magiceden.io/item-details/4ybsDZvURgL2nYMvpFQUQckqPQ7QT1fju5oVRyMKQqZc",
-      "syncedAt": 1794614001638
+      "syncedAt": 1794614001638,
+      "listMarket": "tensor"
     },
     {
       "num": 6882,

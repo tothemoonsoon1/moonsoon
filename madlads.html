@@ -290,9 +290,13 @@ function pct(n, total, d){ return total ? (n/total*100).toFixed(d==null?1:d)+'%'
 var IMG_BASE = 'https://madlads.s3.us-west-2.amazonaws.com/images/';
 // Thumbnails come resized from Magic Eden's image CDN (the originals are ~5MB each).
 function thumb(num, w, h){ return 'https://img-cdn.magiceden.dev/rs:fill:'+w+':'+(h||w)+':0:0/f:webp/plain/'+IMG_BASE+num+'.png'; }
+// Magic Eden's CDN answers 504 for some Lads it has not resized yet. The
+// fallback asks Helius' CDN for about the size actually shown (2x for sharp
+// screens) instead of a fixed 480px, so small thumbnails appear quickly.
 function thumbFallback(img){
   img.onerror = null;
-  img.src = 'https://cdn.helius-rpc.com/cdn-cgi/image/width=480/'+IMG_BASE+img.getAttribute('data-num')+'.png';
+  var w = Math.min(768, Math.max(96, (parseInt(img.getAttribute('width'), 10) || 240) * 2));
+  img.src = 'https://cdn.helius-rpc.com/cdn-cgi/image/width='+w+',format=auto/'+IMG_BASE+img.getAttribute('data-num')+'.png';
 }
 window.thumbFallback = thumbFallback;
 

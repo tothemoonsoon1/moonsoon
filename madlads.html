@@ -74,7 +74,9 @@
 .tt-spot:empty{display:none;}
 .tt-spot .stat-card{display:block;padding:14px 18px;cursor:pointer;}
 .tt-spot .stat-card:hover .stat-val{color:var(--accent);}
-.tt-spot .stat-sub{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.tt-spot .stat-sub{display:flex;align-items:center;gap:8px;margin-top:6px;min-width:0;}
+.tt-spot-txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tt-spot .stat-val{white-space:nowrap;}
 .tt-spot .stat-sub img{width:28px;height:28px;border-radius:6px;object-fit:cover;background:rgba(127,127,127,.15);}
 .tt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
 .tt-grid .empty-state{grid-column:1 / -1;}
@@ -207,7 +209,7 @@
         <div class="sk-header">
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Trait Floors</h2>
-          <div class="sk-desc">Floor, listings and 30-day sales for every trait, side by side (&ldquo;None&rdquo; values are left out). The line is the weekly median sale over 12 weeks; the trend compares the last 30 days with the 30 days before (highlights need at least 3 sales in each period). Prices include fees. Tap a trait for its listings, sales and a 12-month chart.</div>
+          <div class="sk-desc">Every trait on one screen: floor, listings, sales of the last 30 days and where the price is heading. Tap a tile for the trait&rsquo;s listings, recent sales and a 12-month chart. Prices include fees; &ldquo;None&rdquo; values are left out.</div>
         </div>
         <div class="stats-bar tt-spot" id="tt-spot"></div>
         <div class="controls">
@@ -1287,7 +1289,7 @@ function renderTraitsView(){
     for(var i = 1; i < KEYS.length; i++){ if(tl.t[i] >= 0 && (tl.t[rarest] < 0 || COUNTS[i][tl.t[i]+1] < COUNTS[rarest][tl.t[rarest]+1])) rarest = i; }
     topHtml = '<div class="stat-card" role="button" tabindex="0" onclick="openLad('+tl.num+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openLad('+tl.num+')}">'+
       '<div class="stat-label">TOP SALE &middot; '+topSale.window+'D</div><div class="stat-val">'+fmtSol(topSale.p)+' SOL'+(floorNow ? ' <small>'+(topSale.p / floorNow).toFixed(1)+'&times; floor</small>' : '')+'</div>'+
-      '<div class="stat-sub"><img src="'+thumb(tl.num, 56)+'" data-num="'+tl.num+'" onerror="thumbFallback(this)" alt="" width="28" height="28">#'+tl.num+' <span class="tt-tile-cat">rank #'+fmtNum(tl.rank)+' &middot; '+esc(valName(rarest, tl.t[rarest]))+' &middot; '+timeAgo(topSale.t)+' ago</span></div></div>';
+      '<div class="stat-sub"><img src="'+thumb(tl.num, 56)+'" data-num="'+tl.num+'" onerror="thumbFallback(this)" alt="" width="28" height="28"><span class="tt-spot-txt">#'+tl.num+' <span class="tt-tile-cat">'+esc(valName(rarest, tl.t[rarest]))+' &middot; '+timeAgo(topSale.t)+' ago</span></span></div></div>';
   }
   document.getElementById('tt-spot').innerHTML = SALES.length ? spotHtml('HOTTEST &middot; 30D', hot, hot ? pct(hot.sales, hot.n, 1)+' <small>of supply sold</small>' : '')+
     spotHtml('RISING', up && up.chg > 0 ? up : null, up ? chgHtml(up.chg)+' <small>'+fmtSol(up.prevMed)+' &rarr; '+fmtSol(up.med)+' SOL</small>' : '')+

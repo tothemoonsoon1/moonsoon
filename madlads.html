@@ -69,10 +69,11 @@
   #ml-sort,#ml-tier{flex:1 1 40%;}
   #tp-toggle{flex:1 1 100%;}
 }
-.tt-cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.tt-cat{font-family:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:20px;border:1px solid var(--card-border);background:transparent;color:var(--text-muted);cursor:pointer;}
-.tt-cat:hover{color:var(--text);border-color:var(--text-muted);}
-.tt-cat[aria-pressed="true"]{color:var(--btn-text);background:var(--accent);border-color:var(--accent);}
+.tt-listed-btn{cursor:pointer;font-weight:600;}
+.tt-listed-btn[aria-pressed="true"]{color:var(--btn-text);background:var(--accent);border-color:var(--accent);}
+.tt-group{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding:18px 6px 6px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;}
+.tt-group span{color:var(--text-muted);font-weight:400;letter-spacing:0;text-transform:none;}
+.tt-cat-l{display:block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:var(--text-muted);}
 .tt-row{cursor:pointer;}
 .tt-h-thumb{width:44px;flex-shrink:0;}
 .tt-name{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -80,7 +81,7 @@
 .tt-num small{display:block;font-size:12px;color:var(--text-muted);}
 .tt-floor{width:110px;font-weight:700;}
 .tt-floor.none{font-weight:400;color:var(--text-muted);}
-@media(max-width:640px){.tt-cat{min-height:44px;}.tt-listed{display:none;}.tt-num{width:72px;}.tt-floor{width:84px;}}
+@media(max-width:640px){.tt-name{white-space:normal;overflow-wrap:anywhere;}#tt-cat,#tt-sort{flex:1 1 40%;}.tt-listed-btn{flex:1 1 100%;min-height:44px;}.tt-listed{display:none;}.tt-num{width:72px;}.tt-floor{width:84px;}}
 </style>
 </head>
 <body>
@@ -172,21 +173,24 @@
         <div class="sk-header">
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Trait Floors</h2>
-          <div class="sk-desc">Floor price, supply and listings for every trait, including Female Lads (Gender). Prices include fees. Tap a trait to see those Lads in the gallery.</div>
+          <div class="sk-desc">Every trait in one list: floor price, supply and listings. Filter by category, search or sort. Prices include fees. Tap a trait to see those Lads in the gallery.</div>
         </div>
-        <div class="tt-cats" id="tt-cats" role="group" aria-label="Trait category"></div>
         <div class="controls">
           <div class="ctl-search">
-            <input class="ctl-input" type="text" id="tt-search" aria-label="Search traits" placeholder="Search traits" oninput="renderTraitsView()" autocomplete="off" spellcheck="false">
+            <input class="ctl-input" type="text" id="tt-search" aria-label="Search traits" placeholder="Search traits, e.g. Female, Crown, Gold" oninput="renderTraitsView()" autocomplete="off" spellcheck="false">
           </div>
+          <select class="ctl-select" id="tt-cat" onchange="renderTraitsView()" aria-label="Trait category"><option value="all">All categories</option></select>
           <select class="ctl-select" id="tt-sort" onchange="renderTraitsView()" aria-label="Sort traits">
+            <option value="cat">By category</option>
             <option value="floor-asc">Floor: low to high</option>
             <option value="floor-desc">Floor: high to low</option>
+            <option value="count-asc">Rarest first</option>
             <option value="count-desc">Most common</option>
-            <option value="count-asc">Rarest</option>
             <option value="listed-desc">Most listed</option>
           </select>
+          <button class="ctl-select tt-listed-btn" id="tt-listed-only" aria-pressed="false" onclick="this.setAttribute('aria-pressed', this.getAttribute('aria-pressed') !== 'true');renderTraitsView()">Listed only</button>
         </div>
+        <div class="ml-count" id="tt-count"></div>
         <div class="sh-head-row" aria-hidden="true">
           <span class="tt-h-thumb"></span><span>Trait</span><span class="sh-spacer"></span>
           <span class="tt-num">Supply</span><span class="tt-num tt-listed">Listed</span><span class="tt-num tt-floor">Floor</span>
@@ -1158,45 +1162,54 @@ function renderSales(){
 }
 window.renderSales = renderSales;
 
-// ---- Traits view ----
-var ttCat = 0;
-function setTraitsCat(i){ ttCat = i; renderTraitsView(); }
-window.setTraitsCat = setTraitsCat;
+// ---- Traits view: every trait of every category in one list ----
 function renderTraitsView(){
   var list = document.getElementById('tt-list');
   if(!LADS.length) return;
-  document.getElementById('tt-cats').innerHTML = KEYS.map(function(k, ki){
-    return '<button class="tt-cat" aria-pressed="'+(ki === ttCat)+'" onclick="setTraitsCat('+ki+')">'+esc(k)+'</button>';
-  }).join('');
-  var ki = ttCat, total = LADS.length, floors = {}, listed = {};
-  LADS.forEach(function(l){
-    if(l.listPrice == null) return;
-    var v = l.t[ki] + 1;
-    listed[v] = (listed[v] || 0) + 1;
-    if(floors[v] == null || l.listPrice < floors[v]) floors[v] = l.listPrice;
-  });
+  var catSel = document.getElementById('tt-cat');
+  if(catSel.options.length === 1) catSel.innerHTML += KEYS.map(function(k, ki){ return '<option value="'+ki+'">'+esc(k)+'</option>'; }).join('');
+  var cat = catSel.value, sort = document.getElementById('tt-sort').value;
+  var onlyListed = document.getElementById('tt-listed-only').getAttribute('aria-pressed') === 'true';
   var q = document.getElementById('tt-search').value.trim().toLowerCase();
-  var vals = [];
-  for(var v = 0; v <= VALUES[ki].length; v++){
-    if(COUNTS[ki][v] && (!q || valName(ki, v-1).toLowerCase().indexOf(q) !== -1)) vals.push(v);
-  }
-  var sort = document.getElementById('tt-sort').value;
-  function fl(v, dir){ return floors[v] != null ? floors[v] : dir * Infinity; }
-  vals.sort(function(a, b){
-    if(sort === 'floor-asc') return fl(a, 1) - fl(b, 1) || COUNTS[ki][a] - COUNTS[ki][b];
-    if(sort === 'floor-desc') return fl(b, -1) - fl(a, -1) || COUNTS[ki][a] - COUNTS[ki][b];
-    if(sort === 'count-asc') return COUNTS[ki][a] - COUNTS[ki][b];
-    if(sort === 'listed-desc') return (listed[b] || 0) - (listed[a] || 0);
-    return COUNTS[ki][b] - COUNTS[ki][a];
+  var total = LADS.length, rows = [];
+  KEYS.forEach(function(k, ki){
+    if(cat !== 'all' && +cat !== ki) return;
+    var floors = {}, listed = {};
+    LADS.forEach(function(l){
+      if(l.listPrice == null) return;
+      var v = l.t[ki] + 1;
+      listed[v] = (listed[v] || 0) + 1;
+      if(floors[v] == null || l.listPrice < floors[v]) floors[v] = l.listPrice;
+    });
+    for(var v = 0; v <= VALUES[ki].length; v++){
+      if(!COUNTS[ki][v]) continue;
+      var name = valName(ki, v-1);
+      if(q && (name+' '+k).toLowerCase().indexOf(q) === -1) continue;
+      if(onlyListed && !listed[v]) continue;
+      rows.push({ ki: ki, v: v, name: name, n: COUNTS[ki][v], listed: listed[v] || 0, floor: floors[v] });
+    }
   });
-  if(!vals.length){ list.innerHTML = '<div class="empty-state">No traits match your search.</div>'; return; }
-  list.innerHTML = vals.map(function(v){
-    var n = COUNTS[ki][v], name = valName(ki, v-1), f = floors[v];
-    return '<div class="sh-row tt-row" role="button" tabindex="0" onclick="showTrait('+ki+','+(v-1)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();showTrait('+ki+','+(v-1)+')}" aria-label="'+esc(KEYS[ki]+': '+name)+'">'+
-      '<img class="sh-thumb" src="'+thumb(SAMPLE[ki][v], 96)+'" data-num="'+SAMPLE[ki][v]+'" onerror="thumbFallback(this)" alt="" loading="lazy" width="44" height="44">'+
-      '<span class="tt-name">'+esc(name)+'</span><span class="sh-spacer"></span>'+
-      '<span class="tt-num">'+fmtNum(n)+'<small>'+pct(n, total, 2)+'</small></span>'+
-      '<span class="tt-num tt-listed">'+(hasOwners ? fmtNum(listed[v] || 0) : '&mdash;')+'</span>'+
+  function fl(r, dir){ return r.floor != null ? r.floor : dir * Infinity; }
+  rows.sort(function(a, b){
+    if(sort === 'floor-asc') return fl(a, 1) - fl(b, 1) || a.n - b.n;
+    if(sort === 'floor-desc') return fl(b, -1) - fl(a, -1) || a.n - b.n;
+    if(sort === 'count-asc') return a.n - b.n;
+    if(sort === 'count-desc') return b.n - a.n;
+    if(sort === 'listed-desc') return b.listed - a.listed;
+    return a.ki - b.ki || b.n - a.n;
+  });
+  document.getElementById('tt-count').textContent = rows.length+' trait'+(rows.length === 1 ? '' : 's');
+  if(!rows.length){ list.innerHTML = '<div class="empty-state">No traits match your filters.</div>'; return; }
+  var grouped = sort === 'cat', last = -1;
+  list.innerHTML = rows.map(function(r){
+    var head = '';
+    if(grouped && r.ki !== last){ last = r.ki; head = '<div class="tt-group">'+esc(KEYS[r.ki])+'<span>'+VALUES[r.ki].length+' values</span></div>'; }
+    var f = r.floor, sample = SAMPLE[r.ki][r.v];
+    return head+'<div class="sh-row tt-row" role="button" tabindex="0" onclick="showTrait('+r.ki+','+(r.v-1)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();showTrait('+r.ki+','+(r.v-1)+')}" aria-label="'+esc(KEYS[r.ki]+': '+r.name)+'">'+
+      '<img class="sh-thumb" src="'+thumb(sample, 96)+'" data-num="'+sample+'" onerror="thumbFallback(this)" alt="" loading="lazy" width="44" height="44">'+
+      '<span class="tt-name">'+esc(r.name)+(grouped ? '' : '<span class="tt-cat-l">'+esc(KEYS[r.ki])+'</span>')+'</span><span class="sh-spacer"></span>'+
+      '<span class="tt-num">'+fmtNum(r.n)+'<small>'+pct(r.n, total, 2)+'</small></span>'+
+      '<span class="tt-num tt-listed">'+(hasOwners ? fmtNum(r.listed) : '&mdash;')+'</span>'+
       '<span class="tt-num tt-floor'+(f == null ? ' none' : '')+'">'+(f != null ? fmtSol(f)+' SOL' : (hasOwners ? 'not listed' : '&mdash;'))+'</span></div>';
   }).join('');
 }

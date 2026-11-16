@@ -75,8 +75,10 @@
 .tt-spot .stat-card{display:block;padding:14px 18px;cursor:pointer;}
 .tt-spot .stat-card:hover .stat-val{color:var(--accent);}
 .tt-spot .stat-sub{display:flex;align-items:center;gap:8px;margin-top:6px;min-width:0;}
-.tt-spot-txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.tt-spot .stat-val{white-space:nowrap;}
+.tt-spot-txt{min-width:0;}
+.tt-spot .stat-val small{white-space:nowrap;}
+.tt-spot .stat-card{min-width:0;flex:1 1 0;}
+@media(max-width:640px){.tt-spot .stat-card{flex:1 1 45%;}}
 .tt-spot .stat-sub img{width:28px;height:28px;border-radius:6px;object-fit:cover;background:rgba(127,127,127,.15);}
 .tt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
 .tt-grid .empty-state{grid-column:1 / -1;}
@@ -1274,23 +1276,21 @@ function renderTraitsView(){
   var hot = all.filter(function(r){ return r.sales >= 3; }).sort(function(a,b){ return b.turnover - a.turnover; })[0];
   var up = solid.slice().sort(function(a,b){ return b.chg - a.chg; })[0];
   var down = solid.slice().sort(function(a,b){ return a.chg - b.chg; })[0];
-  // Top sale: the priciest sale of the last 7 days (30 if the week was quiet), next to today's floor.
+  // Top sales: the priciest sale of the last 7 and 30 days, next to today's floor.
   var floorNow = null;
   LADS.forEach(function(l){ if(l.listPrice != null && (floorNow == null || l.listPrice < floorNow)) floorNow = l.listPrice; });
-  var now = Date.now(), topSale = null;
-  [7, 30].forEach(function(days){
-    if(topSale) return;
-    SALES.forEach(function(x){ if(x.t >= now - days*TT_DAY && BY[x.num] && (!topSale || x.p > topSale.p)) topSale = x; });
-    if(topSale) topSale.window = days;
-  });
-  var topHtml = '';
-  if(topSale){
-    var tl = BY[topSale.num], rarest = 0;
+  var now = Date.now();
+  function topSaleCard(days){
+    var top = null;
+    SALES.forEach(function(x){ if(x.t >= now - days*TT_DAY && BY[x.num] && (!top || x.p > top.p)) top = x; });
+    if(!top) return '';
+    var tl = BY[top.num], rarest = 0;
     for(var i = 1; i < KEYS.length; i++){ if(tl.t[i] >= 0 && (tl.t[rarest] < 0 || COUNTS[i][tl.t[i]+1] < COUNTS[rarest][tl.t[rarest]+1])) rarest = i; }
-    topHtml = '<div class="stat-card" role="button" tabindex="0" onclick="openLad('+tl.num+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openLad('+tl.num+')}">'+
-      '<div class="stat-label">TOP SALE &middot; '+topSale.window+'D</div><div class="stat-val">'+fmtSol(topSale.p)+' SOL'+(floorNow ? ' <small>'+(topSale.p / floorNow).toFixed(1)+'&times; floor</small>' : '')+'</div>'+
-      '<div class="stat-sub"><img src="'+thumb(tl.num, 56)+'" data-num="'+tl.num+'" onerror="thumbFallback(this)" alt="" width="28" height="28"><span class="tt-spot-txt">#'+tl.num+' <span class="tt-tile-cat">'+esc(valName(rarest, tl.t[rarest]))+' &middot; '+timeAgo(topSale.t)+' ago</span></span></div></div>';
+    return '<div class="stat-card" role="button" tabindex="0" onclick="openLad('+tl.num+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openLad('+tl.num+')}">'+
+      '<div class="stat-label">TOP SALE &middot; '+days+'D</div><div class="stat-val">'+fmtSol(top.p)+' SOL'+(floorNow ? ' <small>'+(top.p / floorNow).toFixed(1)+'&times; floor</small>' : '')+'</div>'+
+      '<div class="stat-sub"><img src="'+thumb(tl.num, 56)+'" data-num="'+tl.num+'" onerror="thumbFallback(this)" alt="" width="28" height="28"><span class="tt-spot-txt">#'+tl.num+' <span class="tt-tile-cat">'+esc(valName(rarest, tl.t[rarest]))+' &middot; '+timeAgo(top.t)+' ago</span></span></div></div>';
   }
+  var topHtml = topSaleCard(7) + topSaleCard(30);
   document.getElementById('tt-spot').innerHTML = SALES.length ? spotHtml('HOTTEST &middot; 30D', hot, hot ? pct(hot.sales, hot.n, 1)+' <small>of supply sold</small>' : '')+
     spotHtml('RISING', up && up.chg > 0 ? up : null, up ? chgHtml(up.chg)+' <small>'+fmtSol(up.prevMed)+' &rarr; '+fmtSol(up.med)+' SOL</small>' : '')+
     spotHtml('FALLING', down && down.chg < 0 ? down : null, down ? chgHtml(down.chg)+' <small>'+fmtSol(down.prevMed)+' &rarr; '+fmtSol(down.med)+' SOL</small>' : '')+

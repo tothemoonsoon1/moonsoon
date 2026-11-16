@@ -1276,7 +1276,7 @@ function renderTraitsView(){
   var hot = all.filter(function(r){ return r.sales >= 3; }).sort(function(a,b){ return b.turnover - a.turnover; })[0];
   var up = solid.slice().sort(function(a,b){ return b.chg - a.chg; })[0];
   var down = solid.slice().sort(function(a,b){ return a.chg - b.chg; })[0];
-  // Top sales: the priciest sale of the last 7 and 30 days, next to today's floor.
+  // Highest sale of the last 7 days, next to today's floor.
   var floorNow = null;
   LADS.forEach(function(l){ if(l.listPrice != null && (floorNow == null || l.listPrice < floorNow)) floorNow = l.listPrice; });
   var now = Date.now();
@@ -1287,10 +1287,10 @@ function renderTraitsView(){
     var tl = BY[top.num], rarest = 0;
     for(var i = 1; i < KEYS.length; i++){ if(tl.t[i] >= 0 && (tl.t[rarest] < 0 || COUNTS[i][tl.t[i]+1] < COUNTS[rarest][tl.t[rarest]+1])) rarest = i; }
     return '<div class="stat-card" role="button" tabindex="0" onclick="openLad('+tl.num+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openLad('+tl.num+')}">'+
-      '<div class="stat-label">TOP SALE &middot; '+days+'D</div><div class="stat-val">'+fmtSol(top.p)+' SOL'+(floorNow ? ' <small>'+(top.p / floorNow).toFixed(1)+'&times; floor</small>' : '')+'</div>'+
+      '<div class="stat-label">HIGHEST SALE &middot; '+days+'D</div><div class="stat-val">'+fmtSol(top.p)+' SOL'+(floorNow ? ' <small>'+(top.p / floorNow).toFixed(1)+'&times; today&rsquo;s floor</small>' : '')+'</div>'+
       '<div class="stat-sub"><img src="'+thumb(tl.num, 56)+'" data-num="'+tl.num+'" onerror="thumbFallback(this)" alt="" width="28" height="28"><span class="tt-spot-txt">#'+tl.num+' <span class="tt-tile-cat">'+esc(valName(rarest, tl.t[rarest]))+' &middot; '+timeAgo(top.t)+' ago</span></span></div></div>';
   }
-  var topHtml = topSaleCard(7) + topSaleCard(30);
+  var topHtml = topSaleCard(7);
   document.getElementById('tt-spot').innerHTML = SALES.length ? spotHtml('HOTTEST &middot; 30D', hot, hot ? pct(hot.sales, hot.n, 1)+' <small>of supply sold</small>' : '')+
     spotHtml('RISING', up && up.chg > 0 ? up : null, up ? chgHtml(up.chg)+' <small>'+fmtSol(up.prevMed)+' &rarr; '+fmtSol(up.med)+' SOL</small>' : '')+
     spotHtml('FALLING', down && down.chg < 0 ? down : null, down ? chgHtml(down.chg)+' <small>'+fmtSol(down.prevMed)+' &rarr; '+fmtSol(down.med)+' SOL</small>' : '')+

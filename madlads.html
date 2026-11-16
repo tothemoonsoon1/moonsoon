@@ -100,6 +100,22 @@
 .tt-chg.up{color:var(--up);}.tt-chg.down{color:var(--down);}
 .tt-spot .stat-val small{font-size:12px;font-weight:500;color:var(--text-muted);}
 @media(max-width:640px){#tt-cat,#tt-sort{flex:1 1 40%;}.tt-listed-btn{flex:1 1 100%;min-height:44px;}.tt-grid{grid-template-columns:1fr;}}
+.td-stats{grid-template-columns:repeat(3,minmax(0,1fr));}
+.td-stats .sd-stat-v{font-size:18px;}
+.td-stats .sd-stat-v small{font-size:12px;font-weight:500;color:var(--text-muted);}
+.td-stats .sd-stat-v.dim{color:var(--text-muted);}
+.td-chart{margin-bottom:0;}
+.td-row{padding:7px 0;gap:10px;cursor:pointer;}
+.td-row:last-child{border-bottom:none;}
+.td-thumb{width:36px;height:36px;}
+.td-num{font-weight:700;font-size:14px;}
+.td-rank{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
+.td-mkt{font-size:12px;color:var(--text-muted);}
+.td-price{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;min-width:84px;text-align:right;}
+.td-more{font-size:12px;color:var(--text-muted);padding-top:8px;}
+.td-btns{grid-template-columns:1fr;}
+.td-btns .sd-btn{font-family:inherit;cursor:pointer;}
+.sd-info .kicker{margin-bottom:4px;}
 </style>
 </head>
 <body>
@@ -191,7 +207,7 @@
         <div class="sk-header">
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Trait Floors</h2>
-          <div class="sk-desc">Floor, listings and 30-day sales for every trait, side by side (&ldquo;None&rdquo; values are left out). The line is the weekly median sale over 12 weeks; the trend compares the last 30 days with the 30 days before (highlights need at least 3 sales in each period). Prices include fees. Tap a trait to see those Lads in the gallery.</div>
+          <div class="sk-desc">Floor, listings and 30-day sales for every trait, side by side (&ldquo;None&rdquo; values are left out). The line is the weekly median sale over 12 weeks; the trend compares the last 30 days with the 30 days before (highlights need at least 3 sales in each period). Prices include fees. Tap a trait for its listings, sales and a 12-month chart.</div>
         </div>
         <div class="stats-bar tt-spot" id="tt-spot"></div>
         <div class="controls">
@@ -868,7 +884,7 @@ function openLad(num){
   if(!renderLad(num)) return;
   var back = document.getElementById('sd-back');
   if(back.hidden) sdLastFocus = document.activeElement;
-  sdOpenNum = num;
+  sdOpenNum = num; tdOpen = null;
   back.hidden = false;
   document.body.style.overflow = 'hidden';
   document.getElementById('sd').scrollTop = 0;
@@ -884,6 +900,8 @@ function openLad(num){
 window.openLad = openLad;
 function closeLad(){
   document.getElementById('sd-back').hidden = true;
+  tdOpen = null;
+  if(/^#t-/.test(location.hash)) history.replaceState(null, '', view === 'gallery' ? location.pathname : '#'+view);
   document.body.style.overflow = '';
   sdOpenNum = null;
   if(sdLastFocus && sdLastFocus.focus){ try{ sdLastFocus.focus(); }catch(e){} }
@@ -1228,7 +1246,7 @@ function chgHtml(c){
 }
 function tileHtml(r){
   var sample = SAMPLE[r.ki][r.v], f = r.floor, cls = r.chg == null ? '' : r.chg > 0.005 ? 'up' : r.chg < -0.005 ? 'down' : '';
-  return '<button class="tt-tile" onclick="showTrait('+r.ki+','+(r.v-1)+')" aria-label="'+esc(KEYS[r.ki]+': '+r.name)+'">'+
+  return '<button class="tt-tile" onclick="openTrait('+r.ki+','+(r.v-1)+')" aria-label="'+esc(KEYS[r.ki]+': '+r.name)+'">'+
     '<div class="tt-tile-top"><img src="'+thumb(sample, 112)+'" data-num="'+sample+'" onerror="thumbFallback(this)" alt="" loading="lazy" width="48" height="48">'+
     '<div class="tt-tile-id"><div class="tt-tile-name">'+esc(r.name)+'</div><div class="tt-tile-cat">'+esc(KEYS[r.ki])+' &middot; '+fmtNum(r.n)+' &middot; '+pct(r.n, LADS.length, 2)+'</div></div></div>'+
     '<div class="tt-tile-mid"><div><div class="tt-tile-floor'+(f == null ? ' none' : '')+'">'+(f != null ? fmtSol(f)+' <small>SOL</small>' : (hasOwners ? 'not listed' : '&mdash;'))+'</div>'+
@@ -1239,7 +1257,7 @@ function tileHtml(r){
 function spotHtml(label, r, val){
   if(!r) return '';
   var sample = SAMPLE[r.ki][r.v];
-  return '<div class="stat-card" role="button" tabindex="0" onclick="showTrait('+r.ki+','+(r.v-1)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();showTrait('+r.ki+','+(r.v-1)+')}">'+
+  return '<div class="stat-card" role="button" tabindex="0" onclick="openTrait('+r.ki+','+(r.v-1)+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openTrait('+r.ki+','+(r.v-1)+')}">'+
     '<div class="stat-label">'+label+'</div><div class="stat-val">'+val+'</div>'+
     '<div class="stat-sub"><img src="'+thumb(sample, 56)+'" data-num="'+sample+'" onerror="thumbFallback(this)" alt="" width="28" height="28">'+esc(r.name)+' <span class="tt-tile-cat">'+esc(KEYS[r.ki])+'</span></div></div>';
 }
@@ -1283,6 +1301,96 @@ function renderTraitsView(){
   grid.innerHTML = rows.length ? rows.map(tileHtml).join('') : '<div class="empty-state">No traits match your filters.</div>';
 }
 window.renderTraitsView = renderTraitsView;
+// ---- Trait detail dialog (shares #sd-back with the Lad dialog) ----
+var tdOpen = null, tdBuckets = [], tdDefault = '';
+function traitRow(ki, vi){
+  var found = null;
+  traitStats().forEach(function(r){ if(r.ki === ki && r.v === vi + 1) found = r; });
+  return found;
+}
+function ladRow(l, right){
+  return '<div class="sh-row td-row" role="button" tabindex="0" onclick="openLad('+l.num+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openLad('+l.num+')}">'+
+    '<img class="sh-thumb td-thumb" src="'+thumb(l.num, 96)+'" data-num="'+l.num+'" onerror="thumbFallback(this)" alt="" loading="lazy" width="36" height="36">'+
+    '<span class="td-num">#'+l.num+'</span><span class="td-rank">rank #'+fmtNum(l.rank)+'</span><span class="sh-spacer"></span>'+right+'</div>';
+}
+function renderTrait(ki, vi){
+  var r = traitRow(ki, vi); if(!r) return false;
+  var lads = LADS.filter(function(l){ return l.t[ki] === vi; });
+  var listed = lads.filter(function(l){ return l.listPrice != null; }).sort(function(a,b){ return a.listPrice - b.listPrice; });
+  var sales = [];
+  SALES.forEach(function(x){ var l = BY[x.num]; if(l && l.t[ki] === vi) sales.push(x); });
+  sales.reverse();
+  // 12 monthly buckets, oldest first.
+  var now = new Date(), buckets = [];
+  for(var i = 11; i >= 0; i--){ var d = new Date(now.getFullYear(), now.getMonth() - i, 1); buckets.push({ y: d.getFullYear(), m: d.getMonth(), prices: [] }); }
+  var first = new Date(buckets[0].y, buckets[0].m, 1).getTime();
+  sales.forEach(function(x){ if(x.t < first) return; var d = new Date(x.t); var b = buckets[(d.getFullYear() - buckets[0].y) * 12 + d.getMonth() - buckets[0].m]; if(b) b.prices.push(x.p); });
+  var max = buckets.reduce(function(m, b){ return Math.max(m, b.prices.length); }, 1), total12 = 0;
+  tdBuckets = buckets.map(function(b){ total12 += b.prices.length; return { y: b.y, m: b.m, count: b.prices.length, med: median(b.prices) }; });
+  tdDefault = 'last 12 months: '+total12+' sale'+(total12 === 1 ? '' : 's');
+  var bars = tdBuckets.map(function(b, i){
+    var h = b.count ? Math.max(4, Math.round(b.count / max * 100)) : 2;
+    return '<div class="sh-bar" style="height:'+h+'%" onmouseenter="tdHover('+i+')" onmouseleave="tdHoverOut()" onclick="event.stopPropagation();tdHover('+i+')"></div>';
+  }).join('');
+  var labels = tdBuckets.map(function(b, i){ return '<div class="sh-chart-label" onmouseenter="tdHover('+i+')" onmouseleave="tdHoverOut()">'+MONTHS[b.m]+'</div>'; }).join('');
+  var hero = listed[0] || BY[SAMPLE[ki][vi+1]];
+  var stat = function(l, v, dim){ return '<div><div class="sd-stat-l">'+l+'</div><div class="sd-stat-v'+(dim ? ' dim' : '')+'">'+v+'</div></div>'; };
+  var listedHtml = listed.length ? '<div class="sh-list td-list">'+listed.slice(0, 5).map(function(l){
+      return ladRow(l, '<span class="td-mkt">'+(l.listMkt === 1 ? 'Tensor' : 'Magic Eden')+'</span><span class="td-price">'+fmtSol(l.listPrice)+' SOL</span>');
+    }).join('')+'</div>'+(listed.length > 5 ? '<div class="td-more">+'+(listed.length - 5)+' more in the gallery</div>' : '')
+    : '<div class="sd-none">'+(hasOwners ? 'Nothing listed right now.' : 'Loading listings…')+'</div>';
+  var salesHtml = sales.length ? '<div class="sh-list td-list">'+sales.slice(0, 8).map(function(x){
+      var l = BY[x.num];
+      return ladRow(l, '<span class="td-mkt">'+fmtDate(x.t)+'</span><span class="td-price">'+fmtSol(x.p)+' SOL</span>');
+    }).join('')+'</div>' : '<div class="sd-none">No sale recorded for this trait.</div>';
+  document.getElementById('sd').innerHTML =
+    '<button class="sd-close" id="sd-close" onclick="closeLad()" aria-label="Close">&times;</button>'+
+    '<div class="sd-art"><img src="'+thumb(hero.num, 768, 960)+'" data-num="'+hero.num+'" onerror="thumbFallback(this)" alt="" width="768" height="960">'+
+      '<span class="sd-flag listed">'+(listed[0] ? 'CHEAPEST LISTED &middot; #'+hero.num : 'EXAMPLE &middot; #'+hero.num)+'</span></div>'+
+    '<div class="sd-info">'+
+      '<div><div class="kicker">'+esc(KEYS[ki])+'</div><h2 class="sd-title" id="sd-title">'+esc(r.name)+'</h2>'+
+      '<div class="sd-sub"><span><b>'+fmtNum(r.n)+'</b> Lads</span><span><b>'+pct(r.n, LADS.length, 2)+'</b> of supply</span>'+(r.last ? '<span>last sale <b>'+timeAgo(r.last.t)+' ago</b></span>' : '<span>never sold</span>')+'</div></div>'+
+      '<div class="sd-stats td-stats">'+
+        stat('Floor', r.floor != null ? fmtSol(r.floor)+' <small>SOL</small>' : (hasOwners ? 'Not listed' : '&mdash;'), r.floor == null)+
+        stat('Listed', hasOwners ? r.listed+' <small>of '+fmtNum(r.n)+'</small>' : '&mdash;', !r.listed)+
+        stat('Sales &middot; 30d', r.sales ? r.sales+' <small>'+pct(r.sales, r.n, 1)+' of supply</small>' : '0', !r.sales)+
+        stat('Median &middot; 30d', r.med != null ? fmtSol(r.med)+' <small>SOL</small>' : '&mdash;', r.med == null)+
+        stat('Trend', r.chg != null ? chgHtml(r.chg)+' <small>'+fmtSol(r.prevMed)+' &rarr; '+fmtSol(r.med)+'</small>' : '&mdash;', r.chg == null)+
+        stat('Sales &middot; 90d', r.sales90 || '0', !r.sales90)+
+      '</div>'+
+      '<div class="sh-chart-card td-chart"><div class="sh-chart-head"><div class="stat-label">SALES PER MONTH</div><div class="sh-chart-detail" id="td-chart-detail">'+tdDefault+'</div></div>'+
+        '<div class="sh-chart-bars" id="td-chart">'+bars+'</div><div class="sh-chart-labels">'+labels+'</div></div>'+
+      '<div><div class="sd-h">Cheapest listed &middot; '+listed.length+'</div>'+listedHtml+'</div>'+
+      '<div><div class="sd-h">Recent sales &middot; '+sales.length+'</div>'+salesHtml+'</div>'+
+      '<div class="sd-btns td-btns"><button class="sd-btn primary" onclick="sdFilterTrait('+ki+','+vi+')">Show all '+fmtNum(r.n)+' in the gallery</button></div>'+
+      '<div class="sd-foot">All prices include the 2% fee + 4.2% royalty — the total a buyer pays.</div>'+
+    '</div>';
+  return true;
+}
+function openTrait(ki, vi){
+  if(!renderTrait(ki, vi)) return;
+  var back = document.getElementById('sd-back');
+  if(back.hidden) sdLastFocus = document.activeElement;
+  sdOpenNum = null; tdOpen = [ki, vi];
+  back.hidden = false;
+  document.body.style.overflow = 'hidden';
+  document.getElementById('sd').scrollTop = 0;
+  document.getElementById('sd-close').focus();
+  if(location.hash !== '#t-'+ki+'-'+vi) history.replaceState(null, '', '#t-'+ki+'-'+vi);
+}
+window.openTrait = openTrait;
+function tdHover(i){
+  var b = tdBuckets[i]; if(!b) return;
+  document.querySelectorAll('#td-chart .sh-bar').forEach(function(el, k){ el.classList.toggle('hover', k === i); });
+  document.getElementById('td-chart-detail').innerHTML = '<span class="hl">'+MONTHS[b.m]+" '"+String(b.y).slice(2)+'</span> &middot; '+b.count+' sale'+(b.count === 1 ? '' : 's')+(b.med != null ? ' &middot; median '+fmtSol(b.med)+' SOL' : '');
+}
+window.tdHover = tdHover;
+function tdHoverOut(){
+  document.querySelectorAll('#td-chart .sh-bar').forEach(function(el){ el.classList.remove('hover'); });
+  var d = document.getElementById('td-chart-detail'); if(d) d.innerHTML = tdDefault;
+}
+window.tdHoverOut = tdHoverOut;
+
 // From the Traits view: open the gallery filtered to that one trait.
 function showTrait(ki, vi){
   traitFilter = {}; traitFilter[ki] = vi; traitTab = ki;
@@ -1310,6 +1418,8 @@ window.switchView = switchView;
 window.addEventListener('hashchange', function(){
   var h = location.hash.slice(1);
   if(/^\d+$/.test(h)){ openLad(+h); return; }
+  var tm = /^t-(\d+)-(\d+)$/.exec(h);
+  if(tm){ if(LADS.length){ switchView('traits'); openTrait(+tm[1], +tm[2]); } return; }
   if(h !== view && VIEWS.indexOf(h || 'gallery') !== -1) switchView(h || 'gallery');
 });
 
@@ -1324,6 +1434,7 @@ function renderAll(){
 // ---- Load ----
 var startHash = location.hash.slice(1);
 if(VIEWS.indexOf(startHash) > 0) switchView(startHash);
+if(/^t-\d+-\d+$/.test(startHash)) switchView('traits');
 document.getElementById('ml-count').textContent = 'Loading Mad Lads…';
 
 // The three files are requested from <head>, so they download while the styles load.
@@ -1343,6 +1454,8 @@ pStatic.then(function(s){
     return (latest ? loadYear(latest) : Promise.resolve()).then(function(){
       renderAll();
       if(/^\d+$/.test(startHash)) openLad(+startHash);
+      var tm0 = /^t-(\d+)-(\d+)$/.exec(startHash);
+      if(tm0) loadAllYears().then(function(){ openTrait(+tm0[1], +tm0[2]); });
       // Opened straight on #sales: the list of years was not known yet.
       if(view === 'sales') loadAllYears().then(function(){ if(view === 'sales') renderSales(); });
       if(view === 'traits') loadAllYears().then(function(){ if(view === 'traits') renderTraitsView(); });

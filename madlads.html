@@ -1272,12 +1272,27 @@ function renderTraitsView(){
   var hot = all.filter(function(r){ return r.sales >= 3; }).sort(function(a,b){ return b.turnover - a.turnover; })[0];
   var up = solid.slice().sort(function(a,b){ return b.chg - a.chg; })[0];
   var down = solid.slice().sort(function(a,b){ return a.chg - b.chg; })[0];
-  // Priciest trait that actually trades: at least 3 sales in 90 days.
-  var top = all.filter(function(r){ return r.floor != null && r.sales90 >= 3; }).sort(function(a,b){ return b.floor - a.floor; })[0];
+  // Top sale: the priciest sale of the last 7 days (30 if the week was quiet), next to today's floor.
+  var floorNow = null;
+  LADS.forEach(function(l){ if(l.listPrice != null && (floorNow == null || l.listPrice < floorNow)) floorNow = l.listPrice; });
+  var now = Date.now(), topSale = null;
+  [7, 30].forEach(function(days){
+    if(topSale) return;
+    SALES.forEach(function(x){ if(x.t >= now - days*TT_DAY && BY[x.num] && (!topSale || x.p > topSale.p)) topSale = x; });
+    if(topSale) topSale.window = days;
+  });
+  var topHtml = '';
+  if(topSale){
+    var tl = BY[topSale.num], rarest = 0;
+    for(var i = 1; i < KEYS.length; i++){ if(tl.t[i] >= 0 && (tl.t[rarest] < 0 || COUNTS[i][tl.t[i]+1] < COUNTS[rarest][tl.t[rarest]+1])) rarest = i; }
+    topHtml = '<div class="stat-card" role="button" tabindex="0" onclick="openLad('+tl.num+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openLad('+tl.num+')}">'+
+      '<div class="stat-label">TOP SALE &middot; '+topSale.window+'D</div><div class="stat-val">'+fmtSol(topSale.p)+' SOL'+(floorNow ? ' <small>'+(topSale.p / floorNow).toFixed(1)+'&times; floor</small>' : '')+'</div>'+
+      '<div class="stat-sub"><img src="'+thumb(tl.num, 56)+'" data-num="'+tl.num+'" onerror="thumbFallback(this)" alt="" width="28" height="28">#'+tl.num+' <span class="tt-tile-cat">rank #'+fmtNum(tl.rank)+' &middot; '+esc(valName(rarest, tl.t[rarest]))+' &middot; '+timeAgo(topSale.t)+' ago</span></div></div>';
+  }
   document.getElementById('tt-spot').innerHTML = SALES.length ? spotHtml('HOTTEST &middot; 30D', hot, hot ? pct(hot.sales, hot.n, 1)+' <small>of supply sold</small>' : '')+
     spotHtml('RISING', up && up.chg > 0 ? up : null, up ? chgHtml(up.chg)+' <small>'+fmtSol(up.prevMed)+' &rarr; '+fmtSol(up.med)+' SOL</small>' : '')+
     spotHtml('FALLING', down && down.chg < 0 ? down : null, down ? chgHtml(down.chg)+' <small>'+fmtSol(down.prevMed)+' &rarr; '+fmtSol(down.med)+' SOL</small>' : '')+
-    spotHtml('PRICIEST &middot; TRADED', top, top ? fmtSol(top.floor)+' SOL <small>floor &middot; '+top.sales90+' sales in 90d</small>' : '') : '';
+    topHtml : '';
   var cat = catSel.value, sort = document.getElementById('tt-sort').value;
   var onlyListed = document.getElementById('tt-listed-only').getAttribute('aria-pressed') === 'true';
   var q = document.getElementById('tt-search').value.trim().toLowerCase();

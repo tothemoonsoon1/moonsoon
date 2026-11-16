@@ -191,7 +191,7 @@
         <div class="sk-header">
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Trait Floors</h2>
-          <div class="sk-desc">Floor, listings and 30-day sales for every trait, side by side (&ldquo;None&rdquo; values are left out). The line is the weekly median sale over 12 weeks; the trend compares the last 30 days with the 30 days before. Prices include fees. Tap a trait to see those Lads in the gallery.</div>
+          <div class="sk-desc">Floor, listings and 30-day sales for every trait, side by side (&ldquo;None&rdquo; values are left out). The line is the weekly median sale over 12 weeks; the trend compares the last 30 days with the 30 days before (highlights need at least 3 sales in each period). Prices include fees. Tap a trait to see those Lads in the gallery.</div>
         </div>
         <div class="stats-bar tt-spot" id="tt-spot"></div>
         <div class="controls">
@@ -1186,15 +1186,18 @@ function traitStats(){
   var now = Date.now(), t30 = now - 30*TT_DAY, t60 = now - 60*TT_DAY, t0 = now - TT_WEEKS*7*TT_DAY, rows = [];
   KEYS.forEach(function(k, ki){
     var nv = VALUES[ki].length + 1, floors = [], listed = [], cur = [], prev = [], weeks = [], v, w;
-    for(v = 0; v < nv; v++){ listed[v] = 0; cur[v] = []; prev[v] = []; weeks[v] = []; for(w = 0; w < TT_WEEKS; w++) weeks[v].push([]); }
+    var last = [], n90 = [], t90 = now - 90*TT_DAY;
+    for(v = 0; v < nv; v++){ listed[v] = 0; cur[v] = []; prev[v] = []; weeks[v] = []; last[v] = null; n90[v] = 0; for(w = 0; w < TT_WEEKS; w++) weeks[v].push([]); }
     LADS.forEach(function(l){
       v = l.t[ki] + 1;
       if(l.listPrice != null){ listed[v]++; if(floors[v] == null || l.listPrice < floors[v]) floors[v] = l.listPrice; }
     });
-    SALES.forEach(function(s){
-      if(s.t < t0) return;
+    SALES.forEach(function(s){ // SALES is sorted by time, so the last one wins
       var l = BY[s.num]; if(!l) return;
       v = l.t[ki] + 1;
+      last[v] = s;
+      if(s.t < t0) return;
+      if(s.t >= t90) n90[v]++;
       weeks[v][Math.min(TT_WEEKS - 1, Math.floor((s.t - t0) / (7*TT_DAY)))].push(s.p);
       if(s.t >= t60) (s.t >= t30 ? cur : prev)[v].push(s.p);
     });
@@ -1202,7 +1205,7 @@ function traitStats(){
       if(!COUNTS[ki][v]) continue;
       var m1 = median(cur[v]), m0 = median(prev[v]);
       rows.push({ ki: ki, v: v, name: valName(ki, v-1), n: COUNTS[ki][v], listed: listed[v], floor: floors[v],
-        sales: cur[v].length, turnover: cur[v].length / COUNTS[ki][v], med: m1, prevMed: m0,
+        sales: cur[v].length, sales90: n90[v], last: last[v], turnover: cur[v].length / COUNTS[ki][v], med: m1, prevMed: m0, nPrev: prev[v].length,
         chg: m1 != null && m0 ? (m1 - m0) / m0 : null, spark: weeks[v].map(median) });
     }
   });
@@ -1230,7 +1233,7 @@ function tileHtml(r){
     '<div class="tt-tile-id"><div class="tt-tile-name">'+esc(r.name)+'</div><div class="tt-tile-cat">'+esc(KEYS[r.ki])+' &middot; '+fmtNum(r.n)+' &middot; '+pct(r.n, LADS.length, 2)+'</div></div></div>'+
     '<div class="tt-tile-mid"><div><div class="tt-tile-floor'+(f == null ? ' none' : '')+'">'+(f != null ? fmtSol(f)+' <small>SOL</small>' : (hasOwners ? 'not listed' : '&mdash;'))+'</div>'+
     '<div class="tt-tile-lbl">floor'+(hasOwners && r.listed ? ' &middot; '+r.listed+' listed' : '')+'</div></div>'+sparkHtml(r.spark, cls)+'</div>'+
-    '<div class="tt-tile-foot"><span>'+(r.sales ? '<b>'+r.sales+'</b> sale'+(r.sales === 1 ? '' : 's')+' &middot; 30d' : 'no sales &middot; 30d')+'</span>'+
+    '<div class="tt-tile-foot"><span>'+(r.sales ? '<b>'+r.sales+'</b> sale'+(r.sales === 1 ? '' : 's')+' &middot; 30d' : r.last ? 'last sale <b>'+timeAgo(r.last.t)+'</b> ago' : 'never sold')+'</span>'+
     (r.med != null ? '<span>med. <b>'+fmtSol(r.med)+'</b></span>' : '')+chgHtml(r.chg)+'</div></button>';
 }
 function spotHtml(label, r, val){
@@ -1247,15 +1250,16 @@ function renderTraitsView(){
   if(catSel.options.length === 1) catSel.innerHTML += KEYS.map(function(k, ki){ return '<option value="'+ki+'">'+esc(k)+'</option>'; }).join('');
   var all = traitStats();
   // Spotlight: only traits with enough sales to mean something.
-  var solid = all.filter(function(r){ return r.sales >= 3 && r.chg != null; });
+  var solid = all.filter(function(r){ return r.sales >= 3 && r.nPrev >= 3 && r.chg != null; });
   var hot = all.filter(function(r){ return r.sales >= 3; }).sort(function(a,b){ return b.turnover - a.turnover; })[0];
   var up = solid.slice().sort(function(a,b){ return b.chg - a.chg; })[0];
   var down = solid.slice().sort(function(a,b){ return a.chg - b.chg; })[0];
-  var top = all.filter(function(r){ return r.floor != null; }).sort(function(a,b){ return b.floor - a.floor; })[0];
+  // Priciest trait that actually trades: at least 3 sales in 90 days.
+  var top = all.filter(function(r){ return r.floor != null && r.sales90 >= 3; }).sort(function(a,b){ return b.floor - a.floor; })[0];
   document.getElementById('tt-spot').innerHTML = SALES.length ? spotHtml('HOTTEST &middot; 30D', hot, hot ? pct(hot.sales, hot.n, 1)+' <small>of supply sold</small>' : '')+
-    spotHtml('RISING', up && up.chg > 0 ? up : null, up ? chgHtml(up.chg) : '')+
-    spotHtml('FALLING', down && down.chg < 0 ? down : null, down ? chgHtml(down.chg) : '')+
-    spotHtml('TOP FLOOR', top, top ? fmtSol(top.floor)+' SOL' : '') : '';
+    spotHtml('RISING', up && up.chg > 0 ? up : null, up ? chgHtml(up.chg)+' <small>'+fmtSol(up.prevMed)+' &rarr; '+fmtSol(up.med)+' SOL</small>' : '')+
+    spotHtml('FALLING', down && down.chg < 0 ? down : null, down ? chgHtml(down.chg)+' <small>'+fmtSol(down.prevMed)+' &rarr; '+fmtSol(down.med)+' SOL</small>' : '')+
+    spotHtml('PRICIEST &middot; TRADED', top, top ? fmtSol(top.floor)+' SOL <small>floor &middot; '+top.sales90+' sales in 90d</small>' : '') : '';
   var cat = catSel.value, sort = document.getElementById('tt-sort').value;
   var onlyListed = document.getElementById('tt-listed-only').getAttribute('aria-pressed') === 'true';
   var q = document.getElementById('tt-search').value.trim().toLowerCase();

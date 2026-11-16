@@ -37,6 +37,7 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 - Po zakończeniu backfillu: `madlads-data.json` (236 KB po kompresji, z czego 210 KB to adresy portfeli) to teraz najcięższy plik strony Mad Lads — można rozważyć skrócone adresy na pierwsze ładowanie.
 
 ## Zrobione
+- 16.11: zakładka Traits na Mad Lads (prośba Chewie z X o floor „Lassie” i listę cech) — na `dev`, czeka na OK.
 - 14.11: przegląd kodu, designu, SEO i wydajności — wspólny `gallery.css`, czcionki z własnej domeny, lżejsze dane Mad Lads (ok. 1,07 MB → 0,47 MB na pierwsze wejście), Skulls bez zmyślonych danych zastępczych, poprawki dostępności i metadanych.
 - 13.11: znacznik „MYSTERY” (MadLads Team Wallet) ma kontrast 5,3:1 — kolor `#c2365a` w `owner-tags.json`; kolory tagów nie są już używane jako kolor tekstu.
 - 13.11: domena ewip.eu wskazuje na Netlify i działa.

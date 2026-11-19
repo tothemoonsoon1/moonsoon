@@ -38,6 +38,19 @@ if (action === 'list') {
   const w = await call('GET', `/${process.env.ID}`);
   const updated = await call('PUT', `/${process.env.ID}`, { webhookURL: w.webhookURL, transactionTypes: types, accountAddresses: w.accountAddresses, webhookType: w.webhookType, ...(w.authHeader ? { authHeader: w.authHeader } : {}) });
   console.log(`### Updated\n\n${brief(updated)}`);
+} else if (action === 'lastsale') {
+  // Check the snapshot's on-chain sale detection on given Lads (numbers in MINTS).
+  const { lastSale } = await import('./madlads-chain.mjs');
+  const stat = JSON.parse(readFileSync(new URL('../madlads-static.json', import.meta.url)));
+  const mintOf = new Map(stat.lads.map((r) => [r[0], r[1]]));
+  const rpc = async (method, params) => {
+    const r = await fetch(`https://mainnet.helius-rpc.com/?${q}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) });
+    const j = await r.json(); if (j.error) throw new Error(JSON.stringify(j.error)); return j.result;
+  };
+  for (const num of (process.env.MINTS || '').split(',').map(Number).filter(Boolean).slice(0, 10)) {
+    const s = await lastSale(rpc, mintOf.get(num)).catch((e) => ({ error: e.message }));
+    console.log(`- #${num}: ${!s ? 'not a sale (transfer, loan or nothing found)' : s.error ? 'error ' + s.error : `${['Magic Eden', 'Tensor', 'OTC/other'][s.m]} · ${s.p.toFixed(3)} SOL · ${new Date(s.t * 1000).toISOString().slice(0, 16)} · \`${s.sig.slice(0, 12)}\``}`);
+  }
 } else if (action === 'inspect') {
   // How Helius classifies the newest transactions of some Lads (type, source),
   // to see what a Tensor sale looks like. ~100 credits per Lad.

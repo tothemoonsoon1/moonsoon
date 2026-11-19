@@ -36,7 +36,9 @@ if (action === 'list') {
   if (!process.env.ID) { console.log('Missing id'); process.exit(1); }
   const types = (process.env.TYPES || 'NFT_SALE').split(',').map((t) => t.trim()).filter(Boolean);
   const w = await call('GET', `/${process.env.ID}`);
-  const updated = await call('PUT', `/${process.env.ID}`, { webhookURL: w.webhookURL, transactionTypes: types, accountAddresses: w.accountAddresses, webhookType: w.webhookType, ...(w.authHeader ? { authHeader: w.authHeader } : {}) });
+  // URL input given and different from the current one: move the webhook there too.
+  const to = process.env.URL && process.env.URL !== w.webhookURL ? process.env.URL : w.webhookURL;
+  const updated = await call('PUT', `/${process.env.ID}`, { webhookURL: to, transactionTypes: types, accountAddresses: w.accountAddresses, webhookType: w.webhookType, ...(w.authHeader ? { authHeader: w.authHeader } : {}) });
   console.log(`### Updated\n\n${brief(updated)}`);
 } else if (action === 'lastsale') {
   // Check the snapshot's on-chain sale detection on given Lads (numbers in MINTS).

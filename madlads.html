@@ -541,8 +541,29 @@ function openSaleTx(t, num){
   }).catch(function(){ if(w) w.close(); });
 }
 window.openSaleTx = openSaleTx;
-function txBtn(t, num){
-  return '<button type="button" class="sh-tx" title="View transaction on Solscan" aria-label="View transaction on Solscan" onclick="event.stopPropagation();event.preventDefault();openSaleTx('+t+','+num+')">&#8599;</button>';
+function txBtn(t, num, sig){
+  var go = sig ? 'window.open(\'https://solscan.io/tx/'+esc(sig)+'\',\'_blank\',\'noopener\')' : 'openSaleTx('+t+','+num+')';
+  return '<button type="button" class="sh-tx" title="View transaction on Solscan" aria-label="View transaction on Solscan" onclick="event.stopPropagation();event.preventDefault();'+go+'">&#8599;</button>';
+}
+
+// Magic Eden sales from the last 3 days that arrived after the last snapshot,
+// pushed to us by a Helius webhook (netlify/functions/helius-webhook.mjs).
+// A sale already in the files (same Lad, within 2 minutes) is skipped.
+function loadLiveSales(){
+  return fetch('/.netlify/functions/helius-webhook').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if(!d || !d.sales || !d.sales.length) return false;
+    var added = 0;
+    d.sales.forEach(function(r){
+      var t = r[0]*1000, num = r[1];
+      if(!BY[num]) return;
+      var dup = SALES.some(function(s){ return s.num === num && Math.abs(s.t - t) < 120000; });
+      if(dup) return;
+      SALES.push({ t: t, num: num, p: Math.round(r[2] * PRICE_FEE * 1000) / 1000, m: r[3], sig: r[4], b: r[5] || null, s: r[6] || null, live: true });
+      added++;
+    });
+    if(added) attachSales();
+    return added > 0;
+  }).catch(function(){ return false; });
 }
 
 var mintsLoading = null;
@@ -854,7 +875,7 @@ function renderLad(num){
 
   var salesHtml = sales.length
     ? '<div class="sd-sales">'+sales.map(function(s){
-        return '<div class="sd-sale"><span class="d">'+fmtDate(s.t)+' &middot; '+MARKETS[s.m]+'</span><span>'+prevChangeHtml(s)+'</span><span class="p">'+fmtSol(s.p)+' SOL</span>'+txBtn(s.t, s.num)+'</div>';
+        return '<div class="sd-sale"><span class="d">'+fmtDate(s.t)+' &middot; '+MARKETS[s.m]+'</span><span>'+prevChangeHtml(s)+'</span><span class="p">'+fmtSol(s.p)+' SOL</span>'+txBtn(s.t, s.num, s.sig)+'</div>';
       }).join('')+'</div>'
     : '<div class="sd-none">'+(fullHistory(l) ? 'Never sold. Still with its first owner, or only moved between wallets.' : 'No sale recorded yet. Older history is still being added.')+'</div>';
 
@@ -1191,7 +1212,7 @@ function renderSales(){
       '<span class="sh-pill '+MKT_CLS[s.m]+'">'+MARKETS[s.m]+'</span>'+
       '<span class="sh-price">'+fmtSol(s.p)+' SOL</span>'+
       '<span class="sh-chg">'+prevChangeHtml(s)+'</span>'+
-      (Date.now() - s.t < 7*86400000 ? '<span class="sh-date" title="'+fmtDate(s.t)+'"><b class="sh-ago">'+timeAgo(s.t)+' ago</b>'+fmtDate(s.t)+'</span>' : '<span class="sh-date">'+fmtDate(s.t)+'</span>')+txBtn(s.t, s.num)+'</a>';
+      (Date.now() - s.t < 7*86400000 ? '<span class="sh-date" title="'+fmtDate(s.t)+'"><b class="sh-ago">'+timeAgo(s.t)+' ago</b>'+fmtDate(s.t)+'</span>' : '<span class="sh-date">'+fmtDate(s.t)+'</span>')+txBtn(s.t, s.num, s.sig)+'</a>';
   }).join('');
   pag.style.display = pages > 1 ? 'flex' : 'none';
   document.getElementById('sh-page-label').textContent = 'Page '+shPage+' / '+pages;
@@ -1470,6 +1491,7 @@ pStatic.then(function(s){
     var latest = salesYears[salesYears.length-1];
     return (latest ? loadYear(latest) : Promise.resolve()).then(function(){
       renderAll();
+      loadLiveSales().then(function(added){ if(added) renderAll(); });
       if(/^\d+$/.test(startHash)) openLad(+startHash);
       var tm0 = /^t-(\d+)-(\d+)$/.exec(startHash);
       if(tm0) loadAllYears().then(function(){ openTrait(+tm0[1], +tm0[2]); });

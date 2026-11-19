@@ -1,42 +1,74 @@
-// Receives Helius "enhanced" webhook events for Mad Lads and keeps them in
-// Netlify Blobs. Test stage: it records every delivered event (each one costs
-// 1 Helius credit) and picks out the ones that are sales.
+// Live Mad Lads sales from a Helius "enhanced" webhook (type NFT_SALE).
 //
-// Each event is written under its own key, so events that arrive at the same
-// time cannot overwrite each other (an earlier version kept one shared
-// counter and lost some):
-//   ev/<day>/<type>/<source>/<signature>   every event; the key alone is the count
-//   sale/<unix time>/<signature>           sales only, with price, buyer, seller, mint
+// Helius only types Magic Eden sales as NFT_SALE; Tensor and other
+// marketplaces come through as UNKNOWN together with bids and loans, which
+// would cost too much to receive (tested 19.11.2026: ~160k credits a month).
+// Those sales are picked up by the 3-hourly snapshot from the chain instead
+// (scripts/generate-madlads-data.mjs). This function makes Magic Eden sales
+// show up on the page within seconds.
 //
-// Helius types Magic Eden sales as NFT_SALE, but Tensor sales come through as
-// UNKNOWN (source TENSOR), together with loans and bids. A transaction counts
-// as a sale here when a Mad Lad moved to a new wallet and that wallet paid SOL.
+//   POST  Helius delivers an array of transactions. Each sale is checked
+//         against the chain (public RPC) before it is stored, so a forged
+//         POST cannot put a fake sale on the page.
+//   GET   sales of the last 3 days: { sales: [[t, num, price, market, sig, buyer, seller], ...] }
+//         Cached on Netlify's CDN for a minute, so page views do not each
+//         run the function.
+//   GET ?stats=1   delivered events per day / type / source (= Helius credits)
 //
-//   POST /.netlify/functions/helius-webhook        Helius delivers an array of transactions
-//   GET  /.netlify/functions/helius-webhook        counts per day, type and source, recent sales
+// Storage (Netlify Blobs, one key per item so concurrent deliveries cannot
+// overwrite each other):
+//   ev/<day>/<type>/<source>/<signature>     every delivered event
+//   sale/<unix time, 11 digits>/<signature>  verified sales
 //
-// If the env var HELIUS_WEBHOOK_AUTH is set, POSTs must carry it in the
-// Authorization header (Helius sends the webhook's authHeader there).
+// If HELIUS_WEBHOOK_AUTH is set, POSTs must also carry it in Authorization.
 import { getStore } from '@netlify/blobs';
 
-const json = (body, status = 200) => new Response(JSON.stringify(body), {
-  status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
+const STORE = 'helius-madlads-v2';
+const KEEP_S = 3 * 86400;
+const RPC = 'https://api.mainnet-beta.solana.com';
+const MARKET = { MAGIC_EDEN: 0, TENSOR: 1 };
+
+const json = (body, status = 200, cdn = false) => new Response(JSON.stringify(body), {
+  status,
+  headers: {
+    'content-type': 'application/json',
+    'cache-control': 'public, max-age=0, must-revalidate',
+    ...(cdn ? { 'netlify-cdn-cache-control': 'public, s-maxage=60, stale-while-revalidate=120' } : { 'netlify-cdn-cache-control': 'no-store' }),
+  },
 });
 const safe = (s) => String(s || 'UNKNOWN').replace(/[^A-Za-z0-9_]/g, '_').slice(0, 40);
 
-// A Lad moved to a wallet that paid for it → { mint, buyer, seller, sol }.
+// mint -> Lad number, built once per cold start from the site's own files
+// (same order in both: madlads-mints.json and madlads-traits.json).
+let numOf = null;
+async function numByMint(origin) {
+  if (numOf) return numOf;
+  const [mints, traits] = await Promise.all([
+    fetch(origin + '/madlads-mints.json').then((r) => r.json()),
+    fetch(origin + '/madlads-traits.json').then((r) => r.json()),
+  ]);
+  const m = new Map();
+  mints.forEach((mint, i) => { const row = traits.lads[i]; if (row) m.set(mint, row[0]); });
+  return (numOf = m);
+}
+
 function saleOf(e) {
-  const moved = (e.tokenTransfers || []).filter((t) => Number(t.tokenAmount) === 1 && t.fromUserAccount && t.toUserAccount && t.fromUserAccount !== t.toUserAccount);
-  for (const t of moved) {
-    const buyer = t.toUserAccount, seller = t.fromUserAccount;
-    const paid = (e.nativeTransfers || []).filter((n) => n.fromUserAccount === buyer).reduce((s, n) => s + n.amount, 0) / 1e9;
-    const got = (e.nativeTransfers || []).filter((n) => n.toUserAccount === seller).reduce((s, n) => s + n.amount, 0) / 1e9;
-    if (paid > 0.3 || got > 0.3) return { mint: t.mint, buyer, seller, sol: +(got > 0.3 ? got : paid).toFixed(4) };
-  }
-  // Helius' own parse, when it has one (Magic Eden NFT_SALE).
   const nft = e.events?.nft;
-  if (nft?.amount > 0.3e9 && nft.buyer) return { mint: nft.nfts?.[0]?.mint || null, buyer: nft.buyer, seller: nft.seller || null, sol: +(nft.amount / 1e9).toFixed(4) };
-  return null;
+  if (!(nft?.amount > 0.3e9) || !nft.buyer) return null;
+  return { mint: nft.nfts?.[0]?.mint || null, buyer: nft.buyer, seller: nft.seller || null, sol: +(nft.amount / 1e9).toFixed(4) };
+}
+
+// Did this transaction succeed and leave the Lad with the buyer?
+async function onChain(sig, mint, buyer) {
+  for (let i = 0; i < 3; i++) {
+    const r = await fetch(RPC, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getTransaction', params: [sig, { maxSupportedTransactionVersion: 0, encoding: 'jsonParsed', commitment: 'confirmed' }] }) });
+    if (r.status === 429 || r.status >= 500) { await new Promise((ok) => setTimeout(ok, 800 * (i + 1))); continue; }
+    const tx = (await r.json()).result;
+    if (!tx) { await new Promise((ok) => setTimeout(ok, 1500)); continue; } // not visible to this RPC node yet
+    if (tx.meta?.err) return false;
+    return (tx.meta?.postTokenBalances || []).some((b) => b.mint === mint && b.owner === buyer && b.uiTokenAmount?.amount === '1');
+  }
+  return null; // could not check
 }
 
 async function listAll(store, prefix) {
@@ -51,21 +83,25 @@ async function listAll(store, prefix) {
 }
 
 export default async (req) => {
-  const store = getStore('helius-madlads-v2');
+  const store = getStore(STORE);
+  const url = new URL(req.url);
 
   if (req.method === 'GET') {
-    const days = {};
-    for (const key of await listAll(store, 'ev/')) {
-      const [, day, type, source] = key.split('/');
-      const d = days[day] || (days[day] = { events: 0, types: {}, sources: {} });
-      d.events++;
-      d.types[type] = (d.types[type] || 0) + 1;
-      d.sources[source] = (d.sources[source] || 0) + 1;
+    if (url.searchParams.get('stats')) {
+      const days = {};
+      for (const key of await listAll(store, 'ev/')) {
+        const [, day, type, source] = key.split('/');
+        const d = days[day] || (days[day] = { events: 0, types: {}, sources: {} });
+        d.events++;
+        d.types[type] = (d.types[type] || 0) + 1;
+        d.sources[source] = (d.sources[source] || 0) + 1;
+      }
+      return json({ total: Object.values(days).reduce((s, d) => s + d.events, 0), days });
     }
-    const saleKeys = (await listAll(store, 'sale/')).sort().reverse().slice(0, 40);
-    const sales = await Promise.all(saleKeys.map((k) => store.get(k, { type: 'json' })));
-    const total = Object.values(days).reduce((s, d) => s + d.events, 0);
-    return json({ total, days, sales });
+    const since = Math.floor(Date.now() / 1000) - KEEP_S;
+    const keys = (await listAll(store, 'sale/')).filter((k) => Number(k.split('/')[1]) >= since).sort().slice(-200);
+    const rows = (await Promise.all(keys.map((k) => store.get(k, { type: 'json' })))).filter((s) => s && s.ok && s.num != null);
+    return json({ sales: rows.map((s) => [s.t, s.num, s.sol, s.m, s.sig, s.buyer, s.seller]) }, 200, true);
   }
   if (req.method !== 'POST') return json({ error: 'method not allowed' }, 405);
 
@@ -75,18 +111,21 @@ export default async (req) => {
   let events;
   try { events = await req.json(); } catch { return json({ error: 'bad json' }, 400); }
   if (!Array.isArray(events)) events = [events];
+  events = events.slice(0, 100);
 
   const day = new Date().toISOString().slice(0, 10);
-  let sales = 0;
+  let stored = 0;
+  const nums = await numByMint(url.origin).catch(() => null);
   await Promise.all(events.map(async (e) => {
-    const sig = e?.signature; if (!sig) return;
-    const type = safe(e.type), source = safe(e.source);
-    await store.set(`ev/${day}/${type}/${source}/${sig}`, '1');
+    const sig = e?.signature; if (!sig || !/^[1-9A-HJ-NP-Za-km-z]{60,100}$/.test(sig)) return;
+    await store.set(`ev/${day}/${safe(e.type)}/${safe(e.source)}/${sig}`, '1');
     const s = saleOf(e);
-    if (s) {
-      sales++;
-      await store.setJSON(`sale/${String(e.timestamp || 0).padStart(11, '0')}/${sig}`, { sig, t: e.timestamp, type, source, ...s });
-    }
+    const num = s && nums ? nums.get(s.mint) : null;
+    if (!s || num == null) return;
+    const ok = await onChain(sig, s.mint, s.buyer).catch(() => null);
+    if (ok !== true) return; // unverified: the snapshot will still find a real sale
+    await store.setJSON(`sale/${String(e.timestamp || 0).padStart(11, '0')}/${sig}`, { ok: true, t: e.timestamp, num, sol: s.sol, m: MARKET[e.source] ?? 2, sig, buyer: s.buyer, seller: s.seller });
+    stored++;
   }));
-  return json({ ok: true, received: events.length, sales });
+  return json({ ok: true, received: events.length, stored });
 };

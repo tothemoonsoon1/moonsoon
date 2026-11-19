@@ -30,6 +30,14 @@ if (action === 'list') {
   if (!process.env.ID) { console.log('Missing id'); process.exit(1); }
   await call('DELETE', `/${process.env.ID}`);
   console.log(`### Deleted \`${process.env.ID}\``);
+} else if (action === 'types') {
+  // Change which transaction types the webhook sends (keeps URL and addresses).
+  // Costs 100 credits.
+  if (!process.env.ID) { console.log('Missing id'); process.exit(1); }
+  const types = (process.env.TYPES || 'NFT_SALE').split(',').map((t) => t.trim()).filter(Boolean);
+  const w = await call('GET', `/${process.env.ID}`);
+  const updated = await call('PUT', `/${process.env.ID}`, { webhookURL: w.webhookURL, transactionTypes: types, accountAddresses: w.accountAddresses, webhookType: w.webhookType, ...(w.authHeader ? { authHeader: w.authHeader } : {}) });
+  console.log(`### Updated\n\n${brief(updated)}`);
 } else if (action === 'inspect') {
   // How Helius classifies the newest transactions of some Lads (type, source),
   // to see what a Tensor sale looks like. ~100 credits per Lad.

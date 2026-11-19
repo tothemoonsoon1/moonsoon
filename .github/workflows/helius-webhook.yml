@@ -7,14 +7,17 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: 'create, list, delete or inspect'
+        description: 'create, list, delete, types or inspect'
         default: 'list'
       url:
         description: 'Endpoint for create'
         default: 'https://dev--moonsoon.netlify.app/.netlify/functions/helius-webhook'
       id:
-        description: 'Webhook id for delete'
+        description: 'Webhook id for delete and types'
         default: ''
+      types:
+        description: 'types: comma-separated transaction types, e.g. NFT_SALE,UNKNOWN'
+        default: 'NFT_SALE'
       mints:
         description: 'inspect: comma-separated mints (max 10)'
         default: ''
@@ -37,4 +40,5 @@ jobs:
           URL: ${{ inputs.url }}
           ID: ${{ inputs.id }}
           MINTS: ${{ inputs.mints }}
+          TYPES: ${{ inputs.types }}
         run: node scripts/helius-webhook.mjs | tee -a "$GITHUB_STEP_SUMMARY"

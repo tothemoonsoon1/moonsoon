@@ -30,4 +30,22 @@ if (action === 'list') {
   if (!process.env.ID) { console.log('Missing id'); process.exit(1); }
   await call('DELETE', `/${process.env.ID}`);
   console.log(`### Deleted \`${process.env.ID}\``);
+} else if (action === 'inspect') {
+  // How Helius classifies the newest transactions of some Lads (type, source),
+  // to see what a Tensor sale looks like. ~100 credits per Lad.
+  const mints = (process.env.MINTS || '').split(',').map((m) => m.trim()).filter(Boolean).slice(0, 10);
+  const seen = {};
+  for (const mint of mints) {
+    const res = await fetch(`https://api-mainnet.helius-rpc.com/v0/addresses/${mint}/transactions?${q}&limit=10`);
+    if (!res.ok) { console.log(`- ${mint}: HTTP ${res.status}`); continue; }
+    const txs = await res.json();
+    console.log(`\n#### ${mint}`);
+    for (const t of txs) {
+      const k = `${t.type} / ${t.source}`;
+      seen[k] = (seen[k] || 0) + 1;
+      const sol = t.events?.nft?.amount ? ` · ${(t.events.nft.amount / 1e9).toFixed(2)} SOL` : '';
+      console.log(`- ${new Date(t.timestamp * 1000).toISOString().slice(0, 16)} · **${t.type}** · ${t.source}${sol} · ${(t.description || '').slice(0, 90)} · \`${t.signature.slice(0, 12)}\``);
+    }
+  }
+  console.log(`\n### Types seen\n${Object.entries(seen).map(([k, n]) => `- ${k}: ${n}`).join('\n')}`);
 } else { console.log(`Unknown action ${action}`); process.exit(1); }

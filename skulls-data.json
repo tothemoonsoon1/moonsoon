@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T21:37:03.157Z",
+  "generatedAt": "2026-11-19T12:10:58.557Z",
   "skulls": [
     {
       "num": 542,
@@ -2129,14 +2129,14 @@
     {
       "num": 7092,
       "mint": "E15vXEstzUrv26wkLvkLy8bpCo9nB8kjYZPb8tUJ5yZW",
-      "owner": "HzdS2G7gMinzZnxx93QJrW8avEz9j7QA25Z2njdHj7uZ",
+      "owner": "5n6RGnQ5U4JGjGGzjhgFeWY83xmgS2tWj73uyXWK79Ta",
       "isDomain": false,
-      "twitter": "Solbull007",
+      "twitter": null,
       "label": null,
       "tagText": null,
       "tagColor": null,
       "tagOnly": false,
-      "twitterUrl": "https://x.com/Solbull007",
+      "twitterUrl": null,
       "trades": 2,
       "lastSalePrice": 48,
       "sales": [
@@ -2156,7 +2156,7 @@
       "listPrice": null,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/7092.png",
       "meUrl": "https://magiceden.io/item-details/E15vXEstzUrv26wkLvkLy8bpCo9nB8kjYZPb8tUJ5yZW",
-      "syncedAt": 1795037823157,
+      "syncedAt": 1795090258557,
       "listMarket": null
     },
     {

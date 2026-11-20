@@ -14,6 +14,7 @@ export const MARKETS = {
   TB1Dqt8JeKQh7RLDzfYDJsq8KS4fS2yt87avRjyRxMv: 1,
   hadeK9DLv9eA7ya5KCTqSvSvRZeJC3JgD5a9Y3CNbvu: 2,
   CJsLwbP1iu5DuUikHEJnLfANgKy6stB2uFgvBBHoyxwz: 2, // Solanart
+  '8guzmt92HbM7yQ69UJg564hRRX6N4nCdxWE5L6ENrA8P': 4, // Foxy (Famous Fox Federation)
   '1BWutmTvYPwDtmw9abTkS4Ssr8no61spGAvW1X6NDix': 0,
 };
 

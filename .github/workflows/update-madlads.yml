@@ -36,6 +36,7 @@ jobs:
       - name: Generate Mad Lads data
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          OPENSEA_API_KEY: ${{ secrets.OPENSEA_API_KEY }}
         run: node scripts/generate-madlads-data.mjs
 
       - name: Commit and push if changed

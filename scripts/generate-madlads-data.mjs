@@ -282,13 +282,93 @@ try {
   console.log(`Magic Eden sales read: ${found.length}, new: ${r.added}`);
 } catch (e) { console.warn(`Magic Eden sales failed, keeping previous: ${e.message}`); }
 
+// Every sale on every marketplace, from the OpenSea API (it indexes Magic
+// Eden, Tensor, OpenSea and the rest; tested 20.11.2026: all of ours plus 25
+// more in 3 days). OpenSea prices include the 6.2% fee + royalty; the files
+// keep raw prices, so they are divided back. OpenSea does not say which
+// marketplace a sale was on: Helius' parsed transactions do (source, or the
+// program called). Market codes: 0 Magic Eden, 1 Tensor, 2 other, 3 OpenSea, 4 Foxy.
+const OS_KEY = process.env.OPENSEA_API_KEY;
+const FEE_MULT = 1.062;
+const PROGRAM_MARKET = {
+  M2mx93ekt1fmXSVkTrUL9xVFHkmME8HTUi5Cyc5aF7K: 0, M3mxk5W2tt27WGT7THox7PmgRDp4m6NEhL5xvxrBfS1: 0, mmm3XBJg5gk8XJxEKBvdgptZz6SgK4tXvn36sodowMc: 0,
+  TCMPhJdwDryooaGtiocG1u3xcYbRpiJzb283XfCZsDp: 1, TSWAPaqyCSx2KABk68Shruf4rp7CxcNi8hAsbdwmHbN: 1, TAMM6ub33ij1mbetoMyVBLeKY5iP41i4UPUJQGkhfsg: 1,
+  '8guzmt92HbM7yQ69UJg564hRRX6N4nCdxWE5L6ENrA8P': 4,
+};
+const SOURCE_MARKET = { MAGIC_EDEN: 0, TENSOR: 1, OPENSEA: 3, FOXY: 4 };
+async function openseaSales(sinceSec) {
+  const out = [];
+  let next = null;
+  for (let page = 0; page < 40; page++) {
+    const url = new URL('https://api.opensea.io/api/v2/events/collection/mad-lads');
+    url.searchParams.set('event_type', 'sale');
+    url.searchParams.set('after', String(sinceSec));
+    url.searchParams.set('limit', '50');
+    if (next) url.searchParams.set('next', next);
+    const res = await fetch(url, { headers: { 'x-api-key': OS_KEY, accept: 'application/json' } });
+    if (!res.ok) throw new Error(`OpenSea HTTP ${res.status}`);
+    const j = await res.json();
+    for (const e of j.asset_events || []) {
+      if (e.chain !== 'solana' || !e.transaction || !e.nft?.identifier || !e.payment) continue;
+      const total = Number(e.payment.quantity) / 10 ** (e.payment.decimals ?? 9);
+      if (!(total > 0.3)) continue;
+      out.push({ t: e.event_timestamp || e.closing_date, mint: e.nft.identifier, p: total / FEE_MULT, m: null, sig: e.transaction, b: e.buyer || null, s: e.seller || null });
+    }
+    next = j.next;
+    if (!next) break;
+    await sleep(300);
+  }
+  return out;
+}
+async function marketsOf(sigs) {
+  const result = new Map(), unknown = {};
+  for (let i = 0; i < sigs.length; i += 100) {
+    const res = await fetch(`https://api-mainnet.helius-rpc.com/v0/transactions?api-key=${KEY}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ transactions: sigs.slice(i, i + 100) }) });
+    credits += 100;
+    if (!res.ok) throw new Error(`Helius parse HTTP ${res.status}`);
+    for (const t of await res.json()) {
+      let m = SOURCE_MARKET[t.source];
+      if (m == null) {
+        const progs = (t.instructions || []).map((x) => x.programId);
+        m = progs.map((p) => PROGRAM_MARKET[p]).find((x) => x != null);
+        if (m == null) { for (const pr of progs) if (!/^(ComputeBudget|11111111|Token|ATokenGP|metaq|auth9SigN)/.test(pr)) unknown[pr] = (unknown[pr] || 0) + 1; m = 2; }
+      }
+      result.set(t.signature, m);
+    }
+  }
+  return { result, unknown };
+}
+let osOk = false;
+if (OS_KEY) {
+  try {
+    const since = prevData?.generatedAt ? Date.parse(prevData.generatedAt) / 1000 - 86400 : startedAt / 1000 - 3 * 86400;
+    const os = await openseaSales(Math.floor(since));
+    // Signatures we already have, in this year's and last year's files.
+    const known = new Map();
+    for (const y of [new Date(startedAt).getUTCFullYear(), new Date(since * 1000).getUTCFullYear()]) {
+      const f = readJson(`madlads-sales-${y}.json`);
+      for (const r of f?.s || []) known.set(r[4], r[3]);
+    }
+    const fresh = os.filter((s) => !known.has(s.sig));
+    const before = credits;
+    const { result, unknown } = fresh.length ? await marketsOf(fresh.map((s) => s.sig)) : { result: new Map(), unknown: {} };
+    for (const s of fresh) s.m = result.get(s.sig) ?? 2;
+    const r = mergeSales(fresh, numByMint);
+    salesYears = r.years;
+    osOk = true;
+    const byMkt = fresh.reduce((o, s) => { o[s.m] = (o[s.m] || 0) + 1; return o; }, {});
+    console.log(`OpenSea sales read: ${os.length}, not in our files: ${fresh.length} ${JSON.stringify(byMkt)} (0 ME, 1 Tensor, 2 other, 3 OpenSea, 4 Foxy), new: ${r.added}, ${credits - before} credits`);
+    if (Object.keys(unknown).length) console.log(`  unknown programs (marked other): ${JSON.stringify(unknown)}`);
+  } catch (e) { console.warn(`OpenSea sales failed, falling back to the on-chain check: ${e.message}`); }
+} else console.log('OPENSEA_API_KEY not set: skipping OpenSea sales');
+
 // Sales the Magic Eden API does not list (Tensor, other marketplaces, OTC):
 // for each Lad that changed holder since the last snapshot and has no Magic
 // Eden sale in that window, read the transaction that moved it and check
 // whether the new holder paid. Transfers and loans come out as null.
 // A few credits per Lad; capped so a busy day cannot run away.
 const CHAIN_MAX = 80;
-try {
+if (!osOk) try {
   const since = prevData?.generatedAt ? Date.parse(prevData.generatedAt) / 1000 - 3600 : startedAt / 1000 - 86400;
   const meSold = new Set();
   for (const y of [new Date(startedAt).getUTCFullYear(), new Date(since * 1000).getUTCFullYear()]) {

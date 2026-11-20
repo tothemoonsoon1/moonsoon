@@ -321,7 +321,9 @@
             <option value="all">All marketplaces</option>
             <option value="0">Magic Eden</option>
             <option value="1">Tensor</option>
-            <option value="2">OTC</option>
+            <option value="3">OpenSea</option>
+            <option value="4">Foxy</option>
+            <option value="2">Other</option>
           </select>
           <select class="ctl-select" id="sh-sort" onchange="shPage=1;renderSales()" aria-label="Sort">
             <option value="newest">Newest first</option>
@@ -382,7 +384,8 @@ window.thumbFallback = thumbFallback;
 
 var X_ICON = '<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var MARKETS = ['Magic Eden','Tensor','OTC'], MKT_CLS = ['me','tensor','other'];
+// Market codes in the sales files: 0 Magic Eden, 1 Tensor, 2 other, 3 OpenSea, 4 Foxy.
+var MARKETS = ['Magic Eden','Tensor','Other','OpenSea','Foxy'], MKT_CLS = ['me','tensor','other','other','other'];
 var PRICE_FEE = 1.062; // every displayed price includes the 2% fee + 4.2% royalty (the buyer total); stored data is raw
 var BF = null; // nightly backfill progress: Lads before index BF.next have full history
 

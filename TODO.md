@@ -23,6 +23,7 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
   - Tensor i inne: Helius typuje je jako `UNKNOWN` razem z ofertami i pożyczkami — test 19.11: ~225 zdarzeń/h, ~160 tys. kredytów/mc, 0 sprzedaży → odrzucone. Zamiast tego zrzut (`generate-madlads-data.mjs`) czyta z łańcucha transakcję każdej zmiany właściciela bez sprzedaży ME (`lastSale` w `scripts/madlads-chain.mjs`, maks. 80 na przebieg). Ograniczenie: gdy po sprzedaży Lad od razu idzie przelewem dalej, widzimy tylko przelew.
 - Sprzedaże z przyjętej oferty są zawyżone o ~6% (cena już z opłatami, a strona dolicza ×1,062). Poprawka: zapisywać typ sprzedaży przy backfillu.
 
+- Link polecający Jupiter Global (https://jupiter.go.link/d8vhn, karta płatnicza) — pomysł: drugi link w notce „Support the site” w oknie Lada/Skulla + linijka w stopce. Odłożone 20.11.
 ## 4. Posty na X o stronie Skulls
 - Szkice (krótki i długi) są w sesji „Traits w zakładce ze skullami” (7–11.11). Przed publikacją poprawić „this week” i „hourly” (Skulls synchronizuje się teraz co godzinę o :47 i raz dziennie pełny zrzut).
 

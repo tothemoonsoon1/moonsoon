@@ -703,7 +703,7 @@ function renderHistory(){
   var meCount = filtered.filter(function(s){ return s.marketplace === 'Magic Eden'; }).length;
   document.getElementById('sh-stat-total').textContent = total;
   document.getElementById('sh-stat-volume').textContent = Math.round(volume).toLocaleString('en-US') + ' SOL';
-  document.getElementById('sh-stat-avg').textContent = (total ? Math.round((volume/total)*10)/10 : 0) + ' SOL';
+  document.getElementById('sh-stat-avg').textContent = (total ? Math.round((volume/total)*100)/100 : 0) + ' SOL';
   document.getElementById('sh-stat-me-pct').textContent = (total ? Math.round(meCount/total*100) : 0) + '%';
   document.getElementById('sh-stat-tensor-pct').textContent = (total ? Math.round((total-meCount)/total*100) : 0) + '%';
 

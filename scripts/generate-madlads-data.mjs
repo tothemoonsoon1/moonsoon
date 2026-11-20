@@ -301,7 +301,7 @@ const SOURCE_MARKET = { MAGIC_EDEN: 0, TENSOR: 1, OPENSEA: 3, FOXY: 4 };
 async function openseaSales(sinceSec) {
   const out = [];
   let next = null;
-  for (let page = 0; page < 40; page++) {
+  for (let page = 0; page < 200; page++) {
     const url = new URL('https://api.opensea.io/api/v2/events/collection/mad-lads');
     url.searchParams.set('event_type', 'sale');
     url.searchParams.set('after', String(sinceSec));
@@ -343,11 +343,13 @@ async function marketsOf(sigs) {
 let osOk = false;
 if (OS_KEY) {
   try {
-    const since = prevData?.generatedAt ? Date.parse(prevData.generatedAt) / 1000 - 86400 : startedAt / 1000 - 3 * 86400;
+    // OS_DAYS (manual run input) reaches further back once, e.g. to fill gaps.
+    const since = process.env.OS_DAYS ? startedAt / 1000 - Number(process.env.OS_DAYS) * 86400
+      : prevData?.generatedAt ? Date.parse(prevData.generatedAt) / 1000 - 86400 : startedAt / 1000 - 3 * 86400;
     const os = await openseaSales(Math.floor(since));
     // Signatures we already have, in this year's and last year's files.
     const known = new Map();
-    for (const y of [new Date(startedAt).getUTCFullYear(), new Date(since * 1000).getUTCFullYear()]) {
+    for (const y of salesYearsOnDisk()) {
       const f = readJson(`madlads-sales-${y}.json`);
       for (const r of f?.s || []) known.set(r[4], r[3]);
     }

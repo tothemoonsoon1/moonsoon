@@ -26,7 +26,7 @@ import { getStore } from '@netlify/blobs';
 const STORE = 'helius-madlads-v2';
 const KEEP_S = 3 * 86400;
 const RPC = 'https://api.mainnet-beta.solana.com';
-const MARKET = { MAGIC_EDEN: 0, TENSOR: 1 };
+const MARKET = { MAGIC_EDEN: 0, TENSOR: 1, OPENSEA: 3, FOXY: 4 }; // same codes as the sales files
 
 const json = (body, status = 200, cdn = false) => new Response(JSON.stringify(body), {
   status,

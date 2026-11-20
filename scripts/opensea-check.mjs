@@ -67,3 +67,20 @@ for (let page = 0; page < 30; page++) {
 }
 console.log(`\n### OpenSea listings: ${listings.length}\n`);
 if (listings[0]) console.log(`First listing, raw:\n\n\`\`\`json\n${JSON.stringify(listings[0], null, 1).slice(0, 3000)}\n\`\`\``);
+
+// ---- Listings vs ours (madlads-data.json: listed[num] = [buyer total, market]) ----
+const stat = JSON.parse(readFileSync(new URL('../madlads-static.json', import.meta.url)));
+const numOf = new Map(stat.lads.map((r) => [r[1], r[0]]));
+const data = JSON.parse(readFileSync(new URL('../madlads-data.json', import.meta.url)));
+let both = 0, onlyOnOS = 0; const ratios = [];
+const makers = new Set();
+for (const l of listings) {
+  const num = numOf.get(l.asset?.identifier); if (num == null) continue;
+  const p = Number(l.price?.current?.value) / 1e9;
+  const ours = data.listed[num];
+  if (ours) { both++; ratios.push(+(p / ours[0]).toFixed(4)); } else { onlyOnOS++; makers.add(l.svm_order?.maker); }
+}
+ratios.sort((a, b) => a - b);
+console.log(`\n### OpenSea listings vs ours: ${listings.length} OS · ${Object.keys(data.listed).length} ours (ME+Tensor) · same Lad in both: ${both} · only on OpenSea: ${onlyOnOS}`);
+console.log(`price OS / ours for Lads in both (ours = buyer total): min ${ratios[0]} · median ${ratios[ratios.length >> 1]} · max ${ratios[ratios.length - 1]}`);
+console.log(`types: ${JSON.stringify(listings.reduce((o, l) => { o[l.type] = (o[l.type] || 0) + 1; return o; }, {}))}`);

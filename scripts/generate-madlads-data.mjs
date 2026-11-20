@@ -26,6 +26,7 @@
  */
 import fs from 'node:fs';
 import { ROOT, readJson, writeJson, mergeSales, salesYearsOnDisk, writePageFiles } from './madlads-lib.mjs';
+import { lastSale } from './madlads-chain.mjs';
 
 const KEY = process.env.HELIUS_API_KEY;
 if (!KEY) { console.error('Missing HELIUS_API_KEY'); process.exit(1); }
@@ -254,6 +255,7 @@ for (const l of lads) if (l.escrow) escrow[oIdx.get(l.owner)] = l.escrow;
 
 // Holder moves: who gained or lost which Lad since the previous snapshot.
 let moves = (prevData?.moves || []).filter((m) => startedAt - m[0] * 1000 < MOVES_KEEP_MS);
+const newMoves = [];
 if (prevData?.nums && prevData.ownerOf) {
   const prevOwner = new Map(prevData.nums.map((n, i) => [n, prevData.owners[prevData.ownerOf[i]]]));
   const prevEscrow = new Set(Object.keys(prevData.escrow || {}).map((i) => prevData.owners[i]));
@@ -264,6 +266,7 @@ if (prevData?.nums && prevData.ownerOf) {
     if (!before || before === l.owner) continue;
     if (prevEscrow.has(before) || l.escrow) continue; // into or out of an escrow is not a change of holder
     moves.push([now, l.num, before, l.owner]);
+    newMoves.push(l);
     n++;
   }
   console.log(`holder moves since last snapshot: ${n}`);
@@ -278,6 +281,33 @@ try {
   salesYears = r.years;
   console.log(`Magic Eden sales read: ${found.length}, new: ${r.added}`);
 } catch (e) { console.warn(`Magic Eden sales failed, keeping previous: ${e.message}`); }
+
+// Sales the Magic Eden API does not list (Tensor, other marketplaces, OTC):
+// for each Lad that changed holder since the last snapshot and has no Magic
+// Eden sale in that window, read the transaction that moved it and check
+// whether the new holder paid. Transfers and loans come out as null.
+// A few credits per Lad; capped so a busy day cannot run away.
+const CHAIN_MAX = 80;
+try {
+  const since = prevData?.generatedAt ? Date.parse(prevData.generatedAt) / 1000 - 3600 : startedAt / 1000 - 86400;
+  const meSold = new Set();
+  for (const y of [new Date(startedAt).getUTCFullYear(), new Date(since * 1000).getUTCFullYear()]) {
+    const f = readJson(`madlads-sales-${y}.json`);
+    for (const r of f?.s || []) if (r[0] >= since && r[3] === 0) meSold.add(r[1]);
+  }
+  const todo = newMoves.filter((l) => !meSold.has(l.num)).slice(0, CHAIN_MAX);
+  const before = credits, found = [];
+  for (const l of todo) {
+    try {
+      const sale = await lastSale(rpc, l.mint);
+      if (sale && sale.t >= since) { delete sale.dbg; found.push(sale); }
+    } catch (e) { console.warn(`  #${l.num}: ${e.message}`); }
+  }
+  const r = mergeSales(found, numByMint);
+  salesYears = r.years;
+  const byMkt = found.reduce((o, s) => { o[s.m] = (o[s.m] || 0) + 1; return o; }, {});
+  console.log(`on-chain check: ${todo.length} moved Lads without a Magic Eden sale, ${found.length} were sales ${JSON.stringify(byMkt)} (0 ME, 1 Tensor, 2 OTC/other), new: ${r.added}, ${credits - before} credits`);
+} catch (e) { console.warn(`On-chain sale check failed: ${e.message}`); }
 
 let tags = {};
 try { tags = JSON.parse(fs.readFileSync(new URL('owner-tags.json', ROOT), 'utf8')).wallets || {}; } catch { /* optional */ }

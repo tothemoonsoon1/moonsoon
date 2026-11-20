@@ -25,7 +25,7 @@
  * writes an emptier file.
  */
 import fs from 'node:fs';
-import { ROOT, readJson, writeJson, mergeSales, salesYearsOnDisk, writePageFiles } from './madlads-lib.mjs';
+import { ROOT, readJson, writeJson, mergeSales, salesYearsOnDisk, writePageFiles, writePageSales } from './madlads-lib.mjs';
 import { lastSale } from './madlads-chain.mjs';
 
 const KEY = process.env.HELIUS_API_KEY;
@@ -40,6 +40,7 @@ const MOVES_MAX = 4000;
 const TRAIT_KEYS = ['Type', 'Gender', 'Expression', 'Eyes', 'Clothing', 'Hat', 'Hair', 'Hand', 'Glove', 'Smoke', 'Background'];
 const PROGRAMS = {
   TCMPhJdwDryooaGtiocG1u3xcYbRpiJzb283XfCZsDp: 'Tensor listing',
+  '7Aru291A64wrTkUDaRv6HqxVBre6ivXWL94cUoCtQF9V': 'OpenSea listing',
   TSWAPaqyCSx2KABk68Shruf4rp7CxcNi8hAsbdwmHbN: 'Tensor pool',
   TAMM6ub33ij1mbetoMyVBLeKY5iP41i4UPUJQGkhfsg: 'Tensor pool',
   TB1Dqt8JeKQh7RLDzfYDJsq8KS4fS2yt87avRjyRxMv: 'Tensor bid',
@@ -294,6 +295,7 @@ const PROGRAM_MARKET = {
   M2mx93ekt1fmXSVkTrUL9xVFHkmME8HTUi5Cyc5aF7K: 0, M3mxk5W2tt27WGT7THox7PmgRDp4m6NEhL5xvxrBfS1: 0, mmm3XBJg5gk8XJxEKBvdgptZz6SgK4tXvn36sodowMc: 0,
   TCMPhJdwDryooaGtiocG1u3xcYbRpiJzb283XfCZsDp: 1, TSWAPaqyCSx2KABk68Shruf4rp7CxcNi8hAsbdwmHbN: 1, TAMM6ub33ij1mbetoMyVBLeKY5iP41i4UPUJQGkhfsg: 1,
   '8guzmt92HbM7yQ69UJg564hRRX6N4nCdxWE5L6ENrA8P': 4,
+  '7Aru291A64wrTkUDaRv6HqxVBre6ivXWL94cUoCtQF9V': 3, // OpenSea (Solana); seen on #8225, which OpenSea shows as its own sale
 };
 const SOURCE_MARKET = { MAGIC_EDEN: 0, TENSOR: 1, OPENSEA: 3, FOXY: 4 };
 async function openseaSales(sinceSec) {
@@ -362,6 +364,26 @@ if (OS_KEY) {
   } catch (e) { console.warn(`OpenSea sales failed, falling back to the on-chain check: ${e.message}`); }
 } else console.log('OPENSEA_API_KEY not set: skipping OpenSea sales');
 
+// Once: sales filed as "other" (code 2) before marketplaces 3 (OpenSea) and
+// 4 (Foxy) existed get their marketplace from Helius. Flag kept in madlads-data.json.
+let reclassified = !!prevData?.reclassified;
+if (!reclassified && KEY) {
+  try {
+    const before = credits;
+    const files = salesYearsOnDisk().map((y) => ({ y, f: readJson(`madlads-sales-${y}.json`) })).filter((x) => x.f);
+    const sigs = files.flatMap((x) => x.f.s.filter((r) => r[3] === 2).map((r) => r[4]));
+    const { result } = sigs.length ? await marketsOf(sigs) : { result: new Map() };
+    let changed = 0;
+    for (const { y, f } of files) {
+      let n = 0;
+      for (const r of f.s) { const m = result.get(r[4]); if (r[3] === 2 && m != null && m !== 2) { r[3] = m; n++; } }
+      if (n) { writeJson(`madlads-sales-${y}.json`, f); writePageSales(y, f); changed += n; }
+    }
+    reclassified = true;
+    console.log(`reclassified 'other' sales: ${changed} of ${sigs.length} now OpenSea/Foxy/ME/Tensor, ${credits - before} credits`);
+  } catch (e) { console.warn(`Reclassifying 'other' sales failed, will retry next run: ${e.message}`); }
+}
+
 // Sales the Magic Eden API does not list (Tensor, other marketplaces, OTC):
 // for each Lad that changed holder since the last snapshot and has no Magic
 // Eden sale in that window, read the transaction that moved it and check
@@ -404,6 +426,7 @@ writeJson('madlads-data.json', {
   tags: usedTags,
   moves,
   salesYears,
+  reclassified,
 });
 // Lighter copies the page loads (no mints, no signatures); see madlads-lib.mjs.
 writePageFiles();

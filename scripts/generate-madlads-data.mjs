@@ -217,6 +217,34 @@ catch (e) { console.warn(`Magic Eden listings failed, keeping previous: ${e.mess
 const uniqueOwners = [...new Set(lads.map((l) => l.owner))];
 const programAccounts = await classifyOwners(uniqueOwners);
 const escrowStats = {};
+// OpenSea listings. OpenSea also shows Magic Eden and Tensor listings (20.11:
+// 105 of 116 were Lads we already had, same buyer-total price); only listings
+// that are on OpenSea alone, or cheaper there, are added (market 3). Prices
+// are already buyer totals.
+const osListed = new Map(); // mint -> { seller, total }
+if (process.env.OPENSEA_API_KEY) {
+  try {
+    let next = null;
+    for (let page = 0; page < 30; page++) {
+      const url = new URL('https://api.opensea.io/api/v2/listings/collection/mad-lads/all');
+      url.searchParams.set('limit', '100');
+      if (next) url.searchParams.set('next', next);
+      const res = await fetch(url, { headers: { 'x-api-key': process.env.OPENSEA_API_KEY, accept: 'application/json' } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const j = await res.json();
+      for (const x of j.listings || []) {
+        const mint = x.asset?.identifier, total = Number(x.price?.current?.value) / 10 ** (x.price?.current?.decimals ?? 9);
+        if (!mint || !(total > 0) || x.status !== 'ACTIVE') continue;
+        const prev = osListed.get(mint);
+        if (!prev || total < prev.total) osListed.set(mint, { seller: x.svm_order?.maker || null, total: Math.round(total * 1000) / 1000 });
+      }
+      next = j.next;
+      if (!next) break;
+      await sleep(300);
+    }
+    console.log(`OpenSea listings: ${osListed.size}`);
+  } catch (e) { console.warn(`OpenSea listings failed, skipping them: ${e.message}`); }
+}
 const tensorListed = new Map();
 for (const l of lads) {
   const acc = programAccounts.get(l.owner);
@@ -230,6 +258,8 @@ for (const l of lads) {
     const ls = tensorListState(acc.data, l.mint);
     if (ls) { tensorListed.set(l.mint, ls); l.owner = ls.seller; l.escrow = null; continue; }
   }
+  const os = osListed.get(l.mint);
+  if (os?.seller && name === 'OpenSea listing') { l.owner = os.seller; l.escrow = null; continue; }
   l.escrow = name;
 }
 console.log('program-owned holders:', JSON.stringify(escrowStats), `| Tensor listings read: ${tensorListed.size}`);
@@ -246,6 +276,13 @@ for (const [mint, l] of tensorListed) {
   const total = Math.round(l.ask * FEE * 1000) / 1000;
   if (!listed[n] || total < listed[n][0]) listed[n] = [total, 1];
 }
+let osAdded = 0;
+for (const [mint, l] of osListed) {
+  const n = numByMint.get(mint);
+  if (n == null) continue;
+  if (!listed[n] || l.total < listed[n][0] - 0.001) { listed[n] = [l.total, 3]; osAdded++; }
+}
+if (osListed.size) console.log(`  OpenSea-only (or cheaper there): ${osAdded}`);
 
 // Owners, as an index into a wallet list.
 const owners = [];

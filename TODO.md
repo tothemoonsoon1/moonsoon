@@ -21,7 +21,6 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 - **Sprzedaże na żywo — układ mieszany (20.11, na produkcji):**
   - Magic Eden: webhook Helius `0fa5432e-d273-4b04-9339-49fa0833e559` (enhanced, `NFT_SALE`, 9 968 mintów) → `netlify/functions/helius-webhook.mjs`. Każda sprzedaż sprawdzana w łańcuchu (publiczne RPC) przed zapisem; GET zwraca ostatnie 3 dni, CDN 60 s; strona dokleja je (`loadLiveSales`). `?stats=1` = liczba zdarzeń (= kredyty).
   - Tensor i inne: Helius typuje je jako `UNKNOWN` razem z ofertami i pożyczkami — test 19.11: ~225 zdarzeń/h, ~160 tys. kredytów/mc, 0 sprzedaży → odrzucone. Zamiast tego zrzut (`generate-madlads-data.mjs`) czyta z łańcucha transakcję każdej zmiany właściciela bez sprzedaży ME (`lastSale` w `scripts/madlads-chain.mjs`, maks. 80 na przebieg). Ograniczenie: gdy po sprzedaży Lad od razu idzie przelewem dalej, widzimy tylko przelew.
-  - Zakładka „Traits” (inna sesja) czeka na `dev`, nie jest na `main` (decyzja właściciela 20.11).
 - Sprzedaże z przyjętej oferty są zawyżone o ~6% (cena już z opłatami, a strona dolicza ×1,062). Poprawka: zapisywać typ sprzedaży przy backfillu.
 
 ## 4. Posty na X o stronie Skulls

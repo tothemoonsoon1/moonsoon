@@ -51,7 +51,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.ML_PRE={stat:preJson('madlads-traits.json'),data:preJson('madlads-data.json',{cache:'no-cache'},true),bf:preJson('madlads-backfill.json',{cache:'no-cache'},true)};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=10">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=11">
 <style>
 /* ---- Mad Lads page only (shared gallery styles: /assets/css/gallery.css) ---- */
 .ml-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:10px;min-height:0;}
@@ -578,8 +578,9 @@ function loadMints(){
 }
 // Until the mint is known the buttons lead to the collection page.
 function meUrlOf(l){ return l.mint ? 'https://magiceden.io/item-details/'+l.mint : 'https://magiceden.io/marketplace/mad_lads'; }
-// OpenSea links carry the owner's referral code (opensea.io/r/tothemoonsoon).
-function osUrlOf(l){ return (l.mint ? 'https://opensea.io/item/solana/'+l.mint : 'https://opensea.io/collection/mad-lads')+'?ref=tothemoonsoon'; }
+// OpenSea drops ?ref= from item links (checked 20.11.2026); referrals only work
+// through opensea.io/r/<code>, which invites to the app, so that is a separate note.
+function osUrlOf(l){ return l.mint ? 'https://opensea.io/item/solana/'+l.mint : 'https://opensea.io/collection/mad-lads'; }
 function tsUrlOf(l){ return l.mint ? 'https://www.tensor.trade/item/'+l.mint : 'https://www.tensor.trade/trade/madlads'; }
 
 // ---- Stats ----
@@ -908,7 +909,7 @@ function renderLad(num){
         '<div><div class="sd-stat-l">Last sale</div><div class="sd-stat-v'+(sales.length?'':' dim')+'">'+(sales.length ? fmtSol(sales[0].p)+' <small>SOL</small>' : '&mdash;')+'</div></div>'+
         '<div><div class="sd-stat-l">Rarity</div><div class="sd-stat-v">#'+fmtNum(l.rank)+'</div></div>'+
       '</div><div class="sd-btns three">'+(onOs ? osBtn+meBtn+tsBtn : l.listMkt === 1 ? tsBtn+meBtn+osBtn : meBtn+tsBtn+osBtn)+'</div>'+
-      '<div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div></div>'+
+      '<div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div><div class="sd-support">Like the site? Support it by joining OpenSea with <a href="https://opensea.io/r/tothemoonsoon" target="_blank" rel="noopener noreferrer">my invite</a>.</div></div>'+
     '</div>';
   return true;
 }

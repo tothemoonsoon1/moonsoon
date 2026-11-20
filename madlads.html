@@ -60,6 +60,8 @@
 .ml-type{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);margin-left:4px;}
 .sk-listed-badge{white-space:nowrap;}
 .sh-ctx .sh-chip.big{color:var(--text);}
+.sd-btns.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+@media(max-width:600px){.sd-btns.three{grid-template-columns:1fr;}}
 .sh-pill.other{color:var(--text-muted);background:rgba(127,127,127,.15);}
 .sf-mkt.other{color:var(--text-muted);}
 @media(min-width:641px){.sk-grid{grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:14px;}}
@@ -498,6 +500,7 @@ function loadMints(){
 }
 // Until the mint is known the buttons lead to the collection page.
 function meUrlOf(l){ return l.mint ? 'https://magiceden.io/item-details/'+l.mint : 'https://magiceden.io/marketplace/mad_lads'; }
+function osUrlOf(l){ return l.mint ? 'https://opensea.io/item/solana/'+l.mint : 'https://opensea.io/collection/mad-lads'; }
 function tsUrlOf(l){ return l.mint ? 'https://www.tensor.trade/item/'+l.mint : 'https://www.tensor.trade/trade/madlads'; }
 
 // ---- Stats ----
@@ -594,7 +597,7 @@ function matchesTraits(l){
 function cardHtml(l){
   var o = l.owner ? OWN[l.owner] : null, count = o ? o.lads.length : 0;
   var badges = '';
-  if(l.listPrice != null) badges += '<div class="sk-listed-badge" title="Listed on '+(l.listMkt === 1 ? 'Tensor' : 'Magic Eden')+'">'+fmtSol(l.listPrice)+' SOL &middot; '+(l.listMkt === 1 ? 'Tensor' : 'ME')+'</div>';
+  if(l.listPrice != null) badges += '<div class="sk-listed-badge" title="Listed on '+MARKETS[l.listMkt || 0]+'">'+fmtSol(l.listPrice)+' SOL &middot; '+(l.listMkt ? MARKETS[l.listMkt] : 'ME')+'</div>';
   var t = l.owner ? tagOf(l.owner) : null;
   if(t && t.text){
     badges += '<div class="sk-owner-badge">'+(t.color ? '<span class="sk-owner-badge-label" style="background:'+esc(t.color)+';color:#fff">TAG</span> ' : '')+esc(t.text)+'</div>';
@@ -804,13 +807,15 @@ function renderLad(num){
 
   var listed = l.listPrice != null;
   var meUrl = meUrlOf(l), tsUrl = tsUrlOf(l);
-  var meBtn = '<a id="sd-me" class="sd-btn'+(l.listMkt !== 1 ? ' primary' : '')+'" href="'+meUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 0 ? 'Buy on Magic Eden' : 'View on Magic Eden')+'</a>';
+  var meBtn = '<a id="sd-me" class="sd-btn'+(!listed || l.listMkt === 0 ? ' primary' : '')+'" href="'+meUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 0 ? 'Buy on Magic Eden' : 'View on Magic Eden')+'</a>';
   var tsBtn = '<a id="sd-ts" class="sd-btn'+(l.listMkt === 1 ? ' primary' : '')+'" href="'+tsUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 1 ? 'Buy on Tensor' : 'View on Tensor')+'</a>';
+  // Listed only on OpenSea (market 3): its buy button leads, ME and Tensor stay as views.
+  var osBtn = listed && l.listMkt === 3 ? '<a id="sd-os" class="sd-btn primary" href="'+osUrlOf(l)+'" target="_blank" rel="noopener noreferrer">Buy on OpenSea</a>' : '';
 
   document.getElementById('sd').innerHTML =
     '<button class="sd-close" id="sd-close" onclick="closeLad()" aria-label="Close">&times;</button>'+
     '<div class="sd-art"><img src="'+thumb(l.num, 768, 960)+'" data-num="'+l.num+'" onerror="thumbFallback(this)" alt="Mad Lad #'+l.num+'" width="768" height="960">'+
-      (listed ? '<span class="sd-flag listed">LISTED ON '+(l.listMkt === 1 ? 'TENSOR' : 'MAGIC EDEN')+'</span>' : '')+
+      (listed ? '<span class="sd-flag listed">LISTED ON '+MARKETS[l.listMkt || 0].toUpperCase()+'</span>' : '')+
       '<button class="sd-nav prev" onclick="sdStep(-1)" aria-label="Previous">&larr;</button>'+
       '<button class="sd-nav next" onclick="sdStep(1)" aria-label="Next">&rarr;</button></div>'+
     '<div class="sd-info">'+
@@ -819,10 +824,10 @@ function renderLad(num){
       '<div><div class="sd-h">Holder</div><div class="sd-owner">'+ownerBits+'</div></div>'+
       '<div><div class="sd-h">'+(fullHistory(l) ? 'Sale history' : 'Recorded sales')+' &middot; '+sales.length+'</div>'+salesHtml+'</div>'+
       '<div class="sd-buy"><div class="sd-stats">'+
-        '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(listed?'':' dim')+'">'+(listed ? fmtSol(l.listPrice)+' <small>SOL on '+(l.listMkt === 1 ? 'Tensor' : 'Magic Eden')+'</small>' : 'Not listed')+'</div></div>'+
+        '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(listed?'':' dim')+'">'+(listed ? fmtSol(l.listPrice)+' <small>SOL on '+MARKETS[l.listMkt || 0]+'</small>' : 'Not listed')+'</div></div>'+
         '<div><div class="sd-stat-l">Last sale</div><div class="sd-stat-v'+(sales.length?'':' dim')+'">'+(sales.length ? fmtSol(sales[0].p)+' <small>SOL</small>' : '&mdash;')+'</div></div>'+
         '<div><div class="sd-stat-l">Rarity</div><div class="sd-stat-v">#'+fmtNum(l.rank)+'</div></div>'+
-      '</div><div class="sd-btns">'+(l.listMkt === 1 ? tsBtn+meBtn : meBtn+tsBtn)+'</div>'+
+      '</div><div class="sd-btns'+(osBtn ? ' three' : '')+'">'+(osBtn ? osBtn+meBtn+tsBtn : l.listMkt === 1 ? tsBtn+meBtn : meBtn+tsBtn)+'</div>'+
       '<div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div></div>'+
     '</div>';
   return true;
@@ -843,6 +848,7 @@ function openLad(num){
     var me = document.getElementById('sd-me'), ts = document.getElementById('sd-ts');
     if(me) me.href = meUrlOf(l);
     if(ts) ts.href = tsUrlOf(l);
+    var os = document.getElementById('sd-os'); if(os) os.href = osUrlOf(l);
   });
 }
 window.openLad = openLad;

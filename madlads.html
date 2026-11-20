@@ -213,7 +213,7 @@
         <div class="sk-header">
           <div class="kicker">MAD LADS</div>
           <h2 class="sk-title">Trait Floors</h2>
-          <div class="sk-desc">Every trait on one screen: floor, listings, sales of the last 30 days and where the price is heading. Tap a tile for the trait&rsquo;s listings, recent sales and a 12-month chart. Prices include fees; &ldquo;None&rdquo; values are left out.</div>
+          <div class="sk-desc">Every trait on one screen: floor, listings, sales of the last 30 days and where the price is heading (&#9650;/&#9660; % = median sale price of the last 30 days vs the 30 days before; &ldquo;&times;6 this week&rdquo; = sales this week vs the trait&rsquo;s usual week). Tap a tile for the trait&rsquo;s listings, recent sales and a 12-month chart. Prices include fees; &ldquo;None&rdquo; values are left out.</div>
         </div>
         <div class="stats-bar tt-spot" id="tt-spot"></div>
         <div class="controls">
@@ -1285,7 +1285,7 @@ function sparkHtml(pts, cls){
 function chgHtml(c){
   if(c == null) return '';
   var pc = Math.round(c * 100);
-  return '<span class="tt-chg '+(pc > 0 ? 'up' : pc < 0 ? 'down' : '')+'">'+(pc > 0 ? '&#9650; +' : pc < 0 ? '&#9660; ' : '')+pc+'%</span>';
+  return '<span class="tt-chg '+(pc > 0 ? 'up' : pc < 0 ? 'down' : '')+'" title="Median sale price, last 30 days vs the 30 days before">'+(pc > 0 ? '&#9650; +' : pc < 0 ? '&#9660; ' : '')+pc+'%</span>';
 }
 function tileHtml(r){
   var sample = SAMPLE[r.ki][r.v], f = r.floor, cls = r.chg == null ? '' : r.chg > 0.005 ? 'up' : r.chg < -0.005 ? 'down' : '';
@@ -1295,7 +1295,7 @@ function tileHtml(r){
     '<div class="tt-tile-mid"><div><div class="tt-tile-floor'+(f == null ? ' none' : '')+'">'+(f != null ? fmtSol(f)+' <small>SOL</small>' : (hasOwners ? 'not listed' : '&mdash;'))+'</div>'+
     '<div class="tt-tile-lbl">floor'+(hasOwners && r.listed ? ' &middot; '+r.listed+' listed' : '')+'</div></div>'+sparkHtml(r.spark, cls)+'</div>'+
     '<div class="tt-tile-foot"><span>'+(r.sales ? '<b>'+r.sales+'</b> sale'+(r.sales === 1 ? '' : 's')+' &middot; 30d' : r.last ? 'last sale <b>'+timeAgo(r.last.t)+'</b> ago' : 'never sold')+'</span>'+
-    (r.trend >= 2 ? '<span class="tt-trend">'+(r.usual ? '&times;'+r.trend.toFixed(1)+' this week' : 'new this week')+'</span>' : '')+
+    (r.trend >= 2 ? '<span class="tt-trend" title="Sales in the last 7 days vs this trait&rsquo;s usual week (average of the 4 weeks before)">'+(r.usual ? '&times;'+r.trend.toFixed(1)+' this week' : 'new this week')+'</span>' : '')+
     (r.med != null ? '<span>med. <b>'+fmtSol(r.med)+'</b></span>' : '')+chgHtml(r.chg)+'</div></button>';
 }
 function spotHtml(label, r, val){

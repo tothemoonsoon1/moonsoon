@@ -11,6 +11,10 @@ on:
     branches: [claude/tender-hopper-p8opwh]
     paths: ['scripts/generate-madlads-data.mjs', '.github/workflows/update-madlads.yml']
   workflow_dispatch:
+    inputs:
+      os_days:
+        description: 'Reach back this many days in the OpenSea sales (empty = since the last run)'
+        default: ''
 
 permissions:
   contents: write
@@ -37,6 +41,7 @@ jobs:
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
           OPENSEA_API_KEY: ${{ secrets.OPENSEA_API_KEY }}
+          OS_DAYS: ${{ inputs.os_days }}
         run: node scripts/generate-madlads-data.mjs
 
       - name: Commit and push if changed

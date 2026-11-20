@@ -50,3 +50,20 @@ for (const e of onlyOS.slice(0, 15)) console.log(`  - ${new Date((e.event_timest
 console.log(`- only in ours (OpenSea misses): ${onlyOurs.length}`);
 const byMk = onlyOurs.reduce((o, r) => { o[MK[r[3]]] = (o[MK[r[3]]] || 0) + 1; return o; }, {});
 console.log(`  by marketplace: ${JSON.stringify(byMk)}`);
+
+// ---- Listings (shape and count) ----
+const listings = [];
+let lnext = null;
+for (let page = 0; page < 30; page++) {
+  const url = new URL('https://api.opensea.io/api/v2/listings/collection/mad-lads/all');
+  url.searchParams.set('limit', '100');
+  if (lnext) url.searchParams.set('next', lnext);
+  const res = await fetch(url, { headers: { 'x-api-key': KEY, accept: 'application/json' } });
+  if (!res.ok) { console.log(`listings HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`); break; }
+  const j = await res.json();
+  listings.push(...(j.listings || []));
+  lnext = j.next;
+  if (!lnext) break;
+}
+console.log(`\n### OpenSea listings: ${listings.length}\n`);
+if (listings[0]) console.log(`First listing, raw:\n\n\`\`\`json\n${JSON.stringify(listings[0], null, 1).slice(0, 3000)}\n\`\`\``);

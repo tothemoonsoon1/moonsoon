@@ -50,7 +50,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.SKULLS_PRE={data:preJson('skulls-data.json',{cache:'no-cache'},true),traits:preJson('skulls-traits.json')};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=10">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=11">
 </head>
 <body>
 <div class="page">
@@ -989,10 +989,10 @@ function renderSkullDetail(num){
           // The marketplace holding the listing gets the primary button and goes first.
           var me = '<a class="sd-btn'+(onTensor ? '' : ' primary')+'" href="'+escAttr(s.meUrl)+'" target="_blank" rel="noopener noreferrer">'+(onMe || (s.listed && !s.listMarket) ? 'Buy on Magic Eden' : 'View on Magic Eden')+'</a>';
           var ts = '<a class="sd-btn'+(onTensor ? ' primary' : '')+'" href="'+escAttr(tensorUrl)+'" target="_blank" rel="noopener noreferrer">'+(onTensor || (s.listed && !s.listMarket) ? 'Buy on Tensor' : 'View on Tensor')+'</a>';
-          var os = '<a class="sd-btn" href="'+escAttr((s.mint ? 'https://opensea.io/item/solana/'+s.mint : 'https://opensea.io/collection/mad-lads')+'?ref=tothemoonsoon')+'" target="_blank" rel="noopener noreferrer">View on OpenSea</a>';
+          var os = '<a class="sd-btn" href="'+escAttr(s.mint ? 'https://opensea.io/item/solana/'+s.mint : 'https://opensea.io/collection/mad-lads')+'" target="_blank" rel="noopener noreferrer">View on OpenSea</a>';
           return (onTensor ? ts+me : me+ts)+os;
         })()+
-      '</div><div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div></div>'+
+      '</div><div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div><div class="sd-support">Like the site? Support it by joining OpenSea with <a href="https://opensea.io/r/tothemoonsoon" target="_blank" rel="noopener noreferrer">my invite</a>.</div></div>'+
     '</div>';
   return true;
 }

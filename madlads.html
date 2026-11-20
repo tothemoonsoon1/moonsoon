@@ -1385,7 +1385,7 @@ function renderTrait(ki, vi){
   var hero = listed[0] || BY[SAMPLE[ki][vi+1]];
   var stat = function(l, v, dim){ return '<div><div class="sd-stat-l">'+l+'</div><div class="sd-stat-v'+(dim ? ' dim' : '')+'">'+v+'</div></div>'; };
   var listedHtml = listed.length ? '<div class="sh-list td-list">'+listed.slice(0, 5).map(function(l){
-      return ladRow(l, '<span class="td-mkt">'+(l.listMkt === 1 ? 'Tensor' : 'Magic Eden')+'</span><span class="td-price">'+fmtSol(l.listPrice)+' SOL</span>');
+      return ladRow(l, '<span class="td-mkt">'+MARKETS[l.listMkt || 0]+'</span><span class="td-price">'+fmtSol(l.listPrice)+' SOL</span>');
     }).join('')+'</div>'+(listed.length > 5 ? '<div class="td-more">+'+(listed.length - 5)+' more in the gallery</div>' : '')
     : '<div class="sd-none">'+(hasOwners ? 'Nothing listed right now.' : 'Loading listings…')+'</div>';
   var salesHtml = sales.length ? '<div class="sh-list td-list">'+sales.slice(0, 8).map(function(x){

@@ -1,0 +1,26 @@
+name: OpenSea check (Mad Lads sales)
+
+# Manual only: compares Mad Lads sales from the OpenSea API with our files.
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'How many days back'
+        default: '3'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run
+        env:
+          OPENSEA_API_KEY: ${{ secrets.OPENSEA_API_KEY }}
+          DAYS: ${{ inputs.days }}
+        run: node scripts/opensea-check.mjs | tee -a "$GITHUB_STEP_SUMMARY"

@@ -270,6 +270,10 @@
 /* ---- Compact page header: keep the Skulls above the fold ---- */
 .sk-wrap{position:relative;padding:18px 72px 90px;}
 .view-toggle{position:absolute;top:18px;right:72px;margin-bottom:0;}
+/* Small invite banner under the view switcher (opensea.io/r/<code> is the only link OpenSea counts). */
+.os-support{position:absolute;top:70px;right:72px;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--card-border);border-radius:20px;background:var(--surface);color:var(--text-muted);font-size:12px;text-decoration:none;white-space:nowrap;}
+.os-support:hover{border-color:var(--accent-border);color:var(--text);}
+.os-support-k{font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);}
 .sk-header{margin-bottom:14px;padding-right:260px;}
 .kicker{margin-bottom:6px;font-size:12px;}
 .sk-title{font-size:28px;margin-bottom:6px;}
@@ -292,6 +296,7 @@
 @media(max-width:768px){
   .sk-wrap{padding:14px 20px 60px;}
   .view-toggle{position:static;margin-bottom:12px;}
+  .os-support{position:static;margin-bottom:12px;white-space:normal;}
   .sk-header{padding-right:0;}
   .stat-card{flex:1 1 50%;border-bottom:1px solid var(--border);}
   .stat-card:nth-child(2n){border-right:none;}
@@ -319,6 +324,7 @@
   .sk-wrap>*,#view-gallery>*,#view-history>*{min-width:0;}
   .sk-header{order:-2;}
   .view-toggle{order:-1;margin-bottom:14px;}
+  .os-support{order:-1;}
 }
 /* ---- Phone: compact 2-column gallery, traits behind a toggle, sales below the grid ---- */
 @media(max-width:640px){

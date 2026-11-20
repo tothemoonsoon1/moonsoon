@@ -123,6 +123,8 @@
 .sd-stat-v small{font-size:12px;font-weight:600;color:var(--text-muted);}
 .sd-stat-v.dim{color:var(--text-muted);}
 .sd-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sd-btns.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+@media(max-width:600px){.sd-btns.three{grid-template-columns:1fr;}}
 .sd-btn{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:14px;padding:12px;border-radius:12px;border:1px solid var(--card-border);color:var(--text);}
 .sd-btn.primary{background:var(--btn-bg);color:var(--btn-text);border-color:var(--btn-bg);}
 .sd-btn:hover{opacity:.88;}

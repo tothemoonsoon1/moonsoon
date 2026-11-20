@@ -17,10 +17,10 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 - Sprawdzić, czy zrzut `update-madlads.yml` rusza sam co 3 h (13.11 GitHub nie uruchomił go z harmonogramu, odpalony ręcznie).
 
 ## 3. Odłożone na słowo właściciela
-- **Sprzedaże na żywo — układ mieszany (19.11):**
+- **Sprzedaże na żywo — układ mieszany (20.11, na produkcji):**
   - Magic Eden: webhook Helius `0fa5432e-d273-4b04-9339-49fa0833e559` (enhanced, `NFT_SALE`, 9 968 mintów) → `netlify/functions/helius-webhook.mjs`. Każda sprzedaż sprawdzana w łańcuchu (publiczne RPC) przed zapisem; GET zwraca ostatnie 3 dni, CDN 60 s; strona dokleja je (`loadLiveSales`). `?stats=1` = liczba zdarzeń (= kredyty).
   - Tensor i inne: Helius typuje je jako `UNKNOWN` razem z ofertami i pożyczkami — test 19.11: ~225 zdarzeń/h, ~160 tys. kredytów/mc, 0 sprzedaży → odrzucone. Zamiast tego zrzut (`generate-madlads-data.mjs`) czyta z łańcucha transakcję każdej zmiany właściciela bez sprzedaży ME (`lastSale` w `scripts/madlads-chain.mjs`, maks. 80 na przebieg). Ograniczenie: gdy po sprzedaży Lad od razu idzie przelewem dalej, widzimy tylko przelew.
-  - Po merge na `main`: przełączyć adres webhooka na produkcję (workflow `helius-webhook.yml`, action `types`, id jak wyżej, types `NFT_SALE`, url `https://tothemoonsoon.xyz/.netlify/functions/helius-webhook`).
+  - Zakładka „Traits” (inna sesja) czeka na `dev`, nie jest na `main` (decyzja właściciela 20.11).
 - Sprzedaże z przyjętej oferty są zawyżone o ~6% (cena już z opłatami, a strona dolicza ×1,062). Poprawka: zapisywać typ sprzedaży przy backfillu.
 
 ## 4. Posty na X o stronie Skulls
@@ -37,7 +37,6 @@ Lista rzeczy rozpoczętych albo odłożonych w poprzednich sesjach. Po zrobieniu
 - Po zakończeniu backfillu: `madlads-data.json` (236 KB po kompresji, z czego 210 KB to adresy portfeli) to teraz najcięższy plik strony Mad Lads — można rozważyć skrócone adresy na pierwsze ładowanie.
 
 ## Zrobione
-- 16.11: zakładka Traits na Mad Lads (prośba Chewie z X o floor „Lassie” i listę cech) — na `dev`, czeka na OK.
 - 14.11: przegląd kodu, designu, SEO i wydajności — wspólny `gallery.css`, czcionki z własnej domeny, lżejsze dane Mad Lads (ok. 1,07 MB → 0,47 MB na pierwsze wejście), Skulls bez zmyślonych danych zastępczych, poprawki dostępności i metadanych.
 - 13.11: znacznik „MYSTERY” (MadLads Team Wallet) ma kontrast 5,3:1 — kolor `#c2365a` w `owner-tags.json`; kolory tagów nie są już używane jako kolor tekstu.
 - 13.11: domena ewip.eu wskazuje na Netlify i działa.

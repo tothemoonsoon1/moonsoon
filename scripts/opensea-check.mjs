@@ -84,3 +84,24 @@ ratios.sort((a, b) => a - b);
 console.log(`\n### OpenSea listings vs ours: ${listings.length} OS · ${Object.keys(data.listed).length} ours (ME+Tensor) · same Lad in both: ${both} · only on OpenSea: ${onlyOnOS}`);
 console.log(`price OS / ours for Lads in both (ours = buyer total): min ${ratios[0]} · median ${ratios[ratios.length >> 1]} · max ${ratios[ratios.length - 1]}`);
 console.log(`types: ${JSON.stringify(listings.reduce((o, l) => { o[l.type] = (o[l.type] || 0) + 1; return o; }, {}))}`);
+
+// ---- Skulls: OpenSea sales of Skull-type Lads vs skulls-data.json ----
+const skulls = JSON.parse(readFileSync(new URL('../skulls-data.json', import.meta.url))).skulls;
+const skullMints = new Set(skulls.map((s) => s.mint));
+const osSkull = [];
+let snext = null;
+const since = Math.floor(Date.now() / 1000) - Number(process.env.SKULL_DAYS || 85) * 86400;
+for (let page = 0; page < 200; page++) {
+  const url = new URL('https://api.opensea.io/api/v2/events/collection/mad-lads');
+  url.searchParams.set('event_type', 'sale'); url.searchParams.set('after', String(since)); url.searchParams.set('limit', '50');
+  if (snext) url.searchParams.set('next', snext);
+  const res = await fetch(url, { headers: { 'x-api-key': KEY, accept: 'application/json' } });
+  if (!res.ok) break;
+  const j = await res.json();
+  for (const e of j.asset_events || []) if (skullMints.has(e.nft?.identifier)) osSkull.push(e);
+  snext = j.next; if (!snext) break;
+}
+const ourSkullTimes = skulls.flatMap((s) => (s.sales || []).map((x) => ({ mint: s.mint, t: Math.round(x.timestamp / 1000) })));
+const missing = osSkull.filter((e) => !ourSkullTimes.some((x) => x.mint === e.nft.identifier && Math.abs(x.t - e.event_timestamp) < 180));
+console.log(`\n### Skulls: OpenSea has ${osSkull.length} Skull sales in the last ${process.env.SKULL_DAYS || 85} days; missing in skulls-data.json: ${missing.length}`);
+for (const e of missing) console.log(`- ${new Date(e.event_timestamp * 1000).toISOString().slice(0, 16)} · ${e.nft.name} · ${(Number(e.payment.quantity) / 1e9).toFixed(2)} SOL · \`${e.transaction.slice(0, 14)}\``);

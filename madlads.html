@@ -51,7 +51,7 @@
 <script>function preJson(f,o,live){function g(u){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},8000),q={},k;for(k in o||{})q[k]=o[k];if(c)q.signal=c.signal;return fetch(u,q).then(function(r){if(t)clearTimeout(t);if(!r.ok)throw 0;return r.json();});}return (live?g('https://raw.githubusercontent.com/tothemoonsoon1/moonsoon/main/'+f).catch(function(){return g('/'+f);}):g('/'+f)).catch(function(){return null;});}window.ML_PRE={stat:preJson('madlads-traits.json'),data:preJson('madlads-data.json',{cache:'no-cache'},true),bf:preJson('madlads-backfill.json',{cache:'no-cache'},true)};</script>
 <link rel="stylesheet" href="/assets/css/tokens.css?v=4">
 <link rel="stylesheet" href="/assets/css/base.css?v=5">
-<link rel="stylesheet" href="/assets/css/gallery.css?v=9">
+<link rel="stylesheet" href="/assets/css/gallery.css?v=10">
 <style>
 /* ---- Mad Lads page only (shared gallery styles: /assets/css/gallery.css) ---- */
 .ml-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-bottom:10px;min-height:0;}
@@ -60,8 +60,6 @@
 .ml-type{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;color:var(--text-muted);margin-left:4px;}
 .sk-listed-badge{white-space:nowrap;}
 .sh-ctx .sh-chip.big{color:var(--text);}
-.sd-btns.three{grid-template-columns:repeat(3,minmax(0,1fr));}
-@media(max-width:600px){.sd-btns.three{grid-template-columns:1fr;}}
 .sh-pill.other{color:var(--text-muted);background:rgba(127,127,127,.15);}
 .sf-mkt.other{color:var(--text-muted);}
 @media(min-width:641px){.sk-grid{grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:14px;}}
@@ -500,7 +498,8 @@ function loadMints(){
 }
 // Until the mint is known the buttons lead to the collection page.
 function meUrlOf(l){ return l.mint ? 'https://magiceden.io/item-details/'+l.mint : 'https://magiceden.io/marketplace/mad_lads'; }
-function osUrlOf(l){ return l.mint ? 'https://opensea.io/item/solana/'+l.mint : 'https://opensea.io/collection/mad-lads'; }
+// OpenSea links carry the owner's referral code (opensea.io/r/tothemoonsoon).
+function osUrlOf(l){ return (l.mint ? 'https://opensea.io/item/solana/'+l.mint : 'https://opensea.io/collection/mad-lads')+'?ref=tothemoonsoon'; }
 function tsUrlOf(l){ return l.mint ? 'https://www.tensor.trade/item/'+l.mint : 'https://www.tensor.trade/trade/madlads'; }
 
 // ---- Stats ----
@@ -810,7 +809,8 @@ function renderLad(num){
   var meBtn = '<a id="sd-me" class="sd-btn'+(!listed || l.listMkt === 0 ? ' primary' : '')+'" href="'+meUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 0 ? 'Buy on Magic Eden' : 'View on Magic Eden')+'</a>';
   var tsBtn = '<a id="sd-ts" class="sd-btn'+(l.listMkt === 1 ? ' primary' : '')+'" href="'+tsUrl+'" target="_blank" rel="noopener noreferrer">'+(listed && l.listMkt === 1 ? 'Buy on Tensor' : 'View on Tensor')+'</a>';
   // Listed only on OpenSea (market 3): its buy button leads, ME and Tensor stay as views.
-  var osBtn = listed && l.listMkt === 3 ? '<a id="sd-os" class="sd-btn primary" href="'+osUrlOf(l)+'" target="_blank" rel="noopener noreferrer">Buy on OpenSea</a>' : '';
+  var onOs = listed && l.listMkt === 3;
+  var osBtn = '<a id="sd-os" class="sd-btn'+(onOs ? ' primary' : '')+'" href="'+osUrlOf(l)+'" target="_blank" rel="noopener noreferrer">'+(onOs ? 'Buy on OpenSea' : 'View on OpenSea')+'</a>';
 
   document.getElementById('sd').innerHTML =
     '<button class="sd-close" id="sd-close" onclick="closeLad()" aria-label="Close">&times;</button>'+
@@ -827,7 +827,7 @@ function renderLad(num){
         '<div><div class="sd-stat-l">Price</div><div class="sd-stat-v'+(listed?'':' dim')+'">'+(listed ? fmtSol(l.listPrice)+' <small>SOL on '+MARKETS[l.listMkt || 0]+'</small>' : 'Not listed')+'</div></div>'+
         '<div><div class="sd-stat-l">Last sale</div><div class="sd-stat-v'+(sales.length?'':' dim')+'">'+(sales.length ? fmtSol(sales[0].p)+' <small>SOL</small>' : '&mdash;')+'</div></div>'+
         '<div><div class="sd-stat-l">Rarity</div><div class="sd-stat-v">#'+fmtNum(l.rank)+'</div></div>'+
-      '</div><div class="sd-btns'+(osBtn ? ' three' : '')+'">'+(osBtn ? osBtn+meBtn+tsBtn : l.listMkt === 1 ? tsBtn+meBtn : meBtn+tsBtn)+'</div>'+
+      '</div><div class="sd-btns three">'+(onOs ? osBtn+meBtn+tsBtn : l.listMkt === 1 ? tsBtn+meBtn+osBtn : meBtn+tsBtn+osBtn)+'</div>'+
       '<div class="sd-foot">All prices include the 2% fee + 4.2% royalty \u2014 the total a buyer pays.</div></div>'+
     '</div>';
   return true;

@@ -53,6 +53,27 @@ if (action === 'list') {
     const s = await lastSale(rpc, mintOf.get(num)).catch((e) => ({ error: e.message }));
     console.log(`- #${num}: ${!s ? 'not a sale (transfer, loan or nothing found)' : s.error ? 'error ' + s.error : `${['Magic Eden', 'Tensor', 'OTC/other'][s.m]} · ${s.p.toFixed(3)} SOL · ${new Date(s.t * 1000).toISOString().slice(0, 16)} · \`${s.sig.slice(0, 12)}\``}`);
   }
+} else if (action === 'othersales') {
+  // How Helius describes the sales we file as "OTC/other" (market 2): which
+  // marketplace (source) they really came from. Up to 100 per request.
+  const year = process.env.MINTS || String(new Date().getUTCFullYear());
+  const f = JSON.parse(readFileSync(new URL(`../madlads-sales-${year}.json`, import.meta.url)));
+  const sigs = f.s.filter((r) => r[3] === 2).map((r) => r[4]);
+  const bySource = {}, examples = {};
+  for (let i = 0; i < sigs.length; i += 100) {
+    const res = await fetch(`https://api-mainnet.helius-rpc.com/v0/transactions?${q}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ transactions: sigs.slice(i, i + 100) }) });
+    if (!res.ok) { console.log(`HTTP ${res.status}`); process.exit(1); }
+    for (const t of await res.json()) {
+      const k = `${t.source} / ${t.type}`;
+      bySource[k] = (bySource[k] || 0) + 1;
+      if (!examples[k]) examples[k] = `${t.signature.slice(0, 16)} · ${(t.description || '').slice(0, 100)}`;
+      const progs = [...new Set((t.instructions || []).map((x) => x.programId))].filter((p) => !/^(ComputeBudget|11111111|Token|ATokenGP|metaq)/.test(p));
+      const pk = `programs: ${progs.join(', ')}`;
+      bySource[pk] = (bySource[pk] || 0) + 1;
+    }
+  }
+  console.log(`### ${sigs.length} sales filed as OTC/other in ${year}\n`);
+  for (const [k, n] of Object.entries(bySource).sort((a, b) => b[1] - a[1])) console.log(`- **${n}** × ${k}${examples[k] ? ' — e.g. ' + examples[k] : ''}`);
 } else if (action === 'inspect') {
   // How Helius classifies the newest transactions of some Lads (type, source),
   // to see what a Tensor sale looks like. ~100 credits per Lad.

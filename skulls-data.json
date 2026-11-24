@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T04:59:34.591Z",
+  "generatedAt": "2026-11-24T16:27:44.262Z",
   "skulls": [
     {
       "num": 542,
@@ -435,10 +435,10 @@
       ],
       "neverTraded": false,
       "listed": true,
-      "listPrice": 180.54,
+      "listPrice": 148.68,
       "image": "https://madlads.s3.us-west-2.amazonaws.com/images/1792.png",
       "meUrl": "https://magiceden.io/item-details/HmfpmjsYGnBfY6qpSHZbU28aiWYP34t5VB78HQLougtx",
-      "syncedAt": 1795496374591,
+      "syncedAt": 1795537664262,
       "listMarket": "me"
     },
     {
